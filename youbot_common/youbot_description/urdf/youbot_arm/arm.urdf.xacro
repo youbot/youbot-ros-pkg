@@ -1,0 +1,243 @@
+<?xml version="1.0"?>
+<robot  xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+        xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+        xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+        xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<include filename="$(find youbot_description)/urdf/youbot_arm/arm.gazebo.xacro" />
+	<include filename="$(find youbot_description)/urdf/youbot_arm/arm.transmission.xacro" />
+        <include filename="$(find youbot_description)/urdf/youbot_arm/limits.urdf.xacro" />
+
+
+	<xacro:macro name="youbot_arm" params="parent name *origin">
+
+		<!-- joint between base_link and arm_0_link -->
+		<joint name="${name}_joint_0" type="fixed" >
+			<insert_block name="origin" />
+			<parent link="${parent}" />
+			<child link="${name}_link_0" />
+			
+		</joint>
+
+		<link name="${name}_link_0">
+			<inertial>
+				<!--<origin xyz="0.023 0 0.006" rpy="0 0 0"/>-->
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<mass value="5"/>
+				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+			</inertial>
+
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm0.dae" />
+				</geometry>
+				<material name="DarkGrey" />
+			</visual>
+
+			<collision>
+				<!--<origin xyz="0.023 0 0.006" rpy="0 0 0"/>-->
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm0_convex.stl" />
+					<!--<cylinder length="0.078" radius="0.093"/>-->
+				</geometry>
+			</collision>			
+			
+		</link>
+
+		<!-- joint between arm_0_link and arm_1_link -->
+		<joint name="${name}_joint_1" type="revolute">
+			<origin xyz="0.024 0 0.096" rpy="0 0 ${170 * M_PI / 180}"/>
+			<parent link="${name}_link_0"/>
+			<child link="${name}_link_1"/>
+			<axis xyz="0 0 -1"/>
+			<!--<calibration rising="${arm_1_ref}" falling="${arm_1_ref}"/>-->
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="10" velocity="${M_PI / 2.0}" lower="0" upper="${joint_1_limit}"/> 
+			<safety_controller k_position="20" k_velocity="25" soft_lower_limit="${threshold}" soft_upper_limit="${joint_1_limit_soft}" />
+		</joint>
+
+		<link name="${name}_link_1">
+			<inertial>
+				<!--<origin xyz="0 0 -0.003" rpy="0 0 0" />-->
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<mass value="1"/>
+				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+			</inertial>
+			
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm1.dae" />
+				</geometry>
+				<!--<material name="Orange" />-->
+			</visual>
+			
+			<collision>
+				<!--<origin xyz="0 0 -0.003" rpy="0 0 0" />-->
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm1_convex.stl" />
+					<!--<cylinder length="0.102" radius="0.080"/>-->
+				</geometry>
+			</collision>		
+		</link>
+
+		<!-- joint between arm_1_link and arm_2_link -->	
+		<joint name="${name}_joint_2" type="revolute">
+			<origin xyz="0.033 0 0.019" rpy="0 ${-65 * M_PI / 180} 0"/>
+			<parent link="${name}_link_1"/>
+			<child link="${name}_link_2"/>
+			<axis xyz="0 1 0"/>
+			<!--<calibration rising="${arm_2_ref}" falling="${arm_2_ref}"/>-->
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="10" velocity="${M_PI / 2.0}" lower="0" upper="${joint_2_limit}"/>
+                        <safety_controller k_position="20" k_velocity="25" soft_lower_limit="${threshold}" soft_upper_limit="${joint_2_limit_soft}" />
+		</joint>
+
+		<link name="${name}_link_2">
+			<inertial>
+				<!--<origin xyz="0.001 -0.041 0.074" rpy="0 0 0" />-->
+				<origin xyz="0 -0.032 0.078" rpy="0 0 0" />
+				<mass value="1"/>
+				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+			</inertial>
+			
+			<visual>
+			<origin xyz="0.000 0.000 0.000" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm2.stl" />
+				</geometry>
+				<material name="Orange" />
+			</visual>
+			
+			<collision>
+				<!--<origin xyz="0.001 -0.041 0.074" rpy="0 0 0" />-->
+				<origin xyz="0 -0.032 0.078" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm2_convex.stl" />
+					<!--<box size="0.074 0.082 0.222"/>-->
+				</geometry>
+			</collision>
+		</link>
+
+		<!-- joint between arm_2_link and arm_3_link -->	
+		<joint name="${name}_joint_3" type="revolute">
+			<origin xyz="0.000 0.000 0.155" rpy="0 ${146 * M_PI / 180} 0"/>
+			<parent link="${name}_link_2"/>
+			<child link="${name}_link_3"/>
+			<axis xyz="0 1 0"/>
+			<!--<calibration rising="${arm_3_ref}" falling="${arm_3_ref}"/>-->
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="10" velocity="${M_PI / 2.0}" lower="-${joint_3_limit}" upper="0"/>
+                        <safety_controller k_position="20" k_velocity="25" soft_lower_limit="-${joint_3_limit_soft}" soft_upper_limit="${threshold}" />
+		</joint>
+
+		<link name="${name}_link_3">
+			<inertial>
+				<!--<origin xyz="0.000 0.025 0.067" rpy="0 0 0" />-->
+				<origin xyz="0.000 0.028 0.079" rpy="0 0 0" />
+				<mass value="1"/>
+				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+			</inertial>
+			
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm3.stl" />
+				</geometry>
+				<material name="Orange" />
+			</visual>
+			
+			<collision>
+				<!--<origin xyz="0.000 0.025 0.067" rpy="0 0 0" />-->
+				<origin xyz="0.000 0.028 0.079" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm3_convex.stl" />
+					<!--<box size="0.064 0.054 0.192"/>-->
+				</geometry>
+			</collision>
+		</link>	
+
+		<!-- joint between arm_3_link and arm_4_link -->
+		<joint name="${name}_joint_4" type="revolute">
+			<origin xyz="0.000 0.000 0.135" rpy="0 ${-102.5 * M_PI / 180} 0" />
+			<parent link="${name}_link_3"/>
+			<child link="${name}_link_4"/>
+			<axis xyz="0 1 0" />
+			<!--<calibration rising="${arm_4_ref}" falling="${arm_4_ref}"/>-->
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="10" velocity="${M_PI / 2.0}" lower="0" upper="${joint_4_limit}"/>
+			<safety_controller k_position="20" k_velocity="25" soft_lower_limit="0" soft_upper_limit="${joint_4_limit_soft}" />
+		</joint>
+
+		<link name="${name}_link_4">
+			<inertial>
+				<!--<origin xyz="0 0 0.026" rpy="0 0 0"/>-->
+				<origin xyz="0 -0.010 0.029" rpy="0 0 0"/>
+				<mass value="1"/>
+				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+			</inertial>
+			
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm4.stl" />
+				</geometry>
+				<material name="Orange" />
+			</visual>
+			
+			<collision>
+				<!--<origin xyz="0 0 0.026" rpy="0 0 0" />-->
+				<origin xyz="0 -0.010 0.029" rpy="0 0 0"/>
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm4_convex.stl" />
+					<!--<box size="0.058 0.100 0.118"/>-->
+				</geometry>
+			</collision>
+		</link>
+
+		<!-- joint between arm_4_link and arm_5_link -->
+		<joint name="${name}_joint_5" type="revolute">
+			<origin xyz="-0.002 0 0.130" rpy="0 0 ${167.5 * M_PI / 180}" />
+			<parent link="${name}_link_4"/>
+			<child link="${name}_link_5"/>
+			<axis xyz="0 0 1" />
+			<!--<calibration rising="${arm_5_ref}" falling="${arm_5_ref}"/>-->
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="10" velocity="${M_PI / 2.0}" lower="0" upper="${joint_5_limit}" />
+                        <safety_controller k_position="20" k_velocity="25" soft_lower_limit="0" soft_upper_limit="${joint_5_limit_soft}" />
+		</joint>
+
+		<link name="${name}_link_5">
+			<inertial>
+				<origin xyz="0.03 0 -0.030" rpy="0 0 0" />
+				<mass value="1"/>
+				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+			</inertial>
+			
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm5.stl" />
+				</geometry>
+				<material name="DarkGrey" />
+			</visual>
+			
+			<collision>
+				<origin xyz="0.003 0 -0.034" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm5_convex.stl" />
+					<!--<box size="0.054 0.096 0.030"/>-->
+				</geometry>
+			</collision>
+		</link>
+
+		<!-- extensions -->
+		<xacro:youbot_arm_gazebo name="${name}" />
+		<xacro:youbot_arm_transmission name="${name}" />
+
+	</xacro:macro>
+
+</robot>

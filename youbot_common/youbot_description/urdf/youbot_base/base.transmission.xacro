@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<property name="wheel_mechanical_reduction" value="${624/35 * 80/18}" />
+	<property name="caster_mechanical_reduction" value="${624/35 * 80/18}" />
+  	<property name="" value="0.360" />
+
+	<xacro:macro name="youbot_base_transmission">
+	<!-- front left wheel -->
+		<transmission name="wheel_trans_fl" type="pr2_mechanism_model/SimpleTransmission">
+			<actuator name="wheel_motor_fl" />
+			<joint name="wheel_joint_fl" />
+			<mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
+		</transmission>
+
+		<transmission name="caster_trans_fl" type="pr2_mechanism_model/SimpleTransmission">
+      			<actuator name="caster_motor_fl" />
+      			<joint name="caster_joint_fl" />
+      			<mechanicalReduction>${caster_mechanical_reduction}</mechanicalReduction>
+    		</transmission>
+
+	<!-- front right wheel -->
+		<transmission name="wheel_trans_fr" type="pr2_mechanism_model/SimpleTransmission">
+			<actuator name="wheel_motor_fr" />
+			<joint name="wheel_joint_fr" />
+			<mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
+		</transmission>
+
+		<transmission name="caster_trans_fr" type="pr2_mechanism_model/SimpleTransmission">
+      			<actuator name="caster_motor_fr" />
+      			<joint name="caster_joint_fr" />
+      			<mechanicalReduction>${caster_mechanical_reduction}</mechanicalReduction>
+    		</transmission>
+
+	<!-- back left wheel -->
+		<transmission name="wheel_trans_bl" type="pr2_mechanism_model/SimpleTransmission">
+			<actuator name="wheel_motor_bl" />
+			<joint name="wheel_joint_bl" />
+			<mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
+		</transmission>
+
+		<transmission name="caster_trans_bl" type="pr2_mechanism_model/SimpleTransmission">
+      			<actuator name="caster_motor_bl" />
+      			<joint name="caster_joint_bl" />
+      			<mechanicalReduction>${caster_mechanical_reduction}</mechanicalReduction>
+    		</transmission>
+
+	<!-- back right wheel -->
+		<transmission name="wheel_trans_br" type="pr2_mechanism_model/SimpleTransmission">
+			<actuator name="wheel_motor_br" />
+			<joint name="wheel_joint_br" />
+			<mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
+		</transmission>
+
+		<transmission name="caster_trans_br" type="pr2_mechanism_model/SimpleTransmission">
+      			<actuator name="caster_motor_br" />
+      			<joint name="caster_joint_br" />
+      			<mechanicalReduction>${caster_mechanical_reduction}</mechanicalReduction>
+    		</transmission>
+
+  	</xacro:macro>
+	
+</robot>

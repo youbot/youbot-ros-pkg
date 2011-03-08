@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- usage: roslaunch youbot_description test_multi_youbot_base.launch namespace:=robot2 -->
+<launch>
+	<group ns="$(arg namespace)">
+		<node name="youbot_keyboard_teleop_experiment" pkg="youbot_description" type="youbot_keyboard_teleop_experiment" output="screen"/>	
+	</group>
+</launch>

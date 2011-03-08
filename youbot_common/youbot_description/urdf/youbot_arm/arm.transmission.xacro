@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<xacro:macro name="youbot_arm_transmission" params="name">
+
+		<transmission name="${name}_trans_1" type="pr2_mechanism_model/SimpleTransmission">
+			<actuator name="${name}_motor_1"/>
+			<joint name="${name}_joint_1"/>
+			<mechanicalReduction>1</mechanicalReduction>
+		</transmission>
+	
+		<transmission name="${name}_trans_2" type="pr2_mechanism_model/SimpleTransmission">
+			<actuator name="${name}_motor_2"/>
+			<joint name="${name}_joint_2"/>
+			<mechanicalReduction>1</mechanicalReduction>
+		</transmission>
+	
+		<transmission name="${name}_trans_3" type="pr2_mechanism_model/SimpleTransmission">
+			<actuator name="${name}_motor_3"/>
+			<joint name="${name}_joint_3"/>
+			<mechanicalReduction>1</mechanicalReduction>
+		</transmission>
+	
+		<transmission name="${name}_trans_4" type="pr2_mechanism_model/SimpleTransmission">
+			<actuator name="${name}_motor_4"/>
+			<joint name="${name}_joint_4"/>
+			<mechanicalReduction>1</mechanicalReduction>
+		</transmission>
+	
+		<transmission name="${name}_trans_5" type="pr2_mechanism_model/SimpleTransmission">
+			<actuator name="${name}_motor_5"/>
+			<joint name="${name}_joint_5"/>
+			<mechanicalReduction>1</mechanicalReduction>
+		</transmission>
+
+	</xacro:macro>
+
+</robot>

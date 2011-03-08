@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       name="youbot" >
+  
+  <!-- The following included files set up definitions of parts of the robot body -->
+  <!-- misc common stuff? -->
+  <include filename="$(find youbot_description)/urdf/common.xacro" />
+
+  <!-- materials for visualization -->
+  <include filename="$(find youbot_description)/urdf/materials.urdf.xacro" />
+
+  <!-- youbot arm -->
+  <include filename="$(find youbot_description)/urdf/youbot_arm/arm.urdf.xacro" />
+
+  <!-- youbot arm -->
+  <include filename="$(find youbot_description)/urdf/youbot_gripper/gripper.urdf.xacro" />
+ 
+  <!-- generic simulator_gazebo plugins for starting mechanism control, ros time, ros battery -->
+  <include filename="$(find youbot_description)/gazebo/gazebo.urdf.xacro" />
+  
+  <!-- Now we can start using the macros included above to define the actual youbot -->
+
+  <!-- The first use of a macro.  This one was defined in base.urdf.xacro above.
+       A macro like this will expand to a set of link and joint definitions, and to additional
+       Gazebo-related extensions (sensor plugins, etc).  The macro takes an argument, name, 
+       that equals "base", and uses it to generate names for its component links and joints 
+       (e.g., base_link).  The included origin block is also an argument to the macro.  By convention, 
+       the origin block defines where the component is w.r.t its parent (in this case the parent 
+       is the world frame). For more, see http://www.ros.org/wiki/xacro -->
+
+<!-- foot for arm-->
+  <link name="base_link">
+    <inertial>
+		   <origin xyz="0 0 0" rpy="0 0 0"/>
+		   <mass value="10.0"/>
+		   <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+    </inertial>
+    </link>
+  <xacro:youbot_arm name="arm" parent="base_link">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:youbot_arm>
+  <xacro:youbot_gripper name="gripper" parent="arm_link_5">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:youbot_gripper>
+</robot>

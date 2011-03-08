@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<include filename="$(find youbot_description)/urdf/youbot_gripper/gripper.gazebo.xacro" />
+	<include filename="$(find youbot_description)/urdf/youbot_gripper/gripper.transmission.xacro" />
+	<include filename="$(find youbot_description)/urdf/youbot_gripper/limits.urdf.xacro" />
+
+	<xacro:macro name="youbot_gripper" params="parent name *origin">
+
+		<!-- joint between arm_7_link and sdh_palm_link -->
+		<joint name="${name}_palm_joint" type="fixed" >
+			<insert_block name="origin" />
+			<parent link="${parent}" />
+			<child link="${name}_palm_link" />
+		</joint>
+
+		<link name="${name}_palm_link">
+			<inertial>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<mass value="0.1"/>
+				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+			</inertial>
+			
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_gripper/palm.stl" />
+				</geometry>
+				<material name="DarkGrey" />
+			</visual>
+			
+			<collision>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<!--<box size="0.050 0.094 0.054"/>-->
+					<mesh filename="package://youbot_description/meshes/youbot_gripper/palm_convex.stl" />
+				</geometry>
+			</collision>
+		</link>
+
+		
+		
+		<joint name="${name}_finger_joint_l" type="prismatic">
+			<origin xyz="0.004 0.008 0.046" rpy="0 0 ${M_PI}" />
+			<parent link="${name}_palm_link"/>
+			<child link="${name}_finger_link_l"/>
+			<axis xyz="0 -1 0" />
+			
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="1" velocity="0.1" lower="0" upper="${finger_joint}"/> 
+                        <safety_controller k_position="20" k_velocity="25" soft_lower_limit="${threshold}" soft_upper_limit="${finger_joint_soft}" />
+		</joint>
+
+		<link name="${name}_finger_link_l">
+			<inertial>
+				<origin xyz="0 -0.001 0" rpy="0 0 0" />
+				<mass value="0.01"/>
+				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+			</inertial>
+			
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_gripper/finger.stl" />
+				</geometry>
+				<material name="DarkGrey" />
+			</visual>
+			
+			<collision>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<!--<box size="0.014 0.020 0.046"/>-->
+					<mesh filename="package://youbot_description/meshes/youbot_gripper/finger_convex.stl" />
+				</geometry>
+			</collision>
+		</link>
+
+               <joint name="${name}_finger_joint_r" type="prismatic">
+			<origin xyz="0.004 -0.008 0.046" rpy="0 0 0" />
+			<parent link="${name}_palm_link"/>
+			<child link="${name}_finger_link_r"/>
+			<axis xyz="0 -1 0" />
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="1" velocity="0.1" lower="0" upper="${finger_joint}"/> 
+                        <safety_controller k_position="20" k_velocity="25" soft_lower_limit="${threshold}" soft_upper_limit="${finger_joint_soft}" />
+		</joint>
+
+		<link name="${name}_finger_link_r">
+			<inertial>
+				<origin xyz="0.000 -0.001 0" rpy="0 0 0" />
+				<mass value="0.01"/>
+				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+			</inertial>
+			
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_gripper/finger.stl" />
+				</geometry>
+				<material name="DarkGrey" />
+			</visual>
+			
+			<collision>
+				<origin xyz="0.000 0 0" rpy="0 0 0" />
+				<geometry>
+					<!--<box size="0.014 0.020 0.046"/>-->
+					<mesh filename="package://youbot_description/meshes/youbot_gripper/finger_convex.stl" />
+				</geometry>
+			</collision>
+		</link>
+
+		
+		<!-- extensions -->
+		<xacro:youbot_gripper_gazebo name="${name}" />
+		<xacro:youbot_gripper_transmission name="${name}" />
+
+	</xacro:macro>
+
+</robot>

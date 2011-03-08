@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+	<xacro:macro name="youbot_base_gazebo">
+		<gazebo reference="youbot_base">
+     			<material value="youbot/DarkGrey" />
+    		</gazebo>
+	<!-- front left wheel -->
+    		<gazebo reference="wheel_link_fl">
+     			
+       			<material value="youbot/Orange" />
+    		</gazebo>
+  
+    		<gazebo reference="caster_link_fl">
+      			
+      			<material value="youbot/Orange" />
+    		</gazebo>
+
+	<!-- front right wheel -->
+    		<gazebo reference="wheel_link_fr">
+     			
+       			<material value="youbot/Orange" />
+    		</gazebo>
+  
+    		<gazebo reference="caster_link_fr">
+      			
+      			<material value="youbot/Orange" />
+    		</gazebo>
+
+	<!-- back left wheel -->
+    		<gazebo reference="wheel_link_bl">
+     			
+       			<material value="youbot/Orange" />
+    		</gazebo>
+  
+    		<gazebo reference="caster_link_bl">
+      			
+      			<material value="youbot/Orange" />
+    		</gazebo>
+
+	<!-- back right wheel -->
+    		<gazebo reference="wheel_link_br">
+     			
+       			<material value="youbot/Orange" />
+    		</gazebo>
+  
+    		<gazebo reference="caster_link_br">
+      			
+      			<material value="youbot/Orange" />
+    		</gazebo>
+
+	<!-- position controller -->
+		<gazebo>
+      			<controller:gazebo_ros_p3d name="p3d_base_controller" plugin="libgazebo_ros_p3d.so">
+        			<alwaysOn>true</alwaysOn>
+        			<updateRate>100.0</updateRate>
+        			<bodyName>base_link</bodyName>
+        			<topicName>base_pose_ground_truth</topicName>
+        			<gaussianNoise>0.01</gaussianNoise>
+        			<frameName>map</frameName>
+        			<xyzOffsets>25.7 25.7 0</xyzOffsets> <!-- initialize odometry for fake localization-->
+        			<rpyOffsets>0 0 0</rpyOffsets>
+        			<interface:position name="p3d_base_position"/>
+      			</controller:gazebo_ros_p3d>
+      			<canonicalBody>base_footprint</canonicalBody>
+    		</gazebo>
+  </xacro:macro>
+
+</robot>

@@ -1,0 +1,15 @@
+#!/bin/bash
+# author: Sebastian Blumenthal
+# date: 16.01.2011
+#
+# This scripts starts the youBot OODL driver for ROS with root permission. 
+# The driver needs root access for the EtherCat driver.
+#
+#
+# Usage: Just run this script (without any parameters): ./start_youbot_oodl_driver
+# NOTE: setup.sh is assumed to be in ~/ros/setup.sh
+# ---- 
+
+sudo bash command.txt #the beneath commands need to be in some ASCII file (command.txt), otherwise no output can be seen, as all commands would be executed in a subshell
+#source ~/ros/setup.sh
+#rosrun youbot_oodl youbot_oodl

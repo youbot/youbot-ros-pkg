@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- load the robot description file -->
+	<!-- <param name="robot_description" command="cat '$(find youbot_model)/urdf/youbot.urdf'" /> -->
+	<param name="robot_description" command="$(find xacro)/xacro.py '$(find youbot_description)/robots/youbot.urdf.xacro'"/>
+		<!-- remap from="joint_states" to="youbot_state"/> -->
+	
+	<!-- start robot_state_publisher -->
+	<node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher" output="screen"/>
+
+
+	<node pkg="robot_state_publisher" type="state_publisher" name="robot_base_state_publisher" output="screen">
+		<remap from="joint_states" to="base_joint_states"/> 
+	</node>
+
+	<!-- <node pkg="robot_state_publisher" type="state_publisher" name="robot_base_static_state_publisher" output="screen">
+		<remap from="joint_states" to="youbot_base_state"/> 
+	</node> -->
+</launch>

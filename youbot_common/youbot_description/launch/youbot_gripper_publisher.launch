@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+	
+	<!-- static joint state publisher -->
+	<node name="joint_gripper_publisher" pkg="youbot_description" type="joint_gripper_publisher" output="screen"/>
+	
+        <!-- TODO:: Add Gazebo model -->
+
+</launch>

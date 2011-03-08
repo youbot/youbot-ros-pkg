@@ -1,0 +1,9 @@
+<stack>
+  <description brief="youbot_drivers">youbot_drivers</description>
+  <author>Maintained by Sebastian Blumenthal</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_drivers</url>
+  <depend stack="ros" />
+
+</stack>

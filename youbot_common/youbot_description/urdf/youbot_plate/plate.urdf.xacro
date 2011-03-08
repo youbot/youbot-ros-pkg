@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+
+	
+	
+	<xacro:macro name="youbot_plate" params="parent name *origin">
+
+		<!-- joint between arm_7_link and sdh_palm_link -->
+		<joint name="${name}_joint" type="fixed" >
+			<insert_block name="origin" />
+			<parent link="${parent}" />
+			<child link="${name}_link" />
+		</joint>
+
+		<link name="${name}_link">
+			<inertial>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<mass value="1"/>
+				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+			</inertial>
+			
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_plate/plate.dae" />
+				</geometry>
+				<material name="DarkGrey" />
+			</visual>
+			
+			<collision>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://youbot_description/meshes/youbot_plate/plate_convex.stl" />
+				</geometry>
+			</collision>
+		</link>
+
+		<!-- extensions -->
+		
+	
+	</xacro:macro>
+
+</robot>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- usage: roslaunch youbot_description test_multi_youbot_arm.launch namespace:=robot1 -->
+<launch>
+	<group ns="$(arg namespace)">
+		<node name="youbot_arm_test" pkg="youbot_description" type="youbot_arm_test" output="screen"/>	
+	</group>
+</launch>
