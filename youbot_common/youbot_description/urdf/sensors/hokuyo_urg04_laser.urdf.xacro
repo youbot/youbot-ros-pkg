@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <include filename="$(find youbot_description)/urdf/sensors/hokuyo_urg04_laser.gazebo.xacro" />
+
+  <xacro:macro name="hokuyo_urg04_laser" params="name parent *origin ros_topic update_rate min_angle max_angle">
+    <joint name="${name}_hokuyo_urg04_laser_joint" type="fixed">
+      <axis xyz="0 1 0" />
+      <insert_block name="origin" />
+      <parent link="${parent}_link"/>
+      <child link="${name}_link"/>
+    </joint>
+    <link name="${name}_link" type="laser">
+      <inertial>
+        <mass value="0.16" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+      </inertial>
+      <visual>
+      	<origin xyz="0 0 0" rpy="0 0 0" />
+	<geometry>
+		<mesh filename="package://youbot_description/meshes/sensors/hokuyo.dae" />
+	</geometry>
+	<material name="DarkGrey" />
+      </visual>
+			
+      <collision>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+			<mesh filename="package://youbot_description/meshes/sensors/hokuyo_convex.stl" />
+			
+		</geometry>
+	</collision>
+    </link>
+    <!-- gazebo extensions -->
+    <xacro:hokuyo_urg04_laser_gazebo name="${name}" ros_topic="${ros_topic}" update_rate="${update_rate}" min_angle="${min_angle}" max_angle="${max_angle}" />
+  </xacro:macro>
+</robot>
