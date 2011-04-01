@@ -4,6 +4,9 @@
         xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
         xmlns:xacro="http://ros.org/wiki/xacro">
 
+	<!-- sensors -->
+	<include filename="$(find youbot_description)/urdf/sensors/hokuyo_urg04_laser.urdf.xacro"/>
+
 	<include filename="$(find youbot_description)/urdf/youbot_base/base.gazebo.xacro" />
 	<include filename="$(find youbot_description)/urdf/youbot_base/base.transmission.xacro" />
         
@@ -39,7 +42,7 @@
 	<property name="wheel_joint_safety_k_velocity" value="10.0" />
 
 	<xacro:macro name="youbot_base" params="name">
-
+		
 		<link name="${name}_footprint">
       			<inertial>
         			<mass value="0.1" />
@@ -91,7 +94,12 @@
       			</collision>
     		</link>		
 
-
+		<!-- base laser front -->
+                       
+    		<xacro:hokuyo_urg04_laser name="${name}_laser_front" parent="${name}" ros_topic="scan_front" update_rate="10" min_angle="-2.09" max_angle="2.09" >
+     			 <origin xyz="0.3 0 -0.03" rpy="0 0 0" />
+    		</xacro:hokuyo_urg04_laser>
+		
 	<!-- front left wheel -->		
 		<joint name="caster_joint_fl" type="continuous">
 			<origin xyz="${caster_offset_x} ${caster_offset_y} ${caster_offset_z}" rpy="0 0 0" />

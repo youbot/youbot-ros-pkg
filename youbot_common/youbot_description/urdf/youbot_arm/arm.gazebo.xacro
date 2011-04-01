@@ -20,25 +20,25 @@
 		</gazebo>
 
 		<gazebo reference="${name}_link_2">
-			<material value="youbot/Orange" />
+			<!--<material value="youbot/Orange" />-->
 			<turnGravityOff>false</turnGravityOff>
 			
 		</gazebo>
 
 		<gazebo reference="${name}_link_3">
-			<material value="youbot/Orange" />
+			<!--<material value="youbot/Orange" />-->
 			<turnGravityOff>false</turnGravityOff>
 			
 		</gazebo>
 
 		<gazebo reference="${name}_link_4">
-			<material value="youbot/Orange" />
+			<!--<material value="youbot/Orange" />-->
 			<turnGravityOff>false</turnGravityOff>
 			
 		</gazebo>
 
 		<gazebo reference="${name}_link_5">
-			<material value="youbot/DarkGrey" />
+			<!--<material value="youbot/DarkGrey" />-->
 			<turnGravityOff>false</turnGravityOff>
 			
 		</gazebo>

@@ -105,9 +105,9 @@
 			</inertial>
 			
 			<visual>
-			<origin xyz="0.000 0.000 0.000" rpy="0 0 0" />
+			<origin xyz="0 -0.032 0.078" rpy="0 0 0" />
 				<geometry>
-					<mesh filename="package://youbot_description/meshes/youbot_arm/arm2.stl" />
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm2.dae" />
 				</geometry>
 				<material name="Orange" />
 			</visual>
@@ -143,9 +143,9 @@
 			</inertial>
 			
 			<visual>
-				<origin xyz="0 0 0" rpy="0 0 0" />
+				<origin xyz="0.000 0.028 0.079" rpy="0 0 0" />
 				<geometry>
-					<mesh filename="package://youbot_description/meshes/youbot_arm/arm3.stl" />
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm3.dae" />
 				</geometry>
 				<material name="Orange" />
 			</visual>
@@ -181,9 +181,9 @@
 			</inertial>
 			
 			<visual>
-				<origin xyz="0 0 0" rpy="0 0 0" />
+				<origin xyz="0 -0.010 0.029" rpy="0 0 0"/>
 				<geometry>
-					<mesh filename="package://youbot_description/meshes/youbot_arm/arm4.stl" />
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm4.dae" />
 				</geometry>
 				<material name="Orange" />
 			</visual>
@@ -212,15 +212,15 @@
 
 		<link name="${name}_link_5">
 			<inertial>
-				<origin xyz="0.03 0 -0.030" rpy="0 0 0" />
+				<origin xyz="0.003 0 -0.034" rpy="0 0 0" />
 				<mass value="${link_5_mass}"/>
 				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
 			</inertial>
 			
 			<visual>
-				<origin xyz="0 0 0" rpy="0 0 0" />
+				<origin xyz="0.003 0 -0.034" rpy="0 0 0" />
 				<geometry>
-					<mesh filename="package://youbot_description/meshes/youbot_arm/arm5.stl" />
+					<mesh filename="package://youbot_description/meshes/youbot_arm/arm5.dae" />
 				</geometry>
 				<material name="DarkGrey" />
 			</visual>
