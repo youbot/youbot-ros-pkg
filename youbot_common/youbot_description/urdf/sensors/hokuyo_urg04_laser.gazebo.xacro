@@ -23,7 +23,7 @@
         <resRange>0.36</resRange>
         <updateRate>${update_rate}</updateRate>
         <controller:gazebo_ros_laser name="gazebo_ros_${name}_controller" plugin="libgazebo_ros_laser.so">
-          <gaussianNoise>0.005</gaussianNoise>
+          <gaussianNoise>0.000</gaussianNoise>
           <alwaysOn>true</alwaysOn>
           <updateRate>${update_rate}</updateRate>
           <topicName>${ros_topic}</topicName>
