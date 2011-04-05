@@ -15,6 +15,7 @@ rosbuild_init()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+set(CMAKE_INCLUDE_PATH ${PROJECT_SOURCE_DIR}/include)
 
 #uncomment if you have defined messages
 #rosbuild_genmsg()
@@ -29,6 +30,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_add_executable(example examples/example.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
 
+rosbuild_add_library(joint_velocity_controller src/joint_velocity_controller.cpp)
 rosbuild_add_executable(joint_base_publisher src/joint_base_publisher.cpp)
 rosbuild_add_executable(joint_arm_publisher src/joint_arm_publisher.cpp)
 rosbuild_add_executable(joint_gripper_publisher src/joint_gripper_publisher.cpp)
@@ -36,6 +38,7 @@ rosbuild_add_executable(joint_robot_publisher src/joint_robot_publisher.cpp)
 rosbuild_add_executable(arm_trajectory_republisher src/arm_trajectory_republisher.cpp)
 rosbuild_add_executable(base_command_republisher src/base_command_republisher.cpp)
 rosbuild_add_executable(youbot_arm_test examples/youbot_arm_test.cpp)
+rosbuild_add_executable(youbot_arm_velocity_test examples/youbot_arm_velocity_test.cpp)
 rosbuild_add_executable(youbot_keyboard_teleop_experiment examples/keyboard_teleop_experiment.cpp)
 
 

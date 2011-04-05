@@ -1,0 +1,3 @@
+<library path="lib/libjoint_velocity_controller">
+  <class name="youbot_description/JointVelocityController" type="controller::JointVelocityController" base_class_type="pr2_controller_interface::Controller" />
+</library>

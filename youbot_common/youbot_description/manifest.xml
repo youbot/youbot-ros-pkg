@@ -12,6 +12,14 @@
   <depend package="urdf"/>
   <depend package="trajectory_msgs"/>
   <depend package="nav_msgs"/>
+  <depend package="pr2_controller_interface"/>
+  <depend package="control_toolbox"/>
+  <depend package="pr2_controllers_msgs" />
+  <depend package="realtime_tools" />
+
+  <export>
+    <pr2_controller_interface plugin="${prefix}/controller_plugins.xml" />
+  </export>
 
 </package>
 

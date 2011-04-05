@@ -2,13 +2,13 @@
 <launch>
 	
 	<!-- start trajectory republisher -->
-	<node name="arm_trajectory_republisher" pkg="youbot_description" type="arm_trajectory_republisher" output="screen"/>
+	<!--<node name="arm_trajectory_republisher" pkg="youbot_description" type="arm_trajectory_republisher" output="screen"/>-->
 
 	<!-- start gazebo -->
 	<param name="/use_sim_time" value="true" />
 	<node name="gazebo" pkg="gazebo" type="gazebo" args="$(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen">
 		<env name="GAZEBO_RESOURCE_PATH" value="$(find youbot_description):$(find gazebo_worlds):$(find gazebo)/gazebo/share/gazebo" />
-		<remap from="arm_controller/command" to="gazebo_arm_controller/command"/>
+		<!--<remap from="arm_controller/command" to="gazebo_arm_controller/command"/>-->
 	</node>
 
 
@@ -16,13 +16,12 @@
 	<node name="youbot_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -model youBot -x 0.4 -y 0.4 -z 0.05" respawn="false" output="screen" />
 
         <!-- arm controllers -->
-        <include file="$(find pr2_controller_manager)/controller_manager.launch" />
+        <!--<include file="$(find pr2_controller_manager)/controller_manager.launch" />-->
         
-	<rosparam file="$(find youbot_description)/controller/youbot_arm_controller.yaml" command="load"/>
+	<rosparam file="$(find youbot_description)/controller/youbot_arm_velocity_controller.yaml" command="load"/>
 	<node name="arm_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="arm_controller" />
-	<group ns="arm_controller">
+	<!--<group ns="arm_controller">
 		<node name="arm_joint_trajectory_action_node" pkg="joint_trajectory_action" type="joint_trajectory_action" />
-	</group>
-
+	</group>-->	
 
 </launch>
