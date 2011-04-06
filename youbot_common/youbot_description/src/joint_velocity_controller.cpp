@@ -1,254 +1,196 @@
-/*********************************************************************
- * Software License Agreement (BSD License)
+/******************************************************************************
+ * Copyright (c) 2011
+ * Locomotec
  *
- *  Copyright (c) 2008, Willow Garage, Inc.
- *  All rights reserved.
+ * Author:
+ * Alexey Zakharov, Yury Brodskiy
  *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
  *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   * Redistributions in binary form must reproduce the above
- *     copyright notice, this list of conditions and the following
- *     disclaimer in the documentation and/or other materials provided
- *     with the distribution.
- *   * Neither the name of the Willow Garage nor the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ * This software is published under a dual-license: GNU Lesser General Public
+ * License LGPL 2.1 and BSD license. The dual-license implies that users of this
+ * code may choose which terms they prefer.
  *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *********************************************************************/
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ * * Neither the name of Locomotec nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License LGPL as
+ * published by the Free Software Foundation, either version 2.1 of the
+ * License, or (at your option) any later version or the BSD license.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License LGPL and the BSD license for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License LGPL and BSD license along with this program.
+ *
+ ******************************************************************************/
 
-#include "robot_mechanism_controllers/joint_velocity_controller.h"
+
+#include <boost/units/systems/si.hpp>
+#include <boost/units/systems/si/angular_velocity.hpp>
+#include <boost/units/io.hpp>
+#include "youbot_controllers/joint_velocity_controller.h"
 #include "pluginlib/class_list_macros.h"
 
-#include <string>
-#include <iostream>
-
-
 PLUGINLIB_DECLARE_CLASS(youbot_description, JointVelocityController, controller::JointVelocityController, pr2_controller_interface::Controller)
-
-using namespace std;
 
 namespace controller {
 
 JointVelocityController::JointVelocityController()
-: joint_state_(NULL), command_(0), robot_(NULL), last_time_(0), loop_count_(0)
-{
-}
-
-JointVelocityController::~JointVelocityController()
-{
-  sub_command_.shutdown();
-}
-
-bool JointVelocityController::init(pr2_mechanism_model::RobotState *robot, const std::string &joint_name,
-				   const control_toolbox::Pid &pid)
-{
-  assert(robot);
-  robot_ = robot;
-  last_time_ = robot->getTime();
-
-  joint_state_ = robot_->getJointState(joint_name);
-  if (!joint_state_)
-  {
-    ROS_ERROR("JointVelocityController could not find joint named \"%s\"\n",
-              joint_name.c_str());
-    return false;
-  }
-
-  pid_controller_ = pid;
-
-  return true;
-}
-
-bool JointVelocityController::init(pr2_mechanism_model::RobotState *robot, ros::NodeHandle &n)
-{
-  assert(robot);
-  node_ = n;
-  robot_ = robot;
-  ROS_INFO("Velocity controller started!\n");
-  std::string joint_name;
-  /*if (!node_.getParam("joint", joint_name)) {
-    ROS_ERROR("No joint given (namespace: %s)", node_.getNamespace().c_str());
-    return false;
-  }
-
-  if (!(joint_state_ = robot->getJointState(joint_name)))
-  {
-    ROS_ERROR("Could not find joint \"%s\" (namespace: %s)",
-              joint_name.c_str(), node_.getNamespace().c_str());
-    return false;
-  }
-
-*/
-
-
-using namespace XmlRpc;
-  node_ = n;
-  robot_ = robot;
-
-  // Gets all of the joints
-  XmlRpc::XmlRpcValue joint_names;
-  if (!node_.getParam("joints", joint_names))
-  {
-    ROS_ERROR("No joints given. (namespace: %s)", node_.getNamespace().c_str());
-    return false;
-  }
-  if (joint_names.getType() != XmlRpc::XmlRpcValue::TypeArray)
-  {
-    ROS_ERROR("Malformed joint specification.  (namespace: %s)", node_.getNamespace().c_str());
-    return false;
-  }
-  for (int i = 0; i < joint_names.size(); ++i)
-  {
-    XmlRpcValue &name_value = joint_names[i];
-    if (name_value.getType() != XmlRpcValue::TypeString)
-    {
-      ROS_ERROR("Array of joint names should contain all strings.  (namespace: %s)",
-                node_.getNamespace().c_str());
-      return false;
-    }
-
-    pr2_mechanism_model::JointState *j = robot->getJointState((std::string)name_value);
-    if (!j) {
-      ROS_ERROR("Joint not found: %s. (namespace: %s)",
-                ((std::string)name_value).c_str(), node_.getNamespace().c_str());
-      return false;
-    }
-    joints_.push_back(j);
-  }
-
-  // Ensures that all the joints are calibrated.
-  for (size_t i = 0; i < joints_.size(); ++i)
-  {
-    if (!joints_[i]->calibrated_)
-    {
-      ROS_ERROR("Joint %s was not calibrated (namespace: %s)",
-                joints_[i]->joint_->name.c_str(), node_.getNamespace().c_str());
-      return false;
-    }
-  }
-
-  for (unsigned int i = 0; i < joints_.size(); ++i ) {
-    cout << joints_[i]->joint_->name.c_str() << endl;
-  }
-
-  if (!pid_controller_.init(ros::NodeHandle(node_, "pid")))
-    return false;
-
-  controller_state_publisher_.reset(
-    new realtime_tools::RealtimePublisher<pr2_controllers_msgs::JointControllerState>
-    (node_, "state", 1));
-
-
-
-
-  sub_command_ = node_.subscribe("command", 1, &JointVelocityController::setCommandCB, this);
-
-  cout << "WE ARE HERE!" << endl;
-
-  return true;
-}
-
-
-void JointVelocityController::setGains(const double &p, const double &i, const double &d, const double &i_max, const double &i_min)
-{
-  pid_controller_.setGains(p,i,d,i_max,i_min);
+: robotPtr(NULL) {
 
 }
 
-void JointVelocityController::getGains(double &p, double &i, double &d, double &i_max, double &i_min)
-{
-  pid_controller_.getGains(p,i,d,i_max,i_min);
+JointVelocityController::~JointVelocityController() {
+	subscriber.shutdown();
 }
 
-std::string JointVelocityController::getJointName()
-{
-  return joint_state_->joint_->name;
-}
+/* when a controller gets initialized, the controller manager passes the controller a pointer to the RobotState
+   RobotState is an interface to the robot joints and a description of the robot model
+   for details see http://www.ros.org/wiki/pr2_mechanism_model */
 
-// Set the joint velocity command
-void JointVelocityController::setCommand(double cmd)
-{
-  command_ = cmd;
-}
+bool JointVelocityController::init(pr2_mechanism_model::RobotState *robotPtr, ros::NodeHandle &nodeHandle) {
+	using namespace XmlRpc;
+	this->nodeHandle = nodeHandle;
+	this->robotPtr = robotPtr;
 
-// Return the current velocity command
-void JointVelocityController::getCommand(double  & cmd)
-{
-  cmd = command_;
-}
+	ROS_DEBUG("Initializing velocity control for the youbot arm...\n");
 
-void JointVelocityController::update()
-{
-  assert(robot_ != NULL);
-  ros::Time time = robot_->getTime();
-
-  double error = joint_state_->velocity_ - command_;
-
-  dt_ = time - last_time_;
-  double command = pid_controller_.updatePid(error, dt_);
-  joint_state_->commanded_effort_ += command;
-
-  cout << "error=" << error << "joint_effort =" << joint_state_->commanded_effort_  <<endl;
-
-  if(loop_count_ % 10 == 0)
-  {
-    if(controller_state_publisher_ && controller_state_publisher_->trylock())
-    {
-         controller_state_publisher_->msg_.header.stamp = time;
-        for (size_t j = 0; j < joints_.size(); ++j)
-      {
-
-      controller_state_publisher_->msg_.set_point = command_;
-      controller_state_publisher_->msg_.process_value = joint_state_->velocity_;
-      controller_state_publisher_->msg_.error = error;
-      controller_state_publisher_->msg_.time_step = dt_.toSec();
-      controller_state_publisher_->msg_.command = command;
-      }
-
-      double dummy;
-      getGains(controller_state_publisher_->msg_.p,
-               controller_state_publisher_->msg_.i,
-               controller_state_publisher_->msg_.d,
-               controller_state_publisher_->msg_.i_clamp,
-               dummy);
-      controller_state_publisher_->unlockAndPublish();
-    }
-  }
-  loop_count_++;
-
-  last_time_ = time;
-}
-
-void JointVelocityController::setCommandCB(/*const std_msgs::Float64ConstPtr& msg*/const trajectory_msgs::JointTrajectory::ConstPtr &msg)
-{
-    trajectory_msgs::JointTrajectoryPoint point;
-    point = msg->points[0];
-    ROS_INFO("%d joints found!\n", msg->joint_names.size());
-    for (int i = 0; i < static_cast<int>(msg->joint_names.size()); ++i) {
-	//	ROS_INFO("joint = %s", msg->joint_names[i]);
-        string name = msg->joint_names[i];
-        double velocity = point.velocities[i];
-        double position = point.positions[i];
-        cout << "Joint = " << name << " velocity = " <<  velocity << " positions = " << position << endl;
+	// Gets all of the joint pointers from the RobotState to a joints vector
+	XmlRpc::XmlRpcValue jointNames;
+	if (!nodeHandle.getParam("joints", jointNames)) {
+		ROS_ERROR("No joints given. (namespace: %s)", nodeHandle.getNamespace().c_str());
+		return false;
 	}
-  command_ = point.velocities[0];
 
+	if (jointNames.getType() != XmlRpc::XmlRpcValue::TypeArray) {
+		ROS_ERROR("Malformed joint specification.  (namespace: %s)", nodeHandle.getNamespace().c_str());
+		return false;
+	}
+
+	for (unsigned int i = 0; i < jointNames.size(); ++i) {
+		XmlRpcValue &name = jointNames[i];
+		if (name.getType() != XmlRpcValue::TypeString) {
+			ROS_ERROR("Array of joint names should contain all strings.  (namespace: %s)", nodeHandle.getNamespace().c_str());
+			return false;
+		}
+
+		pr2_mechanism_model::JointState *jointStatePtr = robotPtr->getJointState((std::string)name);
+		if (jointStatePtr == NULL) {
+			ROS_ERROR("Joint not found: %s. (namespace: %s)", ((std::string)name).c_str(), nodeHandle.getNamespace().c_str());
+			return false;
+		}
+
+		joints.push_back(jointStatePtr);
+	}
+
+	// Ensures that all the joints are calibrated.
+	for (unsigned int i = 0; i < joints.size(); ++i) {
+		if (!joints[i]->calibrated_) {
+			ROS_ERROR("Joint %s was not calibrated (namespace: %s)", joints[i]->joint_->name.c_str(), nodeHandle.getNamespace().c_str());
+			return false;
+		}
+	}
+
+	// Initializing targetVelocities vector
+	targetVelocities.resize(joints.size());
+
+	// Sets up pid controllers for all of the joints from yaml file
+	std::string gainsNS;
+
+	if (!nodeHandle.getParam("gains", gainsNS))
+		gainsNS = nodeHandle.getNamespace() + "/gains";
+
+	pids.resize(joints.size());
+
+	for (unsigned int i = 0; i < joints.size(); ++i) {
+		if (!pids[i].init(ros::NodeHandle(gainsNS + "/" + joints[i]->joint_->name)))
+			return false;
+	}
+
+	subscriber = nodeHandle.subscribe("command", 1, &JointVelocityController::velocityCommand, this);
+
+	return true;
 }
 
-} // namespace
+void JointVelocityController::starting() {
+	ROS_DEBUG("Starting velocity controls for the joints\n");
+
+	for (unsigned int i = 0; i < pids.size(); ++i)
+		pids[i].reset();
+
+	// Initializing timer
+	lastTime = robotPtr->getTime();
+}
+
+void JointVelocityController::update() {
+	// Calculating time interval dt between cycles
+	ros::Time currentTime = robotPtr->getTime();
+	ros::Duration dt = currentTime - lastTime;
+	lastTime = currentTime;
+
+	// Initializing error vector
+	std::vector<double> error(joints.size());
+
+	// Doing control here, calculating and applying the efforts
+	for (unsigned int i = 0; i < joints.size(); ++i) {
+		error[i] = joints[i]->velocity_ - targetVelocities[i];
+		joints[i]->commanded_effort_ += pids[i].updatePid(error[i], dt);
+	}
+}
+
+void JointVelocityController::velocityCommand(const brics_actuator::JointVelocities &jointVelocities) {
+	ROS_DEBUG("Readin the target velocity from brics_actuator::JointVelocities message\n");
+	std::vector <brics_actuator::JointValue> velocities = jointVelocities.velocities;
+
+	if (velocities.empty()) {
+		starting();
+		return;
+	}
+
+	//Correlates the joints we're commanding to the joints in the message
+	std::vector<int> lookup(joints.size(), -1); // Maps from an index in joints_ to an index in the msg
+	for (unsigned int j = 0; j < joints.size(); ++j) {
+		for (unsigned int k = 0; k < velocities.size(); ++k) {
+			if (velocities[k].joint_uri.compare(joints[j]->joint_->name)) {
+				lookup[j] = k;
+				break;
+			}
+		}
+
+		if (lookup[j] == -1) {
+			ROS_ERROR("Unable to locate joint %s in the commanded velocities.", joints[j]->joint_->name.c_str());
+			return;
+		}
+	}
+
+	std::vector<double> actualVelocities;
+	targetVelocities.resize(velocities.size());
+
+	using namespace boost::units;
+
+    for (unsigned int j = 0; j < joints.size(); ++j) {
+        ROS_INFO("Joint %s = %f %s, ",velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].value, velocities[lookup[j]].unit.c_str());
+      //  std::string unit = (base_unit_info <boost::units::si::radians_per_second>).name();
+       // if (velocities[lookup[j]].unit.c_str() != boost::units::si::radians_per_second) {
+            ROS_ERROR("Joint %s has the value in the inpcompatible units %s", velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].unit.c_str());
+            continue;
+        //}
+
+		if (!targetVelocities.empty())
+			targetVelocities[j] = velocities[lookup[j]].value;
+	}
+}
+}
