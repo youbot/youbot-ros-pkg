@@ -56,8 +56,8 @@ public:
 	JointVelocityController();
 	~JointVelocityController();
 
-	bool init(pr2_mechanism_model::RobotState *robot, const std::string &joint_name, const control_toolbox::Pid &pid);
-	bool init(pr2_mechanism_model::RobotState *robot, ros::NodeHandle &n);
+	bool init(pr2_mechanism_model::RobotState *robotPtr, const std::string &jointName, const control_toolbox::Pid &pid);
+	bool init(pr2_mechanism_model::RobotState *robotPtr, ros::NodeHandle &nodeHandle);
 	void starting();
 	void update();
 

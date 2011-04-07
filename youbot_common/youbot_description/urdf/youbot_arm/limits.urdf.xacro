@@ -33,36 +33,31 @@
 	<xacro:macro name="link_1_inertia_tensor">
 		<origin xyz="${14.89/1000} ${2.13/1000} ${2.13/1000}" 
 			rpy="0 0 0" />
-<inertia ixx="0.003863 " ixy="-0.000979 " ixz="0.000000"  		 iyy="0.006196" iyz
-="0.000000" 		 izz="0.006369" />
+		<inertia ixx="0.003863" ixy="-0.000979" ixz="0.000000" iyy="0.006196" iyz="0.000000" izz="0.006369" />
 	
 	</xacro:macro>
 	<xacro:macro name="link_2_inertia_tensor">
 		<origin xyz="${104.53/1000} ${1.7/1000} ${-2.97/1000}" 
 			rpy="0 0 0" />
-<inertia ixx="0.000823 " ixy="0.000000 " ixz="-0.000000"  		 iyy="0.004447" iyz
-="0.000000" 		 izz="0.004439" />
+		<inertia ixx="0.000823" ixy="0.000000" ixz="-0.000000" iyy="0.004447" iyz ="0.000000" izz="0.004439" />
 	
 	</xacro:macro>
 	<xacro:macro name="link_3_inertia_tensor">
 		<origin xyz="${0.1/1000} ${96.7/1000} ${21.07/1000}" 
-		rpy="0 0 0" />
-<inertia ixx="0.002459 " ixy="0.000000 " ixz="0.000000"  		 iyy="0.002571" iyz=
-"-0.000000" 		 izz="0.000535" />
+			rpy="0 0 0" />
+		<inertia ixx="0.002459" ixy="0.000000" ixz="0.000000" iyy="0.002571" iyz="-0.000000" izz="0.000535" />
 
 	</xacro:macro>
 	<xacro:macro name="link_4_inertia_tensor">
 		<origin xyz="${0.11/1000} ${51.03/1000} ${-23.19/1000}" 
-		rpy="0 0 0"  />
-<inertia ixx="0.000869 " ixy="0.000000 " ixz="-0.000000"  		 iyy="0.001173" iyz
-="-0.000231" 		 izz="0.001091" />
+			rpy="0 0 0"  />
+		<inertia ixx="0.000869" ixy="0.000000" ixz="-0.000000" iyy="0.001173" iyz="-0.000231" izz="0.001091" />
 	
 	</xacro:macro>
 	<xacro:macro name="link_5_inertia_tensor">
 		<origin xyz="${0/1000} ${1.15/1000} ${-16.83/1000}" 
-		rpy="0 0 0" />
-<inertia ixx="0.000280 " ixy="0.000000 " ixz="0.000000"  		 iyy="0.000339" iyz=
-"0.000000" 		 izz="0.000119" />
+			rpy="0 0 0" />
+		<inertia ixx="0.000280" ixy="0.000000" ixz="0.000000" iyy="0.000339" iyz="0.000000" izz="0.000119" />
 
 	</xacro:macro>
 
