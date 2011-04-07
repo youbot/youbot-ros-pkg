@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">>
 
 	<!-- common properties -->
 	<property name="M_PI" value="3.1415926535897931" />
@@ -34,154 +34,37 @@
 		<origin xyz="${14.89/1000} ${2.13/1000} ${2.13/1000}" 
 			rpy="${180.00*M_PI/180}  ${20.00*M_PI/180} ${0*M_PI/180}" />
 		<inertia ixx="0.0035070" ixy="0" ixz="0"
-				iyy="0.0065526" iyz="0"
-				        izz="0.0063686" />
+			 iyy="0.0065526" iyz="0"
+			 izz="0.0063686" />
 	</xacro:macro>
-</robot>
-<!--
-<?xml version="1.0" encoding="UTF-8"?>
-<DynDat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="AxisData.xsd">
-  <Axis Number="1">
-    <Geometry>
-      <Mass m="2.412"/>
-      <CM-Frame x="14.89" y="2.13" z="31.05" a="180.00" b="20.00" c="0.00"/>
-      <Inertia xx="0.0035070" yy="0.0065526" zz="0.0063686"/>
-    </Geometry>
-    <Gear>
-      <DynamicLimits Mg="9.5" TrqTol="150" Mg_EM="40.0" Jerk="105263.203125"/>
-      <TorqueCharLine>
-        <x-Axis x1="0.00" x2="3.531" x3="0.00" x4="0.00" x5="0.00" x6="0.00" x7="0.00"/>
-        <y-Axis y1="9.500" y2="9.50" y3="0.00" y4="0.00" y5="0.00" y6="0.00" y7="0.00"/>
-      </TorqueCharLine>
-      <Friction Rh="0.00" Rv="0.00" Rz="1.00" Ad="1.00"/>
-    </Gear>
-    <Motor>
-      <Inertia Ja="0.3285"/>
-      <DynamicLimits Ma="0.084" S="1.000000" Ma_EM="40.0" TrqBrkMax="40.0" TrqBrkHold="40.000000" MaxEKin="7813.399902"/>
-      <TorqueCharLine>
-        <x-Axis x1="0.000" x2="550.8733" x3="0.00" x4="0.00" x5="0.00" x6="0.00" x7="0.00"/>
-        <y-Axis y1="0.084" y2="0.084000" y3="0.00" y4="0.00" y5="0.00" y6="0.00" y7="0.00"/>
-      </TorqueCharLine>
-    </Motor>
-    <AdditionalLoad>
-      <Mass m="0.00"/>
-      <CM-Frame x="0.00" y="0.00" z="0.00" a="0.00" b="0.00" c="0.00"/>
-      <Inertia xx="0.00" yy="0.00" zz="0.00"/>
-    </AdditionalLoad>
-  </Axis>
-  <Axis Number="2">
-    <Geometry>
-      <Mass m="1.155"/>
-      <CM-Frame x="104.53" y="1.70" z="-2.97" a="-90.00" b="0.00" c="-90.00"/>
-      <Inertia xx="0.0044395" yy="0.0008231" zz="0.004447"/>
-    </Geometry>
-    <Gear>
-      <DynamicLimits Mg="9.5" TrqTol="150" Mg_EM="40.0" Jerk="105263.203125"/>
-      <TorqueCharLine>
-        <x-Axis x1="0.0" x2="3.531" x3="0.00" x4="0.00" x5="0.00" x6="0.00" x7="0.00"/>
-        <y-Axis y1="9.50" y2="9.50" y3="0.00" y4="0.00" y5="0.00" y6="0.00" y7="0.00"/>
-      </TorqueCharLine>
-      <Friction Rh="0.00" Rv="0.00" Rz="1.00" Ad="1.00"/>
-    </Gear>
-    <Motor>
-       <Inertia Ja="0.3285"/>
-       <DynamicLimits Ma="0.084" S="1.000000" Ma_EM="40.0" TrqBrkMax="40.0" TrqBrkHold="40.000000" MaxEKin="7813.399902"/>
-       <TorqueCharLine>
-         <x-Axis x1="0.000" x2="550.88" x3="0.00" x4="0.00" x5="0.00" x6="0.00" x7="0.00"/>
-         <y-Axis y1="0.084" y2="0.0840" y3="0.00" y4="0.00" y5="0.00" y6="0.00" y7="0.00"/>
-       </TorqueCharLine>
-    </Motor>
-    <AdditionalLoad>
-      <Mass m="0.00"/>
-      <CM-Frame x="0.00" y="0.00" z="0.00" a="0.00" b="0.00" c="0.00"/>
-      <Inertia xx="0.00" yy="0.00" zz="0.00"/>
-    </AdditionalLoad>
-  </Axis>
-  <Axis Number="3">
-    <Geometry>
-      <Mass m="0.934"/>
-      <CM-Frame x="0.1" y="96.7" z="21.07" a="0.00" b="0.00" c="90.00"/>
-      <Inertia xx="0.0024588" yy="0.0005354" zz="0.0025708"/>
-    </Geometry>
-    <Gear>
-      <DynamicLimits Mg="6.0" TrqTol="150" Mg_EM="30.0" Jerk="105263.203125"/>
-      <TorqueCharLine>
-        <x-Axis x1="0.00" x2="5.73" x3="0.00" x4="0.00" x5="0.00" x6="0.00" x7="0.00"/>
-        <y-Axis y1="6.00" y2="6.00" y3="0.00" y4="0.00" y5="0.00" y6="0.00" y7="0.00"/>
-      </TorqueCharLine>
-      <Friction Rh="0.00" Rv="0.00" Rz="1.00" Ad="1.00"/>
-    </Gear>
-    <Motor>
-       <Inertia Ja="0.3285"/>
-       <DynamicLimits Ma="0.084" S="1.000000" Ma_EM="30.0" TrqBrkMax="30.0" TrqBrkHold="30.000000" MaxEKin="7813.399902"/>
-       <TorqueCharLine>
-         <x-Axis x1="0.000" x2="572.96" x3="0.00" x4="0.00" x5="0.00" x6="0.00" x7="0.00"/>
-         <y-Axis y1="0.084" y2="0.0840" y3="0.00" y4="0.00" y5="0.00" y6="0.00" y7="0.00"/>
-       </TorqueCharLine>
-    </Motor>
-    <AdditionalLoad>
-      <Mass m="0.00"/>
-      <CM-Frame x="0.00" y="0.00" z="0.00" a="0.00" b="0.00" c="0.00"/>
-      <Inertia xx="0.00" yy="0.00" zz="0.00"/>
-    </AdditionalLoad>
-  </Axis>
-  <Axis Number="4">
-    <Geometry>
-      <Mass m="0.877"/>
-      <CM-Frame x="0.11" y="51.03" z="-23.19" a="0.00" b="180.00" c="40.00"/>
-      <Inertia xx="0.0008688" yy="0.0013669" zz="0.0008970"/>
-    </Geometry>
-    <Gear>
-      <DynamicLimits Mg="2.0" TrqTol="150" Mg_EM="40.0" Jerk="105263.203125"/>
-      <TorqueCharLine>
-        <x-Axis x1="0.00" x2="11.29" x3="0.00" x4="0.00" x5="0.00" x6="0.00" x7="0.00"/>
-        <y-Axis y1="2.00" y2="2.000" y3="0.00" y4="0.00" y5="0.00" y6="0.00" y7="0.00"/>
-      </TorqueCharLine>
-      <Friction Rh="0.00" Rv="0.00" Rz="1.00" Ad="1.00"/>
-    </Gear>
-    <Motor>
-      <Inertia Ja="0.0466"/>
-      <DynamicLimits Ma="0.0588" S="1.00" Ma_EM="10.0" TrqBrkMax="10.0" TrqBrkHold="10.0" MaxEKin="636.200012"/>
-      <TorqueCharLine>
-        <x-Axis x1="0.0000" x2="802.14" x3="0.00" x4="0.00" x5="0.00" x6="0.00" x7="0.00"/>
-        <y-Axis y1="0.0466" y2="0.0466" y3="0.00" y4="0.00" y5="0.00" y6="0.00" y7="0.00"/>
-      </TorqueCharLine>
-    </Motor>
-    <AdditionalLoad>
-      <Mass m="0.00"/>
-      <CM-Frame x="0.00" y="0.00" z="0.00" a="0.00" b="0.00" c="0.00"/>
-      <Inertia xx="0.00" yy="0.00" zz="0.00"/>
-    </AdditionalLoad>
-  </Axis>
-  <Axis Number="5">
-    <Geometry>
-      <Mass m="0.251"/>
-      <CM-Frame x="0.00" y="1.15" z="-16.83" a="0.00" b="90.00" c="0.00"/>
-      <Inertia xx="0.0003388" yy="0.0002798" zz="0.0001191"/>
-    </Geometry>
-    <Gear>
-      <DynamicLimits Mg="1.0" TrqTol="150" Mg_EM="5.000" Jerk="30263.199219"/>
-      <TorqueCharLine>
-        <x-Axis x1="0.00" x2="11.57" x3="0.00" x4="0.00" x5="0.00" x6="0.00" x7="0.00"/>
-        <y-Axis y1="5.00" y2="5.000" y3="0.00" y4="0.00" y5="0.00" y6="0.00" y7="0.00"/>
-      </TorqueCharLine>
-      <Friction Rh="0.00" Rv="0.00" Rz="1.00" Ad="1.00"/>
-    </Gear>
-    <Motor>
-      <Inertia Ja="0.0176"/>
-      <DynamicLimits Ma="0.0233" S="1.00" Ma_EM="5.00" TrqBrkMax="5.00" TrqBrkHold="5.00" MaxEKin="963.400024"/>
-      <TorqueCharLine>
-        <x-Axis x1="0.0000" x2="821.24" x3="0.00" x4="0.00" x5="0.00" x6="0.00" x7="0.00"/>
-        <y-Axis y1="0.0233" y2="0.0233" y3="0.00" y4="0.00" y5="0.00" y6="0.00" y7="0.00"/>
-      </TorqueCharLine>
-    </Motor>
-    <AdditionalLoad>
-      <Mass m="0.400"/>
-      <CM-Frame x="0.00" y="0.00" z="28.9" a="180.00" b="0.00" c="90.00"/>
-      <Inertia xx="0.0003098" yy="0.0004771" zz="0.0002781"/>
-    </AdditionalLoad>
-  </Axis>
- </DynDat>
+	<xacro:macro name="link_2_inertia_tensor">
+		<origin xyz="${104.53/1000} ${1.7/1000} ${-2.97/1000}" 
+			rpy="${-90.00*M_PI/180}  ${0.00*M_PI/180} ${-90*M_PI/180}" />
+		<inertia ixx="0.0044395" ixy="0" ixz="0"
+			 iyy="0.0008231" iyz="0"
+			 izz="0.004447" />
+	</xacro:macro>
+	<xacro:macro name="link_3_inertia_tensor">
+		<origin xyz="${0.1/1000} ${96.7/1000} ${21.07/1000}" 
+			rpy="${0.00*M_PI/180}  ${0.00*M_PI/180} ${90*M_PI/180}" />
+		<inertia ixx="0.0024588" ixy="0" ixz="0"
+			 iyy="0.0005354" iyz="0"
+			 izz="0.0025708" />
+	</xacro:macro>
+	<xacro:macro name="link_4_inertia_tensor">
+		<origin xyz="${0.11/1000} ${51.03/1000} ${-23.19/1000}" 
+			rpy="${0.00*M_PI/180}  ${180.00*M_PI/180} ${40*M_PI/180}" />
+		<inertia ixx="0.0008688" ixy="0" ixz="0"
+			 iyy="0.0013669" iyz="0"
+			 izz="0.0008970" />
+	</xacro:macro>
+	<xacro:macro name="link_5_inertia_tensor">
+		<origin xyz="${0/1000} ${1.15/1000} ${-16.83/1000}" 
+			rpy="${0.00*M_PI/180}  ${90.00*M_PI/180} ${0*M_PI/180}" />
+		<inertia ixx="0.0003388" ixy="0" ixz="0"
+			 iyy="0.0002798" iyz="0"
+			 izz="0.0001191" />
+	</xacro:macro>
 
-      
--->
+
+</robot>

@@ -67,11 +67,8 @@
 
 		<link name="${name}_link_1">
 			<inertial>
-				<!--<origin xyz="0 0 -0.003" rpy="0 0 0" />-->
-				<!--<origin xyz="0 0 0" rpy="0 0 0" /> -->
 				<mass value="${link_1_mass}"/>
-			        <!--<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" /> -->
-				<xacro: link_1_inertia_tensor />
+				<xacro:link_1_inertia_tensor />
 			</inertial>
 			
 			<visual>
@@ -106,10 +103,8 @@
 
 		<link name="${name}_link_2">
 			<inertial>
-				<!--<origin xyz="0.001 -0.041 0.074" rpy="0 0 0" />-->
-				<origin xyz="0 -0.032 0.078" rpy="0 0 0" />
 				<mass value="${link_2_mass}"/>
-				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+				<xacro:link_2_inertia_tensor />
 			</inertial>
 			
 			<visual>
@@ -144,10 +139,8 @@
 
 		<link name="${name}_link_3">
 			<inertial>
-				<!--<origin xyz="0.000 0.025 0.067" rpy="0 0 0" />-->
-				<origin xyz="0.000 0.028 0.079" rpy="0 0 0" />
 				<mass value="${link_3_mass}"/>
-				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+				<xacro:link_3_inertia_tensor />
 			</inertial>
 			
 			<visual>
@@ -182,12 +175,10 @@
 
 		<link name="${name}_link_4">
 			<inertial>
-				<!--<origin xyz="0 0 0.026" rpy="0 0 0"/>-->
-				<origin xyz="0 -0.010 0.029" rpy="0 0 0"/>
 				<mass value="${link_4_mass}"/>
-				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+				<xacro:link_4_inertia_tensor />
 			</inertial>
-			
+		
 			<visual>
 				<origin xyz="0 -0.010 0.029" rpy="0 0 0"/>
 				<geometry>
@@ -220,9 +211,8 @@
 
 		<link name="${name}_link_5">
 			<inertial>
-				<origin xyz="0.003 0 -0.034" rpy="0 0 0" />
 				<mass value="${link_5_mass}"/>
-				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+				<xacro:link_5_inertia_tensor />
 			</inertial>
 			
 			<visual>
