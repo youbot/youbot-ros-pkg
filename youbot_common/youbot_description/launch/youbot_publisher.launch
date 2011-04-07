@@ -17,7 +17,7 @@
 	<!-- push robot_description to factory and spawn robot in gazebo -->
 	<node name="youbot_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -model youBot -x 0.0 -y 0.0 -z 0.1" respawn="false" output="screen" />
 
-	<!-- arm controllers -->
+        <!-- arm controllers -->
         <include file="$(find pr2_controller_manager)/controller_manager.launch" />
         
 	<rosparam file="$(find youbot_description)/controller/youbot_arm_controller.yaml" command="load"/>
