@@ -1,18 +1,16 @@
 arm_controller:
   type: youbot_description/JointVelocityController
   joints:
-    - arm_joint_1
+    - arm_joint_1  
     - arm_joint_2
     - arm_joint_3
     - arm_joint_4
     - arm_joint_5
-    - gripper_finger_joint_l
-    - gripper_finger_joint_r
-   
+     
   gains:
     arm_joint_1:
-      p: 15
-      d: 0
+      p: 10
+      d: 2.0
     arm_joint_2:
       p: 10
       d: 2.0
@@ -25,39 +23,3 @@ arm_controller:
     arm_joint_5:
       p: 10
       d: 2.0
-    gripper_finger_joint_l:
-      p: 10
-      d: 2.0
-    gripper_finger_joint_r:
-      p: 10
-      d: 2.0
-   
-    
-
-  arm_joint_trajectory_action_node:
-    joints:
-      - arm_joint_1
-      - arm_joint_2
-      - arm_joint_3
-      - arm_joint_4
-      - arm_joint_5
-      - gripper_finger_joint_l
-      - gripper_finger_joint_r
-        
-    constraints:
-      goal_time: 0.6
-      arm_joint_1:
-        goal: 0.0
-      arm_joint_2:
-        goal: 0.0
-      arm_joint_3:
-        goal: 0.0
-      arm_joint_4:
-        goal: 0.0
-      arm_joint_5:
-        goal: 0.0
-      gripper_finger_joint_l:
-        goal: 0.0
-      gripper_finger_joint_r:
-        goal: 0.0
-

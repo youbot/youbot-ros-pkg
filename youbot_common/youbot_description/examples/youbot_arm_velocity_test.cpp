@@ -69,7 +69,7 @@ int main(int argc, char **argv)
         brics_actuator::JointVelocities command;
 		vector <brics_actuator::JointValue> setPoints;
 
-		setPoints.resize(numberOfJoints + 2); //TODO:change that
+		setPoints.resize(numberOfJoints /*+ 2*/); //TODO:change that
 
 		std::stringstream jointName;
 
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 
 		};
 
-		cout << "Please type in value for gripper " << endl;
+		/*cout << "Please type in value for gripper " << endl;
 		cin >> readValue;
 		setPoints[numberOfJoints].joint_uri = "gripper_finger_joint_l";
         setPoints[numberOfJoints].value = readValue;
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 		setPoints[numberOfJoints + 1].unit = boost::units::to_string(boost::units::si::meter_per_second);
 
 		cout << "sending command ..." << endl;
-
+*/
 		command.velocities = setPoints;
 		armJointVelocitiesPublisher.publish(command);
 		cout << "--------------------" << endl;
