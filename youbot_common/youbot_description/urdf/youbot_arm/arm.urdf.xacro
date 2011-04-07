@@ -53,16 +53,9 @@
 			<child link="${name}_link_1"/>
 			<axis xyz="0 0 -1"/>
 			<!--<calibration rising="${arm_1_ref}" falling="${arm_1_ref}"/>-->
-			<dynamics damping="0.5" friction="0.5" />
-			<!-- damping - N*s/m, N*s*m/rad -->
-			<!-- friction - N, N*m -->			
-			<limit effort="1" velocity="${M_PI / 2.0}" lower="0" upper="${joint_1_limit}"/> 
-			<!--effort - N, N*m-->
-			<!--velocity - m/s, rad/s-->
-			<safety_controller k_position="20" k_velocity="100" soft_lower_limit="${threshold}" soft_upper_limit="${joint_1_limit_soft}" />
-			<!--k_position N/m, N/rad-->
-			<!--k_velocity N*s/m, N*s*m/rad-->
-			<!--for details: http://www.ros.org/wiki/pr2_controller_manager/safety_limits-->
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="10" velocity="${M_PI / 2.0}" lower="0" upper="${joint_1_limit}"/> 
+			<safety_controller k_position="20" k_velocity="25" soft_lower_limit="${threshold}" soft_upper_limit="${joint_1_limit_soft}" />
 		</joint>
 
 		<link name="${name}_link_1">
@@ -99,9 +92,9 @@
 			<child link="${name}_link_2"/>
 			<axis xyz="0 1 0"/>
 			<!--<calibration rising="${arm_2_ref}" falling="${arm_2_ref}"/>-->
-			<dynamics damping="0.5" friction="0.5" />
-			<limit effort="1" velocity="${M_PI / 2.0}" lower="0" upper="${joint_2_limit}"/>
-                        <safety_controller k_position="20" k_velocity="1.0" soft_lower_limit="${threshold}" soft_upper_limit="${joint_2_limit_soft}" />
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="10" velocity="${M_PI / 2.0}" lower="0" upper="${joint_2_limit}"/>
+                        <safety_controller k_position="20" k_velocity="25" soft_lower_limit="${threshold}" soft_upper_limit="${joint_2_limit_soft}" />
 		</joint>
 
 		<link name="${name}_link_2">
@@ -137,9 +130,9 @@
 			<child link="${name}_link_3"/>
 			<axis xyz="0 1 0"/>
 			<!--<calibration rising="${arm_3_ref}" falling="${arm_3_ref}"/>-->
-			<dynamics damping="0.5" friction="0.5" />
-			<limit effort="1" velocity="${M_PI / 2.0}" lower="-${joint_3_limit}" upper="0"/>
-                        <safety_controller k_position="20" k_velocity="1.0" soft_lower_limit="-${joint_3_limit_soft}" soft_upper_limit="${threshold}" />
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="10" velocity="${M_PI / 2.0}" lower="-${joint_3_limit}" upper="0"/>
+                        <safety_controller k_position="20" k_velocity="25" soft_lower_limit="-${joint_3_limit_soft}" soft_upper_limit="${threshold}" />
 		</joint>
 
 		<link name="${name}_link_3">
@@ -175,9 +168,9 @@
 			<child link="${name}_link_4"/>
 			<axis xyz="0 1 0" />
 			<!--<calibration rising="${arm_4_ref}" falling="${arm_4_ref}"/>-->
-			<dynamics damping="0.5" friction="0.5" />
-			<limit effort="1" velocity="${M_PI / 2.0}" lower="0" upper="${joint_4_limit}"/>
-			<safety_controller k_position="20" k_velocity="1.0" soft_lower_limit="0" soft_upper_limit="${joint_4_limit_soft}" />
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="10" velocity="${M_PI / 2.0}" lower="0" upper="${joint_4_limit}"/>
+			<safety_controller k_position="20" k_velocity="25" soft_lower_limit="0" soft_upper_limit="${joint_4_limit_soft}" />
 		</joint>
 
 		<link name="${name}_link_4">
@@ -213,9 +206,9 @@
 			<child link="${name}_link_5"/>
 			<axis xyz="0 0 1" />
 			<!--<calibration rising="${arm_5_ref}" falling="${arm_5_ref}"/>-->
-			<dynamics damping="0.5" friction="0.5" />
-			<limit effort="1" velocity="${M_PI / 2.0}" lower="0" upper="${joint_5_limit}" />
-                        <safety_controller k_position="20" k_velocity="1.0" soft_lower_limit="0" soft_upper_limit="${joint_5_limit_soft}" />
+			<dynamics damping="1.0" friction="1.0" />
+			<limit effort="10" velocity="${M_PI / 2.0}" lower="0" upper="${joint_5_limit}" />
+                        <safety_controller k_position="20" k_velocity="25" soft_lower_limit="0" soft_upper_limit="${joint_5_limit_soft}" />
 		</joint>
 
 		<link name="${name}_link_5">

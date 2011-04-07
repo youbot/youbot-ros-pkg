@@ -11,26 +11,26 @@ arm_controller:
    
   gains:
     arm_joint_1:
-      p: 15
-      d: 0
+      p: 2000.0
+      d: 0.0
     arm_joint_2:
-      p: 10
-      d: 2.0
+      p: 2000.0
+      d: 0.0
     arm_joint_3: 
-      p: 10
-      d: 2.0
+      p: 2000.0
+      d: 0.0
     arm_joint_4:
-      p: 10
-      d: 2.0
+      p: 2020.0
+      d: 0.0
     arm_joint_5:
-      p: 10
-      d: 2.0
+      p: 2030.0
+      d: 0.0
     gripper_finger_joint_l:
-      p: 10
-      d: 2.0
+      p: 200.0
+      d: 0.0
     gripper_finger_joint_r:
-      p: 10
-      d: 2.0
+      p: 200.0
+      d: 0.0
    
     
 
