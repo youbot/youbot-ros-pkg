@@ -4,7 +4,8 @@
        xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
        xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
        xmlns:xacro="http://ros.org/wiki/xacro">
-
+	<!-- reduction ratio doesn't affect the model-->
+	<!-- reduction ratio must not to be 0-->
 	<xacro:macro name="youbot_arm_transmission" params="name">
 
 		<transmission name="${name}_trans_1" type="pr2_mechanism_model/SimpleTransmission">
