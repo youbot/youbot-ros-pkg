@@ -48,7 +48,7 @@
 
 #include "brics_actuator/JointTorques.h"
 #include "brics_actuator/CartesianWrench.h"
-#include "../src/force_control_generated/ForceControl.h"
+#include "../src/position_interaction_control/PositionInteractionControl.h"
 
 namespace controller {
 
@@ -60,7 +60,7 @@ public:
 
 	void init20SimController();
 
-	ForceControl my20simSubmodel;
+	PositionInteractionControl my20simSubmodel;
 
 
 	bool init(pr2_mechanism_model::RobotState *robotPtr, const std::string &jointName, const control_toolbox::Pid &pid);
@@ -78,7 +78,7 @@ private:
 	std::vector <double> targetEfforts;
 	brics_actuator::CartesianWrench wrench;
 	XXDouble u [34 + 1];
-	XXDouble y [27 + 1];
+	XXDouble y [21 + 1];
 	ros::Subscriber subscriber;
 	void velocityCommand(const brics_actuator::JointTorques &jointVelocities);
 	void wrenchCommand(const brics_actuator::CartesianWrench &wrench);

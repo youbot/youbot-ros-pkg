@@ -72,7 +72,7 @@ void JointEffortController::init20SimController() {
 	u[3] = 0.0;
 	u[4] = 0.0;
 	u[5] = 0.024; /* Linkdim */
-	u[6] = 0.0;
+	u[6] = 0.0;//0.0;
 	u[7] = 0.096;
 
 	u[8] = 0.033;
@@ -95,11 +95,11 @@ void JointEffortController::init20SimController() {
 	u[21] = 0.0;
 	u[22] = 0.130;
 
-	u[23] = 170 * M_PI / 180; /* q */
-	u[24] = -65 * M_PI / 180;
-	u[25] = 146 * M_PI / 180;
-	u[26] = -102.5 * M_PI / 180;
-	u[27] = 167.5 * M_PI / 180;
+	u[23] = 170 * M_PI / 180; //2.9671 /* q */
+	u[24] = -65 * M_PI / 180; //-1.1345
+	u[25] = 146 * M_PI / 180; //2.5482
+	u[26] = -102.5 * M_PI / 180; //-1.7890
+	u[27] = 167.5 * M_PI / 180; //2.9234
 
 	u[28] = 0.0; /* tip.e */
 	u[29] = 0.0;
@@ -129,12 +129,7 @@ void JointEffortController::init20SimController() {
 	y[18] = 0.0;
 	y[19] = 0.0;
 	y[20] = 0.0;
-	y[21] = 0.0; /* tip.f */
-	y[22] = 0.0;
-	y[23] = 0.0;
-	y[24] = 0.0;
-	y[25] = 0.0;
-	y[26] = 0.0;
+
 	my20simSubmodel.Initialize(u, y, 0.0);
 
 }
@@ -226,11 +221,12 @@ void JointEffortController::udpate20SimControl(brics_actuator::CartesianWrench &
 	u[3] = joints[3]->velocity_;
 	u[4] = joints[4]->velocity_;
 	// u
-	u[23] = joints[0]->position_; /* q */
-	u[24] = joints[1]->position_;
-	u[25] = joints[2]->position_;
-	u[26] = joints[3]->position_;
-	u[27] = joints[4]->position_;
+
+	u[23] = joints[0]->position_ - 170 * M_PI / 180; /* q */
+	u[24] = joints[1]->position_ + 65 * M_PI / 180;
+	u[25] = joints[2]->position_ - 146 * M_PI / 180;
+	u[26] = joints[3]->position_ + 102.5 * M_PI / 180;
+	u[27] = joints[4]->position_ - 167.5 * M_PI / 180;
 
 	u[28] = wrench.force.x; /* tip.e */
 	u[29] = wrench.force.y;
@@ -255,12 +251,12 @@ void JointEffortController::udpate20SimControl(brics_actuator::CartesianWrench &
 	y[13] = 0.0;
 	y[14] = 0.0;
 	y[15] = 0.0;*/
-	targetEfforts[0] = y[16]; /* joints.e */
-	targetEfforts[1] = y[17];
-	targetEfforts[2] = y[18];
-	targetEfforts[3] = y[19];
-	targetEfforts[4] = y[20];
-	ROS_INFO("%f, %f, %f, %f, %f \n", targetEfforts[0], targetEfforts[1], targetEfforts[2], targetEfforts[3], targetEfforts[4]);
+	targetEfforts[0] = y[0]; /* joints.e */
+	targetEfforts[1] = y[1];
+	targetEfforts[2] = y[2];
+	targetEfforts[3] = y[3];
+	targetEfforts[4] = y[4];
+	ROS_INFO("Effort: %f, %f, %f, %f, %f \n", targetEfforts[0], targetEfforts[1], targetEfforts[2], targetEfforts[3], targetEfforts[4]);
 	//y[21] = 0.0;		/* tip.f */
 	/*y[22] = 0.0;
 	y[23] = 0.0;
