@@ -6,7 +6,7 @@
  *  model: ControlYoubotArmInteraction
  *  expmt: ControlYoubotArmInteraction
  *  date:  April 8, 2011
- *  time:  3:55:48 pm
+ *  time:  5:53:21 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -150,13 +150,13 @@ void PositionInteractionControl::Initialize (XXDouble *u, XXDouble *y, XXDouble 
 	m_C[1] = 0.0;		
 	m_C[2] = 1.0;		
 	m_C[3] = 0.0;		/* CalculateJ\omega2 */
-	m_C[4] = 1.0;		
+	m_C[4] = -1.0;		
 	m_C[5] = 0.0;		
 	m_C[6] = 0.0;		/* CalculateJ\omega3 */
 	m_C[7] = 1.0;		
 	m_C[8] = 0.0;		
 	m_C[9] = 0.0;		/* CalculateJ\omega4 */
-	m_C[10] = 1.0;		
+	m_C[10] = -1.0;		
 	m_C[11] = 0.0;		
 	m_C[12] = 0.0;		/* CalculateJ\omega5 */
 	m_C[13] = 0.0;		
