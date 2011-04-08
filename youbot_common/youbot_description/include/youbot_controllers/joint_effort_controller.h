@@ -47,6 +47,8 @@
 #include <pr2_controller_interface/controller.h>
 
 #include "brics_actuator/JointTorques.h"
+#include "brics_actuator/CartesianWrench.h"
+#include "../src/force_control_generated/ForceControl.h"
 
 namespace controller {
 
@@ -56,10 +58,16 @@ public:
 	JointEffortController();
 	~JointEffortController();
 
+	void init20SimController();
+
+	ForceControl my20simSubmodel;
+
+
 	bool init(pr2_mechanism_model::RobotState *robotPtr, const std::string &jointName, const control_toolbox::Pid &pid);
 	bool init(pr2_mechanism_model::RobotState *robotPtr, ros::NodeHandle &nodeHandle);
 	void starting();
 	void update();
+	void udpate20SimControl(brics_actuator::CartesianWrench &wrench);
 
 private:
 	ros::NodeHandle nodeHandle;
@@ -68,9 +76,12 @@ private:
 	std::vector<control_toolbox::Pid> pids;
 	ros::Time lastTime;
 	std::vector <double> targetEfforts;
-
+	brics_actuator::CartesianWrench wrench;
+	XXDouble u [34 + 1];
+	XXDouble y [27 + 1];
 	ros::Subscriber subscriber;
 	void velocityCommand(const brics_actuator::JointTorques &jointVelocities);
+	void wrenchCommand(const brics_actuator::CartesianWrench &wrench);
 };
 
 } // namespace

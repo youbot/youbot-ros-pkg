@@ -23,3 +23,5 @@ arm_controller:
     arm_joint_5:
       p: 10
       d: 2.0
+
+  joint_state_publish_rate: 1
