@@ -3,10 +3,10 @@
  *
  *  file:  PositionInteractionControl.cpp
  *  subm:  PositionInteractionControl
- *  model: ControlYoubotArmInteraction
- *  expmt: ControlYoubotArmInteraction
- *  date:  April 8, 2011
- *  time:  5:53:21 pm
+ *  model: ControlYoubotArmInteraction_v1
+ *  expmt: ControlYoubotArmInteraction_v1
+ *  date:  April 9, 2011
+ *  time:  2:33:40 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -93,7 +93,7 @@ PositionInteractionControl::PositionInteractionControl(void)
 {
 	m_start_time = 0.0;
 	m_finish_time = 10.0;
-	m_step_size = 1.0e-4;
+	m_step_size = 0.001;
 	m_time = 0;
 	m_major = true;
 
@@ -148,15 +148,15 @@ void PositionInteractionControl::Initialize (XXDouble *u, XXDouble *y, XXDouble 
 	/* set the constants */
 	m_C[0] = 0.0;		/* CalculateJ\omega1 */
 	m_C[1] = 0.0;		
-	m_C[2] = 1.0;		
+	m_C[2] = -1.0;		
 	m_C[3] = 0.0;		/* CalculateJ\omega2 */
-	m_C[4] = -1.0;		
+	m_C[4] = 1.0;		
 	m_C[5] = 0.0;		
 	m_C[6] = 0.0;		/* CalculateJ\omega3 */
 	m_C[7] = 1.0;		
 	m_C[8] = 0.0;		
 	m_C[9] = 0.0;		/* CalculateJ\omega4 */
-	m_C[10] = -1.0;		
+	m_C[10] = 1.0;		
 	m_C[11] = 0.0;		
 	m_C[12] = 0.0;		/* CalculateJ\omega5 */
 	m_C[13] = 0.0;		

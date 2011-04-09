@@ -3,10 +3,10 @@
  *
  *  file:  common\xxmatrix.h
  *  subm:  PositionInteractionControl
- *  model: ControlYoubotArmInteraction
- *  expmt: ControlYoubotArmInteraction
- *  date:  April 8, 2011
- *  time:  5:53:21 pm
+ *  model: ControlYoubotArmInteraction_v1
+ *  expmt: ControlYoubotArmInteraction_v1
+ *  date:  April 9, 2011
+ *  time:  2:33:40 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
