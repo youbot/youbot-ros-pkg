@@ -29,7 +29,7 @@
 #define PositionInteractionControl_H
 
 
-class PositionInteractionControl: virtual Submodel20sim
+class PositionInteractionControl: public virtual Submodel20sim
 {
 	public:
 		enum stateflags_PositionInteractionControl {initialrun, mainrun, finished};

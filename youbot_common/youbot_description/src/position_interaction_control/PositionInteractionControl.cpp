@@ -147,24 +147,24 @@ void PositionInteractionControl::Initialize (XXDouble *u, XXDouble *y, XXDouble 
 
 	/* set the constants */
 	m_C[0] = 0.0;		/* CalculateJ\omega1 */
-	m_C[1] = 0.0;		
-	m_C[2] = -1.0;		
+	m_C[1] = 0.0;
+	m_C[2] = -1.0;
 	m_C[3] = 0.0;		/* CalculateJ\omega2 */
-	m_C[4] = 1.0;		
-	m_C[5] = 0.0;		
+	m_C[4] = 1.0;
+	m_C[5] = 0.0;
 	m_C[6] = 0.0;		/* CalculateJ\omega3 */
-	m_C[7] = 1.0;		
-	m_C[8] = 0.0;		
+	m_C[7] = 1.0;
+	m_C[8] = 0.0;
 	m_C[9] = 0.0;		/* CalculateJ\omega4 */
-	m_C[10] = 1.0;		
-	m_C[11] = 0.0;		
+	m_C[10] = 1.0;
+	m_C[11] = 0.0;
 	m_C[12] = 0.0;		/* CalculateJ\omega5 */
-	m_C[13] = 0.0;		
-	m_C[14] = 1.0;		
+	m_C[13] = 0.0;
+	m_C[14] = 1.0;
 
 
 	/* set the parameters */
-	m_P[0] = 0.07;		/* CtipControl1\CtipControl */
+	m_P[0] = 0.007;		/* CtipControl1\CtipControl */
 
 
 	/* set the states */
@@ -511,7 +511,7 @@ void PositionInteractionControl::Calculate (XXDouble *u, XXDouble *y /*, XXDoubl
 			break;
 		case mainrun:	/* calculate the model */
 
-			
+
 				CopyInputsToVariables (u);
 				CalculateInput ();
 				myintegmethod.Step();
@@ -519,10 +519,10 @@ void PositionInteractionControl::Calculate (XXDouble *u, XXDouble *y /*, XXDoubl
 				CopyVariablesToOutputs (y);
 			break;
 		case finished:
-			throw std::logic_error("The simulation was finished"); 
+			throw std::logic_error("The simulation was finished");
 			break;
 		default:
-			throw std::logic_error("The simulation state machine is inconsistent"); 
+			throw std::logic_error("The simulation state machine is inconsistent");
 			break;
 	}
 }

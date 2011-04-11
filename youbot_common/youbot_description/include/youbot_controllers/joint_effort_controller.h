@@ -42,12 +42,22 @@
 
 #include <vector>
 
+#include <boost/scoped_ptr.hpp>
 #include <ros/node_handle.h>
 #include <control_toolbox/pid.h>
 #include <pr2_controller_interface/controller.h>
 
+#include <realtime_tools/realtime_publisher.h>
+#include <realtime_tools/realtime_box.h>
+
+#include "pr2_controllers_msgs/JointTrajectoryControllerState.h"
+
 #include "brics_actuator/JointTorques.h"
 #include "brics_actuator/CartesianWrench.h"
+#include "brics_actuator/CartesianPose.h"
+#include "brics_actuator/JointPositions.h"
+#include "brics_actuator/JointTorques.h"
+
 #include "../src/position_interaction_control/PositionInteractionControl.h"
 
 namespace controller {
@@ -67,6 +77,7 @@ public:
 	bool init(pr2_mechanism_model::RobotState *robotPtr, ros::NodeHandle &nodeHandle);
 	void starting();
 	void update();
+	void publish();
 	void udpate20SimControl(brics_actuator::CartesianWrench &wrench);
 
 private:
@@ -82,6 +93,20 @@ private:
 	ros::Subscriber subscriber;
 	void velocityCommand(const brics_actuator::JointTorques &jointVelocities);
 	void wrenchCommand(const brics_actuator::CartesianWrench &wrench);
+
+	boost::scoped_ptr<realtime_tools::RealtimePublisher<pr2_controllers_msgs::JointTrajectoryControllerState> > controllerStatePublisher;
+
+	/*Debug outputs*/
+	boost::scoped_ptr<realtime_tools::RealtimePublisher<brics_actuator::JointPositions> > gazeboJointPositions;
+	boost::scoped_ptr<realtime_tools::RealtimePublisher<brics_actuator::JointPositions> > controllerJointPositions;
+
+	boost::scoped_ptr<realtime_tools::RealtimePublisher<brics_actuator::JointTorques> > gazeboJointTorques;
+	boost::scoped_ptr<realtime_tools::RealtimePublisher<brics_actuator::JointTorques> > controllerJointTorques;
+
+	boost::scoped_ptr<realtime_tools::RealtimePublisher<brics_actuator::CartesianPose> > gazeboJointPose;
+	boost::scoped_ptr<realtime_tools::RealtimePublisher<brics_actuator::CartesianPose> > controllerJointPose;
+
+    unsigned int loopCount;
 };
 
 } // namespace

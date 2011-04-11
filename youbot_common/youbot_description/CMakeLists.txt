@@ -47,5 +47,7 @@ rosbuild_add_executable(youbot_arm_velocity_test examples/youbot_arm_velocity_te
 rosbuild_add_executable(youbot_arm_effort_test examples/youbot_arm_effort_test.cpp)
 rosbuild_add_executable(youbot_arm_wrench_test examples/youbot_arm_wrench_test.cpp)
 rosbuild_add_executable(youbot_keyboard_teleop_experiment examples/keyboard_teleop_experiment.cpp)
+rosbuild_add_executable(youbot_controller_debug examples/youbot_controller_debug.cpp)
+
 
 
