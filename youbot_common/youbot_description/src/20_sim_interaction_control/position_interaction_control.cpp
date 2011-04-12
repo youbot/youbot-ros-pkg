@@ -18,7 +18,7 @@
 #include <stdexcept>
 
 /* 20-sim include files */
-#include "PositionInteractionControl.h"
+#include "position_interaction_control.h"
 
 	/* this PRIVATE function sets the input variables from the input vector */
 void PositionInteractionControl::CopyInputsToVariables (XXDouble *u)

@@ -3,10 +3,10 @@
  *
  *  file:  test_PositionInteractionControl.cpp
  *  subm:  PositionInteractionControl
- *  model: ControlYoubotArmInteraction
- *  expmt: ControlYoubotArmInteraction
- *  date:  April 8, 2011
- *  time:  3:55:48 pm
+ *  model: ControlYoubotArmInteraction_v1
+ *  expmt: ControlYoubotArmInteraction_v1
+ *  date:  April 9, 2011
+ *  time:  2:33:40 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -24,7 +24,7 @@
 #include <stdio.h>
 
 /* 20-sim submodel class include file */
-#include "PositionInteractionControl.h"
+#include "position_interaction_control.h"
 
 /* the main function */
 int main()

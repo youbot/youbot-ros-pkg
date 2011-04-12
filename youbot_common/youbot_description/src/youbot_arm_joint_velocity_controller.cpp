@@ -41,7 +41,7 @@
 #include <boost/units/systems/si.hpp>
 #include <boost/units/systems/si/angular_velocity.hpp>
 #include <boost/units/io.hpp>
-#include "youbot_controllers/joint_velocity_controller.h"
+#include "youbot_arm_joint_velocity_controller.h"
 #include "pluginlib/class_list_macros.h"
 
 PLUGINLIB_DECLARE_CLASS(youbot_description, JointVelocityController, controller::JointVelocityController, pr2_controller_interface::Controller)
@@ -80,7 +80,7 @@ bool JointVelocityController::init(pr2_mechanism_model::RobotState *robotPtr, ro
 		return false;
 	}
 
-	for (unsigned int i = 0; i < static_cast <unsigned int> (jointNames.size()); ++i) {
+	for (unsigned int i = 0; i < static_cast<unsigned int> (jointNames.size()); ++i) {
 		XmlRpcValue &name = jointNames[i];
 		if (name.getType() != XmlRpcValue::TypeString) {
 			ROS_ERROR("Array of joint names should contain all strings.  (namespace: %s)", nodeHandle.getNamespace().c_str());
@@ -117,13 +117,13 @@ bool JointVelocityController::init(pr2_mechanism_model::RobotState *robotPtr, ro
 
 	for (unsigned int i = 0; i < joints.size(); ++i) {
 		if (!pids[i].init(ros::NodeHandle(gainsNS + "/" + joints[i]->joint_->name))) {
-            ROS_ERROR("Can't setup PID for the joint %s. (namespace: %s)", joints[i]->joint_->name.c_str(), nodeHandle.getNamespace().c_str());
+			ROS_ERROR("Can't setup PID for the joint %s. (namespace: %s)", joints[i]->joint_->name.c_str(), nodeHandle.getNamespace().c_str());
 			return false;
 		}
 
-		double p,i,d,i_max,i_min;
-		pids[i].getGains(p,i,d,i_max,i_min);
-		ROS_DEBUG ("PID for joint %s: p=%f, i=%f, d=%f, i_max=%f, i_min=%f\n", joints[i]->joint_->name.c_str(), p,i,d,i_max,i_min);
+		double p, i, d, i_max, i_min;
+		pids[i].getGains(p, i, d, i_max, i_min);
+		ROS_DEBUG("PID for joint %s: p=%f, i=%f, d=%f, i_max=%f, i_min=%f\n", joints[i]->joint_->name.c_str(), p, i, d, i_max, i_min);
 	}
 
 	subscriber = nodeHandle.subscribe("command", 1, &JointVelocityController::velocityCommand, this);
@@ -184,14 +184,14 @@ void JointVelocityController::velocityCommand(const brics_actuator::JointVelocit
 	targetVelocities.resize(velocities.size());
 	using namespace boost::units;
 
-    for (unsigned int j = 0; j < joints.size(); ++j) {
-        if (lookup[j] != -1) {
-            ROS_DEBUG("Joint %s = %f %s, ",velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].value, velocities[lookup[j]].unit.c_str());
-            if (velocities[lookup[j]].unit != to_string(si::radian_per_second))
-                ROS_ERROR("Joint %s has the value in the inpcompatible units %s", velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].unit.c_str());
-            if (!targetVelocities.empty())
-                targetVelocities[j] = velocities[lookup[j]].value;
-        }
+	for (unsigned int j = 0; j < joints.size(); ++j) {
+		if (lookup[j] != -1) {
+			ROS_DEBUG("Joint %s = %f %s, ", velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].value, velocities[lookup[j]].unit.c_str());
+			if (velocities[lookup[j]].unit != to_string(si::radian_per_second))
+				ROS_ERROR("Joint %s has the value in the inpcompatible units %s", velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].unit.c_str());
+			if (!targetVelocities.empty())
+				targetVelocities[j] = velocities[lookup[j]].value;
+		}
 	}
 }
 }

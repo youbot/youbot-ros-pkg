@@ -43,9 +43,9 @@
 #include <boost/units/systems/si/plane_angle.hpp>
 #include <tf/transform_broadcaster.h>
 #include <boost/units/io.hpp>
-#include "youbot_controllers/joint_effort_controller.h"
+#include "youbot_arm_joint_torque_controller.h"
 #include "pluginlib/class_list_macros.h"
-#include "../src/position_interaction_control/common/xxmatrix.h"
+#include "20_sim_interaction_control/common/xxmatrix.h"
 
 
 

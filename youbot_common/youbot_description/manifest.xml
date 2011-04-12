@@ -20,7 +20,8 @@
 
   <export>
     <pr2_controller_interface plugin="${prefix}/controller_plugins.xml" />
-  </export>
+     <cpp cflags="-I${prefix}/include" />
+    </export>
 
 </package>
 

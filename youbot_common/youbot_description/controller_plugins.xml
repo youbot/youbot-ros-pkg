@@ -1,6 +1,9 @@
-<library path="lib/libjoint_velocity_controller">
+<library path="lib/libyoubot_arm_joint_velocity_controller">
   <class name="youbot_description/JointVelocityController" type="controller::JointVelocityController" base_class_type="pr2_controller_interface::Controller" />
 </library>
-<library path="lib/libjoint_effort_controller">
-  <class name="youbot_description/JointEffortController" type="controller::JointEffortController" base_class_type="pr2_controller_interface::Controller" />
+<library path="lib/libyoubot_arm_joint_torque_controller">
+  <class name="youbot_description/JointTorqueController" type="controller::JointTorqueController" base_class_type="pr2_controller_interface::Controller" />
+</library>
+<library path="lib/libyoubot_arm_cartesian_interaction_controller">
+  <class name="youbot_description/CartesianInteractionController" type="controller::CartesianInteractionController" base_class_type="pr2_controller_interface::Controller" />
 </library>
