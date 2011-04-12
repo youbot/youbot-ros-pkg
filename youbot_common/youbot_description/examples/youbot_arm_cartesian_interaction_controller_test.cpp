@@ -50,6 +50,24 @@
 using namespace std;
 using namespace boost::units;
 
+
+
+
+void rpy2Quat(double roll, double pitch, double yaw, geometry_msgs::Quaternion& quanternion) {
+    // Assuming the angles are in radians.
+    double c1 = cos(yaw);
+    double s1 = sin(yaw);
+    double c2 = cos(pitch);
+    double s2 = sin(pitch);
+    double c3 = cos(roll);
+    double s3 = sin(roll);
+    quanternion.w = sqrt(1.0 + c1 * c2 + c1*c3 - s1 * s2 * s3 + c2*c3) / 2.0;
+    double w4 = (4.0 * quanternion.w);
+    quanternion.x = (c2 * s3 + c1 * s3 + s1 * s2 * c3) / w4 ;
+    quanternion.y = (s1 * c2 + s1 * c3 + c1 * s2 * s3) / w4 ;
+    quanternion.z = (-s1 * s3 + c1 * s2 * c3 +s2) / w4 ;
+  }
+
 int main(int argc, char **argv) {
 
 	ros::init(argc, argv, "youbot_arm_cartesian_interaction_controller_test");
@@ -72,7 +90,7 @@ int main(int argc, char **argv) {
 
 		cout << "Please type in end effector orientation (Roll Pitch Yaw) in radians: " << endl;
 		cin >> rollPithYaw[0] >> rollPithYaw[1] >> rollPithYaw[2];
-		tipOrientation = tf::createQuaternionMsgFromRollPitchYaw(rollPithYaw[0], rollPithYaw[1], rollPithYaw[2]);
+		rpy2Quat(rollPithYaw[0], rollPithYaw[1], rollPithYaw[2], tipOrientation);
 
         brics_actuator::CartesianPose tipPose;
         tipPose.base_frame_uri = "/base_link";
