@@ -6,7 +6,7 @@
  *  model: ControlYoubotArmInteraction_Grav_v1
  *  expmt: ControlYoubotArmInteraction_Grav_v1
  *  date:  April 12, 2011
- *  time:  3:24:34 pm
+ *  time:  4:52:44 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -29,7 +29,7 @@
 /* the main function */
 int main()
 {
-	XXDouble u [34 + 1];
+	XXDouble u [35 + 1];
 	XXDouble y [21 + 1];
 
 	/* initialize the inputs and outputs with correct initial values */
@@ -61,12 +61,13 @@ int main()
 	u[25] = 0.0;
 	u[26] = 0.0;
 	u[27] = 0.0;
-	u[28] = 0.0;		/* xyzrpy */
+	u[28] = 0.0;		/* xyzQuart */
 	u[29] = 0.0;
 	u[30] = 0.0;
 	u[31] = 0.0;
 	u[32] = 0.0;
 	u[33] = 0.0;
+	u[34] = 0.0;
 
 	y[0] = 0.0;		/* joints.e */
 	y[1] = 0.0;

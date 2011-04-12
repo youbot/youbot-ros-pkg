@@ -6,65 +6,66 @@ INPUTS & OUTPUTS INDICES
  
 *** INPUTS ***
 
-	m_V[1837] = u[0];		/* joints.f */
-	m_V[1838] = u[1];
-	m_V[1839] = u[2];
-	m_V[1840] = u[3];
-	m_V[1841] = u[4];
-	m_V[1848] = u[5];		/* Linkdim */
-	m_V[1849] = u[6];
-	m_V[1850] = u[7];
-	m_V[1851] = u[8];
-	m_V[1852] = u[9];
-	m_V[1853] = u[10];
-	m_V[1854] = u[11];
-	m_V[1855] = u[12];
-	m_V[1856] = u[13];
-	m_V[1857] = u[14];
-	m_V[1858] = u[15];
-	m_V[1859] = u[16];
-	m_V[1860] = u[17];
-	m_V[1861] = u[18];
-	m_V[1862] = u[19];
-	m_V[1863] = u[20];
-	m_V[1864] = u[21];
-	m_V[1865] = u[22];
-	m_V[1866] = u[23];		/* q */
-	m_V[1867] = u[24];
-	m_V[1868] = u[25];
-	m_V[1869] = u[26];
-	m_V[1870] = u[27];
-	m_V[1842] = u[28];		/* xyzrpy */
-	m_V[1843] = u[29];
-	m_V[1844] = u[30];
-	m_V[1845] = u[31];
-	m_V[1846] = u[32];
-	m_V[1847] = u[33];
+	m_V[1820] = u[0];		/* joints.f */
+	m_V[1821] = u[1];
+	m_V[1822] = u[2];
+	m_V[1823] = u[3];
+	m_V[1824] = u[4];
+	m_V[1832] = u[5];		/* Linkdim */
+	m_V[1833] = u[6];
+	m_V[1834] = u[7];
+	m_V[1835] = u[8];
+	m_V[1836] = u[9];
+	m_V[1837] = u[10];
+	m_V[1838] = u[11];
+	m_V[1839] = u[12];
+	m_V[1840] = u[13];
+	m_V[1841] = u[14];
+	m_V[1842] = u[15];
+	m_V[1843] = u[16];
+	m_V[1844] = u[17];
+	m_V[1845] = u[18];
+	m_V[1846] = u[19];
+	m_V[1847] = u[20];
+	m_V[1848] = u[21];
+	m_V[1849] = u[22];
+	m_V[1850] = u[23];		/* q */
+	m_V[1851] = u[24];
+	m_V[1852] = u[25];
+	m_V[1853] = u[26];
+	m_V[1854] = u[27];
+	m_V[1825] = u[28];		/* xyzQuart */
+	m_V[1826] = u[29];
+	m_V[1827] = u[30];
+	m_V[1828] = u[31];
+	m_V[1829] = u[32];
+	m_V[1830] = u[33];
+	m_V[1831] = u[34];
 
  
 *** OUTPUTS ***
 
-	y[0] = 	m_V[1832];		/* joints.e */
-	y[1] = 	m_V[1833];
-	y[2] = 	m_V[1834];
-	y[3] = 	m_V[1835];
-	y[4] = 	m_V[1836];
-	y[5] = 	m_V[1871];		/* output */
-	y[6] = 	m_V[1872];
-	y[7] = 	m_V[1873];
-	y[8] = 	m_V[1874];
-	y[9] = 	m_V[1875];
-	y[10] = 	m_V[1876];
-	y[11] = 	m_V[1877];
-	y[12] = 	m_V[1878];
-	y[13] = 	m_V[1879];
-	y[14] = 	m_V[1880];
-	y[15] = 	m_V[1881];
-	y[16] = 	m_V[1882];
-	y[17] = 	m_V[1883];
-	y[18] = 	m_V[1884];
-	y[19] = 	m_V[1885];
-	y[20] = 	m_V[1886];
+	y[0] = 	m_V[1815];		/* joints.e */
+	y[1] = 	m_V[1816];
+	y[2] = 	m_V[1817];
+	y[3] = 	m_V[1818];
+	y[4] = 	m_V[1819];
+	y[5] = 	m_V[1855];		/* output */
+	y[6] = 	m_V[1856];
+	y[7] = 	m_V[1857];
+	y[8] = 	m_V[1858];
+	y[9] = 	m_V[1859];
+	y[10] = 	m_V[1860];
+	y[11] = 	m_V[1861];
+	y[12] = 	m_V[1862];
+	y[13] = 	m_V[1863];
+	y[14] = 	m_V[1864];
+	y[15] = 	m_V[1865];
+	y[16] = 	m_V[1866];
+	y[17] = 	m_V[1867];
+	y[18] = 	m_V[1868];
+	y[19] = 	m_V[1869];
+	y[20] = 	m_V[1870];
 
  
 
@@ -2037,39 +2038,22 @@ NAMES
 	"VirtualPosition\\output[4,2]",
 	"VirtualPosition\\output[4,3]",
 	"VirtualPosition\\output[4,4]",
-	"VirtualPosition\\xyzrpy[1]",
-	"VirtualPosition\\xyzrpy[2]",
-	"VirtualPosition\\xyzrpy[3]",
-	"VirtualPosition\\xyzrpy[4]",
-	"VirtualPosition\\xyzrpy[5]",
-	"VirtualPosition\\xyzrpy[6]",
-	"VirtualPosition\\Rz[1,1]",
-	"VirtualPosition\\Rz[1,2]",
-	"VirtualPosition\\Rz[1,3]",
-	"VirtualPosition\\Rz[2,1]",
-	"VirtualPosition\\Rz[2,2]",
-	"VirtualPosition\\Rz[2,3]",
-	"VirtualPosition\\Rz[3,1]",
-	"VirtualPosition\\Rz[3,2]",
-	"VirtualPosition\\Rz[3,3]",
-	"VirtualPosition\\Ry[1,1]",
-	"VirtualPosition\\Ry[1,2]",
-	"VirtualPosition\\Ry[1,3]",
-	"VirtualPosition\\Ry[2,1]",
-	"VirtualPosition\\Ry[2,2]",
-	"VirtualPosition\\Ry[2,3]",
-	"VirtualPosition\\Ry[3,1]",
-	"VirtualPosition\\Ry[3,2]",
-	"VirtualPosition\\Ry[3,3]",
-	"VirtualPosition\\Rx[1,1]",
-	"VirtualPosition\\Rx[1,2]",
-	"VirtualPosition\\Rx[1,3]",
-	"VirtualPosition\\Rx[2,1]",
-	"VirtualPosition\\Rx[2,2]",
-	"VirtualPosition\\Rx[2,3]",
-	"VirtualPosition\\Rx[3,1]",
-	"VirtualPosition\\Rx[3,2]",
-	"VirtualPosition\\Rx[3,3]",
+	"VirtualPosition\\xyzQuart[1]",
+	"VirtualPosition\\xyzQuart[2]",
+	"VirtualPosition\\xyzQuart[3]",
+	"VirtualPosition\\xyzQuart[4]",
+	"VirtualPosition\\xyzQuart[5]",
+	"VirtualPosition\\xyzQuart[6]",
+	"VirtualPosition\\xyzQuart[7]",
+	"VirtualPosition\\R[1,1]",
+	"VirtualPosition\\R[1,2]",
+	"VirtualPosition\\R[1,3]",
+	"VirtualPosition\\R[2,1]",
+	"VirtualPosition\\R[2,2]",
+	"VirtualPosition\\R[2,3]",
+	"VirtualPosition\\R[3,1]",
+	"VirtualPosition\\R[3,2]",
+	"VirtualPosition\\R[3,3]",
 	"joints.e[1]",
 	"joints.e[2]",
 	"joints.e[3]",
@@ -2080,12 +2064,13 @@ NAMES
 	"joints.f[3]",
 	"joints.f[4]",
 	"joints.f[5]",
-	"xyzrpy[1]",
-	"xyzrpy[2]",
-	"xyzrpy[3]",
-	"xyzrpy[4]",
-	"xyzrpy[5]",
-	"xyzrpy[6]",
+	"xyzQuart[1]",
+	"xyzQuart[2]",
+	"xyzQuart[3]",
+	"xyzQuart[4]",
+	"xyzQuart[5]",
+	"xyzQuart[6]",
+	"xyzQuart[7]",
 	"Linkdim[1,1]",
 	"Linkdim[1,2]",
 	"Linkdim[1,3]",
@@ -2343,13 +2328,11 @@ NAMES
 	"R\\p.e",
 	"Splitter2\\input",
 	"VirtualPosition\\output",
-	"VirtualPosition\\xyzrpy",
-	"VirtualPosition\\Rz",
-	"VirtualPosition\\Ry",
-	"VirtualPosition\\Rx",
+	"VirtualPosition\\xyzQuart",
+	"VirtualPosition\\R",
 	"joints.e",
 	"joints.f",
-	"xyzrpy",
+	"xyzQuart",
 	"Linkdim",
 	"q",
 	"output",
@@ -2483,6 +2466,15 @@ NAMES
 	"m_U128",
 	"m_U129",
 	"m_U130",
-	"m_U131"
+	"m_U131",
+	"m_U132",
+	"m_U133",
+	"m_U134",
+	"m_U135",
+	"m_U136",
+	"m_U137",
+	"m_U138",
+	"m_U139",
+	"m_U140"
 
 
