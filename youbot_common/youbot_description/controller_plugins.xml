@@ -7,3 +7,6 @@
 <library path="lib/libyoubot_arm_cartesian_interaction_controller">
   <class name="youbot_description/CartesianInteractionController" type="controller::CartesianInteractionController" base_class_type="pr2_controller_interface::Controller" />
 </library>
+<library path="lib/libyoubot_arm_cartesian_interaction_controller_gravity_compensation">
+  <class name="youbot_description/CartesianInteractionControllerGravityCompensation" type="controller::CartesianInteractionControllerGravityCompensation" base_class_type="pr2_controller_interface::Controller" />
+</library>
