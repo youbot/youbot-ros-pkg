@@ -14,6 +14,12 @@ link_2_inertia_tensor_new=rotInertiaTensor(link_2_rpy,link_2_inertia);
 link_3_inertia_tensor_new=rotInertiaTensor(link_3_rpy,link_3_inertia);
 link_4_inertia_tensor_new=rotInertiaTensor(link_4_rpy,link_4_inertia);
 link_5_inertia_tensor_new=rotInertiaTensor(link_5_rpy,link_5_inertia);
+[diag(link_1_inertia_tensor_new)'; 
+diag(link_2_inertia_tensor_new)';
+diag(link_3_inertia_tensor_new)';
+diag(link_4_inertia_tensor_new)';
+diag(link_5_inertia_tensor_new)']'
+
 printf("Link 1 \n");
 printf("<inertia ixx=\"%f \" ixy=\"%f \" ixz=\"%f\" ...
  		 iyy=\"%f\" iyz=\"%f\" ...
