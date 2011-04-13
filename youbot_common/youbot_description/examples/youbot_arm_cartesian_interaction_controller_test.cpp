@@ -40,6 +40,7 @@
 #include <iostream>
 #include <assert.h>
 
+#include <boost/thread.hpp>
 #include <boost/units/systems/si/length.hpp>
 #include <boost/units/io.hpp>
 
@@ -47,13 +48,31 @@
 #include <brics_actuator/CartesianPose.h>
 #include <tf/transform_datatypes.h>
 
+#include <tf/transform_broadcaster.h>
+
 using namespace std;
 using namespace boost::units;
 
+tf::TransformBroadcaster* br;
+brics_actuator::CartesianPose tipPose;
+bool mutex = true;
 
+void publishTf() {
 
+    while(ros::ok()) {
+        if (mutex) {
+            tf::Vector3 position(tipPose.position.x, tipPose.position.y, tipPose.position.z);
+            tf::Quaternion orientation(tipPose.orientation.w, tipPose.orientation.x, tipPose.orientation.y, tipPose.orientation.z);
+            tf::Transform transform(orientation, position);
+            string parentFrameId = tipPose.base_frame_uri;
+            string childFrameId = tipPose.target_frame_uri;
+            br->sendTransform(tf::StampedTransform(transform,ros::Time::now(),parentFrameId,childFrameId));
+            msleep(100);
+        }
+    }
+}
 
-void rpy2Quat(double roll, double pitch, double yaw, geometry_msgs::Quaternion& quanternion) {
+void rpy2Quat(double yaw, double pitch, double roll, geometry_msgs::Quaternion& quanternion) {
     // Assuming the angles are in radians.
     double c1 = cos(yaw);
     double s1 = sin(yaw);
@@ -71,13 +90,18 @@ void rpy2Quat(double roll, double pitch, double yaw, geometry_msgs::Quaternion& 
 int main(int argc, char **argv) {
 
 	ros::init(argc, argv, "youbot_arm_cartesian_interaction_controller_test");
+	br = new tf::TransformBroadcaster();
 	ros::NodeHandle n;
 	ros::Publisher armCommandPublisher;
 
 	armCommandPublisher = n.advertise<brics_actuator::CartesianPose> ("arm_controller/command", 1);
 
 	ros::Rate rate(20); //Hz
-	while (n.ok()) {
+
+	boost::thread thrd(&publishTf);
+
+
+	while (ros::ok()) {
 
 		brics_actuator::CartesianVector tipPosition;
 		geometry_msgs::Quaternion tipOrientation;
@@ -86,26 +110,32 @@ int main(int argc, char **argv) {
 
 		cout << "Please type in end effector position (X Y Z) in meters: " << endl;
 		cin >> tipPosition.x >> tipPosition.y >> tipPosition.z;
+
 		tipPosition.unit = to_string(boost::units::si::meters);
 
 		cout << "Please type in end effector orientation (Roll Pitch Yaw) in radians: " << endl;
 		cin >> rollPithYaw[0] >> rollPithYaw[1] >> rollPithYaw[2];
+
 		rpy2Quat(rollPithYaw[0], rollPithYaw[1], rollPithYaw[2], tipOrientation);
 
-        brics_actuator::CartesianPose tipPose;
+        mutex = false;
         tipPose.base_frame_uri = "/base_link";
-        tipPose.target_frame_uri = "/arm_joint_5";
+        tipPose.target_frame_uri = "/target";
         tipPose.timeStamp = ros::Time::now();
         tipPose.position = tipPosition;
         tipPose.orientation = tipOrientation;
+        mutex = true;
 
-		cout << "sending command ..." << endl;
+        cout << "sending command ..." << endl;
 		armCommandPublisher.publish(tipPose);
+
 		cout << "--------------------" << endl;
 		rate.sleep();
 
 	}
 
+    thrd.join();
+    delete br;
 	return 0;
 }
 

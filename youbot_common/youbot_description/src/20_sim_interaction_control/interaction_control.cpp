@@ -823,20 +823,20 @@ void interaction_control::Initialize (XXDouble *u, XXDouble *y, XXDouble t)
 
 	/* set the constants */
 	m_C[0] = 0.0;		/* CalculateJ\omega1 */
-	m_C[1] = 0.0;		
-	m_C[2] = -1.0;		
+	m_C[1] = 0.0;
+	m_C[2] = -1.0;
 	m_C[3] = 0.0;		/* CalculateJ\omega2 */
-	m_C[4] = 1.0;		
-	m_C[5] = 0.0;		
+	m_C[4] = 1.0;
+	m_C[5] = 0.0;
 	m_C[6] = 0.0;		/* CalculateJ\omega3 */
-	m_C[7] = 1.0;		
-	m_C[8] = 0.0;		
+	m_C[7] = 1.0;
+	m_C[8] = 0.0;
 	m_C[9] = 0.0;		/* CalculateJ\omega4 */
-	m_C[10] = 1.0;		
-	m_C[11] = 0.0;		
+	m_C[10] = 1.0;
+	m_C[11] = 0.0;
 	m_C[12] = 0.0;		/* CalculateJ\omega5 */
-	m_C[13] = 0.0;		
-	m_C[14] = 1.0;		
+	m_C[13] = 0.0;
+	m_C[14] = 1.0;
 
 
 	/* set the parameters */
@@ -1215,7 +1215,7 @@ void interaction_control::Calculate (XXDouble *u, XXDouble *y /*, XXDouble t*/)
 			break;
 		case mainrun:	/* calculate the model */
 
-			
+
 				CopyInputsToVariables (u);
 				CalculateInput ();
 				myintegmethod.Step();
@@ -1223,10 +1223,10 @@ void interaction_control::Calculate (XXDouble *u, XXDouble *y /*, XXDouble t*/)
 				CopyVariablesToOutputs (y);
 			break;
 		case finished:
-			throw std::logic_error("The simulation was finished"); 
+			throw std::logic_error("The simulation was finished");
 			break;
 		default:
-			throw std::logic_error("The simulation state machine is inconsistent"); 
+			throw std::logic_error("The simulation state machine is inconsistent");
 			break;
 	}
 }
@@ -1646,9 +1646,9 @@ void interaction_control::CalculateDynamic (void)
 	/* CtipControl1\Wr[1:3] = (CtipControl1\theta * CtipControl1\omega) / (CtipControl1\CtipControl); */
 	XXScalarMatrixMul (&m_M[105], m_V[391], &m_M[41]);
 	XXMatrixScalarDiv (&m_M[104], &m_M[105], (m_P[0]));
-	m_M[42].mat[0] = m_M[104].mat[0];
-	m_M[42].mat[1] = m_M[104].mat[1];
-	m_M[42].mat[2] = m_M[104].mat[2];
+	m_M[42].mat[0] = m_M[104].mat[0]/10.0;
+	m_M[42].mat[1] = m_M[104].mat[1]/10.0;
+	m_M[42].mat[2] = m_M[104].mat[2]/10.0;
 
 	/* CtipControl1\p.e = inverse (transpose (Adjoint (VirtualPosition\output))) * (CtipControl1\Wt + CtipControl1\Wr); */
 	XXMatrixAdjoint (&m_M[108], &m_M[48]);

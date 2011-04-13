@@ -31,6 +31,12 @@ include_directories(	${PROJECT_SOURCE_DIR}/include
 #rosbuild_add_executable(example examples/example.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
 
+OPTION(WITH_DEBUG_INFO "Publish debug info" ON)
+
+IF(WITH_DEBUG_INFO)
+  ADD_DEFINITIONS(-DDEBUG_INFO)
+ENDIF(WITH_DEBUG_INFO)
+
 #simple publishers
 rosbuild_add_executable(joint_gripper_publisher src/joint_gripper_publisher.cpp)
 rosbuild_add_executable(joint_arm_publisher src/joint_arm_publisher.cpp)

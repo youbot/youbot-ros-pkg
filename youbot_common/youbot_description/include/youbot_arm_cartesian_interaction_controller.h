@@ -37,11 +37,13 @@
  *
  ******************************************************************************/
 
-#ifndef JOINT_EFFORT_CONTROLLER_H
-#define JOINT_EFFORT_CONTROLLER_H
+#ifndef CARTESIAN_INTERACTIOM_CONTROLLER
+#define CARTESIAN_INTERACTIOM_CONTROLLER
 
 #include <vector>
+#include <string>
 #include <boost/scoped_ptr.hpp>
+
 #include <ros/node_handle.h>
 #include <pr2_controller_interface/controller.h>
 #include <tf/transform_broadcaster.h>
@@ -49,13 +51,9 @@
 #include <realtime_tools/realtime_publisher.h>
 #include <realtime_tools/realtime_box.h>
 
-#include "pr2_controllers_msgs/JointTrajectoryControllerState.h"
-
-#include "brics_actuator/JointTorques.h"
-#include "brics_actuator/CartesianWrench.h"
-#include "brics_actuator/CartesianPose.h"
-#include "brics_actuator/JointPositions.h"
-#include "brics_actuator/JointTorques.h"
+#include <brics_actuator/CartesianPose.h>
+#include <brics_actuator/JointPositions.h>
+#include <brics_actuator/JointTorques.h>
 
 #include "20_sim_interaction_control/interaction_control.h"
 
@@ -77,8 +75,10 @@ public:
     CartesianInteractionControllerDebug(pr2_controller_interface::Controller* controllerPtr) : Debug(controllerPtr) {};
     virtual void init();
     virtual void publish();
-    CartesianInteractionController* getControllerPtr();
 private:
+
+    void publishTf(double* tf, std::string parentFrameId, std::string childFrameId);
+    CartesianInteractionController* getControllerPtr();
 
     tf::TransformBroadcaster br;
 
@@ -116,6 +116,7 @@ protected:
 	std::vector<pr2_mechanism_model::JointState*> joints;
 
     unsigned int loopCount;
+	ros::Time currentTime;
 	ros::Time lastTime;
 	double orientation[4]; //Quantarnion
     double position[3]; // XYZ position
