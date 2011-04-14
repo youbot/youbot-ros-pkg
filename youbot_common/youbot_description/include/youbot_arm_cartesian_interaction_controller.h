@@ -55,7 +55,7 @@
 #include <brics_actuator/JointPositions.h>
 #include <brics_actuator/JointTorques.h>
 
-#include "20_sim_interaction_control/interaction_control.h"
+#include "20_sim_arm_interaction_control/interaction_control.h"
 
 namespace controller {
 

@@ -57,7 +57,7 @@
 #include "brics_actuator/JointPositions.h"
 #include "brics_actuator/JointTorques.h"
 
-#include "20_sim_interaction_control_gravity/interaction_control_gravity_compensation.h"
+#include "20_sim_arm_interaction_control_gravity/interaction_control_gravity_compensation.h"
 
 namespace controller {
 

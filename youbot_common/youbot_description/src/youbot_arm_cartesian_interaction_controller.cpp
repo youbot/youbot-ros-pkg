@@ -44,7 +44,7 @@
 #include <geometry_msgs/Quaternion.h>
 
 #include "youbot_arm_cartesian_interaction_controller.h"
-#include "20_sim_interaction_control/common/xxmatrix.h"
+#include "20_sim_arm_interaction_control/common/xxmatrix.h"
 #include "pluginlib/class_list_macros.h"
 
 PLUGINLIB_DECLARE_CLASS(youbot_description, CartesianInteractionController, controller::CartesianInteractionController, pr2_controller_interface::Controller)

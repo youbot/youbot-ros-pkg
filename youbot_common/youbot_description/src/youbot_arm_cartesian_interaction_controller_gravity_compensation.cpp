@@ -47,7 +47,7 @@
 
 #include <tf/transform_datatypes.h>
 #include "pluginlib/class_list_macros.h"
-#include "20_sim_interaction_control_gravity/common/xxmatrix.h"
+#include "20_sim_arm_interaction_control_gravity/common/xxmatrix.h"
 
 //#define DEBUG
 
