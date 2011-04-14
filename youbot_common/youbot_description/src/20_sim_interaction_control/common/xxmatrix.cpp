@@ -3,10 +3,10 @@
  *
  *  file:  common\xxmatrix.cpp
  *  subm:  youbot_interaction_control
- *  model: ControlYoubotFullInteraction_Grav_v1
- *  expmt: ControlYoubotFullInteraction_Grav_v1
+ *  model: ControlYoubotFullInteraction_v1
+ *  expmt: ControlYoubotFullInteraction_v1
  *  date:  April 14, 2011
- *  time:  9:28:09 pm
+ *  time:  10:40:15 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
