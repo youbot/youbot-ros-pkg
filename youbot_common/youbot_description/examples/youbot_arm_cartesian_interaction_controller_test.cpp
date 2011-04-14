@@ -67,7 +67,7 @@ void publishTf() {
             string parentFrameId = tipPose.base_frame_uri;
             string childFrameId = tipPose.target_frame_uri;
             br->sendTransform(tf::StampedTransform(transform,ros::Time::now(),parentFrameId,childFrameId));
-            msleep(100);
+            sleep(1);
         }
     }
 }
@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
 		rpy2Quat(rollPithYaw[0], rollPithYaw[1], rollPithYaw[2], tipOrientation);
 
         mutex = false;
-        tipPose.base_frame_uri = "/base_link";
+        tipPose.base_frame_uri = "/arm_link_0";
         tipPose.target_frame_uri = "/target";
         tipPose.timeStamp = ros::Time::now();
         tipPose.position = tipPosition;
