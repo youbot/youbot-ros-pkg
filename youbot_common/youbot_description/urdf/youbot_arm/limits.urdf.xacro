@@ -19,18 +19,18 @@
 	<property name="joint_5_limit_soft" value="${M_PI * (167.5 + 167.5) / 180 - threshold}" />
 
 	<!-- dynamic properties : mass (kg) Alu data sheet -->
-	<!--<property name="link_0_mass" value="0.845" />
+	<property name="link_0_mass" value="0.845" />
 	<property name="link_1_mass" value="2.412" />
 	<property name="link_2_mass" value="1.155" />
 	<property name="link_3_mass" value="0.934" />
 	<property name="link_4_mass" value="0.877" />
-	<property name="link_5_mass" value="0.251" />-->
-	<property name="link_0_mass" value="0.845" />
+	<property name="link_5_mass" value="0.251" />
+	<!--<property name="link_0_mass" value="0.845" />
 	<property name="link_1_mass" value="0.1" />
 	<property name="link_2_mass" value="0.1" />
 	<property name="link_3_mass" value="0.1" />
 	<property name="link_4_mass" value="0.1" />
-	<property name="link_5_mass" value="0.1" />
+	<property name="link_5_mass" value="0.1" />-->
 	<!-- TODO: add inertia tensor-->
 	<xacro:macro name="default_origin">
         	<origin xyz="0 0 0" rpy="0 0 0"/> <!-- no data known -->

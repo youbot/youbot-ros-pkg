@@ -824,7 +824,7 @@ void interaction_control::Initialize (XXDouble *u, XXDouble *y, XXDouble t)
 	/* set the constants */
 	m_C[0] = 0.0;		/* CalculateJ\omega1 */
 	m_C[1] = 0.0;
-	m_C[2] = -1.0;
+	m_C[2] = 1.0;
 	m_C[3] = 0.0;		/* CalculateJ\omega2 */
 	m_C[4] = 1.0;
 	m_C[5] = 0.0;
