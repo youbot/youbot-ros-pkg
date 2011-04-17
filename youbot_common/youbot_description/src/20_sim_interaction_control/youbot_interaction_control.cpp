@@ -6,7 +6,7 @@
  *  model: ControlYoubotFullInteraction_v1
  *  expmt: ControlYoubotFullInteraction_v1
  *  date:  April 17, 2011
- *  time:  11:22:08 am
+ *  time:  11:51:38 am
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -956,7 +956,7 @@ void youbot_interaction_control::initVarNames(void){
 youbot_interaction_control::youbot_interaction_control(void)
 {
 	m_start_time = 0.0;
-	m_finish_time = 14.0;
+	m_finish_time = 30.0;
 	m_step_size = 0.001;
 	m_time = 0;
 	m_major = true;
@@ -1021,7 +1021,7 @@ void youbot_interaction_control::Initialize (XXDouble *u, XXDouble *y, XXDouble 
 	m_C[8] = 0.0;		
 	m_C[9] = 0.0;		/* CalculateJ\omega1 */
 	m_C[10] = 0.0;		
-	m_C[11] = -1.0;		
+	m_C[11] = 1.0;		
 	m_C[12] = 0.0;		/* CalculateJ\omega2 */
 	m_C[13] = 1.0;		
 	m_C[14] = 0.0;		
@@ -1040,11 +1040,11 @@ void youbot_interaction_control::Initialize (XXDouble *u, XXDouble *y, XXDouble 
 	m_P[0] = 0.0;		/* C\jointStiffness {N/m} */
 	m_P[1] = 0.0;		
 	m_P[2] = 0.0;		
-	m_P[3] = 30.0;		
-	m_P[4] = 30.0;		
-	m_P[5] = 30.0;		
-	m_P[6] = 30.0;		
-	m_P[7] = 30.0;		
+	m_P[3] = 3.0;		
+	m_P[4] = 3.0;		
+	m_P[5] = 3.0;		
+	m_P[6] = 3.0;		
+	m_P[7] = 3.0;		
 	m_P[8] = 0.024;		/* CalculateJ\Linkdim */
 	m_P[9] = 0.033;		
 	m_P[10] = 0.0;		
@@ -1063,9 +1063,9 @@ void youbot_interaction_control::Initialize (XXDouble *u, XXDouble *y, XXDouble 
 	m_P[23] = 0.135;		
 	m_P[24] = 0.096;		
 	m_P[25] = 0.034;		
-	m_P[26] = 0.0;		/* CtipControl1\CtipControl */
-	m_P[27] = 0.0;		
-	m_P[28] = 0.0;		
+	m_P[26] = 3000.0;		/* CtipControl1\CtipControl */
+	m_P[27] = 3000.0;		
+	m_P[28] = 3000.0;		
 	m_P[29] = 0.0;		
 	m_P[30] = 0.0;		
 	m_P[31] = 0.0;		
@@ -1125,9 +1125,9 @@ void youbot_interaction_control::Initialize (XXDouble *u, XXDouble *y, XXDouble 
 	m_P[85] = 0.877;		
 	m_P[86] = 0.251;		
 	m_P[87] = 0.12;		
-	m_P[88] = 0.0;		/* cartesianStiffness {N/m} */
-	m_P[89] = 0.0;		
-	m_P[90] = 0.0;		
+	m_P[88] = 300.0;		/* cartesianStiffness {N/m} */
+	m_P[89] = 300.0;		
+	m_P[90] = 300.0;		
 	m_P[91] = 0.0;		
 	m_P[92] = 0.0;		
 	m_P[93] = 0.0;		
@@ -1140,19 +1140,19 @@ void youbot_interaction_control::Initialize (XXDouble *u, XXDouble *y, XXDouble 
 	m_P[100] = 0.0;		/* jointStiffness {N/m} */
 	m_P[101] = 0.0;		
 	m_P[102] = 0.0;		
-	m_P[103] = 30.0;		
-	m_P[104] = 30.0;		
-	m_P[105] = 30.0;		
-	m_P[106] = 30.0;		
-	m_P[107] = 30.0;		
-	m_P[108] = 0.0;		/* jointDumping {N.s/m} */
-	m_P[109] = 0.0;		
-	m_P[110] = 0.0;		
-	m_P[111] = 0.0;		
-	m_P[112] = 0.0;		
-	m_P[113] = 0.0;		
-	m_P[114] = 0.0;		
-	m_P[115] = 0.0;		
+	m_P[103] = 3.0;		
+	m_P[104] = 3.0;		
+	m_P[105] = 3.0;		
+	m_P[106] = 3.0;		
+	m_P[107] = 3.0;		
+	m_P[108] = 10.0;		/* jointDumping {N.s/m} */
+	m_P[109] = 10.0;		
+	m_P[110] = 10.0;		
+	m_P[111] = 10.0;		
+	m_P[112] = 10.0;		
+	m_P[113] = 10.0;		
+	m_P[114] = 10.0;		
+	m_P[115] = 10.0;		
 
 
 	/* set the states */

@@ -1136,7 +1136,7 @@ Splitter2\output2[8]
 0.0
 0.0
 0.0
--1.0
+1.0
 0.0
 1.0
 0.0
@@ -1502,11 +1502,11 @@ Splitter2\output2[8]
 	<token name="FAVORITE_VARS_EQUATIONS"><![CDATA[]]></token>
 	<token name="FILE_NAME"><![CDATA[]]></token>
 	<token name="FINAL_EQUATIONS"><![CDATA[]]></token>
-	<token name="FINISH_TIME"><![CDATA[14.0]]></token>
+	<token name="FINISH_TIME"><![CDATA[30.0]]></token>
 	<token name="GENERATION_BUILD"><![CDATA[4.1.2.2]]></token>
 	<token name="GENERATION_DATE"><![CDATA[April 17, 2011]]></token>
 	<token name="GENERATION_DIR"><![CDATA[c:\temp\youbot_interaction_control]]></token>
-	<token name="GENERATION_TIME"><![CDATA[11:22:08 am]]></token>
+	<token name="GENERATION_TIME"><![CDATA[11:51:38 am]]></token>
 	<token name="IMPORT_NAMES"><![CDATA[	NULL]]></token>
 	<token name="IMPORT_NAMES2"><![CDATA[	NULL]]></token>
 	<token name="IMPORT_NAMES3"><![CDATA[]]></token>
@@ -1607,7 +1607,7 @@ Splitter2\output2[8]
 	m_C[8] = 0.0;		
 	m_C[9] = 0.0;		/* CalculateJ\omega1 */
 	m_C[10] = 0.0;		
-	m_C[11] = -1.0;		
+	m_C[11] = 1.0;		
 	m_C[12] = 0.0;		/* CalculateJ\omega2 */
 	m_C[13] = 1.0;		
 	m_C[14] = 0.0;		
@@ -2070,11 +2070,11 @@ Splitter2\output2[8]
 	<token name="INITIALIZE_PARAMETERS"><![CDATA[	m_P[0] = 0.0;		/* C\jointStiffness {N/m} */
 	m_P[1] = 0.0;		
 	m_P[2] = 0.0;		
-	m_P[3] = 30.0;		
-	m_P[4] = 30.0;		
-	m_P[5] = 30.0;		
-	m_P[6] = 30.0;		
-	m_P[7] = 30.0;		
+	m_P[3] = 3.0;		
+	m_P[4] = 3.0;		
+	m_P[5] = 3.0;		
+	m_P[6] = 3.0;		
+	m_P[7] = 3.0;		
 	m_P[8] = 0.024;		/* CalculateJ\Linkdim */
 	m_P[9] = 0.033;		
 	m_P[10] = 0.0;		
@@ -2093,9 +2093,9 @@ Splitter2\output2[8]
 	m_P[23] = 0.135;		
 	m_P[24] = 0.096;		
 	m_P[25] = 0.034;		
-	m_P[26] = 0.0;		/* CtipControl1\CtipControl */
-	m_P[27] = 0.0;		
-	m_P[28] = 0.0;		
+	m_P[26] = 3000.0;		/* CtipControl1\CtipControl */
+	m_P[27] = 3000.0;		
+	m_P[28] = 3000.0;		
 	m_P[29] = 0.0;		
 	m_P[30] = 0.0;		
 	m_P[31] = 0.0;		
@@ -2155,9 +2155,9 @@ Splitter2\output2[8]
 	m_P[85] = 0.877;		
 	m_P[86] = 0.251;		
 	m_P[87] = 0.12;		
-	m_P[88] = 0.0;		/* cartesianStiffness {N/m} */
-	m_P[89] = 0.0;		
-	m_P[90] = 0.0;		
+	m_P[88] = 300.0;		/* cartesianStiffness {N/m} */
+	m_P[89] = 300.0;		
+	m_P[90] = 300.0;		
 	m_P[91] = 0.0;		
 	m_P[92] = 0.0;		
 	m_P[93] = 0.0;		
@@ -2170,19 +2170,19 @@ Splitter2\output2[8]
 	m_P[100] = 0.0;		/* jointStiffness {N/m} */
 	m_P[101] = 0.0;		
 	m_P[102] = 0.0;		
-	m_P[103] = 30.0;		
-	m_P[104] = 30.0;		
-	m_P[105] = 30.0;		
-	m_P[106] = 30.0;		
-	m_P[107] = 30.0;		
-	m_P[108] = 0.0;		/* jointDumping {N.s/m} */
-	m_P[109] = 0.0;		
-	m_P[110] = 0.0;		
-	m_P[111] = 0.0;		
-	m_P[112] = 0.0;		
-	m_P[113] = 0.0;		
-	m_P[114] = 0.0;		
-	m_P[115] = 0.0;		
+	m_P[103] = 3.0;		
+	m_P[104] = 3.0;		
+	m_P[105] = 3.0;		
+	m_P[106] = 3.0;		
+	m_P[107] = 3.0;		
+	m_P[108] = 10.0;		/* jointDumping {N.s/m} */
+	m_P[109] = 10.0;		
+	m_P[110] = 10.0;		
+	m_P[111] = 10.0;		
+	m_P[112] = 10.0;		
+	m_P[113] = 10.0;		
+	m_P[114] = 10.0;		
+	m_P[115] = 10.0;		
 ]]></token>
 	<token name="INITIALIZE_STATES"><![CDATA[]]></token>
 	<token name="INITIAL_EQUATIONS"><![CDATA[		/* CalculateJ\Linkdim = linkDim; */
@@ -2874,14 +2874,14 @@ N.s/m
  &lt;KeepParameterValues&gt;False&lt;/KeepParameterValues&gt;
  &lt;AllowLibraryUpdate&gt;True&lt;/AllowLibraryUpdate&gt;
 &lt;/Description&gt;</description>
-		<date>2011-04-17T11:22:22.0Z</date>
+		<date>2011-04-17T11:51:51.0Z</date>
 		<modelDir></modelDir>
 		<originalModel>Z:\Users\yury\Dropbox\UT\BRICS\Workspace\modeling\Junk\ControlYoubotFullInteraction_v1.emx</originalModel>
 		<additional>Campuslicentie, Universiteit Twente</additional>
 	</general>
 	<run>
 		<startTime>0.0</startTime>
-		<finishTime>14.0</finishTime>
+		<finishTime>30.0</finishTime>
 		<stepSize>0.001</stepSize>
 	</run>
 	<modelVariables>
@@ -2939,7 +2939,7 @@ N.s/m
 			<name>C\jointStiffness</name>
 			<kind>parameter</kind>
 			<type>real</type>
-			<value>0.0; 0.0; 0.0; 30.0; 30.0; 30.0; 30.0; 30.0</value>
+			<value>0.0; 0.0; 0.0; 3.0; 3.0; 3.0; 3.0; 3.0</value>
 			<description>control the force that attracts joint to a zero possition</description>
 			<size>
 				<rows>8</rows>
@@ -3730,7 +3730,7 @@ initialequations
 			<name>CtipControl1\CtipControl</name>
 			<kind>parameter</kind>
 			<type>real</type>
-			<value>0.0; 0.0; 0.0; 0.0; 0.0; 0.0</value>
+			<value>3000.0; 3000.0; 3000.0; 0.0; 0.0; 0.0</value>
 			<description></description>
 			<size>
 				<rows>6</rows>
@@ -4421,7 +4421,7 @@ initialequations
 			<name>cartesianStiffness</name>
 			<kind>parameter</kind>
 			<type>real</type>
-			<value>0.0; 0.0; 0.0; 0.0; 0.0; 0.0</value>
+			<value>300.0; 300.0; 300.0; 0.0; 0.0; 0.0</value>
 			<description></description>
 			<size>
 				<rows>6</rows>
@@ -4463,7 +4463,7 @@ initialequations
 			<name>jointStiffness</name>
 			<kind>parameter</kind>
 			<type>real</type>
-			<value>0.0; 0.0; 0.0; 30.0; 30.0; 30.0; 30.0; 30.0</value>
+			<value>0.0; 0.0; 0.0; 3.0; 3.0; 3.0; 3.0; 3.0</value>
 			<description></description>
 			<size>
 				<rows>8</rows>
@@ -4484,7 +4484,7 @@ initialequations
 			<name>jointDumping</name>
 			<kind>parameter</kind>
 			<type>real</type>
-			<value>0.0; 0.0; 0.0; 0.0; 0.0; 0.0; 0.0; 0.0</value>
+			<value>10.0; 10.0; 10.0; 10.0; 10.0; 10.0; 10.0; 10.0</value>
 			<description></description>
 			<size>
 				<rows>8</rows>
@@ -5386,11 +5386,11 @@ N.s/m
 	<token name="PARAMETER_VALUES"><![CDATA[0.0
 0.0
 0.0
-30.0
-30.0
-30.0
-30.0
-30.0
+3.0
+3.0
+3.0
+3.0
+3.0
 0.024
 0.033
 0.0
@@ -5409,9 +5409,9 @@ N.s/m
 0.135
 0.096
 0.034
-0.0
-0.0
-0.0
+3000.0
+3000.0
+3000.0
 0.0
 0.0
 0.0
@@ -5471,6 +5471,9 @@ N.s/m
 0.877
 0.251
 0.12
+300.0
+300.0
+300.0
 0.0
 0.0
 0.0
@@ -5483,22 +5486,19 @@ N.s/m
 0.0
 0.0
 0.0
-0.0
-0.0
-0.0
-30.0
-30.0
-30.0
-30.0
-30.0
-0.0
-0.0
-0.0
-0.0
-0.0
-0.0
-0.0
-0.0
+3.0
+3.0
+3.0
+3.0
+3.0
+10.0
+10.0
+10.0
+10.0
+10.0
+10.0
+10.0
+10.0
 ]]></token>
 	<token name="RATE_NAMES"><![CDATA[	NULL]]></token>
 	<token name="RATE_NAMES2"><![CDATA[	NULL]]></token>
@@ -5527,7 +5527,7 @@ N.s/m
 The block parameters are:<br><blockquote></blockquote>
 Generated at:<br>
 <blockquote><b>date:  </b>April 17, 2011<br>
-<b>time:  </b>11:22:08 am<br></blockquote>
+<b>time:  </b>11:51:38 am<br></blockquote>
 From the following 20-sim model:<br>
 <blockquote><b>submodel:  </b>youbot_interaction_control<br>
 <b>model:  </b>ControlYoubotFullInteraction_v1<br>
@@ -5671,7 +5671,7 @@ Using the following 20-sim license:<br>
 The block parameters are:<br><blockquote></blockquote>
 Generated at:<br>
 <blockquote><b>date:  </b>April 17, 2011<br>
-<b>time:  </b>11:22:08 am<br></blockquote>
+<b>time:  </b>11:51:38 am<br></blockquote>
 From the following 20-sim model:<br>
 <blockquote><b>submodel:  </b>youbot_interaction_control<br>
 <b>model:  </b>ControlYoubotFullInteraction_v1<br>
