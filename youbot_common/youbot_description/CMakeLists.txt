@@ -73,6 +73,8 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/20_sim_interaction_control)
 rosbuild_add_library(youbot_interaction_controller src/youbot_interaction_controller.cpp)
 target_link_libraries(youbot_interaction_controller 20_sim_interaction_controller)
 
+#youbot_ros_controllers (test)
+rosbuild_add_executable(youbot_arm_cartesian_pose_controller_test examples/youbot_arm_cartesian_pose_controller_test.cpp)
 
 #depricated
 rosbuild_add_executable(arm_trajectory_republisher src/arm_trajectory_republisher.cpp)
