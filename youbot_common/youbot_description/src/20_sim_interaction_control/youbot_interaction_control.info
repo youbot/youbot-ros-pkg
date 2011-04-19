@@ -6,66 +6,66 @@ INPUTS & OUTPUTS INDICES
  
 *** INPUTS ***
 
-	m_V[511] = u[0];		/* outputForces.f */
-	m_V[512] = u[1];
-	m_V[513] = u[2];
-	m_V[514] = u[3];
-	m_V[515] = u[4];
-	m_V[516] = u[5];
-	m_V[517] = u[6];
-	m_V[518] = u[7];
-	m_V[551] = u[8];		/* q */
-	m_V[552] = u[9];
-	m_V[553] = u[10];
-	m_V[554] = u[11];
-	m_V[555] = u[12];
-	m_V[556] = u[13];
-	m_V[557] = u[14];
-	m_V[558] = u[15];
-	m_V[519] = u[16];		/* setPointH */
-	m_V[520] = u[17];
-	m_V[521] = u[18];
-	m_V[522] = u[19];
-	m_V[523] = u[20];
-	m_V[524] = u[21];
-	m_V[525] = u[22];
-	m_V[526] = u[23];
-	m_V[527] = u[24];
-	m_V[528] = u[25];
-	m_V[529] = u[26];
-	m_V[530] = u[27];
-	m_V[531] = u[28];
-	m_V[532] = u[29];
-	m_V[533] = u[30];
-	m_V[534] = u[31];
+	m_V[519] = u[0];		/* outputForces.f */
+	m_V[520] = u[1];
+	m_V[521] = u[2];
+	m_V[522] = u[3];
+	m_V[523] = u[4];
+	m_V[524] = u[5];
+	m_V[525] = u[6];
+	m_V[526] = u[7];
+	m_V[559] = u[8];		/* q */
+	m_V[560] = u[9];
+	m_V[561] = u[10];
+	m_V[562] = u[11];
+	m_V[563] = u[12];
+	m_V[564] = u[13];
+	m_V[565] = u[14];
+	m_V[566] = u[15];
+	m_V[527] = u[16];		/* setPointH */
+	m_V[528] = u[17];
+	m_V[529] = u[18];
+	m_V[530] = u[19];
+	m_V[531] = u[20];
+	m_V[532] = u[21];
+	m_V[533] = u[22];
+	m_V[534] = u[23];
+	m_V[535] = u[24];
+	m_V[536] = u[25];
+	m_V[537] = u[26];
+	m_V[538] = u[27];
+	m_V[539] = u[28];
+	m_V[540] = u[29];
+	m_V[541] = u[30];
+	m_V[542] = u[31];
 
  
 *** OUTPUTS ***
 
-	y[0] = 	m_V[503];		/* outputForces.e */
-	y[1] = 	m_V[504];
-	y[2] = 	m_V[505];
-	y[3] = 	m_V[506];
-	y[4] = 	m_V[507];
-	y[5] = 	m_V[508];
-	y[6] = 	m_V[509];
-	y[7] = 	m_V[510];
-	y[8] = 	m_V[535];		/* tipH */
-	y[9] = 	m_V[536];
-	y[10] = 	m_V[537];
-	y[11] = 	m_V[538];
-	y[12] = 	m_V[539];
-	y[13] = 	m_V[540];
-	y[14] = 	m_V[541];
-	y[15] = 	m_V[542];
-	y[16] = 	m_V[543];
-	y[17] = 	m_V[544];
-	y[18] = 	m_V[545];
-	y[19] = 	m_V[546];
-	y[20] = 	m_V[547];
-	y[21] = 	m_V[548];
-	y[22] = 	m_V[549];
-	y[23] = 	m_V[550];
+	y[0] = 	m_V[511];		/* outputForces.e */
+	y[1] = 	m_V[512];
+	y[2] = 	m_V[513];
+	y[3] = 	m_V[514];
+	y[4] = 	m_V[515];
+	y[5] = 	m_V[516];
+	y[6] = 	m_V[517];
+	y[7] = 	m_V[518];
+	y[8] = 	m_V[543];		/* tipH */
+	y[9] = 	m_V[544];
+	y[10] = 	m_V[545];
+	y[11] = 	m_V[546];
+	y[12] = 	m_V[547];
+	y[13] = 	m_V[548];
+	y[14] = 	m_V[549];
+	y[15] = 	m_V[550];
+	y[16] = 	m_V[551];
+	y[17] = 	m_V[552];
+	y[18] = 	m_V[553];
+	y[19] = 	m_V[554];
+	y[20] = 	m_V[555];
+	y[21] = 	m_V[556];
+	y[22] = 	m_V[557];
+	y[23] = 	m_V[558];
 
  
 
@@ -616,6 +616,14 @@ NAMES
 	"CalculateJ\\p0ref[1]",
 	"CalculateJ\\p0ref[2]",
 	"CalculateJ\\p0ref[3]",
+	"CalculateJ\\q[1]",
+	"CalculateJ\\q[2]",
+	"CalculateJ\\q[3]",
+	"CalculateJ\\q[4]",
+	"CalculateJ\\q[5]",
+	"CalculateJ\\q[6]",
+	"CalculateJ\\q[7]",
+	"CalculateJ\\q[8]",
 	"ControllableJ1\\joints.e[1]",
 	"ControllableJ1\\joints.e[2]",
 	"ControllableJ1\\joints.e[3]",
@@ -832,6 +840,7 @@ NAMES
 	"CalculateJ\\H40",
 	"CalculateJ\\H50",
 	"CalculateJ\\p0ref",
+	"CalculateJ\\q",
 	"ControllableJ1\\joints.e",
 	"ControllableJ1\\tip.f",
 	"CtipControl1\\p.e",

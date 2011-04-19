@@ -4,8 +4,8 @@
  *  file:  common\xxtypes.h
  *  model: ControlYoubotFullInteraction_v1
  *  expmt: ControlYoubotFullInteraction_v1
- *  date:  April 14, 2011
- *  time:  10:40:15 pm
+ *  date:  April 17, 2011
+ *  time:  11:51:38 am
  *  user:  Campuslicentie 
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
