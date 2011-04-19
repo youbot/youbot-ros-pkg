@@ -3,10 +3,10 @@
  *
  *  file:  youbot_interaction_control.h
  *  subm:  youbot_interaction_control
- *  model: ControlYoubotFullInteraction_v1
- *  expmt: ControlYoubotFullInteraction_v1
- *  date:  April 17, 2011
- *  time:  11:51:38 am
+ *  model: youBot_control_gazebo
+ *  expmt: youBot_control_gazebo
+ *  date:  April 19, 2011
+ *  time:  4:14:43 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -139,8 +139,7 @@ class youbot_interaction_control: public virtual Submodel20sim
 		 */
 		void CopyVariablesToOutputs (XXDouble *y);
 	
-		void initVarNames(void);
-
+	
 		Euler myintegmethod;	///< pointer to the integration method for this submodel
 	
 

@@ -3,10 +3,10 @@
  *
  *  file:  test_youbot_interaction_control.cpp
  *  subm:  youbot_interaction_control
- *  model: ControlYoubotFullInteraction_v1
- *  expmt: ControlYoubotFullInteraction_v1
- *  date:  April 17, 2011
- *  time:  11:51:38 am
+ *  model: youBot_control_gazebo
+ *  expmt: youBot_control_gazebo
+ *  date:  April 19, 2011
+ *  time:  4:14:43 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -29,11 +29,11 @@
 /* the main function */
 int main()
 {
-	XXDouble u [32 + 1];
+	XXDouble u [22 + 1];
 	XXDouble y [24 + 1];
 
 	/* initialize the inputs and outputs with correct initial values */
-	u[0] = 0.0;		/* outputForces.f */
+	u[0] = 0.0;		/* input */
 	u[1] = 0.0;
 	u[2] = 0.0;
 	u[3] = 0.0;
@@ -41,7 +41,7 @@ int main()
 	u[5] = 0.0;
 	u[6] = 0.0;
 	u[7] = 0.0;
-	u[8] = 0.0;		/* q */
+	u[8] = 0.0;		/* p.f */
 	u[9] = 0.0;
 	u[10] = 0.0;
 	u[11] = 0.0;
@@ -49,24 +49,14 @@ int main()
 	u[13] = 0.0;
 	u[14] = 0.0;
 	u[15] = 0.0;
-	u[16] = 0.0;		/* setPointH */
+	u[16] = 0.0;		/* xyzrpy */
 	u[17] = 0.0;
 	u[18] = 0.0;
 	u[19] = 0.0;
 	u[20] = 0.0;
 	u[21] = 0.0;
-	u[22] = 0.0;
-	u[23] = 0.0;
-	u[24] = 0.0;
-	u[25] = 0.0;
-	u[26] = 0.0;
-	u[27] = 0.0;
-	u[28] = 0.0;
-	u[29] = 0.0;
-	u[30] = 0.0;
-	u[31] = 0.0;
 
-	y[0] = 0.0;		/* outputForces.e */
+	y[0] = 0.0;		/* output */
 	y[1] = 0.0;
 	y[2] = 0.0;
 	y[3] = 0.0;
@@ -74,7 +64,7 @@ int main()
 	y[5] = 0.0;
 	y[6] = 0.0;
 	y[7] = 0.0;
-	y[8] = 0.0;		/* tipH */
+	y[8] = 0.0;
 	y[9] = 0.0;
 	y[10] = 0.0;
 	y[11] = 0.0;
@@ -82,7 +72,8 @@ int main()
 	y[13] = 0.0;
 	y[14] = 0.0;
 	y[15] = 0.0;
-	y[16] = 0.0;
+
+	y[16] = 0.0;		/* p.e */
 	y[17] = 0.0;
 	y[18] = 0.0;
 	y[19] = 0.0;

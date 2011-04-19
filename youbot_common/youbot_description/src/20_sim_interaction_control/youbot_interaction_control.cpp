@@ -3,10 +3,10 @@
  *
  *  file:  youbot_interaction_control.cpp
  *  subm:  youbot_interaction_control
- *  model: ControlYoubotFullInteraction_v1
- *  expmt: ControlYoubotFullInteraction_v1
- *  date:  April 17, 2011
- *  time:  11:51:38 am
+ *  model: youBot_control_gazebo
+ *  expmt: youBot_control_gazebo
+ *  date:  April 19, 2011
+ *  time:  4:14:43 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -24,38 +24,28 @@
 void youbot_interaction_control::CopyInputsToVariables (XXDouble *u)
 {
 	/* copy the input vector to the input variables */
-	m_V[519] = u[0];		/* outputForces.f */
-	m_V[520] = u[1];
-	m_V[521] = u[2];
-	m_V[522] = u[3];
-	m_V[523] = u[4];
-	m_V[524] = u[5];
-	m_V[525] = u[6];
-	m_V[526] = u[7];
-	m_V[559] = u[8];		/* q */
-	m_V[560] = u[9];
-	m_V[561] = u[10];
-	m_V[562] = u[11];
-	m_V[563] = u[12];
-	m_V[564] = u[13];
-	m_V[565] = u[14];
-	m_V[566] = u[15];
-	m_V[527] = u[16];		/* setPointH */
-	m_V[528] = u[17];
-	m_V[529] = u[18];
-	m_V[530] = u[19];
-	m_V[531] = u[20];
-	m_V[532] = u[21];
-	m_V[533] = u[22];
-	m_V[534] = u[23];
-	m_V[535] = u[24];
-	m_V[536] = u[25];
-	m_V[537] = u[26];
-	m_V[538] = u[27];
-	m_V[539] = u[28];
-	m_V[540] = u[29];
-	m_V[541] = u[30];
-	m_V[542] = u[31];
+	m_V[549] = u[0];		/* input */
+	m_V[550] = u[1];
+	m_V[551] = u[2];
+	m_V[552] = u[3];
+	m_V[553] = u[4];
+	m_V[554] = u[5];
+	m_V[555] = u[6];
+	m_V[556] = u[7];
+	m_V[541] = u[8];		/* p.f */
+	m_V[542] = u[9];
+	m_V[543] = u[10];
+	m_V[544] = u[11];
+	m_V[545] = u[12];
+	m_V[546] = u[13];
+	m_V[547] = u[14];
+	m_V[548] = u[15];
+	m_V[557] = u[16];		/* xyzrpy */
+	m_V[558] = u[17];
+	m_V[559] = u[18];
+	m_V[560] = u[19];
+	m_V[561] = u[20];
+	m_V[562] = u[21];
 
 }
 
@@ -63,922 +53,59 @@ void youbot_interaction_control::CopyInputsToVariables (XXDouble *u)
 void youbot_interaction_control::CopyVariablesToOutputs (XXDouble *y)
 {
 	/* copy the output variables to the output vector */
-	y[0] = 	m_V[511];		/* outputForces.e */
-	y[1] = 	m_V[512];
-	y[2] = 	m_V[513];
-	y[3] = 	m_V[514];
-	y[4] = 	m_V[515];
-	y[5] = 	m_V[516];
-	y[6] = 	m_V[517];
-	y[7] = 	m_V[518];
-	y[8] = 	m_V[543];		/* tipH */
-	y[9] = 	m_V[544];
-	y[10] = 	m_V[545];
-	y[11] = 	m_V[546];
-	y[12] = 	m_V[547];
-	y[13] = 	m_V[548];
-	y[14] = 	m_V[549];
-	y[15] = 	m_V[550];
-	y[16] = 	m_V[551];
-	y[17] = 	m_V[552];
-	y[18] = 	m_V[553];
-	y[19] = 	m_V[554];
-	y[20] = 	m_V[555];
-	y[21] = 	m_V[556];
-	y[22] = 	m_V[557];
-	y[23] = 	m_V[558];
+	y[0] = 	m_V[563];		/* output */
+	y[1] = 	m_V[564];
+	y[2] = 	m_V[565];
+	y[3] = 	m_V[566];
+	y[4] = 	m_V[567];
+	y[5] = 	m_V[568];
+	y[6] = 	m_V[569];
+	y[7] = 	m_V[570];
+	y[8] = 	m_V[571];
+	y[9] = 	m_V[572];
+	y[10] = 	m_V[573];
+	y[11] = 	m_V[574];
+	y[12] = 	m_V[575];
+	y[13] = 	m_V[576];
+	y[14] = 	m_V[577];
+	y[15] = 	m_V[578];
+	y[16] = 	m_V[533];		/* p.e */
+	y[17] = 	m_V[534];
+	y[18] = 	m_V[535];
+	y[19] = 	m_V[536];
+	y[20] = 	m_V[537];
+	y[21] = 	m_V[538];
+	y[22] = 	m_V[539];
+	y[23] = 	m_V[540];
 
 }
-void youbot_interaction_control::initVarNames(void){
-	std::string m_constant_names[24+1] = {
-			"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	""
 
-	};
-	std::string m_parameter_names[116+1] = {
-			"C\\jointStiffness[1]",
-	"C\\jointStiffness[2]",
-	"C\\jointStiffness[3]",
-	"C\\jointStiffness[4]",
-	"C\\jointStiffness[5]",
-	"C\\jointStiffness[6]",
-	"C\\jointStiffness[7]",
-	"C\\jointStiffness[8]",
-	"CalculateJ\\Linkdim[1,1]",
-	"CalculateJ\\Linkdim[1,2]",
-	"CalculateJ\\Linkdim[1,3]",
-	"CalculateJ\\Linkdim[1,4]",
-	"CalculateJ\\Linkdim[1,5]",
-	"CalculateJ\\Linkdim[1,6]",
-	"CalculateJ\\Linkdim[2,1]",
-	"CalculateJ\\Linkdim[2,2]",
-	"CalculateJ\\Linkdim[2,3]",
-	"CalculateJ\\Linkdim[2,4]",
-	"CalculateJ\\Linkdim[2,5]",
-	"CalculateJ\\Linkdim[2,6]",
-	"CalculateJ\\Linkdim[3,1]",
-	"CalculateJ\\Linkdim[3,2]",
-	"CalculateJ\\Linkdim[3,3]",
-	"CalculateJ\\Linkdim[3,4]",
-	"CalculateJ\\Linkdim[3,5]",
-	"CalculateJ\\Linkdim[3,6]",
-	"CtipControl1\\CtipControl[1]",
-	"CtipControl1\\CtipControl[2]",
-	"CtipControl1\\CtipControl[3]",
-	"CtipControl1\\CtipControl[4]",
-	"CtipControl1\\CtipControl[5]",
-	"CtipControl1\\CtipControl[6]",
-	"R\\cartesianDumping[1]",
-	"R\\cartesianDumping[2]",
-	"R\\cartesianDumping[3]",
-	"R\\cartesianDumping[4]",
-	"R\\cartesianDumping[5]",
-	"R\\cartesianDumping[6]",
-	"R1\\jointDumping[1]",
-	"R1\\jointDumping[2]",
-	"R1\\jointDumping[3]",
-	"R1\\jointDumping[4]",
-	"R1\\jointDumping[5]",
-	"R1\\jointDumping[6]",
-	"R1\\jointDumping[7]",
-	"R1\\jointDumping[8]",
-	"linkDim[1,1]",
-	"linkDim[1,2]",
-	"linkDim[1,3]",
-	"linkDim[1,4]",
-	"linkDim[1,5]",
-	"linkDim[1,6]",
-	"linkDim[2,1]",
-	"linkDim[2,2]",
-	"linkDim[2,3]",
-	"linkDim[2,4]",
-	"linkDim[2,5]",
-	"linkDim[2,6]",
-	"linkDim[3,1]",
-	"linkDim[3,2]",
-	"linkDim[3,3]",
-	"linkDim[3,4]",
-	"linkDim[3,5]",
-	"linkDim[3,6]",
-	"linkCom[1,1]",
-	"linkCom[1,2]",
-	"linkCom[1,3]",
-	"linkCom[1,4]",
-	"linkCom[1,5]",
-	"linkCom[1,6]",
-	"linkCom[2,1]",
-	"linkCom[2,2]",
-	"linkCom[2,3]",
-	"linkCom[2,4]",
-	"linkCom[2,5]",
-	"linkCom[2,6]",
-	"linkCom[3,1]",
-	"linkCom[3,2]",
-	"linkCom[3,3]",
-	"linkCom[3,4]",
-	"linkCom[3,5]",
-	"linkCom[3,6]",
-	"linkM[1]",
-	"linkM[2]",
-	"linkM[3]",
-	"linkM[4]",
-	"linkM[5]",
-	"linkM[6]",
-	"cartesianStiffness[1]",
-	"cartesianStiffness[2]",
-	"cartesianStiffness[3]",
-	"cartesianStiffness[4]",
-	"cartesianStiffness[5]",
-	"cartesianStiffness[6]",
-	"cartesianDumping[1]",
-	"cartesianDumping[2]",
-	"cartesianDumping[3]",
-	"cartesianDumping[4]",
-	"cartesianDumping[5]",
-	"cartesianDumping[6]",
-	"jointStiffness[1]",
-	"jointStiffness[2]",
-	"jointStiffness[3]",
-	"jointStiffness[4]",
-	"jointStiffness[5]",
-	"jointStiffness[6]",
-	"jointStiffness[7]",
-	"jointStiffness[8]",
-	"jointDumping[1]",
-	"jointDumping[2]",
-	"jointDumping[3]",
-	"jointDumping[4]",
-	"jointDumping[5]",
-	"jointDumping[6]",
-	"jointDumping[7]",
-	"jointDumping[8]"
-
-	};
-	std::string m_initial_value_names[0+1] = {
-			NULL
-	};
-	std::string m_variable_names[567+1] = {
-			"C\\p.e[1]",
-	"C\\p.e[2]",
-	"C\\p.e[3]",
-	"C\\p.e[4]",
-	"C\\p.e[5]",
-	"C\\p.e[6]",
-	"C\\p.e[7]",
-	"C\\p.e[8]",
-	"CalculateJ\\controllableJ[1,1]",
-	"CalculateJ\\controllableJ[1,2]",
-	"CalculateJ\\controllableJ[1,3]",
-	"CalculateJ\\controllableJ[1,4]",
-	"CalculateJ\\controllableJ[1,5]",
-	"CalculateJ\\controllableJ[1,6]",
-	"CalculateJ\\controllableJ[1,7]",
-	"CalculateJ\\controllableJ[1,8]",
-	"CalculateJ\\controllableJ[2,1]",
-	"CalculateJ\\controllableJ[2,2]",
-	"CalculateJ\\controllableJ[2,3]",
-	"CalculateJ\\controllableJ[2,4]",
-	"CalculateJ\\controllableJ[2,5]",
-	"CalculateJ\\controllableJ[2,6]",
-	"CalculateJ\\controllableJ[2,7]",
-	"CalculateJ\\controllableJ[2,8]",
-	"CalculateJ\\controllableJ[3,1]",
-	"CalculateJ\\controllableJ[3,2]",
-	"CalculateJ\\controllableJ[3,3]",
-	"CalculateJ\\controllableJ[3,4]",
-	"CalculateJ\\controllableJ[3,5]",
-	"CalculateJ\\controllableJ[3,6]",
-	"CalculateJ\\controllableJ[3,7]",
-	"CalculateJ\\controllableJ[3,8]",
-	"CalculateJ\\controllableJ[4,1]",
-	"CalculateJ\\controllableJ[4,2]",
-	"CalculateJ\\controllableJ[4,3]",
-	"CalculateJ\\controllableJ[4,4]",
-	"CalculateJ\\controllableJ[4,5]",
-	"CalculateJ\\controllableJ[4,6]",
-	"CalculateJ\\controllableJ[4,7]",
-	"CalculateJ\\controllableJ[4,8]",
-	"CalculateJ\\controllableJ[5,1]",
-	"CalculateJ\\controllableJ[5,2]",
-	"CalculateJ\\controllableJ[5,3]",
-	"CalculateJ\\controllableJ[5,4]",
-	"CalculateJ\\controllableJ[5,5]",
-	"CalculateJ\\controllableJ[5,6]",
-	"CalculateJ\\controllableJ[5,7]",
-	"CalculateJ\\controllableJ[5,8]",
-	"CalculateJ\\controllableJ[6,1]",
-	"CalculateJ\\controllableJ[6,2]",
-	"CalculateJ\\controllableJ[6,3]",
-	"CalculateJ\\controllableJ[6,4]",
-	"CalculateJ\\controllableJ[6,5]",
-	"CalculateJ\\controllableJ[6,6]",
-	"CalculateJ\\controllableJ[6,7]",
-	"CalculateJ\\controllableJ[6,8]",
-	"CalculateJ\\Htip0[1,1]",
-	"CalculateJ\\Htip0[1,2]",
-	"CalculateJ\\Htip0[1,3]",
-	"CalculateJ\\Htip0[1,4]",
-	"CalculateJ\\Htip0[2,1]",
-	"CalculateJ\\Htip0[2,2]",
-	"CalculateJ\\Htip0[2,3]",
-	"CalculateJ\\Htip0[2,4]",
-	"CalculateJ\\Htip0[3,1]",
-	"CalculateJ\\Htip0[3,2]",
-	"CalculateJ\\Htip0[3,3]",
-	"CalculateJ\\Htip0[3,4]",
-	"CalculateJ\\Htip0[4,1]",
-	"CalculateJ\\Htip0[4,2]",
-	"CalculateJ\\Htip0[4,3]",
-	"CalculateJ\\Htip0[4,4]",
-	"CalculateJ\\uTrzrefref[1]",
-	"CalculateJ\\uTrzrefref[2]",
-	"CalculateJ\\uTrzrefref[3]",
-	"CalculateJ\\uTrzrefref[4]",
-	"CalculateJ\\uTrzrefref[5]",
-	"CalculateJ\\uTrzrefref[6]",
-	"CalculateJ\\uTryrefref[1]",
-	"CalculateJ\\uTryrefref[2]",
-	"CalculateJ\\uTryrefref[3]",
-	"CalculateJ\\uTryrefref[4]",
-	"CalculateJ\\uTryrefref[5]",
-	"CalculateJ\\uTryrefref[6]",
-	"CalculateJ\\uTrxrefref[1]",
-	"CalculateJ\\uTrxrefref[2]",
-	"CalculateJ\\uTrxrefref[3]",
-	"CalculateJ\\uTrxrefref[4]",
-	"CalculateJ\\uTrxrefref[5]",
-	"CalculateJ\\uTrxrefref[6]",
-	"CalculateJ\\uTr1refref[1]",
-	"CalculateJ\\uTr1refref[2]",
-	"CalculateJ\\uTr1refref[3]",
-	"CalculateJ\\uTr1refref[4]",
-	"CalculateJ\\uTr1refref[5]",
-	"CalculateJ\\uTr1refref[6]",
-	"CalculateJ\\uTr211[1]",
-	"CalculateJ\\uTr211[2]",
-	"CalculateJ\\uTr211[3]",
-	"CalculateJ\\uTr211[4]",
-	"CalculateJ\\uTr211[5]",
-	"CalculateJ\\uTr211[6]",
-	"CalculateJ\\uTr322[1]",
-	"CalculateJ\\uTr322[2]",
-	"CalculateJ\\uTr322[3]",
-	"CalculateJ\\uTr322[4]",
-	"CalculateJ\\uTr322[5]",
-	"CalculateJ\\uTr322[6]",
-	"CalculateJ\\uTr433[1]",
-	"CalculateJ\\uTr433[2]",
-	"CalculateJ\\uTr433[3]",
-	"CalculateJ\\uTr433[4]",
-	"CalculateJ\\uTr433[5]",
-	"CalculateJ\\uTr433[6]",
-	"CalculateJ\\uTr544[1]",
-	"CalculateJ\\uTr544[2]",
-	"CalculateJ\\uTr544[3]",
-	"CalculateJ\\uTr544[4]",
-	"CalculateJ\\uTr544[5]",
-	"CalculateJ\\uTr544[6]",
-	"CalculateJ\\R0ref[1,1]",
-	"CalculateJ\\R0ref[1,2]",
-	"CalculateJ\\R0ref[1,3]",
-	"CalculateJ\\R0ref[2,1]",
-	"CalculateJ\\R0ref[2,2]",
-	"CalculateJ\\R0ref[2,3]",
-	"CalculateJ\\R0ref[3,1]",
-	"CalculateJ\\R0ref[3,2]",
-	"CalculateJ\\R0ref[3,3]",
-	"CalculateJ\\R1ref[1,1]",
-	"CalculateJ\\R1ref[1,2]",
-	"CalculateJ\\R1ref[1,3]",
-	"CalculateJ\\R1ref[2,1]",
-	"CalculateJ\\R1ref[2,2]",
-	"CalculateJ\\R1ref[2,3]",
-	"CalculateJ\\R1ref[3,1]",
-	"CalculateJ\\R1ref[3,2]",
-	"CalculateJ\\R1ref[3,3]",
-	"CalculateJ\\R21[1,1]",
-	"CalculateJ\\R21[1,2]",
-	"CalculateJ\\R21[1,3]",
-	"CalculateJ\\R21[2,1]",
-	"CalculateJ\\R21[2,2]",
-	"CalculateJ\\R21[2,3]",
-	"CalculateJ\\R21[3,1]",
-	"CalculateJ\\R21[3,2]",
-	"CalculateJ\\R21[3,3]",
-	"CalculateJ\\R32[1,1]",
-	"CalculateJ\\R32[1,2]",
-	"CalculateJ\\R32[1,3]",
-	"CalculateJ\\R32[2,1]",
-	"CalculateJ\\R32[2,2]",
-	"CalculateJ\\R32[2,3]",
-	"CalculateJ\\R32[3,1]",
-	"CalculateJ\\R32[3,2]",
-	"CalculateJ\\R32[3,3]",
-	"CalculateJ\\R43[1,1]",
-	"CalculateJ\\R43[1,2]",
-	"CalculateJ\\R43[1,3]",
-	"CalculateJ\\R43[2,1]",
-	"CalculateJ\\R43[2,2]",
-	"CalculateJ\\R43[2,3]",
-	"CalculateJ\\R43[3,1]",
-	"CalculateJ\\R43[3,2]",
-	"CalculateJ\\R43[3,3]",
-	"CalculateJ\\R54[1,1]",
-	"CalculateJ\\R54[1,2]",
-	"CalculateJ\\R54[1,3]",
-	"CalculateJ\\R54[2,1]",
-	"CalculateJ\\R54[2,2]",
-	"CalculateJ\\R54[2,3]",
-	"CalculateJ\\R54[3,1]",
-	"CalculateJ\\R54[3,2]",
-	"CalculateJ\\R54[3,3]",
-	"CalculateJ\\Rtip5[1,1]",
-	"CalculateJ\\Rtip5[1,2]",
-	"CalculateJ\\Rtip5[1,3]",
-	"CalculateJ\\Rtip5[2,1]",
-	"CalculateJ\\Rtip5[2,2]",
-	"CalculateJ\\Rtip5[2,3]",
-	"CalculateJ\\Rtip5[3,1]",
-	"CalculateJ\\Rtip5[3,2]",
-	"CalculateJ\\Rtip5[3,3]",
-	"CalculateJ\\p1ref[1]",
-	"CalculateJ\\p1ref[2]",
-	"CalculateJ\\p1ref[3]",
-	"CalculateJ\\p21[1]",
-	"CalculateJ\\p21[2]",
-	"CalculateJ\\p21[3]",
-	"CalculateJ\\p32[1]",
-	"CalculateJ\\p32[2]",
-	"CalculateJ\\p32[3]",
-	"CalculateJ\\p43[1]",
-	"CalculateJ\\p43[2]",
-	"CalculateJ\\p43[3]",
-	"CalculateJ\\p54[1]",
-	"CalculateJ\\p54[2]",
-	"CalculateJ\\p54[3]",
-	"CalculateJ\\ptip5[1]",
-	"CalculateJ\\ptip5[2]",
-	"CalculateJ\\ptip5[3]",
-	"CalculateJ\\Href0[1,1]",
-	"CalculateJ\\Href0[1,2]",
-	"CalculateJ\\Href0[1,3]",
-	"CalculateJ\\Href0[1,4]",
-	"CalculateJ\\Href0[2,1]",
-	"CalculateJ\\Href0[2,2]",
-	"CalculateJ\\Href0[2,3]",
-	"CalculateJ\\Href0[2,4]",
-	"CalculateJ\\Href0[3,1]",
-	"CalculateJ\\Href0[3,2]",
-	"CalculateJ\\Href0[3,3]",
-	"CalculateJ\\Href0[3,4]",
-	"CalculateJ\\Href0[4,1]",
-	"CalculateJ\\Href0[4,2]",
-	"CalculateJ\\Href0[4,3]",
-	"CalculateJ\\Href0[4,4]",
-	"CalculateJ\\H1ref[1,1]",
-	"CalculateJ\\H1ref[1,2]",
-	"CalculateJ\\H1ref[1,3]",
-	"CalculateJ\\H1ref[1,4]",
-	"CalculateJ\\H1ref[2,1]",
-	"CalculateJ\\H1ref[2,2]",
-	"CalculateJ\\H1ref[2,3]",
-	"CalculateJ\\H1ref[2,4]",
-	"CalculateJ\\H1ref[3,1]",
-	"CalculateJ\\H1ref[3,2]",
-	"CalculateJ\\H1ref[3,3]",
-	"CalculateJ\\H1ref[3,4]",
-	"CalculateJ\\H1ref[4,1]",
-	"CalculateJ\\H1ref[4,2]",
-	"CalculateJ\\H1ref[4,3]",
-	"CalculateJ\\H1ref[4,4]",
-	"CalculateJ\\H21[1,1]",
-	"CalculateJ\\H21[1,2]",
-	"CalculateJ\\H21[1,3]",
-	"CalculateJ\\H21[1,4]",
-	"CalculateJ\\H21[2,1]",
-	"CalculateJ\\H21[2,2]",
-	"CalculateJ\\H21[2,3]",
-	"CalculateJ\\H21[2,4]",
-	"CalculateJ\\H21[3,1]",
-	"CalculateJ\\H21[3,2]",
-	"CalculateJ\\H21[3,3]",
-	"CalculateJ\\H21[3,4]",
-	"CalculateJ\\H21[4,1]",
-	"CalculateJ\\H21[4,2]",
-	"CalculateJ\\H21[4,3]",
-	"CalculateJ\\H21[4,4]",
-	"CalculateJ\\H32[1,1]",
-	"CalculateJ\\H32[1,2]",
-	"CalculateJ\\H32[1,3]",
-	"CalculateJ\\H32[1,4]",
-	"CalculateJ\\H32[2,1]",
-	"CalculateJ\\H32[2,2]",
-	"CalculateJ\\H32[2,3]",
-	"CalculateJ\\H32[2,4]",
-	"CalculateJ\\H32[3,1]",
-	"CalculateJ\\H32[3,2]",
-	"CalculateJ\\H32[3,3]",
-	"CalculateJ\\H32[3,4]",
-	"CalculateJ\\H32[4,1]",
-	"CalculateJ\\H32[4,2]",
-	"CalculateJ\\H32[4,3]",
-	"CalculateJ\\H32[4,4]",
-	"CalculateJ\\H43[1,1]",
-	"CalculateJ\\H43[1,2]",
-	"CalculateJ\\H43[1,3]",
-	"CalculateJ\\H43[1,4]",
-	"CalculateJ\\H43[2,1]",
-	"CalculateJ\\H43[2,2]",
-	"CalculateJ\\H43[2,3]",
-	"CalculateJ\\H43[2,4]",
-	"CalculateJ\\H43[3,1]",
-	"CalculateJ\\H43[3,2]",
-	"CalculateJ\\H43[3,3]",
-	"CalculateJ\\H43[3,4]",
-	"CalculateJ\\H43[4,1]",
-	"CalculateJ\\H43[4,2]",
-	"CalculateJ\\H43[4,3]",
-	"CalculateJ\\H43[4,4]",
-	"CalculateJ\\H54[1,1]",
-	"CalculateJ\\H54[1,2]",
-	"CalculateJ\\H54[1,3]",
-	"CalculateJ\\H54[1,4]",
-	"CalculateJ\\H54[2,1]",
-	"CalculateJ\\H54[2,2]",
-	"CalculateJ\\H54[2,3]",
-	"CalculateJ\\H54[2,4]",
-	"CalculateJ\\H54[3,1]",
-	"CalculateJ\\H54[3,2]",
-	"CalculateJ\\H54[3,3]",
-	"CalculateJ\\H54[3,4]",
-	"CalculateJ\\H54[4,1]",
-	"CalculateJ\\H54[4,2]",
-	"CalculateJ\\H54[4,3]",
-	"CalculateJ\\H54[4,4]",
-	"CalculateJ\\Htip5[1,1]",
-	"CalculateJ\\Htip5[1,2]",
-	"CalculateJ\\Htip5[1,3]",
-	"CalculateJ\\Htip5[1,4]",
-	"CalculateJ\\Htip5[2,1]",
-	"CalculateJ\\Htip5[2,2]",
-	"CalculateJ\\Htip5[2,3]",
-	"CalculateJ\\Htip5[2,4]",
-	"CalculateJ\\Htip5[3,1]",
-	"CalculateJ\\Htip5[3,2]",
-	"CalculateJ\\Htip5[3,3]",
-	"CalculateJ\\Htip5[3,4]",
-	"CalculateJ\\Htip5[4,1]",
-	"CalculateJ\\Htip5[4,2]",
-	"CalculateJ\\Htip5[4,3]",
-	"CalculateJ\\Htip5[4,4]",
-	"CalculateJ\\H10[1,1]",
-	"CalculateJ\\H10[1,2]",
-	"CalculateJ\\H10[1,3]",
-	"CalculateJ\\H10[1,4]",
-	"CalculateJ\\H10[2,1]",
-	"CalculateJ\\H10[2,2]",
-	"CalculateJ\\H10[2,3]",
-	"CalculateJ\\H10[2,4]",
-	"CalculateJ\\H10[3,1]",
-	"CalculateJ\\H10[3,2]",
-	"CalculateJ\\H10[3,3]",
-	"CalculateJ\\H10[3,4]",
-	"CalculateJ\\H10[4,1]",
-	"CalculateJ\\H10[4,2]",
-	"CalculateJ\\H10[4,3]",
-	"CalculateJ\\H10[4,4]",
-	"CalculateJ\\H20[1,1]",
-	"CalculateJ\\H20[1,2]",
-	"CalculateJ\\H20[1,3]",
-	"CalculateJ\\H20[1,4]",
-	"CalculateJ\\H20[2,1]",
-	"CalculateJ\\H20[2,2]",
-	"CalculateJ\\H20[2,3]",
-	"CalculateJ\\H20[2,4]",
-	"CalculateJ\\H20[3,1]",
-	"CalculateJ\\H20[3,2]",
-	"CalculateJ\\H20[3,3]",
-	"CalculateJ\\H20[3,4]",
-	"CalculateJ\\H20[4,1]",
-	"CalculateJ\\H20[4,2]",
-	"CalculateJ\\H20[4,3]",
-	"CalculateJ\\H20[4,4]",
-	"CalculateJ\\H30[1,1]",
-	"CalculateJ\\H30[1,2]",
-	"CalculateJ\\H30[1,3]",
-	"CalculateJ\\H30[1,4]",
-	"CalculateJ\\H30[2,1]",
-	"CalculateJ\\H30[2,2]",
-	"CalculateJ\\H30[2,3]",
-	"CalculateJ\\H30[2,4]",
-	"CalculateJ\\H30[3,1]",
-	"CalculateJ\\H30[3,2]",
-	"CalculateJ\\H30[3,3]",
-	"CalculateJ\\H30[3,4]",
-	"CalculateJ\\H30[4,1]",
-	"CalculateJ\\H30[4,2]",
-	"CalculateJ\\H30[4,3]",
-	"CalculateJ\\H30[4,4]",
-	"CalculateJ\\H40[1,1]",
-	"CalculateJ\\H40[1,2]",
-	"CalculateJ\\H40[1,3]",
-	"CalculateJ\\H40[1,4]",
-	"CalculateJ\\H40[2,1]",
-	"CalculateJ\\H40[2,2]",
-	"CalculateJ\\H40[2,3]",
-	"CalculateJ\\H40[2,4]",
-	"CalculateJ\\H40[3,1]",
-	"CalculateJ\\H40[3,2]",
-	"CalculateJ\\H40[3,3]",
-	"CalculateJ\\H40[3,4]",
-	"CalculateJ\\H40[4,1]",
-	"CalculateJ\\H40[4,2]",
-	"CalculateJ\\H40[4,3]",
-	"CalculateJ\\H40[4,4]",
-	"CalculateJ\\H50[1,1]",
-	"CalculateJ\\H50[1,2]",
-	"CalculateJ\\H50[1,3]",
-	"CalculateJ\\H50[1,4]",
-	"CalculateJ\\H50[2,1]",
-	"CalculateJ\\H50[2,2]",
-	"CalculateJ\\H50[2,3]",
-	"CalculateJ\\H50[2,4]",
-	"CalculateJ\\H50[3,1]",
-	"CalculateJ\\H50[3,2]",
-	"CalculateJ\\H50[3,3]",
-	"CalculateJ\\H50[3,4]",
-	"CalculateJ\\H50[4,1]",
-	"CalculateJ\\H50[4,2]",
-	"CalculateJ\\H50[4,3]",
-	"CalculateJ\\H50[4,4]",
-	"CalculateJ\\p0ref[1]",
-	"CalculateJ\\p0ref[2]",
-	"CalculateJ\\p0ref[3]",
-	"CalculateJ\\q[1]",
-	"CalculateJ\\q[2]",
-	"CalculateJ\\q[3]",
-	"CalculateJ\\q[4]",
-	"CalculateJ\\q[5]",
-	"CalculateJ\\q[6]",
-	"CalculateJ\\q[7]",
-	"CalculateJ\\q[8]",
-	"ControllableJ1\\joints.e[1]",
-	"ControllableJ1\\joints.e[2]",
-	"ControllableJ1\\joints.e[3]",
-	"ControllableJ1\\joints.e[4]",
-	"ControllableJ1\\joints.e[5]",
-	"ControllableJ1\\joints.e[6]",
-	"ControllableJ1\\joints.e[7]",
-	"ControllableJ1\\joints.e[8]",
-	"ControllableJ1\\tip.f[1]",
-	"ControllableJ1\\tip.f[2]",
-	"ControllableJ1\\tip.f[3]",
-	"ControllableJ1\\tip.f[4]",
-	"ControllableJ1\\tip.f[5]",
-	"ControllableJ1\\tip.f[6]",
-	"CtipControl1\\p.e[1]",
-	"CtipControl1\\p.e[2]",
-	"CtipControl1\\p.e[3]",
-	"CtipControl1\\p.e[4]",
-	"CtipControl1\\p.e[5]",
-	"CtipControl1\\p.e[6]",
-	"CtipControl1\\state[1,1]",
-	"CtipControl1\\state[1,2]",
-	"CtipControl1\\state[1,3]",
-	"CtipControl1\\state[1,4]",
-	"CtipControl1\\state[2,1]",
-	"CtipControl1\\state[2,2]",
-	"CtipControl1\\state[2,3]",
-	"CtipControl1\\state[2,4]",
-	"CtipControl1\\state[3,1]",
-	"CtipControl1\\state[3,2]",
-	"CtipControl1\\state[3,3]",
-	"CtipControl1\\state[3,4]",
-	"CtipControl1\\state[4,1]",
-	"CtipControl1\\state[4,2]",
-	"CtipControl1\\state[4,3]",
-	"CtipControl1\\state[4,4]",
-	"CtipControl1\\Hvp0[1,1]",
-	"CtipControl1\\Hvp0[1,2]",
-	"CtipControl1\\Hvp0[1,3]",
-	"CtipControl1\\Hvp0[1,4]",
-	"CtipControl1\\Hvp0[2,1]",
-	"CtipControl1\\Hvp0[2,2]",
-	"CtipControl1\\Hvp0[2,3]",
-	"CtipControl1\\Hvp0[2,4]",
-	"CtipControl1\\Hvp0[3,1]",
-	"CtipControl1\\Hvp0[3,2]",
-	"CtipControl1\\Hvp0[3,3]",
-	"CtipControl1\\Hvp0[3,4]",
-	"CtipControl1\\Hvp0[4,1]",
-	"CtipControl1\\Hvp0[4,2]",
-	"CtipControl1\\Hvp0[4,3]",
-	"CtipControl1\\Hvp0[4,4]",
-	"CtipControl1\\theta",
-	"CtipControl1\\omega[1]",
-	"CtipControl1\\omega[2]",
-	"CtipControl1\\omega[3]",
-	"CtipControl1\\W[1]",
-	"CtipControl1\\W[2]",
-	"CtipControl1\\W[3]",
-	"CtipControl1\\W[4]",
-	"CtipControl1\\W[5]",
-	"CtipControl1\\W[6]",
-	"CtipControl1\\temp",
-	"OneJunction\\p2.e[1]",
-	"OneJunction\\p2.e[2]",
-	"OneJunction\\p2.e[3]",
-	"OneJunction\\p2.e[4]",
-	"OneJunction\\p2.e[5]",
-	"OneJunction\\p2.e[6]",
-	"OneJunction1\\p2.e[1]",
-	"OneJunction1\\p2.e[2]",
-	"OneJunction1\\p2.e[3]",
-	"OneJunction1\\p2.e[4]",
-	"OneJunction1\\p2.e[5]",
-	"OneJunction1\\p2.e[6]",
-	"OneJunction1\\p2.e[7]",
-	"OneJunction1\\p2.e[8]",
-	"OneJunction1\\p2.f[1]",
-	"OneJunction1\\p2.f[2]",
-	"OneJunction1\\p2.f[3]",
-	"OneJunction1\\p2.f[4]",
-	"OneJunction1\\p2.f[5]",
-	"OneJunction1\\p2.f[6]",
-	"OneJunction1\\p2.f[7]",
-	"OneJunction1\\p2.f[8]",
-	"R\\p.e[1]",
-	"R\\p.e[2]",
-	"R\\p.e[3]",
-	"R\\p.e[4]",
-	"R\\p.e[5]",
-	"R\\p.e[6]",
-	"R1\\p.e[1]",
-	"R1\\p.e[2]",
-	"R1\\p.e[3]",
-	"R1\\p.e[4]",
-	"R1\\p.e[5]",
-	"R1\\p.e[6]",
-	"R1\\p.e[7]",
-	"R1\\p.e[8]",
-	"Splitter2\\input[1]",
-	"Splitter2\\input[2]",
-	"Splitter2\\input[3]",
-	"Splitter2\\input[4]",
-	"Splitter2\\input[5]",
-	"Splitter2\\input[6]",
-	"Splitter2\\input[7]",
-	"Splitter2\\input[8]",
-	"outputForces.e[1]",
-	"outputForces.e[2]",
-	"outputForces.e[3]",
-	"outputForces.e[4]",
-	"outputForces.e[5]",
-	"outputForces.e[6]",
-	"outputForces.e[7]",
-	"outputForces.e[8]",
-	"outputForces.f[1]",
-	"outputForces.f[2]",
-	"outputForces.f[3]",
-	"outputForces.f[4]",
-	"outputForces.f[5]",
-	"outputForces.f[6]",
-	"outputForces.f[7]",
-	"outputForces.f[8]",
-	"setPointH[1,1]",
-	"setPointH[1,2]",
-	"setPointH[1,3]",
-	"setPointH[1,4]",
-	"setPointH[2,1]",
-	"setPointH[2,2]",
-	"setPointH[2,3]",
-	"setPointH[2,4]",
-	"setPointH[3,1]",
-	"setPointH[3,2]",
-	"setPointH[3,3]",
-	"setPointH[3,4]",
-	"setPointH[4,1]",
-	"setPointH[4,2]",
-	"setPointH[4,3]",
-	"setPointH[4,4]",
-	"tipH[1,1]",
-	"tipH[1,2]",
-	"tipH[1,3]",
-	"tipH[1,4]",
-	"tipH[2,1]",
-	"tipH[2,2]",
-	"tipH[2,3]",
-	"tipH[2,4]",
-	"tipH[3,1]",
-	"tipH[3,2]",
-	"tipH[3,3]",
-	"tipH[3,4]",
-	"tipH[4,1]",
-	"tipH[4,2]",
-	"tipH[4,3]",
-	"tipH[4,4]",
-	"q[1]",
-	"q[2]",
-	"q[3]",
-	"q[4]",
-	"q[5]",
-	"q[6]",
-	"q[7]",
-	"q[8]"
-
-	};
-	std::string m_state_names[0+1] = {
-			NULL
-	};
-	std::string m_rate_names[0+1] = {
-			NULL
-	};
-	std::string m_matrix_names[128+1] = {
-			"C\\p.e",
-	"C\\jointStiffness",
-	"CalculateJ\\controllableJ",
-	"CalculateJ\\Htip0",
-	"CalculateJ\\Linkdim",
-	"CalculateJ\\omegaz",
-	"CalculateJ\\vy",
-	"CalculateJ\\vx",
-	"CalculateJ\\omega1",
-	"CalculateJ\\omega2",
-	"CalculateJ\\omega3",
-	"CalculateJ\\omega4",
-	"CalculateJ\\omega5",
-	"CalculateJ\\uTrzrefref",
-	"CalculateJ\\uTryrefref",
-	"CalculateJ\\uTrxrefref",
-	"CalculateJ\\uTr1refref",
-	"CalculateJ\\uTr211",
-	"CalculateJ\\uTr322",
-	"CalculateJ\\uTr433",
-	"CalculateJ\\uTr544",
-	"CalculateJ\\R0ref",
-	"CalculateJ\\R1ref",
-	"CalculateJ\\R21",
-	"CalculateJ\\R32",
-	"CalculateJ\\R43",
-	"CalculateJ\\R54",
-	"CalculateJ\\Rtip5",
-	"CalculateJ\\p1ref",
-	"CalculateJ\\p21",
-	"CalculateJ\\p32",
-	"CalculateJ\\p43",
-	"CalculateJ\\p54",
-	"CalculateJ\\ptip5",
-	"CalculateJ\\Href0",
-	"CalculateJ\\H1ref",
-	"CalculateJ\\H21",
-	"CalculateJ\\H32",
-	"CalculateJ\\H43",
-	"CalculateJ\\H54",
-	"CalculateJ\\Htip5",
-	"CalculateJ\\H10",
-	"CalculateJ\\H20",
-	"CalculateJ\\H30",
-	"CalculateJ\\H40",
-	"CalculateJ\\H50",
-	"CalculateJ\\p0ref",
-	"CalculateJ\\q",
-	"ControllableJ1\\joints.e",
-	"ControllableJ1\\tip.f",
-	"CtipControl1\\p.e",
-	"CtipControl1\\state",
-	"CtipControl1\\Hvp0",
-	"CtipControl1\\CtipControl",
-	"CtipControl1\\omega",
-	"CtipControl1\\W",
-	"OneJunction\\p2.e",
-	"OneJunction1\\p2.e",
-	"OneJunction1\\p2.f",
-	"R\\p.e",
-	"R\\cartesianDumping",
-	"R1\\p.e",
-	"R1\\jointDumping",
-	"Splitter2\\input",
-	"outputForces.e",
-	"outputForces.f",
-	"setPointH",
-	"tipH",
-	"q",
-	"linkDim",
-	"linkCom",
-	"linkM",
-	"cartesianStiffness",
-	"cartesianDumping",
-	"jointStiffness",
-	"jointDumping",
-	"m_U1",
-	"m_U2",
-	"m_U3",
-	"m_U4",
-	"m_U5",
-	"m_U6",
-	"m_U7",
-	"m_U8",
-	"m_U9",
-	"m_U10",
-	"m_U11",
-	"m_U12",
-	"m_U13",
-	"m_U14",
-	"m_U15",
-	"m_U16",
-	"m_U17",
-	"m_U18",
-	"m_U19",
-	"m_U20",
-	"m_U21",
-	"m_U22",
-	"m_U23",
-	"m_U24",
-	"m_U25",
-	"m_U26",
-	"m_U27",
-	"m_U28",
-	"m_U29",
-	"m_U30",
-	"m_U31",
-	"m_U32",
-	"m_U33",
-	"m_U34",
-	"m_U35",
-	"m_U36",
-	"m_U37",
-	"m_U38",
-	"m_U39",
-	"m_U40",
-	"m_U41",
-	"m_U42",
-	"m_U43",
-	"m_U44",
-	"m_U45",
-	"m_U46",
-	"m_U47",
-	"m_U48",
-	"m_U49",
-	"m_U50",
-	"m_U51",
-	"m_U52"
-
-	};
-	std::string m_favorite_par_names[0+1] = {
-			NULL
-	};
-	std::string m_favorite_var_names[0+1] = {
-			NULL
-	};
-}
 youbot_interaction_control::youbot_interaction_control(void)
 {
 	m_start_time = 0.0;
-	m_finish_time = 30.0;
-	m_step_size = 0.001;
+	m_finish_time = 60.0;
+	m_step_size = 0.01;
 	m_time = 0;
 	m_major = true;
 
 	m_number_constants = 24;
-	m_number_parameters = 116;
-	m_number_initialvalues = 0;
-	m_number_variables = 567;
-	m_number_states = 0;
-	m_number_rates = 0;
-	m_number_matrices = 128;
-	m_number_unnamed = 863;
+	m_number_parameters = 42;
+	m_number_initialvalues = 3;
+	m_number_variables = 579;
+	m_number_states = 3;
+	m_number_rates = 3;
+	m_number_matrices = 121;
+	m_number_unnamed = 539;
 
 	/* the variable arrays */
 	m_C = new XXDouble[24 + 1];		/* constants */
-	m_P = new XXDouble[116 + 1];		/* parameters */
-	m_I = new XXDouble[0 + 1];		/* initial values */
-	m_V = new XXDouble[567 + 1];		/* variables */
-	m_s = new XXDouble[0 + 1];		/* states */
-	m_R = new XXDouble[0 + 1];		/* rates (or new states) */
-	m_M = new XXMatrix[128 + 1];		/* matrices */
-	m_U = new XXDouble[863 + 1];		/* unnamed */
+	m_P = new XXDouble[42 + 1];		/* parameters */
+	m_I = new XXDouble[3 + 1];		/* initial values */
+	m_V = new XXDouble[579 + 1];		/* variables */
+	m_s = new XXDouble[3 + 1];		/* states */
+	m_R = new XXDouble[3 + 1];		/* rates (or new states) */
+	m_M = new XXMatrix[121 + 1];		/* matrices */
+	m_U = new XXDouble[539 + 1];		/* unnamed */
 	m_workarray = new XXDouble[156 + 1];
 
 	myintegmethod.Initialize(this);
@@ -1010,43 +137,43 @@ void youbot_interaction_control::Initialize (XXDouble *u, XXDouble *y, XXDouble 
 	m_time = t;
 
 	/* set the constants */
-	m_C[0] = 0.0;		/* CalculateJ\omegaz */
+	m_C[0] = 1.0;		/* CalculateJ\vx */
 	m_C[1] = 0.0;		
-	m_C[2] = 1.0;		
+	m_C[2] = 0.0;		
 	m_C[3] = 0.0;		/* CalculateJ\vy */
 	m_C[4] = 1.0;		
 	m_C[5] = 0.0;		
-	m_C[6] = 1.0;		/* CalculateJ\vx */
+	m_C[6] = 0.0;		/* CalculateJ\omegaz */
 	m_C[7] = 0.0;		
-	m_C[8] = 0.0;		
+	m_C[8] = 1.0;		
 	m_C[9] = 0.0;		/* CalculateJ\omega1 */
 	m_C[10] = 0.0;		
-	m_C[11] = 1.0;		
+	m_C[11] = -1.0;		
 	m_C[12] = 0.0;		/* CalculateJ\omega2 */
 	m_C[13] = 1.0;		
 	m_C[14] = 0.0;		
 	m_C[15] = 0.0;		/* CalculateJ\omega3 */
-	m_C[16] = 1.0;		
+	m_C[16] = -1.0;		
 	m_C[17] = 0.0;		
 	m_C[18] = 0.0;		/* CalculateJ\omega4 */
 	m_C[19] = 1.0;		
 	m_C[20] = 0.0;		
 	m_C[21] = 0.0;		/* CalculateJ\omega5 */
 	m_C[22] = 0.0;		
-	m_C[23] = 1.0;		
+	m_C[23] = -1.0;		
 
 
 	/* set the parameters */
-	m_P[0] = 0.0;		/* C\jointStiffness {N/m} */
-	m_P[1] = 0.0;		
-	m_P[2] = 0.0;		
-	m_P[3] = 3.0;		
-	m_P[4] = 3.0;		
-	m_P[5] = 3.0;		
-	m_P[6] = 3.0;		
-	m_P[7] = 3.0;		
-	m_P[8] = 0.024;		/* CalculateJ\Linkdim */
-	m_P[9] = 0.033;		
+	m_P[0] = 0.1;		/* C\c */
+	m_P[1] = 1.0;		/* CalculateJ\InitialJointPos */
+	m_P[2] = 1.0;		
+	m_P[3] = 1.0;		
+	m_P[4] = 1.0;		
+	m_P[5] = 1.0;		
+	m_P[6] = 0.024;		/* CalculateJ\Linkdim */
+	m_P[7] = 0.033;		
+	m_P[8] = 0.0;		
+	m_P[9] = 0.0;		
 	m_P[10] = 0.0;		
 	m_P[11] = 0.0;		
 	m_P[12] = 0.0;		
@@ -1055,494 +182,402 @@ void youbot_interaction_control::Initialize (XXDouble *u, XXDouble *y, XXDouble 
 	m_P[15] = 0.0;		
 	m_P[16] = 0.0;		
 	m_P[17] = 0.0;		
-	m_P[18] = 0.0;		
-	m_P[19] = 0.0;		
-	m_P[20] = 0.096;		
-	m_P[21] = 0.019;		
-	m_P[22] = 0.155;		
-	m_P[23] = 0.135;		
-	m_P[24] = 0.096;		
-	m_P[25] = 0.034;		
-	m_P[26] = 3000.0;		/* CtipControl1\CtipControl */
-	m_P[27] = 3000.0;		
-	m_P[28] = 3000.0;		
-	m_P[29] = 0.0;		
+	m_P[18] = 0.096;		
+	m_P[19] = 0.019;		
+	m_P[20] = 0.155;		
+	m_P[21] = 0.135;		
+	m_P[22] = 0.096;		
+	m_P[23] = 0.034;		
+	m_P[24] = 1.0;		/* CalculateJ\InitialBasePos */
+	m_P[25] = 0.0;		
+	m_P[26] = 0.0;		
+	m_P[27] = 1.0;		
+	m_P[28] = 0.0;		
+	m_P[29] = 1.0;		
 	m_P[30] = 0.0;		
 	m_P[31] = 0.0;		
-	m_P[32] = 0.0;		/* R\cartesianDumping {N.s/m} */
+	m_P[32] = 0.0;		
 	m_P[33] = 0.0;		
-	m_P[34] = 0.0;		
+	m_P[34] = 1.0;		
 	m_P[35] = 0.0;		
 	m_P[36] = 0.0;		
 	m_P[37] = 0.0;		
-	m_P[38] = 0.0;		/* R1\jointDumping {N.s/m} */
-	m_P[39] = 0.0;		
-	m_P[40] = 0.0;		
-	m_P[41] = 0.0;		
-	m_P[42] = 0.0;		
-	m_P[43] = 0.0;		
-	m_P[44] = 0.0;		
-	m_P[45] = 0.0;		
-	m_P[46] = 0.024;		/* linkDim {m} */
-	m_P[47] = 0.033;		
-	m_P[48] = 0.0;		
-	m_P[49] = 0.0;		
-	m_P[50] = 0.0;		
-	m_P[51] = 0.0;		
-	m_P[52] = 0.0;		
-	m_P[53] = 0.0;		
-	m_P[54] = 0.0;		
-	m_P[55] = 0.0;		
-	m_P[56] = 0.0;		
-	m_P[57] = 0.0;		
-	m_P[58] = 0.096;		
-	m_P[59] = 0.019;		
-	m_P[60] = 0.155;		
-	m_P[61] = 0.135;		
-	m_P[62] = 0.096;		
-	m_P[63] = 0.034;		
-	m_P[64] = 0.01489;		/* linkCom {m} */
-	m_P[65] = 0.10453;		
-	m_P[66] = 0.001;		
-	m_P[67] = 0.011;		
-	m_P[68] = 0.0;		
-	m_P[69] = 0.0;		
-	m_P[70] = 0.00213;		
-	m_P[71] = 0.0017;		
-	m_P[72] = 0.0967;		
-	m_P[73] = 0.05103;		
-	m_P[74] = 0.00115;		
-	m_P[75] = 0.0;		
-	m_P[76] = 0.00213;		
-	m_P[77] = -0.00297;		
-	m_P[78] = 0.02107;		
-	m_P[79] = -0.02319;		
-	m_P[80] = -0.01683;		
-	m_P[81] = 0.001;		
-	m_P[82] = 2.412;		/* linkM {kg} */
-	m_P[83] = 1.155;		
-	m_P[84] = 0.934;		
-	m_P[85] = 0.877;		
-	m_P[86] = 0.251;		
-	m_P[87] = 0.12;		
-	m_P[88] = 300.0;		/* cartesianStiffness {N/m} */
-	m_P[89] = 300.0;		
-	m_P[90] = 300.0;		
-	m_P[91] = 0.0;		
-	m_P[92] = 0.0;		
-	m_P[93] = 0.0;		
-	m_P[94] = 0.0;		/* cartesianDumping {N.s/m} */
-	m_P[95] = 0.0;		
-	m_P[96] = 0.0;		
-	m_P[97] = 0.0;		
-	m_P[98] = 0.0;		
-	m_P[99] = 0.0;		
-	m_P[100] = 0.0;		/* jointStiffness {N/m} */
-	m_P[101] = 0.0;		
-	m_P[102] = 0.0;		
-	m_P[103] = 3.0;		
-	m_P[104] = 3.0;		
-	m_P[105] = 3.0;		
-	m_P[106] = 3.0;		
-	m_P[107] = 3.0;		
-	m_P[108] = 10.0;		/* jointDumping {N.s/m} */
-	m_P[109] = 10.0;		
-	m_P[110] = 10.0;		
-	m_P[111] = 10.0;		
-	m_P[112] = 10.0;		
-	m_P[113] = 10.0;		
-	m_P[114] = 10.0;		
-	m_P[115] = 10.0;		
+	m_P[38] = 0.0;		
+	m_P[39] = 1.0;		
+	m_P[40] = 0.001;		/* CtipControl\CtipControl */
+	m_P[41] = 1.0;		/* R\r */
 
 
 	/* set the states */
+	m_s[0] = m_I[0];		/* C\x */
+	m_s[1] = m_I[1];
+	m_s[2] = m_I[2];
 
 
 	/* set the matrices */
 	m_M[0].mat = &m_V[0];		/* C\p.e */
 	m_M[0].rows = 8;
 	m_M[0].columns = 1;
-	m_M[1].mat = &m_P[0];		/* C\jointStiffness */
-	m_M[1].rows = 8;
-	m_M[1].columns = 1;
-	m_M[2].mat = &m_V[8];		/* CalculateJ\controllableJ */
-	m_M[2].rows = 6;
-	m_M[2].columns = 8;
-	m_M[3].mat = &m_V[56];		/* CalculateJ\Htip0 */
-	m_M[3].rows = 4;
-	m_M[3].columns = 4;
-	m_M[4].mat = &m_P[8];		/* CalculateJ\Linkdim */
+	m_M[1].mat = &m_V[8];		/* CalculateJ\controllableJ */
+	m_M[1].rows = 6;
+	m_M[1].columns = 8;
+	m_M[2].mat = &m_V[56];		/* CalculateJ\Htip0 */
+	m_M[2].rows = 4;
+	m_M[2].columns = 4;
+	m_M[3].mat = &m_P[1];		/* CalculateJ\InitialJointPos */
+	m_M[3].rows = 5;
+	m_M[3].columns = 1;
+	m_M[4].mat = &m_P[6];		/* CalculateJ\Linkdim */
 	m_M[4].rows = 3;
 	m_M[4].columns = 6;
-	m_M[5].mat = &m_C[0];		/* CalculateJ\omegaz */
-	m_M[5].rows = 3;
-	m_M[5].columns = 1;
-	m_M[6].mat = &m_C[3];		/* CalculateJ\vy */
+	m_M[5].mat = &m_P[24];		/* CalculateJ\InitialBasePos */
+	m_M[5].rows = 4;
+	m_M[5].columns = 4;
+	m_M[6].mat = &m_C[0];		/* CalculateJ\vx */
 	m_M[6].rows = 3;
 	m_M[6].columns = 1;
-	m_M[7].mat = &m_C[6];		/* CalculateJ\vx */
+	m_M[7].mat = &m_C[3];		/* CalculateJ\vy */
 	m_M[7].rows = 3;
 	m_M[7].columns = 1;
-	m_M[8].mat = &m_C[9];		/* CalculateJ\omega1 */
+	m_M[8].mat = &m_C[6];		/* CalculateJ\omegaz */
 	m_M[8].rows = 3;
 	m_M[8].columns = 1;
-	m_M[9].mat = &m_C[12];		/* CalculateJ\omega2 */
+	m_M[9].mat = &m_C[9];		/* CalculateJ\omega1 */
 	m_M[9].rows = 3;
 	m_M[9].columns = 1;
-	m_M[10].mat = &m_C[15];		/* CalculateJ\omega3 */
+	m_M[10].mat = &m_C[12];		/* CalculateJ\omega2 */
 	m_M[10].rows = 3;
 	m_M[10].columns = 1;
-	m_M[11].mat = &m_C[18];		/* CalculateJ\omega4 */
+	m_M[11].mat = &m_C[15];		/* CalculateJ\omega3 */
 	m_M[11].rows = 3;
 	m_M[11].columns = 1;
-	m_M[12].mat = &m_C[21];		/* CalculateJ\omega5 */
+	m_M[12].mat = &m_C[18];		/* CalculateJ\omega4 */
 	m_M[12].rows = 3;
 	m_M[12].columns = 1;
-	m_M[13].mat = &m_V[72];		/* CalculateJ\uTrzrefref */
-	m_M[13].rows = 6;
+	m_M[13].mat = &m_C[21];		/* CalculateJ\omega5 */
+	m_M[13].rows = 3;
 	m_M[13].columns = 1;
-	m_M[14].mat = &m_V[78];		/* CalculateJ\uTryrefref */
+	m_M[14].mat = &m_V[72];		/* CalculateJ\uTrzrefref */
 	m_M[14].rows = 6;
 	m_M[14].columns = 1;
-	m_M[15].mat = &m_V[84];		/* CalculateJ\uTrxrefref */
+	m_M[15].mat = &m_V[78];		/* CalculateJ\uTryrefref */
 	m_M[15].rows = 6;
 	m_M[15].columns = 1;
-	m_M[16].mat = &m_V[90];		/* CalculateJ\uTr1refref */
+	m_M[16].mat = &m_V[84];		/* CalculateJ\uTrxrefref */
 	m_M[16].rows = 6;
 	m_M[16].columns = 1;
-	m_M[17].mat = &m_V[96];		/* CalculateJ\uTr211 */
+	m_M[17].mat = &m_V[90];		/* CalculateJ\uTr1refref */
 	m_M[17].rows = 6;
 	m_M[17].columns = 1;
-	m_M[18].mat = &m_V[102];		/* CalculateJ\uTr322 */
+	m_M[18].mat = &m_V[96];		/* CalculateJ\uTr211 */
 	m_M[18].rows = 6;
 	m_M[18].columns = 1;
-	m_M[19].mat = &m_V[108];		/* CalculateJ\uTr433 */
+	m_M[19].mat = &m_V[102];		/* CalculateJ\uTr322 */
 	m_M[19].rows = 6;
 	m_M[19].columns = 1;
-	m_M[20].mat = &m_V[114];		/* CalculateJ\uTr544 */
+	m_M[20].mat = &m_V[108];		/* CalculateJ\uTr433 */
 	m_M[20].rows = 6;
 	m_M[20].columns = 1;
-	m_M[21].mat = &m_V[120];		/* CalculateJ\R0ref */
-	m_M[21].rows = 3;
-	m_M[21].columns = 3;
-	m_M[22].mat = &m_V[129];		/* CalculateJ\R1ref */
+	m_M[21].mat = &m_V[114];		/* CalculateJ\uTr544 */
+	m_M[21].rows = 6;
+	m_M[21].columns = 1;
+	m_M[22].mat = &m_V[120];		/* CalculateJ\R1ref */
 	m_M[22].rows = 3;
 	m_M[22].columns = 3;
-	m_M[23].mat = &m_V[138];		/* CalculateJ\R21 */
+	m_M[23].mat = &m_V[129];		/* CalculateJ\R21 */
 	m_M[23].rows = 3;
 	m_M[23].columns = 3;
-	m_M[24].mat = &m_V[147];		/* CalculateJ\R32 */
+	m_M[24].mat = &m_V[138];		/* CalculateJ\R32 */
 	m_M[24].rows = 3;
 	m_M[24].columns = 3;
-	m_M[25].mat = &m_V[156];		/* CalculateJ\R43 */
+	m_M[25].mat = &m_V[147];		/* CalculateJ\R43 */
 	m_M[25].rows = 3;
 	m_M[25].columns = 3;
-	m_M[26].mat = &m_V[165];		/* CalculateJ\R54 */
+	m_M[26].mat = &m_V[156];		/* CalculateJ\R54 */
 	m_M[26].rows = 3;
 	m_M[26].columns = 3;
-	m_M[27].mat = &m_V[174];		/* CalculateJ\Rtip5 */
+	m_M[27].mat = &m_V[165];		/* CalculateJ\Rtip5 */
 	m_M[27].rows = 3;
 	m_M[27].columns = 3;
-	m_M[28].mat = &m_V[183];		/* CalculateJ\p1ref */
+	m_M[28].mat = &m_V[174];		/* CalculateJ\p1ref */
 	m_M[28].rows = 3;
 	m_M[28].columns = 1;
-	m_M[29].mat = &m_V[186];		/* CalculateJ\p21 */
+	m_M[29].mat = &m_V[177];		/* CalculateJ\p21 */
 	m_M[29].rows = 3;
 	m_M[29].columns = 1;
-	m_M[30].mat = &m_V[189];		/* CalculateJ\p32 */
+	m_M[30].mat = &m_V[180];		/* CalculateJ\p32 */
 	m_M[30].rows = 3;
 	m_M[30].columns = 1;
-	m_M[31].mat = &m_V[192];		/* CalculateJ\p43 */
+	m_M[31].mat = &m_V[183];		/* CalculateJ\p43 */
 	m_M[31].rows = 3;
 	m_M[31].columns = 1;
-	m_M[32].mat = &m_V[195];		/* CalculateJ\p54 */
+	m_M[32].mat = &m_V[186];		/* CalculateJ\p54 */
 	m_M[32].rows = 3;
 	m_M[32].columns = 1;
-	m_M[33].mat = &m_V[198];		/* CalculateJ\ptip5 */
+	m_M[33].mat = &m_V[189];		/* CalculateJ\ptip5 */
 	m_M[33].rows = 3;
 	m_M[33].columns = 1;
-	m_M[34].mat = &m_V[201];		/* CalculateJ\Href0 */
+	m_M[34].mat = &m_V[192];		/* CalculateJ\Href0 */
 	m_M[34].rows = 4;
 	m_M[34].columns = 4;
-	m_M[35].mat = &m_V[217];		/* CalculateJ\H1ref */
+	m_M[35].mat = &m_V[208];		/* CalculateJ\H1ref */
 	m_M[35].rows = 4;
 	m_M[35].columns = 4;
-	m_M[36].mat = &m_V[233];		/* CalculateJ\H21 */
+	m_M[36].mat = &m_V[224];		/* CalculateJ\H21 */
 	m_M[36].rows = 4;
 	m_M[36].columns = 4;
-	m_M[37].mat = &m_V[249];		/* CalculateJ\H32 */
+	m_M[37].mat = &m_V[240];		/* CalculateJ\H32 */
 	m_M[37].rows = 4;
 	m_M[37].columns = 4;
-	m_M[38].mat = &m_V[265];		/* CalculateJ\H43 */
+	m_M[38].mat = &m_V[256];		/* CalculateJ\H43 */
 	m_M[38].rows = 4;
 	m_M[38].columns = 4;
-	m_M[39].mat = &m_V[281];		/* CalculateJ\H54 */
+	m_M[39].mat = &m_V[272];		/* CalculateJ\H54 */
 	m_M[39].rows = 4;
 	m_M[39].columns = 4;
-	m_M[40].mat = &m_V[297];		/* CalculateJ\Htip5 */
+	m_M[40].mat = &m_V[288];		/* CalculateJ\Htip5 */
 	m_M[40].rows = 4;
 	m_M[40].columns = 4;
-	m_M[41].mat = &m_V[313];		/* CalculateJ\H10 */
+	m_M[41].mat = &m_V[304];		/* CalculateJ\H10 */
 	m_M[41].rows = 4;
 	m_M[41].columns = 4;
-	m_M[42].mat = &m_V[329];		/* CalculateJ\H20 */
+	m_M[42].mat = &m_V[320];		/* CalculateJ\H20 */
 	m_M[42].rows = 4;
 	m_M[42].columns = 4;
-	m_M[43].mat = &m_V[345];		/* CalculateJ\H30 */
+	m_M[43].mat = &m_V[336];		/* CalculateJ\H30 */
 	m_M[43].rows = 4;
 	m_M[43].columns = 4;
-	m_M[44].mat = &m_V[361];		/* CalculateJ\H40 */
+	m_M[44].mat = &m_V[352];		/* CalculateJ\H40 */
 	m_M[44].rows = 4;
 	m_M[44].columns = 4;
-	m_M[45].mat = &m_V[377];		/* CalculateJ\H50 */
+	m_M[45].mat = &m_V[368];		/* CalculateJ\H50 */
 	m_M[45].rows = 4;
 	m_M[45].columns = 4;
-	m_M[46].mat = &m_V[393];		/* CalculateJ\p0ref */
-	m_M[46].rows = 3;
+	m_M[46].mat = &m_V[384];		/* CalculateJ\initialq */
+	m_M[46].rows = 8;
 	m_M[46].columns = 1;
-	m_M[47].mat = &m_V[396];		/* CalculateJ\q */
+	m_M[47].mat = &m_V[392];		/* ControllableJ\joints.e */
 	m_M[47].rows = 8;
 	m_M[47].columns = 1;
-	m_M[48].mat = &m_V[404];		/* ControllableJ1\joints.e */
-	m_M[48].rows = 8;
+	m_M[48].mat = &m_V[400];		/* ControllableJ\tip.f */
+	m_M[48].rows = 6;
 	m_M[48].columns = 1;
-	m_M[49].mat = &m_V[412];		/* ControllableJ1\tip.f */
+	m_M[49].mat = &m_V[406];		/* CtipControl\p.e */
 	m_M[49].rows = 6;
 	m_M[49].columns = 1;
-	m_M[50].mat = &m_V[418];		/* CtipControl1\p.e */
-	m_M[50].rows = 6;
-	m_M[50].columns = 1;
-	m_M[51].mat = &m_V[424];		/* CtipControl1\state */
-	m_M[51].rows = 4;
-	m_M[51].columns = 4;
-	m_M[52].mat = &m_V[440];		/* CtipControl1\Hvp0 */
-	m_M[52].rows = 4;
-	m_M[52].columns = 4;
-	m_M[53].mat = &m_P[26];		/* CtipControl1\CtipControl */
+	m_M[50].mat = &m_V[412];		/* CtipControl\state */
+	m_M[50].rows = 4;
+	m_M[50].columns = 4;
+	m_M[51].mat = &m_V[429];		/* CtipControl\omega */
+	m_M[51].rows = 3;
+	m_M[51].columns = 1;
+	m_M[52].mat = &m_V[432];		/* CtipControl\Wr */
+	m_M[52].rows = 6;
+	m_M[52].columns = 1;
+	m_M[53].mat = &m_V[438];		/* CtipControl\Wt */
 	m_M[53].rows = 6;
 	m_M[53].columns = 1;
-	m_M[54].mat = &m_V[457];		/* CtipControl1\omega */
-	m_M[54].rows = 3;
+	m_M[54].mat = &m_V[446];		/* Gain\xyzrpy */
+	m_M[54].rows = 6;
 	m_M[54].columns = 1;
-	m_M[55].mat = &m_V[460];		/* CtipControl1\W */
-	m_M[55].rows = 6;
-	m_M[55].columns = 1;
-	m_M[56].mat = &m_V[467];		/* OneJunction\p2.e */
-	m_M[56].rows = 6;
-	m_M[56].columns = 1;
-	m_M[57].mat = &m_V[473];		/* OneJunction1\p2.e */
-	m_M[57].rows = 8;
-	m_M[57].columns = 1;
-	m_M[58].mat = &m_V[481];		/* OneJunction1\p2.f */
-	m_M[58].rows = 8;
-	m_M[58].columns = 1;
-	m_M[59].mat = &m_V[489];		/* R\p.e */
+	m_M[55].mat = &m_V[452];		/* Gain\H */
+	m_M[55].rows = 4;
+	m_M[55].columns = 4;
+	m_M[56].mat = &m_V[468];		/* Gain\Rz */
+	m_M[56].rows = 3;
+	m_M[56].columns = 3;
+	m_M[57].mat = &m_V[477];		/* Gain\Ry */
+	m_M[57].rows = 3;
+	m_M[57].columns = 3;
+	m_M[58].mat = &m_V[486];		/* Gain\Rx */
+	m_M[58].rows = 3;
+	m_M[58].columns = 3;
+	m_M[59].mat = &m_V[495];		/* OneJunction\p2.e */
 	m_M[59].rows = 6;
 	m_M[59].columns = 1;
-	m_M[60].mat = &m_P[32];		/* R\cartesianDumping */
-	m_M[60].rows = 6;
+	m_M[60].mat = &m_V[501];		/* OneJunction2\p4.e */
+	m_M[60].rows = 8;
 	m_M[60].columns = 1;
-	m_M[61].mat = &m_V[495];		/* R1\p.e */
+	m_M[61].mat = &m_V[509];		/* OneJunction2\p4.f */
 	m_M[61].rows = 8;
 	m_M[61].columns = 1;
-	m_M[62].mat = &m_P[38];		/* R1\jointDumping */
+	m_M[62].mat = &m_V[517];		/* R\p.e */
 	m_M[62].rows = 8;
 	m_M[62].columns = 1;
-	m_M[63].mat = &m_V[503];		/* Splitter2\input */
+	m_M[63].mat = &m_V[525];		/* Splitter1\input */
 	m_M[63].rows = 8;
 	m_M[63].columns = 1;
-	m_M[64].mat = &m_V[511];		/* outputForces.e */
+	m_M[64].mat = &m_V[533];		/* p.e */
 	m_M[64].rows = 8;
 	m_M[64].columns = 1;
-	m_M[65].mat = &m_V[519];		/* outputForces.f */
+	m_M[65].mat = &m_V[541];		/* p.f */
 	m_M[65].rows = 8;
 	m_M[65].columns = 1;
-	m_M[66].mat = &m_V[527];		/* setPointH */
-	m_M[66].rows = 4;
-	m_M[66].columns = 4;
-	m_M[67].mat = &m_V[543];		/* tipH */
-	m_M[67].rows = 4;
-	m_M[67].columns = 4;
-	m_M[68].mat = &m_V[559];		/* q */
-	m_M[68].rows = 8;
-	m_M[68].columns = 1;
-	m_M[69].mat = &m_P[46];		/* linkDim */
+	m_M[66].mat = &m_V[549];		/* input */
+	m_M[66].rows = 8;
+	m_M[66].columns = 1;
+	m_M[67].mat = &m_V[557];		/* xyzrpy */
+	m_M[67].rows = 6;
+	m_M[67].columns = 1;
+	m_M[68].mat = &m_V[563];		/* output */
+	m_M[68].rows = 4;
+	m_M[68].columns = 4;
+	m_M[69].mat = &m_R[0];		/* C\x_dot */
 	m_M[69].rows = 3;
-	m_M[69].columns = 6;
-	m_M[70].mat = &m_P[64];		/* linkCom */
+	m_M[69].columns = 1;
+	m_M[70].mat = &m_s[0];		/* C\x */
 	m_M[70].rows = 3;
-	m_M[70].columns = 6;
-	m_M[71].mat = &m_P[82];		/* linkM */
-	m_M[71].rows = 6;
+	m_M[70].columns = 1;
+	m_M[71].mat = &m_I[0];		/* C\x_initial */
+	m_M[71].rows = 3;
 	m_M[71].columns = 1;
-	m_M[72].mat = &m_P[88];		/* cartesianStiffness */
-	m_M[72].rows = 6;
+	m_M[72].mat = &m_U[0];		/* m_U1 */
+	m_M[72].rows = 3;
 	m_M[72].columns = 1;
-	m_M[73].mat = &m_P[94];		/* cartesianDumping */
-	m_M[73].rows = 6;
-	m_M[73].columns = 1;
-	m_M[74].mat = &m_P[100];		/* jointStiffness */
-	m_M[74].rows = 8;
+	m_M[73].mat = &m_U[3];		/* m_U2 */
+	m_M[73].rows = 3;
+	m_M[73].columns = 3;
+	m_M[74].mat = &m_U[12];		/* m_U3 */
+	m_M[74].rows = 3;
 	m_M[74].columns = 1;
-	m_M[75].mat = &m_P[108];		/* jointDumping */
-	m_M[75].rows = 8;
+	m_M[75].mat = &m_U[15];		/* m_U4 */
+	m_M[75].rows = 3;
 	m_M[75].columns = 1;
-	m_M[76].mat = &m_U[0];		/* m_U1 */
+	m_M[76].mat = &m_U[18];		/* m_U5 */
 	m_M[76].rows = 3;
-	m_M[76].columns = 1;
-	m_M[77].mat = &m_U[3];		/* m_U2 */
+	m_M[76].columns = 3;
+	m_M[77].mat = &m_U[27];		/* m_U6 */
 	m_M[77].rows = 3;
-	m_M[77].columns = 3;
-	m_M[78].mat = &m_U[12];		/* m_U3 */
+	m_M[77].columns = 1;
+	m_M[78].mat = &m_U[30];		/* m_U7 */
 	m_M[78].rows = 3;
 	m_M[78].columns = 1;
-	m_M[79].mat = &m_U[15];		/* m_U4 */
+	m_M[79].mat = &m_U[33];		/* m_U8 */
 	m_M[79].rows = 3;
-	m_M[79].columns = 1;
-	m_M[80].mat = &m_U[18];		/* m_U5 */
+	m_M[79].columns = 3;
+	m_M[80].mat = &m_U[42];		/* m_U9 */
 	m_M[80].rows = 3;
-	m_M[80].columns = 3;
-	m_M[81].mat = &m_U[27];		/* m_U6 */
+	m_M[80].columns = 1;
+	m_M[81].mat = &m_U[45];		/* m_U10 */
 	m_M[81].rows = 3;
 	m_M[81].columns = 1;
-	m_M[82].mat = &m_U[30];		/* m_U7 */
+	m_M[82].mat = &m_U[48];		/* m_U11 */
 	m_M[82].rows = 3;
-	m_M[82].columns = 1;
-	m_M[83].mat = &m_U[33];		/* m_U8 */
+	m_M[82].columns = 3;
+	m_M[83].mat = &m_U[57];		/* m_U12 */
 	m_M[83].rows = 3;
-	m_M[83].columns = 3;
-	m_M[84].mat = &m_U[42];		/* m_U9 */
+	m_M[83].columns = 1;
+	m_M[84].mat = &m_U[60];		/* m_U13 */
 	m_M[84].rows = 3;
 	m_M[84].columns = 1;
-	m_M[85].mat = &m_U[45];		/* m_U10 */
+	m_M[85].mat = &m_U[63];		/* m_U14 */
 	m_M[85].rows = 3;
-	m_M[85].columns = 1;
-	m_M[86].mat = &m_U[48];		/* m_U11 */
+	m_M[85].columns = 3;
+	m_M[86].mat = &m_U[72];		/* m_U15 */
 	m_M[86].rows = 3;
-	m_M[86].columns = 3;
-	m_M[87].mat = &m_U[57];		/* m_U12 */
+	m_M[86].columns = 1;
+	m_M[87].mat = &m_U[75];		/* m_U16 */
 	m_M[87].rows = 3;
 	m_M[87].columns = 1;
-	m_M[88].mat = &m_U[60];		/* m_U13 */
-	m_M[88].rows = 3;
+	m_M[88].mat = &m_U[78];		/* m_U17 */
+	m_M[88].rows = 6;
 	m_M[88].columns = 1;
-	m_M[89].mat = &m_U[63];		/* m_U14 */
-	m_M[89].rows = 3;
-	m_M[89].columns = 3;
-	m_M[90].mat = &m_U[72];		/* m_U15 */
+	m_M[89].mat = &m_U[84];		/* m_U18 */
+	m_M[89].rows = 6;
+	m_M[89].columns = 6;
+	m_M[90].mat = &m_U[120];		/* m_U19 */
 	m_M[90].rows = 3;
-	m_M[90].columns = 1;
-	m_M[91].mat = &m_U[75];		/* m_U16 */
-	m_M[91].rows = 8;
-	m_M[91].columns = 8;
-	m_M[92].mat = &m_U[139];		/* m_U17 */
-	m_M[92].rows = 6;
+	m_M[90].columns = 3;
+	m_M[91].mat = &m_U[129];		/* m_U20 */
+	m_M[91].rows = 3;
+	m_M[91].columns = 3;
+	m_M[92].mat = &m_U[138];		/* m_U21 */
+	m_M[92].rows = 3;
 	m_M[92].columns = 1;
-	m_M[93].mat = &m_U[145];		/* m_U18 */
-	m_M[93].rows = 6;
-	m_M[93].columns = 6;
-	m_M[94].mat = &m_U[181];		/* m_U19 */
-	m_M[94].rows = 6;
+	m_M[93].mat = &m_U[141];		/* m_U22 */
+	m_M[93].rows = 5;
+	m_M[93].columns = 1;
+	m_M[94].mat = &m_U[146];		/* m_U23 */
+	m_M[94].rows = 5;
 	m_M[94].columns = 1;
-	m_M[95].mat = &m_U[187];		/* m_U20 */
+	m_M[95].mat = &m_U[151];		/* m_U24 */
 	m_M[95].rows = 6;
-	m_M[95].columns = 6;
-	m_M[96].mat = &m_U[223];		/* m_U21 */
+	m_M[95].columns = 1;
+	m_M[96].mat = &m_U[157];		/* m_U25 */
 	m_M[96].rows = 6;
-	m_M[96].columns = 1;
-	m_M[97].mat = &m_U[229];		/* m_U22 */
+	m_M[96].columns = 6;
+	m_M[97].mat = &m_U[193];		/* m_U26 */
 	m_M[97].rows = 6;
-	m_M[97].columns = 6;
-	m_M[98].mat = &m_U[265];		/* m_U23 */
+	m_M[97].columns = 1;
+	m_M[98].mat = &m_U[199];		/* m_U27 */
 	m_M[98].rows = 6;
-	m_M[98].columns = 1;
-	m_M[99].mat = &m_U[271];		/* m_U24 */
+	m_M[98].columns = 6;
+	m_M[99].mat = &m_U[235];		/* m_U28 */
 	m_M[99].rows = 6;
-	m_M[99].columns = 6;
-	m_M[100].mat = &m_U[307];		/* m_U25 */
+	m_M[99].columns = 1;
+	m_M[100].mat = &m_U[241];		/* m_U29 */
 	m_M[100].rows = 6;
-	m_M[100].columns = 1;
-	m_M[101].mat = &m_U[313];		/* m_U26 */
+	m_M[100].columns = 6;
+	m_M[101].mat = &m_U[277];		/* m_U30 */
 	m_M[101].rows = 6;
-	m_M[101].columns = 6;
-	m_M[102].mat = &m_U[349];		/* m_U27 */
+	m_M[101].columns = 1;
+	m_M[102].mat = &m_U[283];		/* m_U31 */
 	m_M[102].rows = 6;
-	m_M[102].columns = 1;
-	m_M[103].mat = &m_U[355];		/* m_U28 */
-	m_M[103].rows = 6;
-	m_M[103].columns = 6;
-	m_M[104].mat = &m_U[391];		/* m_U29 */
-	m_M[104].rows = 6;
+	m_M[102].columns = 6;
+	m_M[103].mat = &m_U[319];		/* m_U32 */
+	m_M[103].rows = 4;
+	m_M[103].columns = 4;
+	m_M[104].mat = &m_U[335];		/* m_U33 */
+	m_M[104].rows = 1;
 	m_M[104].columns = 1;
-	m_M[105].mat = &m_U[397];		/* m_U30 */
-	m_M[105].rows = 6;
-	m_M[105].columns = 6;
-	m_M[106].mat = &m_U[433];		/* m_U31 */
-	m_M[106].rows = 6;
+	m_M[105].mat = &m_U[336];		/* m_U34 */
+	m_M[105].rows = 3;
+	m_M[105].columns = 3;
+	m_M[106].mat = &m_U[345];		/* m_U35 */
+	m_M[106].rows = 1;
 	m_M[106].columns = 1;
-	m_M[107].mat = &m_U[439];		/* m_U32 */
-	m_M[107].rows = 6;
-	m_M[107].columns = 6;
-	m_M[108].mat = &m_U[475];		/* m_U33 */
-	m_M[108].rows = 8;
-	m_M[108].columns = 8;
-	m_M[109].mat = &m_U[539];		/* m_U34 */
-	m_M[109].rows = 4;
-	m_M[109].columns = 4;
-	m_M[110].mat = &m_U[555];		/* m_U35 */
-	m_M[110].rows = 1;
+	m_M[107].mat = &m_U[346];		/* m_U36 */
+	m_M[107].rows = 1;
+	m_M[107].columns = 1;
+	m_M[108].mat = &m_U[347];		/* m_U37 */
+	m_M[108].rows = 3;
+	m_M[108].columns = 1;
+	m_M[109].mat = &m_U[350];		/* m_U38 */
+	m_M[109].rows = 3;
+	m_M[109].columns = 1;
+	m_M[110].mat = &m_U[353];		/* m_U39 */
+	m_M[110].rows = 3;
 	m_M[110].columns = 1;
-	m_M[111].mat = &m_U[556];		/* m_U36 */
+	m_M[111].mat = &m_U[356];		/* m_U40 */
 	m_M[111].rows = 3;
-	m_M[111].columns = 3;
-	m_M[112].mat = &m_U[565];		/* m_U37 */
-	m_M[112].rows = 1;
+	m_M[111].columns = 1;
+	m_M[112].mat = &m_U[359];		/* m_U41 */
+	m_M[112].rows = 3;
 	m_M[112].columns = 1;
-	m_M[113].mat = &m_U[566];		/* m_U38 */
-	m_M[113].rows = 1;
-	m_M[113].columns = 1;
-	m_M[114].mat = &m_U[567];		/* m_U39 */
-	m_M[114].rows = 3;
-	m_M[114].columns = 1;
-	m_M[115].mat = &m_U[570];		/* m_U40 */
+	m_M[113].mat = &m_U[362];		/* m_U42 */
+	m_M[113].rows = 6;
+	m_M[113].columns = 6;
+	m_M[114].mat = &m_U[398];		/* m_U43 */
+	m_M[114].rows = 6;
+	m_M[114].columns = 6;
+	m_M[115].mat = &m_U[434];		/* m_U44 */
 	m_M[115].rows = 6;
 	m_M[115].columns = 6;
-	m_M[116].mat = &m_U[606];		/* m_U41 */
+	m_M[116].mat = &m_U[470];		/* m_U45 */
 	m_M[116].rows = 6;
-	m_M[116].columns = 6;
-	m_M[117].mat = &m_U[642];		/* m_U42 */
-	m_M[117].rows = 6;
-	m_M[117].columns = 1;
-	m_M[118].mat = &m_U[648];		/* m_U43 */
-	m_M[118].rows = 3;
+	m_M[116].columns = 1;
+	m_M[117].mat = &m_U[476];		/* m_U46 */
+	m_M[117].rows = 8;
+	m_M[117].columns = 6;
+	m_M[118].mat = &m_U[524];		/* m_U47 */
+	m_M[118].rows = 8;
 	m_M[118].columns = 1;
-	m_M[119].mat = &m_U[651];		/* m_U44 */
-	m_M[119].rows = 3;
+	m_M[119].mat = &m_U[532];		/* m_U48 */
+	m_M[119].rows = 1;
 	m_M[119].columns = 1;
-	m_M[120].mat = &m_U[654];		/* m_U45 */
-	m_M[120].rows = 3;
-	m_M[120].columns = 1;
-	m_M[121].mat = &m_U[657];		/* m_U46 */
-	m_M[121].rows = 6;
-	m_M[121].columns = 6;
-	m_M[122].mat = &m_U[693];		/* m_U47 */
-	m_M[122].rows = 6;
-	m_M[122].columns = 6;
-	m_M[123].mat = &m_U[729];		/* m_U48 */
-	m_M[123].rows = 6;
-	m_M[123].columns = 6;
-	m_M[124].mat = &m_U[765];		/* m_U49 */
-	m_M[124].rows = 6;
-	m_M[124].columns = 6;
-	m_M[125].mat = &m_U[801];		/* m_U50 */
-	m_M[125].rows = 6;
-	m_M[125].columns = 1;
-	m_M[126].mat = &m_U[807];		/* m_U51 */
-	m_M[126].rows = 8;
-	m_M[126].columns = 6;
-	m_M[127].mat = &m_U[855];		/* m_U52 */
-	m_M[127].rows = 8;
-	m_M[127].columns = 1;
+	m_M[120].mat = &m_U[533];		/* m_U49 */
+	m_M[120].rows = 1;
+	m_M[120].columns = 6;
 
 
 	/* calculate initial and static equations */
@@ -1609,20 +644,15 @@ void youbot_interaction_control::Terminate (XXDouble *u, XXDouble *y /*, XXDoubl
  */
 void youbot_interaction_control::CalculateInitial (void)
 {
-		/* CalculateJ\Linkdim = linkDim; */
-		XXMatrixMov (&m_M[4], &m_M[69]);
-
-		/* C\jointStiffness = jointStiffness; */
-		XXMatrixMov (&m_M[1], &m_M[74]);
-
-		/* CtipControl1\CtipControl = cartesianStiffness; */
-		XXMatrixMov (&m_M[53], &m_M[72]);
-
-		/* R\cartesianDumping = cartesianDumping; */
-		XXMatrixMov (&m_M[60], &m_M[73]);
-
-		/* R1\jointDumping = jointDumping; */
-		XXMatrixMov (&m_M[62], &m_M[75]);
+		/* CalculateJ\initialq = [0; 0; 0; CalculateJ\InitialJointPos[1]; CalculateJ\InitialJointPos[2]; CalculateJ\InitialJointPos[3]; CalculateJ\InitialJointPos[4]; CalculateJ\InitialJointPos[5]]; */
+		m_M[46].mat[0] = 0.0;
+		m_M[46].mat[1] = 0.0;
+		m_M[46].mat[2] = 0.0;
+		m_M[46].mat[3] = m_M[3].mat[0];
+		m_M[46].mat[4] = m_M[3].mat[1];
+		m_M[46].mat[5] = m_M[3].mat[2];
+		m_M[46].mat[6] = m_M[3].mat[3];
+		m_M[46].mat[7] = m_M[3].mat[4];
 
 }
 
@@ -1631,6 +661,9 @@ void youbot_interaction_control::CalculateInitial (void)
  */
 void youbot_interaction_control::CalculateStatic (void)
 {
+	/* CalculateJ\Href0 = eye (4); */
+	XXMatrixEye (&m_M[34]);
+
 	/* CalculateJ\p1ref = CalculateJ\Linkdim[1:3,1]; */
 	m_M[28].mat[0] = m_M[4].mat[0];
 	m_M[28].mat[1] = m_M[4].mat[6];
@@ -1668,109 +701,143 @@ void youbot_interaction_control::CalculateStatic (void)
 	XXMatrixHomogeneous (&m_M[40], &m_M[27], &m_M[33]);
 
 	/* CalculateJ\uTrzrefref[1:3] = CalculateJ\omegaz; */
-	m_M[13].mat[0] = m_M[5].mat[0];
-	m_M[13].mat[1] = m_M[5].mat[1];
-	m_M[13].mat[2] = m_M[5].mat[2];
+	m_M[14].mat[0] = m_M[8].mat[0];
+	m_M[14].mat[1] = m_M[8].mat[1];
+	m_M[14].mat[2] = m_M[8].mat[2];
 
 	/* CalculateJ\uTrzrefref[4:6] = 0; */
-	m_M[13].mat[3] = 0.0;
-	m_M[13].mat[4] = 0.0;
-	m_M[13].mat[5] = 0.0;
+	m_M[14].mat[3] = 0.0;
+	m_M[14].mat[4] = 0.0;
+	m_M[14].mat[5] = 0.0;
 
 	/* CalculateJ\uTryrefref[1:3] = 0; */
-	m_M[14].mat[0] = 0.0;
-	m_M[14].mat[1] = 0.0;
-	m_M[14].mat[2] = 0.0;
-
-	/* CalculateJ\uTryrefref[4:6] = CalculateJ\vy; */
-	m_M[14].mat[3] = m_M[6].mat[0];
-	m_M[14].mat[4] = m_M[6].mat[1];
-	m_M[14].mat[5] = m_M[6].mat[2];
-
-	/* CalculateJ\uTrxrefref[1:3] = 0; */
 	m_M[15].mat[0] = 0.0;
 	m_M[15].mat[1] = 0.0;
 	m_M[15].mat[2] = 0.0;
 
-	/* CalculateJ\uTrxrefref[4:6] = CalculateJ\vx; */
+	/* CalculateJ\uTryrefref[4:6] = CalculateJ\vy; */
 	m_M[15].mat[3] = m_M[7].mat[0];
 	m_M[15].mat[4] = m_M[7].mat[1];
 	m_M[15].mat[5] = m_M[7].mat[2];
 
+	/* CalculateJ\uTrxrefref[1:3] = 0; */
+	m_M[16].mat[0] = 0.0;
+	m_M[16].mat[1] = 0.0;
+	m_M[16].mat[2] = 0.0;
+
+	/* CalculateJ\uTrxrefref[4:6] = CalculateJ\vx; */
+	m_M[16].mat[3] = m_M[6].mat[0];
+	m_M[16].mat[4] = m_M[6].mat[1];
+	m_M[16].mat[5] = m_M[6].mat[2];
+
 	/* CalculateJ\uTr1refref[1:3] = CalculateJ\omega1; */
-	m_M[16].mat[0] = m_M[8].mat[0];
-	m_M[16].mat[1] = m_M[8].mat[1];
-	m_M[16].mat[2] = m_M[8].mat[2];
-
-	/* CalculateJ\uTr1refref[4:6] = skew (CalculateJ\Linkdim[1:3,1]) * CalculateJ\omega1; */
-	m_M[78].mat[0] = m_M[4].mat[0];
-	m_M[78].mat[1] = m_M[4].mat[6];
-	m_M[78].mat[2] = m_M[4].mat[12];
-	XXMatrixSkew (&m_M[77], &m_M[78]);
-	XXMatrixMul (&m_M[76], &m_M[77], &m_M[8]);
-	m_M[16].mat[3] = m_M[76].mat[0];
-	m_M[16].mat[4] = m_M[76].mat[1];
-	m_M[16].mat[5] = m_M[76].mat[2];
-
-	/* CalculateJ\uTr211[1:3] = CalculateJ\omega2; */
 	m_M[17].mat[0] = m_M[9].mat[0];
 	m_M[17].mat[1] = m_M[9].mat[1];
 	m_M[17].mat[2] = m_M[9].mat[2];
 
-	/* CalculateJ\uTr211[4:6] = skew (CalculateJ\Linkdim[1:3,2]) * CalculateJ\omega2; */
-	m_M[81].mat[0] = m_M[4].mat[1];
-	m_M[81].mat[1] = m_M[4].mat[7];
-	m_M[81].mat[2] = m_M[4].mat[13];
-	XXMatrixSkew (&m_M[80], &m_M[81]);
-	XXMatrixMul (&m_M[79], &m_M[80], &m_M[9]);
-	m_M[17].mat[3] = m_M[79].mat[0];
-	m_M[17].mat[4] = m_M[79].mat[1];
-	m_M[17].mat[5] = m_M[79].mat[2];
+	/* CalculateJ\uTr1refref[4:6] = skew (CalculateJ\Linkdim[1:3,1]) * CalculateJ\omega1; */
+	m_M[74].mat[0] = m_M[4].mat[0];
+	m_M[74].mat[1] = m_M[4].mat[6];
+	m_M[74].mat[2] = m_M[4].mat[12];
+	XXMatrixSkew (&m_M[73], &m_M[74]);
+	XXMatrixMul (&m_M[72], &m_M[73], &m_M[9]);
+	m_M[17].mat[3] = m_M[72].mat[0];
+	m_M[17].mat[4] = m_M[72].mat[1];
+	m_M[17].mat[5] = m_M[72].mat[2];
 
-	/* CalculateJ\uTr322[1:3] = CalculateJ\omega3; */
+	/* CalculateJ\uTr211[1:3] = CalculateJ\omega2; */
 	m_M[18].mat[0] = m_M[10].mat[0];
 	m_M[18].mat[1] = m_M[10].mat[1];
 	m_M[18].mat[2] = m_M[10].mat[2];
 
-	/* CalculateJ\uTr322[4:6] = skew (CalculateJ\Linkdim[1:3,3]) * CalculateJ\omega3; */
-	m_M[84].mat[0] = m_M[4].mat[2];
-	m_M[84].mat[1] = m_M[4].mat[8];
-	m_M[84].mat[2] = m_M[4].mat[14];
-	XXMatrixSkew (&m_M[83], &m_M[84]);
-	XXMatrixMul (&m_M[82], &m_M[83], &m_M[10]);
-	m_M[18].mat[3] = m_M[82].mat[0];
-	m_M[18].mat[4] = m_M[82].mat[1];
-	m_M[18].mat[5] = m_M[82].mat[2];
+	/* CalculateJ\uTr211[4:6] = skew (CalculateJ\Linkdim[1:3,2]) * CalculateJ\omega2; */
+	m_M[77].mat[0] = m_M[4].mat[1];
+	m_M[77].mat[1] = m_M[4].mat[7];
+	m_M[77].mat[2] = m_M[4].mat[13];
+	XXMatrixSkew (&m_M[76], &m_M[77]);
+	XXMatrixMul (&m_M[75], &m_M[76], &m_M[10]);
+	m_M[18].mat[3] = m_M[75].mat[0];
+	m_M[18].mat[4] = m_M[75].mat[1];
+	m_M[18].mat[5] = m_M[75].mat[2];
 
-	/* CalculateJ\uTr433[1:3] = CalculateJ\omega4; */
+	/* CalculateJ\uTr322[1:3] = CalculateJ\omega3; */
 	m_M[19].mat[0] = m_M[11].mat[0];
 	m_M[19].mat[1] = m_M[11].mat[1];
 	m_M[19].mat[2] = m_M[11].mat[2];
 
-	/* CalculateJ\uTr433[4:6] = skew (CalculateJ\Linkdim[1:3,4]) * CalculateJ\omega4; */
-	m_M[87].mat[0] = m_M[4].mat[3];
-	m_M[87].mat[1] = m_M[4].mat[9];
-	m_M[87].mat[2] = m_M[4].mat[15];
-	XXMatrixSkew (&m_M[86], &m_M[87]);
-	XXMatrixMul (&m_M[85], &m_M[86], &m_M[11]);
-	m_M[19].mat[3] = m_M[85].mat[0];
-	m_M[19].mat[4] = m_M[85].mat[1];
-	m_M[19].mat[5] = m_M[85].mat[2];
+	/* CalculateJ\uTr322[4:6] = skew (CalculateJ\Linkdim[1:3,3]) * CalculateJ\omega3; */
+	m_M[80].mat[0] = m_M[4].mat[2];
+	m_M[80].mat[1] = m_M[4].mat[8];
+	m_M[80].mat[2] = m_M[4].mat[14];
+	XXMatrixSkew (&m_M[79], &m_M[80]);
+	XXMatrixMul (&m_M[78], &m_M[79], &m_M[11]);
+	m_M[19].mat[3] = m_M[78].mat[0];
+	m_M[19].mat[4] = m_M[78].mat[1];
+	m_M[19].mat[5] = m_M[78].mat[2];
 
-	/* CalculateJ\uTr544[1:3] = CalculateJ\omega5; */
+	/* CalculateJ\uTr433[1:3] = CalculateJ\omega4; */
 	m_M[20].mat[0] = m_M[12].mat[0];
 	m_M[20].mat[1] = m_M[12].mat[1];
 	m_M[20].mat[2] = m_M[12].mat[2];
 
+	/* CalculateJ\uTr433[4:6] = skew (CalculateJ\Linkdim[1:3,4]) * CalculateJ\omega4; */
+	m_M[83].mat[0] = m_M[4].mat[3];
+	m_M[83].mat[1] = m_M[4].mat[9];
+	m_M[83].mat[2] = m_M[4].mat[15];
+	XXMatrixSkew (&m_M[82], &m_M[83]);
+	XXMatrixMul (&m_M[81], &m_M[82], &m_M[12]);
+	m_M[20].mat[3] = m_M[81].mat[0];
+	m_M[20].mat[4] = m_M[81].mat[1];
+	m_M[20].mat[5] = m_M[81].mat[2];
+
+	/* CalculateJ\uTr544[1:3] = CalculateJ\omega5; */
+	m_M[21].mat[0] = m_M[13].mat[0];
+	m_M[21].mat[1] = m_M[13].mat[1];
+	m_M[21].mat[2] = m_M[13].mat[2];
+
 	/* CalculateJ\uTr544[4:6] = skew (CalculateJ\Linkdim[1:3,5]) * CalculateJ\omega5; */
-	m_M[90].mat[0] = m_M[4].mat[4];
-	m_M[90].mat[1] = m_M[4].mat[10];
-	m_M[90].mat[2] = m_M[4].mat[16];
-	XXMatrixSkew (&m_M[89], &m_M[90]);
-	XXMatrixMul (&m_M[88], &m_M[89], &m_M[12]);
-	m_M[20].mat[3] = m_M[88].mat[0];
-	m_M[20].mat[4] = m_M[88].mat[1];
-	m_M[20].mat[5] = m_M[88].mat[2];
+	m_M[86].mat[0] = m_M[4].mat[4];
+	m_M[86].mat[1] = m_M[4].mat[10];
+	m_M[86].mat[2] = m_M[4].mat[16];
+	XXMatrixSkew (&m_M[85], &m_M[86]);
+	XXMatrixMul (&m_M[84], &m_M[85], &m_M[13]);
+	m_M[21].mat[3] = m_M[84].mat[0];
+	m_M[21].mat[4] = m_M[84].mat[1];
+	m_M[21].mat[5] = m_M[84].mat[2];
+
+	/* CalculateJ\controllableJ[1:6,1] = 0; */
+	m_M[1].mat[0] = 0.0;
+	m_M[1].mat[8] = 0.0;
+	m_M[1].mat[16] = 0.0;
+	m_M[1].mat[24] = 0.0;
+	m_M[1].mat[32] = 0.0;
+	m_M[1].mat[40] = 0.0;
+
+	/* CalculateJ\controllableJ[1:6,2] = 0; */
+	m_M[1].mat[1] = 0.0;
+	m_M[1].mat[9] = 0.0;
+	m_M[1].mat[17] = 0.0;
+	m_M[1].mat[25] = 0.0;
+	m_M[1].mat[33] = 0.0;
+	m_M[1].mat[41] = 0.0;
+
+	/* CalculateJ\controllableJ[1:6,3] = 0; */
+	m_M[1].mat[2] = 0.0;
+	m_M[1].mat[10] = 0.0;
+	m_M[1].mat[18] = 0.0;
+	m_M[1].mat[26] = 0.0;
+	m_M[1].mat[34] = 0.0;
+	m_M[1].mat[42] = 0.0;
+
+	/* CtipControl\Wt[1:3] = 0; */
+	m_M[53].mat[0] = 0.0;
+	m_M[53].mat[1] = 0.0;
+	m_M[53].mat[2] = 0.0;
+
+	/* CtipControl\Wr[4:6] = 0; */
+	m_M[52].mat[3] = 0.0;
+	m_M[52].mat[4] = 0.0;
+	m_M[52].mat[5] = 0.0;
 
 }
 
@@ -1789,68 +856,91 @@ void youbot_interaction_control::CalculateInput (void)
  */
 void youbot_interaction_control::CalculateDynamic (void)
 {
-	/* OneJunction1\p2.f = outputForces.f; */
-	XXMatrixMov (&m_M[58], &m_M[65]);
+	/* C\p.e[1:3] = C\x * C\c; */
+	XXMatrixScalarMul (&m_M[87], &m_M[70], m_P[0]);
+	m_M[0].mat[0] = m_M[87].mat[0];
+	m_M[0].mat[1] = m_M[87].mat[1];
+	m_M[0].mat[2] = m_M[87].mat[2];
 
-	/* CtipControl1\Hvp0 = setPointH; */
-	XXMatrixMov (&m_M[52], &m_M[66]);
+	/* CalculateJ\controllableJ[1:6,4] = Adjoint (CalculateJ\Href0) * CalculateJ\uTr1refref; */
+	XXMatrixAdjoint (&m_M[89], &m_M[34]);
+	XXMatrixMul (&m_M[88], &m_M[89], &m_M[17]);
+	m_M[1].mat[3] = m_M[88].mat[0];
+	m_M[1].mat[11] = m_M[88].mat[1];
+	m_M[1].mat[19] = m_M[88].mat[2];
+	m_M[1].mat[27] = m_M[88].mat[3];
+	m_M[1].mat[35] = m_M[88].mat[4];
+	m_M[1].mat[43] = m_M[88].mat[5];
 
-	/* Splitter2\input = q; */
-	XXMatrixMov (&m_M[63], &m_M[68]);
+	/* OneJunction2\p4.f = p.f; */
+	XXMatrixMov (&m_M[61], &m_M[65]);
 
-	/* C\p.e = diag (C\jointStiffness) * Splitter2\input; */
-	XXMatrixDiag (&m_M[91], &m_M[1]);
-	XXMatrixMul (&m_M[0], &m_M[91], &m_M[63]);
+	/* Splitter1\input = input; */
+	XXMatrixMov (&m_M[63], &m_M[66]);
 
-	/* CalculateJ\q[1] = Splitter2\input[1]; */
-	m_M[47].mat[0] = m_M[63].mat[0];
+	/* Gain\xyzrpy = xyzrpy; */
+	XXMatrixMov (&m_M[54], &m_M[67]);
 
-	/* CalculateJ\q[2] = Splitter2\input[2]; */
-	m_M[47].mat[1] = m_M[63].mat[1];
+	/* Gain\Rz = [cos (Gain\xyzrpy[5]), sin (Gain\xyzrpy[5]), 0; -sin (Gain\xyzrpy[5]), cos (Gain\xyzrpy[5]), 0; 0, 0, 1]; */
+	m_M[56].mat[0] = cos (m_M[54].mat[4]);
+	m_M[56].mat[1] = sin (m_M[54].mat[4]);
+	m_M[56].mat[2] = 0.0;
+	m_M[56].mat[3] = -(sin (m_M[54].mat[4]));
+	m_M[56].mat[4] = cos (m_M[54].mat[4]);
+	m_M[56].mat[5] = 0.0;
+	m_M[56].mat[6] = 0.0;
+	m_M[56].mat[7] = 0.0;
+	m_M[56].mat[8] = 1.0;
 
-	/* CalculateJ\q[3] = Splitter2\input[3]; */
-	m_M[47].mat[2] = m_M[63].mat[2];
+	/* Gain\Ry = [cos (Gain\xyzrpy[4]), 0, -sin (Gain\xyzrpy[4]); 0, 1, 0; sin (Gain\xyzrpy[4]), 0, cos (Gain\xyzrpy[4])]; */
+	m_M[57].mat[0] = cos (m_M[54].mat[3]);
+	m_M[57].mat[1] = 0.0;
+	m_M[57].mat[2] = -(sin (m_M[54].mat[3]));
+	m_M[57].mat[3] = 0.0;
+	m_M[57].mat[4] = 1.0;
+	m_M[57].mat[5] = 0.0;
+	m_M[57].mat[6] = sin (m_M[54].mat[3]);
+	m_M[57].mat[7] = 0.0;
+	m_M[57].mat[8] = cos (m_M[54].mat[3]);
 
-	/* CalculateJ\q[4] = -Splitter2\input[4]; */
-	m_M[47].mat[3] = -m_M[63].mat[3];
+	/* Gain\Rx = [1, 0, 0; 0, cos (Gain\xyzrpy[6]), sin (Gain\xyzrpy[6]); 0, -sin (Gain\xyzrpy[6]), cos (Gain\xyzrpy[6])]; */
+	m_M[58].mat[0] = 1.0;
+	m_M[58].mat[1] = 0.0;
+	m_M[58].mat[2] = 0.0;
+	m_M[58].mat[3] = 0.0;
+	m_M[58].mat[4] = cos (m_M[54].mat[5]);
+	m_M[58].mat[5] = sin (m_M[54].mat[5]);
+	m_M[58].mat[6] = 0.0;
+	m_M[58].mat[7] = -(sin (m_M[54].mat[5]));
+	m_M[58].mat[8] = cos (m_M[54].mat[5]);
 
-	/* CalculateJ\q[5] = Splitter2\input[5]; */
-	m_M[47].mat[4] = m_M[63].mat[4];
+	/* Gain\H = homogeneous ((Gain\Rx * Gain\Ry) * Gain\Rz, Gain\xyzrpy[1:3]); */
+	XXMatrixMul (&m_M[91], &m_M[58], &m_M[57]);
+	XXMatrixMul (&m_M[90], &m_M[91], &m_M[56]);
+	m_M[92].mat[0] = m_M[54].mat[0];
+	m_M[92].mat[1] = m_M[54].mat[1];
+	m_M[92].mat[2] = m_M[54].mat[2];
+	XXMatrixHomogeneous (&m_M[55], &m_M[90], &m_M[92]);
 
-	/* CalculateJ\q[6] = -Splitter2\input[6]; */
-	m_M[47].mat[5] = -m_M[63].mat[5];
+	/* C\p.e[4:8] = Splitter1\input[4:8] * C\c; */
+	m_M[94].mat[0] = m_M[63].mat[3];
+	m_M[94].mat[1] = m_M[63].mat[4];
+	m_M[94].mat[2] = m_M[63].mat[5];
+	m_M[94].mat[3] = m_M[63].mat[6];
+	m_M[94].mat[4] = m_M[63].mat[7];
+	XXMatrixScalarMul (&m_M[93], &m_M[94], m_P[0]);
+	m_M[0].mat[3] = m_M[93].mat[0];
+	m_M[0].mat[4] = m_M[93].mat[1];
+	m_M[0].mat[5] = m_M[93].mat[2];
+	m_M[0].mat[6] = m_M[93].mat[3];
+	m_M[0].mat[7] = m_M[93].mat[4];
 
-	/* CalculateJ\q[7] = Splitter2\input[7]; */
-	m_M[47].mat[6] = m_M[63].mat[6];
-
-	/* CalculateJ\q[8] = -Splitter2\input[8]; */
-	m_M[47].mat[7] = -m_M[63].mat[7];
-
-	/* CalculateJ\R0ref = [cos (CalculateJ\q[1]), sin (CalculateJ\q[1]), 0; -sin (CalculateJ\q[1]), cos (CalculateJ\q[1]), 0; 0, 0, 1]; */
-	m_M[21].mat[0] = cos (m_M[47].mat[0]);
-	m_M[21].mat[1] = sin (m_M[47].mat[0]);
-	m_M[21].mat[2] = 0.0;
-	m_M[21].mat[3] = -(sin (m_M[47].mat[0]));
-	m_M[21].mat[4] = cos (m_M[47].mat[0]);
-	m_M[21].mat[5] = 0.0;
-	m_M[21].mat[6] = 0.0;
-	m_M[21].mat[7] = 0.0;
-	m_M[21].mat[8] = 1.0;
-
-	/* CalculateJ\p0ref = [CalculateJ\q[3]; CalculateJ\q[2]; 0]; */
-	m_M[46].mat[0] = m_M[47].mat[2];
-	m_M[46].mat[1] = m_M[47].mat[1];
-	m_M[46].mat[2] = 0.0;
-
-	/* CalculateJ\Href0 = homogeneous (CalculateJ\R0ref, CalculateJ\p0ref); */
-	XXMatrixHomogeneous (&m_M[34], &m_M[21], &m_M[46]);
-
-	/* CalculateJ\R1ref = [cos (CalculateJ\q[4]), -sin (CalculateJ\q[4]), 0; sin (CalculateJ\q[4]), cos (CalculateJ\q[4]), 0; 0, 0, 1]; */
-	m_M[22].mat[0] = cos (m_M[47].mat[3]);
-	m_M[22].mat[1] = -(sin (m_M[47].mat[3]));
+	/* CalculateJ\R1ref = [cos (-Splitter1\input[4]), -sin (-Splitter1\input[4]), 0; sin (-Splitter1\input[4]), cos (-Splitter1\input[4]), 0; 0, 0, 1]; */
+	m_M[22].mat[0] = cos (-m_M[63].mat[3]);
+	m_M[22].mat[1] = -(sin (-m_M[63].mat[3]));
 	m_M[22].mat[2] = 0.0;
-	m_M[22].mat[3] = sin (m_M[47].mat[3]);
-	m_M[22].mat[4] = cos (m_M[47].mat[3]);
+	m_M[22].mat[3] = sin (-m_M[63].mat[3]);
+	m_M[22].mat[4] = cos (-m_M[63].mat[3]);
 	m_M[22].mat[5] = 0.0;
 	m_M[22].mat[6] = 0.0;
 	m_M[22].mat[7] = 0.0;
@@ -1859,54 +949,54 @@ void youbot_interaction_control::CalculateDynamic (void)
 	/* CalculateJ\H1ref = homogeneous (CalculateJ\R1ref, CalculateJ\p1ref); */
 	XXMatrixHomogeneous (&m_M[35], &m_M[22], &m_M[28]);
 
-	/* CalculateJ\R21 = [cos (CalculateJ\q[5]), 0, sin (CalculateJ\q[5]); 0, 1, 0; -sin (CalculateJ\q[5]), 0, cos (CalculateJ\q[5])]; */
-	m_M[23].mat[0] = cos (m_M[47].mat[4]);
+	/* CalculateJ\R21 = [cos (Splitter1\input[5]), 0, sin (Splitter1\input[5]); 0, 1, 0; -sin (Splitter1\input[5]), 0, cos (Splitter1\input[5])]; */
+	m_M[23].mat[0] = cos (m_M[63].mat[4]);
 	m_M[23].mat[1] = 0.0;
-	m_M[23].mat[2] = sin (m_M[47].mat[4]);
+	m_M[23].mat[2] = sin (m_M[63].mat[4]);
 	m_M[23].mat[3] = 0.0;
 	m_M[23].mat[4] = 1.0;
 	m_M[23].mat[5] = 0.0;
-	m_M[23].mat[6] = -(sin (m_M[47].mat[4]));
+	m_M[23].mat[6] = -(sin (m_M[63].mat[4]));
 	m_M[23].mat[7] = 0.0;
-	m_M[23].mat[8] = cos (m_M[47].mat[4]);
+	m_M[23].mat[8] = cos (m_M[63].mat[4]);
 
 	/* CalculateJ\H21 = homogeneous (CalculateJ\R21, CalculateJ\p21); */
 	XXMatrixHomogeneous (&m_M[36], &m_M[23], &m_M[29]);
 
-	/* CalculateJ\R32 = [cos (CalculateJ\q[6]), 0, sin (CalculateJ\q[6]); 0, 1, 0; -sin (CalculateJ\q[6]), 0, cos (CalculateJ\q[6])]; */
-	m_M[24].mat[0] = cos (m_M[47].mat[5]);
+	/* CalculateJ\R32 = [cos (-Splitter1\input[6]), 0, sin (-Splitter1\input[6]); 0, 1, 0; -sin (-Splitter1\input[6]), 0, cos (-Splitter1\input[6])]; */
+	m_M[24].mat[0] = cos (-m_M[63].mat[5]);
 	m_M[24].mat[1] = 0.0;
-	m_M[24].mat[2] = sin (m_M[47].mat[5]);
+	m_M[24].mat[2] = sin (-m_M[63].mat[5]);
 	m_M[24].mat[3] = 0.0;
 	m_M[24].mat[4] = 1.0;
 	m_M[24].mat[5] = 0.0;
-	m_M[24].mat[6] = -(sin (m_M[47].mat[5]));
+	m_M[24].mat[6] = -(sin (-m_M[63].mat[5]));
 	m_M[24].mat[7] = 0.0;
-	m_M[24].mat[8] = cos (m_M[47].mat[5]);
+	m_M[24].mat[8] = cos (-m_M[63].mat[5]);
 
 	/* CalculateJ\H32 = homogeneous (CalculateJ\R32, CalculateJ\p32); */
 	XXMatrixHomogeneous (&m_M[37], &m_M[24], &m_M[30]);
 
-	/* CalculateJ\R43 = [cos (CalculateJ\q[7]), 0, sin (CalculateJ\q[7]); 0, 1, 0; -sin (CalculateJ\q[7]), 0, cos (CalculateJ\q[7])]; */
-	m_M[25].mat[0] = cos (m_M[47].mat[6]);
+	/* CalculateJ\R43 = [cos (Splitter1\input[7]), 0, sin (Splitter1\input[7]); 0, 1, 0; -sin (Splitter1\input[7]), 0, cos (Splitter1\input[7])]; */
+	m_M[25].mat[0] = cos (m_M[63].mat[6]);
 	m_M[25].mat[1] = 0.0;
-	m_M[25].mat[2] = sin (m_M[47].mat[6]);
+	m_M[25].mat[2] = sin (m_M[63].mat[6]);
 	m_M[25].mat[3] = 0.0;
 	m_M[25].mat[4] = 1.0;
 	m_M[25].mat[5] = 0.0;
-	m_M[25].mat[6] = -(sin (m_M[47].mat[6]));
+	m_M[25].mat[6] = -(sin (m_M[63].mat[6]));
 	m_M[25].mat[7] = 0.0;
-	m_M[25].mat[8] = cos (m_M[47].mat[6]);
+	m_M[25].mat[8] = cos (m_M[63].mat[6]);
 
 	/* CalculateJ\H43 = homogeneous (CalculateJ\R43, CalculateJ\p43); */
 	XXMatrixHomogeneous (&m_M[38], &m_M[25], &m_M[31]);
 
-	/* CalculateJ\R54 = [cos (CalculateJ\q[8]), -sin (CalculateJ\q[8]), 0; sin (CalculateJ\q[8]), cos (CalculateJ\q[8]), 0; 0, 0, 1]; */
-	m_M[26].mat[0] = cos (m_M[47].mat[7]);
-	m_M[26].mat[1] = -(sin (m_M[47].mat[7]));
+	/* CalculateJ\R54 = [cos (-Splitter1\input[8]), -sin (-Splitter1\input[8]), 0; sin (-Splitter1\input[8]), cos (-Splitter1\input[8]), 0; 0, 0, 1]; */
+	m_M[26].mat[0] = cos (-m_M[63].mat[7]);
+	m_M[26].mat[1] = -(sin (-m_M[63].mat[7]));
 	m_M[26].mat[2] = 0.0;
-	m_M[26].mat[3] = sin (m_M[47].mat[7]);
-	m_M[26].mat[4] = cos (m_M[47].mat[7]);
+	m_M[26].mat[3] = sin (-m_M[63].mat[7]);
+	m_M[26].mat[4] = cos (-m_M[63].mat[7]);
 	m_M[26].mat[5] = 0.0;
 	m_M[26].mat[6] = 0.0;
 	m_M[26].mat[7] = 0.0;
@@ -1931,185 +1021,144 @@ void youbot_interaction_control::CalculateDynamic (void)
 	XXMatrixMul (&m_M[45], &m_M[44], &m_M[39]);
 
 	/* CalculateJ\Htip0 = CalculateJ\H50 * CalculateJ\Htip5; */
-	XXMatrixMul (&m_M[3], &m_M[45], &m_M[40]);
-
-	/* CalculateJ\controllableJ[1:6,1] = Adjoint (CalculateJ\Href0) * CalculateJ\uTrzrefref; */
-	XXMatrixAdjoint (&m_M[93], &m_M[34]);
-	XXMatrixMul (&m_M[92], &m_M[93], &m_M[13]);
-	m_M[2].mat[0] = m_M[92].mat[0];
-	m_M[2].mat[8] = m_M[92].mat[1];
-	m_M[2].mat[16] = m_M[92].mat[2];
-	m_M[2].mat[24] = m_M[92].mat[3];
-	m_M[2].mat[32] = m_M[92].mat[4];
-	m_M[2].mat[40] = m_M[92].mat[5];
-
-	/* CalculateJ\controllableJ[1:6,2] = Adjoint (CalculateJ\Href0) * CalculateJ\uTryrefref; */
-	XXMatrixAdjoint (&m_M[95], &m_M[34]);
-	XXMatrixMul (&m_M[94], &m_M[95], &m_M[14]);
-	m_M[2].mat[1] = m_M[94].mat[0];
-	m_M[2].mat[9] = m_M[94].mat[1];
-	m_M[2].mat[17] = m_M[94].mat[2];
-	m_M[2].mat[25] = m_M[94].mat[3];
-	m_M[2].mat[33] = m_M[94].mat[4];
-	m_M[2].mat[41] = m_M[94].mat[5];
-
-	/* CalculateJ\controllableJ[1:6,3] = Adjoint (CalculateJ\Href0) * CalculateJ\uTrxrefref; */
-	XXMatrixAdjoint (&m_M[97], &m_M[34]);
-	XXMatrixMul (&m_M[96], &m_M[97], &m_M[15]);
-	m_M[2].mat[2] = m_M[96].mat[0];
-	m_M[2].mat[10] = m_M[96].mat[1];
-	m_M[2].mat[18] = m_M[96].mat[2];
-	m_M[2].mat[26] = m_M[96].mat[3];
-	m_M[2].mat[34] = m_M[96].mat[4];
-	m_M[2].mat[42] = m_M[96].mat[5];
-
-	/* CalculateJ\controllableJ[1:6,4] = Adjoint (CalculateJ\Href0) * CalculateJ\uTr1refref; */
-	XXMatrixAdjoint (&m_M[99], &m_M[34]);
-	XXMatrixMul (&m_M[98], &m_M[99], &m_M[16]);
-	m_M[2].mat[3] = m_M[98].mat[0];
-	m_M[2].mat[11] = m_M[98].mat[1];
-	m_M[2].mat[19] = m_M[98].mat[2];
-	m_M[2].mat[27] = m_M[98].mat[3];
-	m_M[2].mat[35] = m_M[98].mat[4];
-	m_M[2].mat[43] = m_M[98].mat[5];
+	XXMatrixMul (&m_M[2], &m_M[45], &m_M[40]);
 
 	/* CalculateJ\controllableJ[1:6,5] = Adjoint (CalculateJ\H10) * CalculateJ\uTr211; */
-	XXMatrixAdjoint (&m_M[101], &m_M[41]);
-	XXMatrixMul (&m_M[100], &m_M[101], &m_M[17]);
-	m_M[2].mat[4] = m_M[100].mat[0];
-	m_M[2].mat[12] = m_M[100].mat[1];
-	m_M[2].mat[20] = m_M[100].mat[2];
-	m_M[2].mat[28] = m_M[100].mat[3];
-	m_M[2].mat[36] = m_M[100].mat[4];
-	m_M[2].mat[44] = m_M[100].mat[5];
+	XXMatrixAdjoint (&m_M[96], &m_M[41]);
+	XXMatrixMul (&m_M[95], &m_M[96], &m_M[18]);
+	m_M[1].mat[4] = m_M[95].mat[0];
+	m_M[1].mat[12] = m_M[95].mat[1];
+	m_M[1].mat[20] = m_M[95].mat[2];
+	m_M[1].mat[28] = m_M[95].mat[3];
+	m_M[1].mat[36] = m_M[95].mat[4];
+	m_M[1].mat[44] = m_M[95].mat[5];
 
 	/* CalculateJ\controllableJ[1:6,6] = Adjoint (CalculateJ\H20) * CalculateJ\uTr322; */
-	XXMatrixAdjoint (&m_M[103], &m_M[42]);
-	XXMatrixMul (&m_M[102], &m_M[103], &m_M[18]);
-	m_M[2].mat[5] = m_M[102].mat[0];
-	m_M[2].mat[13] = m_M[102].mat[1];
-	m_M[2].mat[21] = m_M[102].mat[2];
-	m_M[2].mat[29] = m_M[102].mat[3];
-	m_M[2].mat[37] = m_M[102].mat[4];
-	m_M[2].mat[45] = m_M[102].mat[5];
+	XXMatrixAdjoint (&m_M[98], &m_M[42]);
+	XXMatrixMul (&m_M[97], &m_M[98], &m_M[19]);
+	m_M[1].mat[5] = m_M[97].mat[0];
+	m_M[1].mat[13] = m_M[97].mat[1];
+	m_M[1].mat[21] = m_M[97].mat[2];
+	m_M[1].mat[29] = m_M[97].mat[3];
+	m_M[1].mat[37] = m_M[97].mat[4];
+	m_M[1].mat[45] = m_M[97].mat[5];
 
 	/* CalculateJ\controllableJ[1:6,7] = Adjoint (CalculateJ\H30) * CalculateJ\uTr433; */
-	XXMatrixAdjoint (&m_M[105], &m_M[43]);
-	XXMatrixMul (&m_M[104], &m_M[105], &m_M[19]);
-	m_M[2].mat[6] = m_M[104].mat[0];
-	m_M[2].mat[14] = m_M[104].mat[1];
-	m_M[2].mat[22] = m_M[104].mat[2];
-	m_M[2].mat[30] = m_M[104].mat[3];
-	m_M[2].mat[38] = m_M[104].mat[4];
-	m_M[2].mat[46] = m_M[104].mat[5];
+	XXMatrixAdjoint (&m_M[100], &m_M[43]);
+	XXMatrixMul (&m_M[99], &m_M[100], &m_M[20]);
+	m_M[1].mat[6] = m_M[99].mat[0];
+	m_M[1].mat[14] = m_M[99].mat[1];
+	m_M[1].mat[22] = m_M[99].mat[2];
+	m_M[1].mat[30] = m_M[99].mat[3];
+	m_M[1].mat[38] = m_M[99].mat[4];
+	m_M[1].mat[46] = m_M[99].mat[5];
 
 	/* CalculateJ\controllableJ[1:6,8] = Adjoint (CalculateJ\H40) * CalculateJ\uTr544; */
-	XXMatrixAdjoint (&m_M[107], &m_M[44]);
-	XXMatrixMul (&m_M[106], &m_M[107], &m_M[20]);
-	m_M[2].mat[7] = m_M[106].mat[0];
-	m_M[2].mat[15] = m_M[106].mat[1];
-	m_M[2].mat[23] = m_M[106].mat[2];
-	m_M[2].mat[31] = m_M[106].mat[3];
-	m_M[2].mat[39] = m_M[106].mat[4];
-	m_M[2].mat[47] = m_M[106].mat[5];
+	XXMatrixAdjoint (&m_M[102], &m_M[44]);
+	XXMatrixMul (&m_M[101], &m_M[102], &m_M[21]);
+	m_M[1].mat[7] = m_M[101].mat[0];
+	m_M[1].mat[15] = m_M[101].mat[1];
+	m_M[1].mat[23] = m_M[101].mat[2];
+	m_M[1].mat[31] = m_M[101].mat[3];
+	m_M[1].mat[39] = m_M[101].mat[4];
+	m_M[1].mat[47] = m_M[101].mat[5];
 
-	/* R1\p.e = diag (R1\jointDumping) * OneJunction1\p2.f; */
-	XXMatrixDiag (&m_M[108], &m_M[62]);
-	XXMatrixMul (&m_M[61], &m_M[108], &m_M[58]);
+	/* C\x_dot = OneJunction2\p4.f[1:3]; */
+	m_M[69].mat[0] = m_M[61].mat[0];
+	m_M[69].mat[1] = m_M[61].mat[1];
+	m_M[69].mat[2] = m_M[61].mat[2];
 
-	/* ControllableJ1\tip.f = CalculateJ\controllableJ * OneJunction1\p2.f; */
-	XXMatrixMul (&m_M[49], &m_M[2], &m_M[58]);
+	/* R\p.e = R\r * OneJunction2\p4.f; */
+	XXScalarMatrixMul (&m_M[62], m_P[41], &m_M[61]);
 
-	/* tipH = CalculateJ\Htip0; */
-	XXMatrixMov (&m_M[67], &m_M[3]);
+	/* output = CalculateJ\Htip0; */
+	XXMatrixMov (&m_M[68], &m_M[2]);
 
-	/* CtipControl1\state = inverse (CtipControl1\Hvp0) * CalculateJ\Htip0; */
-	XXMatrixInverse (&m_M[109], &m_M[52], m_workarray);
-	XXMatrixMul (&m_M[51], &m_M[109], &m_M[3]);
+	/* CtipControl\state = inverse (Gain\H) * CalculateJ\Htip0; */
+	XXMatrixInverse (&m_M[103], &m_M[55], m_workarray);
+	XXMatrixMul (&m_M[50], &m_M[103], &m_M[2]);
 
-	/* CtipControl1\temp = (trace (CtipControl1\state[1:3,1:3]) - 1) / 2; */
-	m_M[111].mat[0] = m_M[51].mat[0];
-	m_M[111].mat[1] = m_M[51].mat[1];
-	m_M[111].mat[2] = m_M[51].mat[2];
-	m_M[111].mat[3] = m_M[51].mat[4];
-	m_M[111].mat[4] = m_M[51].mat[5];
-	m_M[111].mat[5] = m_M[51].mat[6];
-	m_M[111].mat[6] = m_M[51].mat[8];
-	m_M[111].mat[7] = m_M[51].mat[9];
-	m_M[111].mat[8] = m_M[51].mat[10];
-	m_M[110].mat[0] = XXMatrixTrace (&m_M[111]);
-	m_V[466] = (XXMatrixTrace (&m_M[111]) - 1.0) / 2.0;
+	/* CtipControl\temp = (trace (CtipControl\state[1:3,1:3]) - 1) / 2; */
+	m_M[105].mat[0] = m_M[50].mat[0];
+	m_M[105].mat[1] = m_M[50].mat[1];
+	m_M[105].mat[2] = m_M[50].mat[2];
+	m_M[105].mat[3] = m_M[50].mat[4];
+	m_M[105].mat[4] = m_M[50].mat[5];
+	m_M[105].mat[5] = m_M[50].mat[6];
+	m_M[105].mat[6] = m_M[50].mat[8];
+	m_M[105].mat[7] = m_M[50].mat[9];
+	m_M[105].mat[8] = m_M[50].mat[10];
+	m_M[104].mat[0] = XXMatrixTrace (&m_M[105]);
+	m_V[444] = (XXMatrixTrace (&m_M[105]) - 1.0) / 2.0;
 
-	/* if (CtipControl1\temp < -1) */
-	if (m_V[466] < -1.0)
+	/* if (CtipControl\temp < -1) */
+	if (m_V[444] < -1.0)
 	{
-		/* CtipControl1\temp = -1; */
-		m_V[466] = -1.0;
+		/* CtipControl\temp = -1; */
+		m_V[444] = -1.0;
 	}
 
-	/* if (CtipControl1\temp > 1) */
-	if (m_V[466] > 1.0)
+	/* if (CtipControl\temp > 1) */
+	if (m_V[444] > 1.0)
 	{
-		/* CtipControl1\temp = 1; */
-		m_V[466] = 1.0;
+		/* CtipControl\temp = 1; */
+		m_V[444] = 1.0;
 	}
 
-	/* CtipControl1\theta = arccos (CtipControl1\temp); */
-	m_V[456] = acos (m_V[466]);
+	/* CtipControl\theta = arccos (CtipControl\temp); */
+	m_V[428] = acos (m_V[444]);
 
-	/* if (CtipControl1\theta == 0) */
-	if (m_V[456] == 0.0)
+	/* if (CtipControl\theta == 0) */
+	if (m_V[428] == 0.0)
 	{
-		/* CtipControl1\omega = 0; */
-		XXMatrixScalarMov (&m_M[54], 0.0);
+		/* CtipControl\omega = 0; */
+		XXMatrixScalarMov (&m_M[51], 0.0);
 	}
 	else
 	{
-		/* CtipControl1\omega = (1 / (2 * sin (CtipControl1\theta))) * [CtipControl1\state[3,2] - CtipControl1\state[2,3]; CtipControl1\state[1,3] - CtipControl1\state[3,1]; CtipControl1\state[2,1] - CtipControl1\state[1,2]]; */
-		m_M[114].mat[0] = m_M[51].mat[9] - m_M[51].mat[6];
-		m_M[114].mat[1] = m_M[51].mat[2] - m_M[51].mat[8];
-		m_M[114].mat[2] = m_M[51].mat[4] - m_M[51].mat[1];
-		XXScalarMatrixMul (&m_M[54], (1.0 / (2.0 * sin (m_V[456]))), &m_M[114]);
+		/* CtipControl\omega = (1 / (2 * sin (CtipControl\theta))) * [CtipControl\state[3,2] - CtipControl\state[2,3]; CtipControl\state[1,3] - CtipControl\state[3,1]; CtipControl\state[2,1] - CtipControl\state[1,2]]; */
+		m_M[108].mat[0] = m_M[50].mat[9] - m_M[50].mat[6];
+		m_M[108].mat[1] = m_M[50].mat[2] - m_M[50].mat[8];
+		m_M[108].mat[2] = m_M[50].mat[4] - m_M[50].mat[1];
+		XXScalarMatrixMul (&m_M[51], (1.0 / (2.0 * sin (m_V[428]))), &m_M[108]);
 	}
 
-	/* CtipControl1\W = transpose (diag (CtipControl1\CtipControl)) * [CtipControl1\state[1,4]; CtipControl1\state[2,4]; CtipControl1\state[3,4]; CtipControl1\theta * CtipControl1\omega; CtipControl1\theta * CtipControl1\omega; CtipControl1\theta * CtipControl1\omega]; */
-	XXMatrixDiag (&m_M[116], &m_M[53]);
-	XXMatrixTranspose (&m_M[115], &m_M[116]);
-	XXScalarMatrixMul (&m_M[118], m_V[456], &m_M[54]);
-	XXScalarMatrixMul (&m_M[119], m_V[456], &m_M[54]);
-	XXScalarMatrixMul (&m_M[120], m_V[456], &m_M[54]);
-	m_M[117].mat[0] = m_M[51].mat[3];
-	m_M[117].mat[1] = m_M[51].mat[7];
-	m_M[117].mat[2] = m_M[51].mat[11];
-	XXScalarMatrixMul (&m_M[117], m_V[456], &m_M[54]);
-	XXScalarMatrixMul (&m_M[117], m_V[456], &m_M[54]);
-	XXScalarMatrixMul (&m_M[117], m_V[456], &m_M[54]);
-	XXMatrixMul (&m_M[55], &m_M[115], &m_M[117]);
+	/* CtipControl\Wt[4:6] = CtipControl\state[1:3,4] / CtipControl\CtipControl; */
+	m_M[110].mat[0] = m_M[50].mat[3];
+	m_M[110].mat[1] = m_M[50].mat[7];
+	m_M[110].mat[2] = m_M[50].mat[11];
+	XXMatrixScalarDiv (&m_M[109], &m_M[110], m_P[40]);
+	m_M[53].mat[3] = m_M[109].mat[0];
+	m_M[53].mat[4] = m_M[109].mat[1];
+	m_M[53].mat[5] = m_M[109].mat[2];
 
-	/* CtipControl1\p.e = inverse (transpose (Adjoint (CtipControl1\Hvp0))) * CtipControl1\W; */
-	XXMatrixAdjoint (&m_M[123], &m_M[52]);
-	XXMatrixTranspose (&m_M[122], &m_M[123]);
-	XXMatrixInverse (&m_M[121], &m_M[122], m_workarray);
-	XXMatrixMul (&m_M[50], &m_M[121], &m_M[55]);
+	/* CtipControl\Wr[1:3] = (CtipControl\theta * CtipControl\omega) / (CtipControl\CtipControl * 10); */
+	XXScalarMatrixMul (&m_M[112], m_V[428], &m_M[51]);
+	XXMatrixScalarDiv (&m_M[111], &m_M[112], (m_P[40] * 10.0));
+	m_M[52].mat[0] = m_M[111].mat[0];
+	m_M[52].mat[1] = m_M[111].mat[1];
+	m_M[52].mat[2] = m_M[111].mat[2];
 
-	/* R\p.e = diag (R\cartesianDumping) * ControllableJ1\tip.f; */
-	XXMatrixDiag (&m_M[124], &m_M[60]);
-	XXMatrixMul (&m_M[59], &m_M[124], &m_M[49]);
+	/* CtipControl\p.e = inverse (transpose (Adjoint (Gain\H))) * (CtipControl\Wt + CtipControl\Wr); */
+	XXMatrixAdjoint (&m_M[115], &m_M[55]);
+	XXMatrixTranspose (&m_M[114], &m_M[115]);
+	XXMatrixInverse (&m_M[113], &m_M[114], m_workarray);
+	XXMatrixAdd (&m_M[116], &m_M[53], &m_M[52]);
+	XXMatrixMul (&m_M[49], &m_M[113], &m_M[116]);
 
-	/* OneJunction\p2.e = -(CtipControl1\p.e + R\p.e); */
-	XXMatrixAdd (&m_M[125], &m_M[50], &m_M[59]);
-	XXMatrixInv (&m_M[56], &m_M[125]);
+	/* OneJunction\p2.e = -CtipControl\p.e; */
+	XXMatrixInv (&m_M[59], &m_M[49]);
 
-	/* ControllableJ1\joints.e = transpose (CalculateJ\controllableJ) * OneJunction\p2.e; */
-	XXMatrixTranspose (&m_M[126], &m_M[2]);
-	XXMatrixMul (&m_M[48], &m_M[126], &m_M[56]);
+	/* ControllableJ\joints.e = transpose (CalculateJ\controllableJ) * OneJunction\p2.e; */
+	XXMatrixTranspose (&m_M[117], &m_M[1]);
+	XXMatrixMul (&m_M[47], &m_M[117], &m_M[59]);
 
-	/* OneJunction1\p2.e = ControllableJ1\joints.e - (C\p.e + R1\p.e); */
-	XXMatrixAdd (&m_M[127], &m_M[0], &m_M[61]);
-	XXMatrixSub (&m_M[57], &m_M[48], &m_M[127]);
+	/* OneJunction2\p4.e = (ControllableJ\joints.e - R\p.e) - C\p.e; */
+	XXMatrixSub (&m_M[118], &m_M[47], &m_M[62]);
+	XXMatrixSub (&m_M[60], &m_M[118], &m_M[0]);
 
-	/* outputForces.e = OneJunction1\p2.e; */
-	XXMatrixMov (&m_M[64], &m_M[57]);
+	/* p.e = OneJunction2\p4.e; */
+	XXMatrixMov (&m_M[64], &m_M[60]);
 
 }
 
@@ -2121,6 +1170,13 @@ void youbot_interaction_control::CalculateDynamic (void)
  */
 void youbot_interaction_control::CalculateOutput (void)
 {
+	/* ControllableJ\tip.f = CalculateJ\controllableJ * OneJunction2\p4.f; */
+	XXMatrixMul (&m_M[48], &m_M[1], &m_M[61]);
+
+	/* CtipControl\stenght = sqrt (transpose (CtipControl\Wt) * CtipControl\Wt); */
+	XXMatrixTranspose (&m_M[120], &m_M[53]);
+	XXScalarMatrixMatrixMul (m_M[119].mat, &m_M[120], &m_M[53]);
+	m_V[445] = sqrt (m_M[119].mat[0]);
 
 }
 
