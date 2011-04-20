@@ -5,8 +5,8 @@
  *  subm:  youbot_interaction_control
  *  model: youBot_control_gazebo
  *  expmt: youBot_control_gazebo
- *  date:  April 19, 2011
- *  time:  4:14:43 pm
+ *  date:  April 20, 2011
+ *  time:  12:30:15 pm
  *  user:  Campuslicentie 
  *  from:  Universiteit Twente
  *  build: 4.1.2.2

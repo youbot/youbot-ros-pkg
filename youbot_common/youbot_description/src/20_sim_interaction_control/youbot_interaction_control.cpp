@@ -5,8 +5,8 @@
  *  subm:  youbot_interaction_control
  *  model: youBot_control_gazebo
  *  expmt: youBot_control_gazebo
- *  date:  April 19, 2011
- *  time:  4:14:43 pm
+ *  date:  April 20, 2011
+ *  time:  12:30:15 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -83,7 +83,7 @@ void youbot_interaction_control::CopyVariablesToOutputs (XXDouble *y)
 youbot_interaction_control::youbot_interaction_control(void)
 {
 	m_start_time = 0.0;
-	m_finish_time = 60.0;
+	m_finish_time = 30.0;
 	m_step_size = 0.01;
 	m_time = 0;
 	m_major = true;
@@ -881,42 +881,42 @@ void youbot_interaction_control::CalculateDynamic (void)
 	/* Gain\xyzrpy = xyzrpy; */
 	XXMatrixMov (&m_M[54], &m_M[67]);
 
-	/* Gain\Rz = [cos (Gain\xyzrpy[5]), sin (Gain\xyzrpy[5]), 0; -sin (Gain\xyzrpy[5]), cos (Gain\xyzrpy[5]), 0; 0, 0, 1]; */
+	/* Gain\Rz = [cos (Gain\xyzrpy[5]), -sin (Gain\xyzrpy[5]), 0; sin (Gain\xyzrpy[5]), cos (Gain\xyzrpy[5]), 0; 0, 0, 1]; */
 	m_M[56].mat[0] = cos (m_M[54].mat[4]);
-	m_M[56].mat[1] = sin (m_M[54].mat[4]);
+	m_M[56].mat[1] = -(sin (m_M[54].mat[4]));
 	m_M[56].mat[2] = 0.0;
-	m_M[56].mat[3] = -(sin (m_M[54].mat[4]));
+	m_M[56].mat[3] = sin (m_M[54].mat[4]);
 	m_M[56].mat[4] = cos (m_M[54].mat[4]);
 	m_M[56].mat[5] = 0.0;
 	m_M[56].mat[6] = 0.0;
 	m_M[56].mat[7] = 0.0;
 	m_M[56].mat[8] = 1.0;
 
-	/* Gain\Ry = [cos (Gain\xyzrpy[4]), 0, -sin (Gain\xyzrpy[4]); 0, 1, 0; sin (Gain\xyzrpy[4]), 0, cos (Gain\xyzrpy[4])]; */
+	/* Gain\Ry = [cos (Gain\xyzrpy[4]), 0, sin (Gain\xyzrpy[4]); 0, 1, 0; -sin (Gain\xyzrpy[4]), 0, cos (Gain\xyzrpy[4])]; */
 	m_M[57].mat[0] = cos (m_M[54].mat[3]);
 	m_M[57].mat[1] = 0.0;
-	m_M[57].mat[2] = -(sin (m_M[54].mat[3]));
+	m_M[57].mat[2] = sin (m_M[54].mat[3]);
 	m_M[57].mat[3] = 0.0;
 	m_M[57].mat[4] = 1.0;
 	m_M[57].mat[5] = 0.0;
-	m_M[57].mat[6] = sin (m_M[54].mat[3]);
+	m_M[57].mat[6] = -(sin (m_M[54].mat[3]));
 	m_M[57].mat[7] = 0.0;
 	m_M[57].mat[8] = cos (m_M[54].mat[3]);
 
-	/* Gain\Rx = [1, 0, 0; 0, cos (Gain\xyzrpy[6]), sin (Gain\xyzrpy[6]); 0, -sin (Gain\xyzrpy[6]), cos (Gain\xyzrpy[6])]; */
+	/* Gain\Rx = [1, 0, 0; 0, cos (Gain\xyzrpy[6]), -sin (Gain\xyzrpy[6]); 0, sin (Gain\xyzrpy[6]), cos (Gain\xyzrpy[6])]; */
 	m_M[58].mat[0] = 1.0;
 	m_M[58].mat[1] = 0.0;
 	m_M[58].mat[2] = 0.0;
 	m_M[58].mat[3] = 0.0;
 	m_M[58].mat[4] = cos (m_M[54].mat[5]);
-	m_M[58].mat[5] = sin (m_M[54].mat[5]);
+	m_M[58].mat[5] = -(sin (m_M[54].mat[5]));
 	m_M[58].mat[6] = 0.0;
-	m_M[58].mat[7] = -(sin (m_M[54].mat[5]));
+	m_M[58].mat[7] = sin (m_M[54].mat[5]);
 	m_M[58].mat[8] = cos (m_M[54].mat[5]);
 
-	/* Gain\H = homogeneous ((Gain\Rx * Gain\Ry) * Gain\Rz, Gain\xyzrpy[1:3]); */
-	XXMatrixMul (&m_M[91], &m_M[58], &m_M[57]);
-	XXMatrixMul (&m_M[90], &m_M[91], &m_M[56]);
+	/* Gain\H = homogeneous ((Gain\Rz * Gain\Ry) * Gain\Rx, Gain\xyzrpy[1:3]); */
+	XXMatrixMul (&m_M[91], &m_M[56], &m_M[57]);
+	XXMatrixMul (&m_M[90], &m_M[91], &m_M[58]);
 	m_M[92].mat[0] = m_M[54].mat[0];
 	m_M[92].mat[1] = m_M[54].mat[1];
 	m_M[92].mat[2] = m_M[54].mat[2];
@@ -1132,9 +1132,9 @@ void youbot_interaction_control::CalculateDynamic (void)
 	m_M[53].mat[4] = m_M[109].mat[1];
 	m_M[53].mat[5] = m_M[109].mat[2];
 
-	/* CtipControl\Wr[1:3] = (CtipControl\theta * CtipControl\omega) / (CtipControl\CtipControl * 10); */
+	/* CtipControl\Wr[1:3] = (CtipControl\theta * CtipControl\omega) / (CtipControl\CtipControl * 5); */
 	XXScalarMatrixMul (&m_M[112], m_V[428], &m_M[51]);
-	XXMatrixScalarDiv (&m_M[111], &m_M[112], (m_P[40] * 10.0));
+	XXMatrixScalarDiv (&m_M[111], &m_M[112], (m_P[40] * 5.0));
 	m_M[52].mat[0] = m_M[111].mat[0];
 	m_M[52].mat[1] = m_M[111].mat[1];
 	m_M[52].mat[2] = m_M[111].mat[2];

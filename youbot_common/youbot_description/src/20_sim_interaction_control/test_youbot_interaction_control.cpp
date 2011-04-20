@@ -5,8 +5,8 @@
  *  subm:  youbot_interaction_control
  *  model: youBot_control_gazebo
  *  expmt: youBot_control_gazebo
- *  date:  April 19, 2011
- *  time:  4:14:43 pm
+ *  date:  April 20, 2011
+ *  time:  12:30:15 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -72,7 +72,6 @@ int main()
 	y[13] = 0.0;
 	y[14] = 0.0;
 	y[15] = 0.0;
-
 	y[16] = 0.0;		/* p.e */
 	y[17] = 0.0;
 	y[18] = 0.0;
