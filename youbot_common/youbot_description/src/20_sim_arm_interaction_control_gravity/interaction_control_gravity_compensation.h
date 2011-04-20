@@ -3,10 +3,10 @@
  *
  *  file:  interaction_control_gravity_compensation.h
  *  subm:  interaction_control_gravity_compensation
- *  model: ControlYoubotArmInteraction_Grav_v1
- *  expmt: ControlYoubotArmInteraction_Grav_v1
- *  date:  April 12, 2011
- *  time:  4:52:44 pm
+ *  model: youBot_control_base_gazebo
+ *  expmt: youBot_control_base_gazebo
+ *  date:  April 20, 2011
+ *  time:  4:36:07 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -139,8 +139,7 @@ class interaction_control_gravity_compensation: public virtual Submodel20sim
 		 */
 		void CopyVariablesToOutputs (XXDouble *y);
 	
-		void initVarNames(void);
-
+	
 		Euler myintegmethod;	///< pointer to the integration method for this submodel
 	
 
