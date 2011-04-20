@@ -3,10 +3,10 @@
  *
  *  file:  test_interaction_control_gravity_compensation.cpp
  *  subm:  interaction_control_gravity_compensation
- *  model: ControlYoubotArmInteraction_Grav_v1
- *  expmt: ControlYoubotArmInteraction_Grav_v1
- *  date:  April 12, 2011
- *  time:  4:52:44 pm
+ *  model: youBot_control_base_gazebo
+ *  expmt: youBot_control_base_gazebo
+ *  date:  April 20, 2011
+ *  time:  4:36:07 pm
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2
@@ -29,19 +29,19 @@
 /* the main function */
 int main()
 {
-	XXDouble u [35 + 1];
-	XXDouble y [21 + 1];
+	XXDouble u [22 + 1];
+	XXDouble y [24 + 1];
 
 	/* initialize the inputs and outputs with correct initial values */
-	u[0] = 0.0;		/* joints.f */
+	u[0] = 0.0;		/* input */
 	u[1] = 0.0;
 	u[2] = 0.0;
 	u[3] = 0.0;
 	u[4] = 0.0;
-	u[5] = 0.0;		/* Linkdim */
+	u[5] = 0.0;
 	u[6] = 0.0;
 	u[7] = 0.0;
-	u[8] = 0.0;
+	u[8] = 0.0;		/* p.f */
 	u[9] = 0.0;
 	u[10] = 0.0;
 	u[11] = 0.0;
@@ -49,32 +49,19 @@ int main()
 	u[13] = 0.0;
 	u[14] = 0.0;
 	u[15] = 0.0;
-	u[16] = 0.0;
+	u[16] = 0.0;		/* xyzypr */
 	u[17] = 0.0;
 	u[18] = 0.0;
 	u[19] = 0.0;
 	u[20] = 0.0;
 	u[21] = 0.0;
-	u[22] = 0.0;
-	u[23] = 0.0;		/* q */
-	u[24] = 0.0;
-	u[25] = 0.0;
-	u[26] = 0.0;
-	u[27] = 0.0;
-	u[28] = 0.0;		/* xyzQuart */
-	u[29] = 0.0;
-	u[30] = 0.0;
-	u[31] = 0.0;
-	u[32] = 0.0;
-	u[33] = 0.0;
-	u[34] = 0.0;
 
-	y[0] = 0.0;		/* joints.e */
+	y[0] = 0.0;		/* output */
 	y[1] = 0.0;
 	y[2] = 0.0;
 	y[3] = 0.0;
 	y[4] = 0.0;
-	y[5] = 0.0;		/* output */
+	y[5] = 0.0;
 	y[6] = 0.0;
 	y[7] = 0.0;
 	y[8] = 0.0;
@@ -85,11 +72,14 @@ int main()
 	y[13] = 0.0;
 	y[14] = 0.0;
 	y[15] = 0.0;
-	y[16] = 0.0;
+	y[16] = 0.0;		/* p.e */
 	y[17] = 0.0;
 	y[18] = 0.0;
 	y[19] = 0.0;
 	y[20] = 0.0;
+	y[21] = 0.0;
+	y[22] = 0.0;
+	y[23] = 0.0;
 
 
 	interaction_control_gravity_compensation my20simSubmodel;
