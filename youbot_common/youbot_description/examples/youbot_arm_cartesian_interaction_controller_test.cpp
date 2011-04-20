@@ -62,7 +62,8 @@ void publishTf() {
     while(ros::ok()) {
         if (mutex) {
             tf::Vector3 position(tipPose.position.x, tipPose.position.y, tipPose.position.z);
-            tf::Quaternion orientation(tipPose.orientation.w, tipPose.orientation.x, tipPose.orientation.y, tipPose.orientation.z);
+            btQuaternion orientation;
+            tf::quaternionMsgToTF(tipPose.orientation, orientation);
             tf::Transform transform(orientation, position);
             string parentFrameId = tipPose.base_frame_uri;
             string childFrameId = tipPose.target_frame_uri;
@@ -72,58 +73,63 @@ void publishTf() {
     }
 }
 
-void rpy2Quat(double yaw, double pitch, double roll, geometry_msgs::Quaternion& quanternion) {
-    // Assuming the angles are in radians.
-    double c1 = cos(yaw);
-    double s1 = sin(yaw);
-    double c2 = cos(pitch);
-    double s2 = sin(pitch);
-    double c3 = cos(roll);
-    double s3 = sin(roll);
-    quanternion.w = sqrt(1.0 + c1 * c2 + c1*c3 - s1 * s2 * s3 + c2*c3) / 2.0;
-    double w4 = (4.0 * quanternion.w);
-    quanternion.x = (c2 * s3 + c1 * s3 + s1 * s2 * c3) / w4 ;
-    quanternion.y = (s1 * c2 + s1 * c3 + c1 * s2 * s3) / w4 ;
-    quanternion.z = (-s1 * s3 + c1 * s2 * c3 +s2) / w4 ;
-  }
+void ypr2Quat(double yaw, double pitch, double roll, btQuaternion& quanternion) {
+        btMatrix3x3 rotMatrix;
+        rotMatrix.setEulerYPR(btScalar(yaw), btScalar(pitch), btScalar(roll));
+        rotMatrix.getRotation(quanternion);
+}
+
+void setCartesianVectorMsg(brics_actuator::CartesianPose& tipPose,
+                           const brics_actuator::CartesianVector& tipPosition,
+                           const btQuaternion& tipOrientation,
+                           const string baseFrameUri,
+                           const string targetFrameUri,
+                           ros::Time timeStamp) {
+
+    tipPose.base_frame_uri = baseFrameUri;
+    tipPose.target_frame_uri = targetFrameUri;
+    tipPose.timeStamp = timeStamp;
+    tipPose.position = tipPosition;
+    tf::quaternionTFToMsg(tipOrientation, tipPose.orientation);
+}
 
 int main(int argc, char **argv) {
-
-	ros::init(argc, argv, "youbot_arm_cartesian_interaction_controller_test");
-	br = new tf::TransformBroadcaster();
+    ros::init(argc, argv, "youbot_arm_cartesian_interaction_controller_test");
+    br = new tf::TransformBroadcaster();
 	ros::NodeHandle n;
-	ros::Publisher armCommandPublisher;
+    ros::Publisher armCommandPublisher;
+
+    brics_actuator::CartesianVector tipPosition;
+    btQuaternion tipOrientation;
+
+    tipPosition.x = 0;
+    tipPosition.y = 0;
+    tipPosition.z = 0;
+    ypr2Quat(0.0, 0.0, 0.0, tipOrientation);
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
 
 	armCommandPublisher = n.advertise<brics_actuator::CartesianPose> ("arm_controller/command", 1);
 
 	ros::Rate rate(20); //Hz
-
 	boost::thread thrd(&publishTf);
-
 
 	while (ros::ok()) {
 
-		brics_actuator::CartesianVector tipPosition;
-		geometry_msgs::Quaternion tipOrientation;
-		float rollPithYaw[3];
-		float xyz[3];
+
+		float yawPithRoll[3];
 
 		cout << "Please type in end effector position (X Y Z) in meters: " << endl;
 		cin >> tipPosition.x >> tipPosition.y >> tipPosition.z;
 
 		tipPosition.unit = to_string(boost::units::si::meters);
 
-		cout << "Please type in end effector orientation (Roll Pitch Yaw) in radians: " << endl;
-		cin >> rollPithYaw[0] >> rollPithYaw[1] >> rollPithYaw[2];
+		cout << "Please type in end effector orientation (Yaw Pitch Roll) in radians: " << endl;
+		cin >> yawPithRoll[0] >> yawPithRoll[1] >> yawPithRoll[2];
 
-		rpy2Quat(rollPithYaw[0], rollPithYaw[1], rollPithYaw[2], tipOrientation);
+		ypr2Quat(yawPithRoll[0], yawPithRoll[1], yawPithRoll[2], tipOrientation);
 
         mutex = false;
-        tipPose.base_frame_uri = "/arm_link_0";
-        tipPose.target_frame_uri = "/target";
-        tipPose.timeStamp = ros::Time::now();
-        tipPose.position = tipPosition;
-        tipPose.orientation = tipOrientation;
+        setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
         mutex = true;
 
         cout << "sending command ..." << endl;
