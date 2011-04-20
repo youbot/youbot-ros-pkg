@@ -32,9 +32,7 @@
 	<property name="link_4_mass" value="0.1" />
 	<property name="link_5_mass" value="0.1" />-->
 	<!-- TODO: add inertia tensor-->
-<<<<<<< HEAD
-  
-=======
+
 	<xacro:macro name="default_origin">
         	<origin xyz="0 0 0" rpy="0 0 0"/> <!-- no data known -->
 	</xacro:macro>
@@ -76,5 +74,5 @@
 	</xacro:macro>
 
 
->>>>>>> working
+
 </robot>

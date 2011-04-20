@@ -153,13 +153,10 @@ void onArmCommand(const trajectory_msgs::JointTrajectory& armCommand)
 	republishedArmCommand.header.frame_id = armCommand.header.frame_id;
 	republishedArmCommand.points.resize(1); // only one point so far
 	republishedArmCommand.points[0] = armDesiredState;
-<<<<<<< HEAD
-	const double k = 2; // Proportional coefficient
-	republishedArmCommand.points[0].time_from_start = ros::Duration(maxDelta*k); //filling time_from_start required parameter for Gazebo
-=======
+
 	const double k = 1;//0.000000001; // Proportional coefficient
 	republishedArmCommand.points[0].time_from_start = ros::Duration(k); //filling time_from_start required parameter for Gazebo
->>>>>>> working
+
 	armJointTrajectoryPublisher.publish(republishedArmCommand);
 }
 

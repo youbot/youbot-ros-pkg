@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-                
-	<rosparam file="$(find youbot_description)/controller/youbot_arm_joint_torque_controller.yaml" command="load"/>
-	<node name="arm_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="arm_controller" />
-	
-</launch>
