@@ -309,6 +309,13 @@ namespace controller {
 
     void InteractionController::update20SimControl() {
 
+        double roll, pitch, yaw;
+
+        btQuaternion quat(orientation[0], orientation[1], orientation[2], orientation[3]);
+        btMatrix3x3 orientationMatrix(quat);
+        orientationMatrix.getEulerYPR(yaw,pitch,roll);
+        ROS_INFO("%f , %f , %f\n", yaw, pitch, roll);
+
 
         u[0] = 0.0;                 //is not active
         u[1] = 0.0;                 //is not active
@@ -327,18 +334,14 @@ namespace controller {
         u[13] = 0.0;                //J3
         u[14] = 0.0;                //J4
         u[15] = 0.0;                //J5
-        u[16] = 0;      //0;0.0;            /* xyzrpy *///not tested
-        u[17] = 0;      //0;0.2;
-        u[18] = 0.53;   //0,53;0.4;
-        u[19] = 0;      //0;0.0;
-        u[20] = 1.57;   //1.57;1.57;
-        u[21] = 0.7;   //0.7;-0.7;-0.7
+        u[16] = this->position[0];      //0;0.0;            /* xyzrpy *///not tested
+        u[17] = this->position[1];      //0;0.2;
+        u[18] = this->position[2];   //0,53;0.4;
+        u[19] = this->orientation[0];      //0;0.0;
+        u[20] = this->orientation[1];   //1.57;1.57;
+        u[21] = this->orientation[2];   //0.7;-0.7;-0.7
 
-
-
-        btQuaternion quat(orientation[0], orientation[1], orientation[2], orientation[3]);
-        btMatrix3x3 orientationMatrix(quat);
-    //    orientationMatrix.getEulerYPR(yaw,pitch,roll,x);
+            //    orientationMatrix.getEulerYPR(yaw,pitch,roll,x);
 
 
 
@@ -358,9 +361,9 @@ namespace controller {
         targetEfforts[4] = y[23];  // -167 +167, clockwise
 
 
-        ROS_INFO("\njoints position :%f, %f,%f,%f %f,\n",u[3]*180/3.14,u[4]*180/3.14,u[5]*180/3.14,u[6]*180/3.14,u[7]*180/3.14);
+ //       ROS_INFO("\njoints position :%f, %f,%f,%f %f,\n",u[3]*180/3.14,u[4]*180/3.14,u[5]*180/3.14,u[6]*180/3.14,u[7]*180/3.14);
 
-        ROS_INFO("\njoints torques :%f, %f,%f,%f %f,\n", targetEfforts[0], targetEfforts[1], targetEfforts[2], targetEfforts[3], targetEfforts[4]);
+ //       ROS_INFO("\njoints torques :%f, %f,%f,%f %f,\n", targetEfforts[0], targetEfforts[1], targetEfforts[2], targetEfforts[3], targetEfforts[4]);
 
 
     }
