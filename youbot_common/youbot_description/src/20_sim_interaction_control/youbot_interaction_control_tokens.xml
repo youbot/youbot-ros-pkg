@@ -1200,27 +1200,27 @@ CalculateJ\jointVelocities[8]
 	/* Gain\xyzrpy = xyzrpy; */
 	XXMatrixMov (&m_M[54], &m_M[67]);
 
-	/* Gain\Rz = [cos (Gain\xyzrpy[5]), -sin (Gain\xyzrpy[5]), 0; sin (Gain\xyzrpy[5]), cos (Gain\xyzrpy[5]), 0; 0, 0, 1]; */
-	m_M[56].mat[0] = cos (m_M[54].mat[4]);
-	m_M[56].mat[1] = -(sin (m_M[54].mat[4]));
+	/* Gain\Ry = [cos (Gain\xyzrpy[5]), 0, sin (Gain\xyzrpy[5]); 0, 1, 0; -sin (Gain\xyzrpy[5]), 0, cos (Gain\xyzrpy[5])]; */
+	m_M[57].mat[0] = cos (m_M[54].mat[4]);
+	m_M[57].mat[1] = 0.0;
+	m_M[57].mat[2] = sin (m_M[54].mat[4]);
+	m_M[57].mat[3] = 0.0;
+	m_M[57].mat[4] = 1.0;
+	m_M[57].mat[5] = 0.0;
+	m_M[57].mat[6] = -(sin (m_M[54].mat[4]));
+	m_M[57].mat[7] = 0.0;
+	m_M[57].mat[8] = cos (m_M[54].mat[4]);
+
+	/* Gain\Rz = [cos (Gain\xyzrpy[4]), -sin (Gain\xyzrpy[4]), 0; sin (Gain\xyzrpy[4]), cos (Gain\xyzrpy[4]), 0; 0, 0, 1]; */
+	m_M[56].mat[0] = cos (m_M[54].mat[3]);
+	m_M[56].mat[1] = -(sin (m_M[54].mat[3]));
 	m_M[56].mat[2] = 0.0;
-	m_M[56].mat[3] = sin (m_M[54].mat[4]);
-	m_M[56].mat[4] = cos (m_M[54].mat[4]);
+	m_M[56].mat[3] = sin (m_M[54].mat[3]);
+	m_M[56].mat[4] = cos (m_M[54].mat[3]);
 	m_M[56].mat[5] = 0.0;
 	m_M[56].mat[6] = 0.0;
 	m_M[56].mat[7] = 0.0;
 	m_M[56].mat[8] = 1.0;
-
-	/* Gain\Ry = [cos (Gain\xyzrpy[4]), 0, sin (Gain\xyzrpy[4]); 0, 1, 0; -sin (Gain\xyzrpy[4]), 0, cos (Gain\xyzrpy[4])]; */
-	m_M[57].mat[0] = cos (m_M[54].mat[3]);
-	m_M[57].mat[1] = 0.0;
-	m_M[57].mat[2] = sin (m_M[54].mat[3]);
-	m_M[57].mat[3] = 0.0;
-	m_M[57].mat[4] = 1.0;
-	m_M[57].mat[5] = 0.0;
-	m_M[57].mat[6] = -(sin (m_M[54].mat[3]));
-	m_M[57].mat[7] = 0.0;
-	m_M[57].mat[8] = cos (m_M[54].mat[3]);
 
 	/* Gain\Rx = [1, 0, 0; 0, cos (Gain\xyzrpy[6]), -sin (Gain\xyzrpy[6]); 0, sin (Gain\xyzrpy[6]), cos (Gain\xyzrpy[6])]; */
 	m_M[58].mat[0] = 1.0;
@@ -1500,7 +1500,7 @@ CalculateJ\jointVelocities[8]
 	<token name="GENERATION_BUILD"><![CDATA[4.1.2.2]]></token>
 	<token name="GENERATION_DATE"><![CDATA[April 20, 2011]]></token>
 	<token name="GENERATION_DIR"><![CDATA[c:\temp\youbot_interaction_control]]></token>
-	<token name="GENERATION_TIME"><![CDATA[12:30:15 pm]]></token>
+	<token name="GENERATION_TIME"><![CDATA[12:38:30 pm]]></token>
 	<token name="IMPORT_NAMES"><![CDATA[	NULL]]></token>
 	<token name="IMPORT_NAMES2"><![CDATA[	NULL]]></token>
 	<token name="IMPORT_NAMES3"><![CDATA[]]></token>
@@ -2706,7 +2706,7 @@ m_U49
  &lt;KeepParameterValues&gt;False&lt;/KeepParameterValues&gt;
  &lt;AllowLibraryUpdate&gt;True&lt;/AllowLibraryUpdate&gt;
 &lt;/Description&gt;</description>
-		<date>2011-04-20T12:30:30.0Z</date>
+		<date>2011-04-20T12:38:38.0Z</date>
 		<modelDir></modelDir>
 		<originalModel>Z:\Users\yury\Dropbox\UT\BRICS\Workspace\modeling\Junk\FreshView\youBot_control_gazebo.emx</originalModel>
 		<additional>Campuslicentie, Universiteit Twente</additional>
@@ -4370,27 +4370,27 @@ code
 	/* Gain\xyzrpy = xyzrpy; */
 	XXMatrixMov (&m_M[54], &m_M[67]);
 
-	/* Gain\Rz = [cos (Gain\xyzrpy[5]), -sin (Gain\xyzrpy[5]), 0; sin (Gain\xyzrpy[5]), cos (Gain\xyzrpy[5]), 0; 0, 0, 1]; */
-	m_M[56].mat[0] = cos (m_M[54].mat[4]);
-	m_M[56].mat[1] = -(sin (m_M[54].mat[4]));
+	/* Gain\Ry = [cos (Gain\xyzrpy[5]), 0, sin (Gain\xyzrpy[5]); 0, 1, 0; -sin (Gain\xyzrpy[5]), 0, cos (Gain\xyzrpy[5])]; */
+	m_M[57].mat[0] = cos (m_M[54].mat[4]);
+	m_M[57].mat[1] = 0.0;
+	m_M[57].mat[2] = sin (m_M[54].mat[4]);
+	m_M[57].mat[3] = 0.0;
+	m_M[57].mat[4] = 1.0;
+	m_M[57].mat[5] = 0.0;
+	m_M[57].mat[6] = -(sin (m_M[54].mat[4]));
+	m_M[57].mat[7] = 0.0;
+	m_M[57].mat[8] = cos (m_M[54].mat[4]);
+
+	/* Gain\Rz = [cos (Gain\xyzrpy[4]), -sin (Gain\xyzrpy[4]), 0; sin (Gain\xyzrpy[4]), cos (Gain\xyzrpy[4]), 0; 0, 0, 1]; */
+	m_M[56].mat[0] = cos (m_M[54].mat[3]);
+	m_M[56].mat[1] = -(sin (m_M[54].mat[3]));
 	m_M[56].mat[2] = 0.0;
-	m_M[56].mat[3] = sin (m_M[54].mat[4]);
-	m_M[56].mat[4] = cos (m_M[54].mat[4]);
+	m_M[56].mat[3] = sin (m_M[54].mat[3]);
+	m_M[56].mat[4] = cos (m_M[54].mat[3]);
 	m_M[56].mat[5] = 0.0;
 	m_M[56].mat[6] = 0.0;
 	m_M[56].mat[7] = 0.0;
 	m_M[56].mat[8] = 1.0;
-
-	/* Gain\Ry = [cos (Gain\xyzrpy[4]), 0, sin (Gain\xyzrpy[4]); 0, 1, 0; -sin (Gain\xyzrpy[4]), 0, cos (Gain\xyzrpy[4])]; */
-	m_M[57].mat[0] = cos (m_M[54].mat[3]);
-	m_M[57].mat[1] = 0.0;
-	m_M[57].mat[2] = sin (m_M[54].mat[3]);
-	m_M[57].mat[3] = 0.0;
-	m_M[57].mat[4] = 1.0;
-	m_M[57].mat[5] = 0.0;
-	m_M[57].mat[6] = -(sin (m_M[54].mat[3]));
-	m_M[57].mat[7] = 0.0;
-	m_M[57].mat[8] = cos (m_M[54].mat[3]);
 
 	/* Gain\Rx = [1, 0, 0; 0, cos (Gain\xyzrpy[6]), -sin (Gain\xyzrpy[6]); 0, sin (Gain\xyzrpy[6]), cos (Gain\xyzrpy[6])]; */
 	m_M[58].mat[0] = 1.0;
@@ -4959,7 +4959,7 @@ C\x_dot[3]
 The block parameters are:<br><blockquote></blockquote>
 Generated at:<br>
 <blockquote><b>date:  </b>April 20, 2011<br>
-<b>time:  </b>12:30:15 pm<br></blockquote>
+<b>time:  </b>12:38:30 pm<br></blockquote>
 From the following 20-sim model:<br>
 <blockquote><b>submodel:  </b>youbot_interaction_control<br>
 <b>model:  </b>youBot_control_gazebo<br>
@@ -5103,7 +5103,7 @@ Using the following 20-sim license:<br>
 The block parameters are:<br><blockquote></blockquote>
 Generated at:<br>
 <blockquote><b>date:  </b>April 20, 2011<br>
-<b>time:  </b>12:30:15 pm<br></blockquote>
+<b>time:  </b>12:38:30 pm<br></blockquote>
 From the following 20-sim model:<br>
 <blockquote><b>submodel:  </b>youbot_interaction_control<br>
 <b>model:  </b>youBot_control_gazebo<br>
