@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">>
 
 	<!-- common properties -->
 	<property name="M_PI" value="3.1415926535897931" />
@@ -25,6 +25,56 @@
 	<property name="link_3_mass" value="0.934" />
 	<property name="link_4_mass" value="0.877" />
 	<property name="link_5_mass" value="0.251" />
+	<!--<property name="link_0_mass" value="0.845" />
+	<property name="link_1_mass" value="0.1" />
+	<property name="link_2_mass" value="0.1" />
+	<property name="link_3_mass" value="0.1" />
+	<property name="link_4_mass" value="0.1" />
+	<property name="link_5_mass" value="0.1" />-->
 	<!-- TODO: add inertia tensor-->
+<<<<<<< HEAD
   
+=======
+	<xacro:macro name="default_origin">
+        	<origin xyz="0 0 0" rpy="0 0 0"/> <!-- no data known -->
+	</xacro:macro>
+
+	<xacro:macro name="link_default_inertia_tensor">
+		<origin xyz="0 0 0" 
+			rpy="0 0 0" />
+		<inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1" />	
+	</xacro:macro>	
+	<xacro:macro name="link_1_inertia_tensor">
+		<origin xyz="${14.89/1000} ${2.13/1000} ${2.13/1000}" 
+			rpy="0 0 0" />
+		<inertia ixx="0.003863" ixy="-0.000979" ixz="0.000000" iyy="0.006196" iyz="0.000000" izz="0.006369" />
+	
+	</xacro:macro>
+	<xacro:macro name="link_2_inertia_tensor">
+		<origin xyz="${104.53/1000} ${1.7/1000} ${-2.97/1000}" 
+			rpy="0 0 0" />
+		<inertia ixx="0.000823" ixy="0.000000" ixz="-0.000000" iyy="0.004447" iyz ="0.000000" izz="0.004439" />
+	
+	</xacro:macro>
+	<xacro:macro name="link_3_inertia_tensor">
+		<origin xyz="${0.1/1000} ${96.7/1000} ${21.07/1000}" 
+			rpy="0 0 0" />
+		<inertia ixx="0.002459" ixy="0.000000" ixz="0.000000" iyy="0.002571" iyz="-0.000000" izz="0.000535" />
+
+	</xacro:macro>
+	<xacro:macro name="link_4_inertia_tensor">
+		<origin xyz="${0.11/1000} ${51.03/1000} ${-23.19/1000}" 
+			rpy="0 0 0"  />
+		<inertia ixx="0.000869" ixy="0.000000" ixz="-0.000000" iyy="0.001173" iyz="-0.000231" izz="0.001091" />
+	
+	</xacro:macro>
+	<xacro:macro name="link_5_inertia_tensor">
+		<origin xyz="${0/1000} ${1.15/1000} ${-16.83/1000}" 
+			rpy="0 0 0" />
+		<inertia ixx="0.000280" ixy="0.000000" ixz="0.000000" iyy="0.000339" iyz="0.000000" izz="0.000119" />
+
+	</xacro:macro>
+
+
+>>>>>>> working
 </robot>

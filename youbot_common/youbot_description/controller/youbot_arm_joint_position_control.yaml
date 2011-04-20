@@ -1,0 +1,64 @@
+arm_controller:
+  type: robot_mechanism_controllers/JointSplineTrajectoryController
+  joints:
+    - arm_joint_1
+    - arm_joint_2
+    - arm_joint_3
+    - arm_joint_4
+    - arm_joint_5
+    
+   
+  gains:
+    arm_joint_1:
+      p: 2000.0
+      d: 0.0
+    arm_joint_2:
+      p: 2000.0
+      d: 0.0
+    arm_joint_3: 
+      p: 2000.0
+      d: 0.0
+    arm_joint_4:
+      p: 2020.0
+      d: 0.0
+    arm_joint_5:
+<<<<<<< HEAD:youbot_common/youbot_description/controller/youbot_arm_controller.yaml
+      p: 2030.0
+      d: 0.0
+    gripper_finger_joint_l:
+      p: 200.0
+      d: 0.0
+    gripper_finger_joint_r:
+      p: 200.0
+      d: 0.0
+=======
+      p: 10
+      d: 2.0
+   
+>>>>>>> working:youbot_common/youbot_description/controller/youbot_arm_joint_position_control.yaml
+   
+    
+
+  arm_joint_trajectory_action_node:
+    joints:
+      - arm_joint_1
+      - arm_joint_2
+      - arm_joint_3
+      - arm_joint_4
+      - arm_joint_5
+     
+        
+    constraints:
+      goal_time: 0.6
+      arm_joint_1:
+        goal: 0.0
+      arm_joint_2:
+        goal: 0.0
+      arm_joint_3:
+        goal: 0.0
+      arm_joint_4:
+        goal: 0.0
+      arm_joint_5:
+        goal: 0.0
+    
+

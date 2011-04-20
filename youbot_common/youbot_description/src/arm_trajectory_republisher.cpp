@@ -120,6 +120,7 @@ void onArmCommand(const trajectory_msgs::JointTrajectory& armCommand)
 		if (armCommandIterator != jointNameToValueMapping.end()) {
 		    republishedArmCommand.joint_names.push_back(armCommandIterator->first);
 		    armDesiredState.positions.push_back(armCommandIterator->second);
+		    //armDesiredState.velocities.push_back(armCommandIterator->second);
 		    /* calculating delta, which is proportional to time_from_start */
 		    double delta = fabs(armDesiredState.positions.back() - currentArmJointValues[i]);
 		    ROS_INFO("Delta = %f\n", delta);
@@ -135,8 +136,10 @@ void onArmCommand(const trajectory_msgs::JointTrajectory& armCommand)
     if (gripperIterator != jointNameToValueMapping.end()) {
         gripperDesiredPosition = gripperIterator->second;
         republishedArmCommand.joint_names.push_back(gripperJointStateNames[0]);
+        //armDesiredState.velocities.push_back(gripperDesiredPosition / 2.0);
         armDesiredState.positions.push_back(gripperDesiredPosition / 2.0);
         republishedArmCommand.joint_names.push_back(gripperJointStateNames[1]);
+        //armDesiredState.velocities.push_back(gripperDesiredPosition / 2.0);
         armDesiredState.positions.push_back(gripperDesiredPosition / 2.0);
         double delta = fabs(gripperDesiredPosition - currentGripperJointValue);
         ROS_INFO("Delta = %f\n", delta);
@@ -150,8 +153,13 @@ void onArmCommand(const trajectory_msgs::JointTrajectory& armCommand)
 	republishedArmCommand.header.frame_id = armCommand.header.frame_id;
 	republishedArmCommand.points.resize(1); // only one point so far
 	republishedArmCommand.points[0] = armDesiredState;
+<<<<<<< HEAD
 	const double k = 2; // Proportional coefficient
 	republishedArmCommand.points[0].time_from_start = ros::Duration(maxDelta*k); //filling time_from_start required parameter for Gazebo
+=======
+	const double k = 1;//0.000000001; // Proportional coefficient
+	republishedArmCommand.points[0].time_from_start = ros::Duration(k); //filling time_from_start required parameter for Gazebo
+>>>>>>> working
 	armJointTrajectoryPublisher.publish(republishedArmCommand);
 }
 
