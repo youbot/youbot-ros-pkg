@@ -120,7 +120,7 @@ private:
     unsigned int loopCount;
 	ros::Time currentTime;
 	ros::Time lastTime;
-	double orientation[4]; //Quantarnion
+	double orientationYPR[3]; //Yaw Pitch Roll position
     double position[3]; // XYZ position
     std::vector <double> targetEfforts;
 

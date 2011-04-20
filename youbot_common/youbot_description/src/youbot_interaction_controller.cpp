@@ -157,10 +157,9 @@ namespace controller {
 		this->position[1] = 0;
 		this->position[2] = 0;
 
-		this->orientation[0] = 0;
-		this->orientation[1] = 0;
-		this->orientation[2] = 0;
-		this->orientation[3] = 0;
+		this->orientationYPR[0] = 0;
+		this->orientationYPR[1] = 0;
+		this->orientationYPR[2] = 0;
 #ifdef DEBUG_INFO
         debugInfo = new InteractionControllerDebug(this);
 #else
@@ -309,13 +308,7 @@ namespace controller {
 
     void InteractionController::update20SimControl() {
 
-        double roll, pitch, yaw;
-
-        btQuaternion quat(orientation[0], orientation[1], orientation[2], orientation[3]);
-        btMatrix3x3 orientationMatrix(quat);
-        orientationMatrix.getEulerYPR(yaw,pitch,roll);
-        ROS_INFO("%f , %f , %f\n", yaw, pitch, roll);
-
+       ROS_INFO("Yaw = %f , Pitch = %f , Roll = %f\n", orientationYPR[0], orientationYPR[1], orientationYPR[2]);
 
         u[0] = 0.0;                 //is not active
         u[1] = 0.0;                 //is not active
@@ -337,9 +330,9 @@ namespace controller {
         u[16] = this->position[0];      //0;0.0;            /* xyzrpy *///not tested
         u[17] = this->position[1];      //0;0.2;
         u[18] = this->position[2];   //0,53;0.4;
-        u[19] = this->orientation[0];      //0;0.0;
-        u[20] = this->orientation[1];   //1.57;1.57;
-        u[21] = this->orientation[2];   //0.7;-0.7;-0.7
+        u[19] = this->orientationYPR[2];      //0;0.0;
+        u[20] = this->orientationYPR[1];   //1.57;1.57;
+        u[21] = this->orientationYPR[0];   //0.7;-0.7;-0.7
 
             //    orientationMatrix.getEulerYPR(yaw,pitch,roll,x);
 
@@ -424,10 +417,9 @@ namespace controller {
 		this->position[1] = tipPosition.y;
 		this->position[2] = tipPosition.z;
 
-		this->orientation[0] = tipOrientation.x;
-		this->orientation[1] = tipOrientation.y;
-		this->orientation[2] = tipOrientation.z;
-		this->orientation[3] = tipOrientation.w;
+        btQuaternion quaternion;
+        tf::quaternionMsgToTF(tipOrientation, quaternion);
+        btMatrix3x3(quaternion).getEulerYPR(orientationYPR[0],orientationYPR[1],orientationYPR[2]);
 
     }
 
