@@ -93,6 +93,90 @@ void setCartesianVectorMsg(brics_actuator::CartesianPose& tipPose,
     tf::quaternionTFToMsg(tipOrientation, tipPose.orientation);
 }
 
+// test to reach refference poses
+void test1(const ros::Publisher& armCommandPublisher) {
+    brics_actuator::CartesianVector tipPosition;
+    btQuaternion tipOrientation;
+
+    //ref. position 1
+    tipPosition.x = 0.0;
+    tipPosition.y = 0.0;
+    tipPosition.z = 0.43;
+    ypr2Quat(-1.0, 0.0, 0.0, tipOrientation);
+    mutex = false;
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    mutex = true;
+    sleep(2);
+    cout << "sending command ..." << endl;
+    armCommandPublisher.publish(tipPose);
+
+    sleep(1);
+    //ref. position 2
+    tipPosition.x = -0.1;
+    tipPosition.y = -0.1;
+    tipPosition.z = 0.4;
+    ypr2Quat(-2.0, 1.3, 0.0, tipOrientation);
+    mutex = false;
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    mutex = true;
+    sleep(2);
+    cout << "sending command ..." << endl;
+    armCommandPublisher.publish(tipPose);
+
+    sleep(1);
+    //ref. position 3
+    tipPosition.x = 0.0;
+    tipPosition.y = 0.2;
+    tipPosition.z = 0.35;
+    ypr2Quat(-3.0, 0.0, 1.0, tipOrientation);
+    mutex = false;
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    mutex = true;
+    sleep(2);
+    cout << "sending command ..." << endl;
+    armCommandPublisher.publish(tipPose);
+
+    sleep(1);
+    //ref. position 4
+    tipPosition.x = 0.2;
+    tipPosition.y = 0.2;
+    tipPosition.z = 0.35;
+    ypr2Quat(-4.0, 1.0, 1.0, tipOrientation);
+    mutex = false;
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    mutex = true;
+    sleep(2);
+    cout << "sending command ..." << endl;
+    armCommandPublisher.publish(tipPose);
+
+    sleep(1);
+    //ref. position 5
+    tipPosition.x = 0.0;
+    tipPosition.y = 0.2;
+    tipPosition.z = 0.35;
+    ypr2Quat(0.0, 0.0, 0.0, tipOrientation);
+    mutex = false;
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    mutex = true;
+    sleep(2);
+    cout << "sending command ..." << endl;
+    armCommandPublisher.publish(tipPose);
+
+    sleep(1);
+    //ref. position 6
+    tipPosition.x = 0.0;
+    tipPosition.y = 0.2;
+    tipPosition.z = 0.35;
+    ypr2Quat(1.5, 0.0, 0.0, tipOrientation);
+    mutex = false;
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    mutex = true;
+    sleep(2);
+    cout << "sending command ..." << endl;
+    armCommandPublisher.publish(tipPose);
+
+}
+
 int main(int argc, char **argv) {
     ros::init(argc, argv, "youbot_arm_cartesian_interaction_controller_test");
     br = new tf::TransformBroadcaster();
@@ -112,6 +196,8 @@ int main(int argc, char **argv) {
 
 	ros::Rate rate(20); //Hz
 	boost::thread thrd(&publishTf);
+
+    test1(armCommandPublisher);
 
 	while (ros::ok()) {
 
