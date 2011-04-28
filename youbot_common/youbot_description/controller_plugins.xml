@@ -13,6 +13,9 @@
 <library path="lib/libyoubot_interaction_controller">
   <class name="youbot_description/InteractionController" type="controller::InteractionController" base_class_type="pr2_controller_interface::Controller" />
 </library>
+<library path="lib/libyoubot_interaction_controller_base">
+  <class name="youbot_description/InteractionControllerBase" type="controller::InteractionControllerBase" base_class_type="pr2_controller_interface::Controller" />
+</library>
 <library path="$(find youbot_description)/lib/librobot_mechanism_controllers">
   <class name="robot_mechanism_controllers/CartesianPoseController" type="controller::CartesianPoseController" base_class_type="pr2_controller_interface::Controller" />
 </library>

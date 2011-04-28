@@ -1,5 +1,5 @@
 base_odometry:
-  publish_tf: false
+  publish_tf: true
   caster_names: caster_link_fr caster_link_fl caster_link_bl caster_link_br
   type: pr2_mechanism_controllers/Pr2Odometry
   ils_max_iterations: 3

@@ -104,7 +104,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     tipPosition.z = 0.43;
     ypr2Quat(-1.0, 0.0, 0.0, tipOrientation);
     mutex = false;
-    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/odom", "/target", ros::Time::now());
     mutex = true;
     sleep(2);
     cout << "sending command ..." << endl;
@@ -117,7 +117,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     tipPosition.z = 0.4;
     ypr2Quat(-2.0, 1.3, 0.0, tipOrientation);
     mutex = false;
-    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/odom", "/target", ros::Time::now());
     mutex = true;
     sleep(2);
     cout << "sending command ..." << endl;
@@ -130,7 +130,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     tipPosition.z = 0.35;
     ypr2Quat(-3.0, 0.0, 1.0, tipOrientation);
     mutex = false;
-    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/odom", "/target", ros::Time::now());
     mutex = true;
     sleep(2);
     cout << "sending command ..." << endl;
@@ -143,7 +143,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     tipPosition.z = 0.35;
     ypr2Quat(-4.0, 1.0, 1.0, tipOrientation);
     mutex = false;
-    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/odom", "/target", ros::Time::now());
     mutex = true;
     sleep(2);
     cout << "sending command ..." << endl;
@@ -156,7 +156,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     tipPosition.z = 0.35;
     ypr2Quat(0.0, 0.0, 0.0, tipOrientation);
     mutex = false;
-    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/odom", "/target", ros::Time::now());
     mutex = true;
     sleep(2);
     cout << "sending command ..." << endl;
@@ -169,7 +169,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     tipPosition.z = 0.35;
     ypr2Quat(1.5, 0.0, 0.0, tipOrientation);
     mutex = false;
-    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/odom", "/target", ros::Time::now());
     mutex = true;
     sleep(2);
     cout << "sending command ..." << endl;
@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
 		ypr2Quat(yawPithRoll[0], yawPithRoll[1], yawPithRoll[2], tipOrientation);
 
         mutex = false;
-        setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+        setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/odom", "/target", ros::Time::now());
         mutex = true;
 
         cout << "sending command ..." << endl;
