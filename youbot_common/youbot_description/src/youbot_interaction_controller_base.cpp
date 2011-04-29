@@ -381,11 +381,11 @@ void InteractionControllerBase::update() {
 	baseTwist->trylock();
 
 
-    twist.linear.x = 0;//targetSpeed[2]/100.0;
-    twist.linear.y = 0;targetSpeed[1]/100.0;
+    twist.linear.x = targetSpeed[2]/100.0;
+    twist.linear.y = targetSpeed[1]/100.0;
 	//twist.angular.x = 0.0;//targetSpeed[2];
     //twist.angular.y = 0.0;//targetSpeed[1];
-    twist.angular.z = 0;targetSpeed[0]/100.0;
+    twist.angular.z = targetSpeed[0]/100.0;
 
 	//ROS_INFO("Speed: %f, %f, %f\n", twist.angular.x, twist.angular.y, twist.angular.z);
 
