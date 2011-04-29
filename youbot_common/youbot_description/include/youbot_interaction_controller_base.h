@@ -83,6 +83,7 @@ public:
 	virtual void publish();
 private:
 
+    void toTransformMatrix(double* tf,  tf::Transform& trans);
 	void publishTf(double* tf, std::string parentFrameId, std::string childFrameId);
 	InteractionControllerBase* getControllerPtr();
 
@@ -96,6 +97,9 @@ private:
 
 	boost::scoped_ptr<realtime_tools::RealtimePublisher<brics_actuator::CartesianPose> > gazeboJointPose;
 	boost::scoped_ptr<realtime_tools::RealtimePublisher<brics_actuator::CartesianPose> > controllerJointPose;
+
+	boost::scoped_ptr<realtime_tools::RealtimePublisher<brics_actuator::CartesianPose> > currentTipPose;
+	boost::scoped_ptr<realtime_tools::RealtimePublisher<brics_actuator::CartesianPose> > targetTipPose;
 
 };
 
@@ -137,6 +141,8 @@ private:
 	geometry_msgs::Pose currentBasePose;
 	boost::scoped_ptr<realtime_tools::RealtimePublisher<geometry_msgs::Twist> > baseTwist;
 
+    brics_actuator::CartesianPose targetTipPose;
+    brics_actuator::CartesianPose currentTipPose;
 
 	Debug* debugInfo;
 

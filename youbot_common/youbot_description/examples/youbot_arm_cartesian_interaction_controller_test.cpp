@@ -94,7 +94,10 @@ void setCartesianVectorMsg(brics_actuator::CartesianPose& tipPose,
 }
 
 // test to reach refference poses
+const int delay = 10;
 void test1(const ros::Publisher& armCommandPublisher) {
+
+    for (int i = 0; i < 10; i++) {
     brics_actuator::CartesianVector tipPosition;
     btQuaternion tipOrientation;
 
@@ -110,7 +113,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     cout << "sending command ..." << endl;
     armCommandPublisher.publish(tipPose);
 
-    sleep(1);
+    sleep(delay);
     //ref. position 2
     tipPosition.x = -0.1;
     tipPosition.y = -0.1;
@@ -123,7 +126,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     cout << "sending command ..." << endl;
     armCommandPublisher.publish(tipPose);
 
-    sleep(1);
+    sleep(delay);
     //ref. position 3
     tipPosition.x = 0.0;
     tipPosition.y = 0.2;
@@ -136,7 +139,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     cout << "sending command ..." << endl;
     armCommandPublisher.publish(tipPose);
 
-    sleep(1);
+    sleep(delay);
     //ref. position 4
     tipPosition.x = 0.2;
     tipPosition.y = 0.2;
@@ -149,7 +152,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     cout << "sending command ..." << endl;
     armCommandPublisher.publish(tipPose);
 
-    sleep(1);
+    sleep(delay);
     //ref. position 5
     tipPosition.x = 0.0;
     tipPosition.y = 0.2;
@@ -162,7 +165,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
     cout << "sending command ..." << endl;
     armCommandPublisher.publish(tipPose);
 
-    sleep(1);
+    sleep(delay);
     //ref. position 6
     tipPosition.x = 0.0;
     tipPosition.y = 0.2;
@@ -174,6 +177,8 @@ void test1(const ros::Publisher& armCommandPublisher) {
     sleep(2);
     cout << "sending command ..." << endl;
     armCommandPublisher.publish(tipPose);
+    sleep(delay);
+    }
 
 }
 
@@ -190,7 +195,7 @@ int main(int argc, char **argv) {
     tipPosition.y = 0;
     tipPosition.z = 0;
     ypr2Quat(0.0, 0.0, 0.0, tipOrientation);
-    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/arm_link_0", "/target", ros::Time::now());
+    setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/odom", "/target", ros::Time::now());
 
 	armCommandPublisher = n.advertise<brics_actuator::CartesianPose> ("arm_controller/command", 1);
 
