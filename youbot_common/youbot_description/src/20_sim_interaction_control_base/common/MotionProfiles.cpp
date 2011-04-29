@@ -4,8 +4,8 @@
  *  file:  common\MotionProfiles.cpp
  *  model: youBot_control_grav_base_gazebo_v1
  *  expmt: youBot_control_grav_base_gazebo_v1
- *  date:  April 28, 2011
- *  time:  3:40:15 pm
+ *  date:  April 29, 2011
+ *  time:  11:57:26 am
  *  user:  Campuslicentie
  *  from:  Universiteit Twente
  *  build: 4.1.2.2

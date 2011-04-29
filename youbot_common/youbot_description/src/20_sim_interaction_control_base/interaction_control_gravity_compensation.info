@@ -6,56 +6,56 @@ INPUTS & OUTPUTS INDICES
  
 *** INPUTS ***
 
-	m_V[1909] = u[0];		/* input */
-	m_V[1910] = u[1];
-	m_V[1911] = u[2];
-	m_V[1912] = u[3];
-	m_V[1913] = u[4];
-	m_V[1914] = u[5];
-	m_V[1915] = u[6];
-	m_V[1916] = u[7];
-	m_V[1901] = u[8];		/* p.f */
-	m_V[1902] = u[9];
-	m_V[1903] = u[10];
-	m_V[1904] = u[11];
-	m_V[1905] = u[12];
-	m_V[1906] = u[13];
-	m_V[1907] = u[14];
-	m_V[1908] = u[15];
-	m_V[1917] = u[16];		/* xyzypr */
-	m_V[1918] = u[17];
-	m_V[1919] = u[18];
-	m_V[1920] = u[19];
-	m_V[1921] = u[20];
-	m_V[1922] = u[21];
+	m_V[1925] = u[0];		/* input */
+	m_V[1926] = u[1];
+	m_V[1927] = u[2];
+	m_V[1928] = u[3];
+	m_V[1929] = u[4];
+	m_V[1930] = u[5];
+	m_V[1931] = u[6];
+	m_V[1932] = u[7];
+	m_V[1917] = u[8];		/* p.f */
+	m_V[1918] = u[9];
+	m_V[1919] = u[10];
+	m_V[1920] = u[11];
+	m_V[1921] = u[12];
+	m_V[1922] = u[13];
+	m_V[1923] = u[14];
+	m_V[1924] = u[15];
+	m_V[1933] = u[16];		/* xyzypr */
+	m_V[1934] = u[17];
+	m_V[1935] = u[18];
+	m_V[1936] = u[19];
+	m_V[1937] = u[20];
+	m_V[1938] = u[21];
 
  
 *** OUTPUTS ***
 
-	y[0] = 	m_V[1923];		/* output */
-	y[1] = 	m_V[1924];
-	y[2] = 	m_V[1925];
-	y[3] = 	m_V[1926];
-	y[4] = 	m_V[1927];
-	y[5] = 	m_V[1928];
-	y[6] = 	m_V[1929];
-	y[7] = 	m_V[1930];
-	y[8] = 	m_V[1931];
-	y[9] = 	m_V[1932];
-	y[10] = 	m_V[1933];
-	y[11] = 	m_V[1934];
-	y[12] = 	m_V[1935];
-	y[13] = 	m_V[1936];
-	y[14] = 	m_V[1937];
-	y[15] = 	m_V[1938];
-	y[16] = 	m_V[1893];		/* p.e */
-	y[17] = 	m_V[1894];
-	y[18] = 	m_V[1895];
-	y[19] = 	m_V[1896];
-	y[20] = 	m_V[1897];
-	y[21] = 	m_V[1898];
-	y[22] = 	m_V[1899];
-	y[23] = 	m_V[1900];
+	y[0] = 	m_V[1939];		/* output */
+	y[1] = 	m_V[1940];
+	y[2] = 	m_V[1941];
+	y[3] = 	m_V[1942];
+	y[4] = 	m_V[1943];
+	y[5] = 	m_V[1944];
+	y[6] = 	m_V[1945];
+	y[7] = 	m_V[1946];
+	y[8] = 	m_V[1947];
+	y[9] = 	m_V[1948];
+	y[10] = 	m_V[1949];
+	y[11] = 	m_V[1950];
+	y[12] = 	m_V[1951];
+	y[13] = 	m_V[1952];
+	y[14] = 	m_V[1953];
+	y[15] = 	m_V[1954];
+	y[16] = 	m_V[1909];		/* p.e */
+	y[17] = 	m_V[1910];
+	y[18] = 	m_V[1911];
+	y[19] = 	m_V[1912];
+	y[20] = 	m_V[1913];
+	y[21] = 	m_V[1914];
+	y[22] = 	m_V[1915];
+	y[23] = 	m_V[1916];
 
  
 
@@ -132,6 +132,9 @@ NAMES
 	"CalculateJ\\InitialBasePos[4,2]",
 	"CalculateJ\\InitialBasePos[4,3]",
 	"CalculateJ\\InitialBasePos[4,4]",
+	"CalculateJ\\baseoffset[1]",
+	"CalculateJ\\baseoffset[2]",
+	"CalculateJ\\baseoffset[3]",
 	"CtipControl\\CtipControl",
 	"GravityCompensation\\Base\\AdHik1\\COMdim[1]",
 	"GravityCompensation\\Base\\AdHik1\\COMdim[2]",
@@ -669,6 +672,22 @@ NAMES
 	"CalculateJ\\H50[4,2]",
 	"CalculateJ\\H50[4,3]",
 	"CalculateJ\\H50[4,4]",
+	"CalculateJ\\base_offset_H[1,1]",
+	"CalculateJ\\base_offset_H[1,2]",
+	"CalculateJ\\base_offset_H[1,3]",
+	"CalculateJ\\base_offset_H[1,4]",
+	"CalculateJ\\base_offset_H[2,1]",
+	"CalculateJ\\base_offset_H[2,2]",
+	"CalculateJ\\base_offset_H[2,3]",
+	"CalculateJ\\base_offset_H[2,4]",
+	"CalculateJ\\base_offset_H[3,1]",
+	"CalculateJ\\base_offset_H[3,2]",
+	"CalculateJ\\base_offset_H[3,3]",
+	"CalculateJ\\base_offset_H[3,4]",
+	"CalculateJ\\base_offset_H[4,1]",
+	"CalculateJ\\base_offset_H[4,2]",
+	"CalculateJ\\base_offset_H[4,3]",
+	"CalculateJ\\base_offset_H[4,4]",
 	"CalculateJ\\initialq[1]",
 	"CalculateJ\\initialq[2]",
 	"CalculateJ\\initialq[3]",
@@ -2242,6 +2261,7 @@ NAMES
 	"CalculateJ\\InitialJointPos",
 	"CalculateJ\\Linkdim",
 	"CalculateJ\\InitialBasePos",
+	"CalculateJ\\baseoffset",
 	"CalculateJ\\vx",
 	"CalculateJ\\vy",
 	"CalculateJ\\omegaz",
@@ -2282,6 +2302,7 @@ NAMES
 	"CalculateJ\\H30",
 	"CalculateJ\\H40",
 	"CalculateJ\\H50",
+	"CalculateJ\\base_offset_H",
 	"CalculateJ\\initialq",
 	"CalculateJ\\Rz",
 	"ControllableJ\\joints.e",
@@ -2613,6 +2634,9 @@ NAMES
 	"m_U139",
 	"m_U140",
 	"m_U141",
-	"m_U142"
+	"m_U142",
+	"m_U143",
+	"m_U144",
+	"m_U145"
 
 
