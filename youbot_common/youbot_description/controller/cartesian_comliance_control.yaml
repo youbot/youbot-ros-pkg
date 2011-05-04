@@ -1,0 +1,8 @@
+arm_controller:
+  type: youbot_description/CartesianComplianceController
+  joints:
+    - arm_joint_1  
+    - arm_joint_2
+    - arm_joint_3
+    - arm_joint_4
+    - arm_joint_5
