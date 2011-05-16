@@ -31,12 +31,13 @@ include_directories(	${PROJECT_SOURCE_DIR}/include
 #rosbuild_add_executable(example examples/example.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
 
-OPTION(WITH_DEBUG_INFO "Publish debug info" ON)
+OPTION(WITH_DEBUG_INFO "Publish debug info" ON)	#TODO:: move debug parameter to the yaml file
 
 IF(WITH_DEBUG_INFO)
   ADD_DEFINITIONS(-DDEBUG_INFO)
 ENDIF(WITH_DEBUG_INFO)
 
+<<<<<<< HEAD
 #simple publishers
 rosbuild_add_executable(joint_gripper_publisher src/joint_gripper_publisher.cpp)
 rosbuild_add_executable(joint_arm_publisher src/joint_arm_publisher.cpp)
@@ -54,6 +55,26 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/20_sim_interaction_control)
 rosbuild_add_library(youbot_interaction_controller src/youbot_interaction_controller.cpp)
 target_link_libraries(youbot_interaction_controller 20_sim_interaction_controller)
 rosbuild_add_executable(youbot_interaction_controller_test examples/youbot_arm_cartesian_interaction_controller_test.cpp)
+=======
+#youbot base teleoperation experiment 
+rosbuild_add_executable(youbot_keyboard_teleop_experiment examples/keyboard_teleop_experiment.cpp)
+
+#test for a joint position control of the youbot arm
+rosbuild_add_executable(arm_joint_position_control_test examples/arm_joint_position_control_test.cpp)
+
+#joint velocity control of the youbot arm its test
+rosbuild_add_library(arm_joint_velocity_control src/arm_joint_velocity_control.cpp)
+rosbuild_add_executable(arm_joint_velocity_control_test examples/arm_joint_velocity_control_test.cpp)
+
+#cartesian compliance control for the unified youbot arm and base system
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/20_sim_cartesian_compliance_control)
+rosbuild_add_library(cartesian_compliance_control src/cartesian_compliance_control.cpp)
+target_link_libraries(cartesian_compliance_control 20_sim_cartesian_compliance_control)
+rosbuild_add_executable(cartesian_compliance_control_test examples/cartesian_compliance_control_test.cpp)
+
+#static joint states publisher
+rosbuild_add_executable(static_joint_publisher src/static_joint_publisher.cpp)
+>>>>>>> 0aa399e0257402a018e7c12673694bca48a51df8
 
 #depricated
 rosbuild_add_executable(arm_trajectory_republisher src/arm_trajectory_republisher.cpp)
