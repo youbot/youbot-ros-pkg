@@ -55,6 +55,8 @@ vector <string> armCommandNames;        //arm command names, published by the us
 string gripperCommandName;              //gripper command name, published by the user
 
 const double deltaThreshold = 0.2;      //minimum value for time_from_start parameter
+const double publishRate = 1;          //rate at which command are published, Hz;
+                                        //used as a parameter for update rate and speed calculatins
 
 bool mutex = false;                     //flag to prevent two processes from accessing currentArmJointValues at the same time
 
@@ -63,7 +65,6 @@ ros::Publisher armJointTrajectoryPublisher; //publisher of the updated trajector
 void onJointStates(const sensor_msgs::JointState& jointStates) {
     if (mutex)
         return;
-
 	/* create mapping between joint names and positions  */
     currentArmJointValues.clear();
 	std::map<string, double> jointNameToValueMapping;
@@ -91,6 +92,13 @@ void onJointStates(const sensor_msgs::JointState& jointStates) {
 
 }
 
+trajectory_msgs::JointTrajectory republishedArmCommand;
+trajectory_msgs::JointTrajectoryPoint armDesiredState;
+
+void calculations() {
+
+}
+
 void onArmCommand(const trajectory_msgs::JointTrajectory& armCommand)
 {
 
@@ -100,7 +108,7 @@ void onArmCommand(const trajectory_msgs::JointTrajectory& armCommand)
 	}
 
 	/* create mapping between joint names and values  */
-	trajectory_msgs::JointTrajectoryPoint armDesiredState;
+
 	armDesiredState = armCommand.points[0];
 	std::map<string, double> jointNameToValueMapping;
 	for (int i = 0; i < static_cast<int>(armCommand.joint_names.size()); ++i) {
@@ -110,7 +118,7 @@ void onArmCommand(const trajectory_msgs::JointTrajectory& armCommand)
 	/* calculating  JointTrajectory.point[...].time_from_start for the arm (required parameter for Gazebo)*/
 	double maxDelta = deltaThreshold;
 	armDesiredState.positions.resize(0);
-	trajectory_msgs::JointTrajectory republishedArmCommand;
+
 	republishedArmCommand.joint_names.resize(0);
 
 	mutex = true;
@@ -148,15 +156,15 @@ void onArmCommand(const trajectory_msgs::JointTrajectory& armCommand)
     }
     mutex = false;
 
+   // maxDelta=
+
     /* Setting up new message */
 	republishedArmCommand.header.stamp = armCommand.header.stamp;
 	republishedArmCommand.header.frame_id = armCommand.header.frame_id;
 	republishedArmCommand.points.resize(1); // only one point so far
 	republishedArmCommand.points[0] = armDesiredState;
-
 	const double k = 1;//0.000000001; // Proportional coefficient
 	republishedArmCommand.points[0].time_from_start = ros::Duration(k); //filling time_from_start required parameter for Gazebo
-
 	armJointTrajectoryPublisher.publish(republishedArmCommand);
 }
 
@@ -187,10 +195,15 @@ int main(int argc, char **argv)
  	ros::Subscriber jointStatesSubsriber = n.subscribe("joint_states", 1, onJointStates); // subscribing for joint states
  	ros::Subscriber armCommandsSubscriber = n.subscribe("arm_controller/command", 1, onArmCommand); // subscribing for joint states
 
-	ros::Rate rate(10); //Hz
+	ros::Rate rate(publishRate); //Hz
 	ros::AsyncSpinner spinner(4); // Use 4 threads
    	spinner.start();
-    ros::waitForShutdown();
-
+    //ros::waitForShutdown();
+    while (ros::ok()) {
+        ros::spinOnce();
+        rate.sleep();
+      //  armJointTrajectoryPublisher.publish(republishedArmCommand);
+       // ROS_INFO("Publishing\n");
+    }
     return 0;
 }

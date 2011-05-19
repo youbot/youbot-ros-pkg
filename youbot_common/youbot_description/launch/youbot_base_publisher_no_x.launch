@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<launch>
+	
+	<!-- start base command republisher -->
+	<node name="base_command_republisher" pkg="youbot_description" type="base_command_republisher" output="screen"/>
+	
+        <!-- start gazebo -->
+	<param name="/use_sim_time" value="true" />
+	<node name="gazebo" pkg="gazebo" type="gazebo" args="-r $(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen">
+		<env name="GAZEBO_RESOURCE_PATH" value="$(find youbot_description):$(find gazebo_worlds):$(find gazebo)/gazebo/share/gazebo" />
+		<remap from="arm_controller/command" to="gazebo_arm_controller/command"/>
+	</node>
+
+	<!-- push robot_description to factory and spawn robot in gazebo -->
+	<node name="youbot_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -model youBot -x 0 -y 0 -z 0.3" respawn="false" output="screen" />
+
+        <!-- base controllers -->
+        <include file="$(find pr2_controller_manager)/controller_manager.launch" />
+        
+	<!-- base control -->
+  	<rosparam file="$(find youbot_description)/controller/youbot_base_controller.yaml" command="load" />
+
+  	<!-- base odometry -->
+  	<rosparam file="$(find youbot_description)/controller/youbot_base_odometry.yaml" command="load" /> 
+
+	<!-- controllers that come up started -->
+        <node name="base_controllers_spawner" pkg="pr2_controller_manager" type="spawner" output="screen" args="base_controller base_odometry">
+  		<!--<remap from="/base_odometry/odom" to="/base_controller/odometry" />-->
+  	</node>
+
+</launch>

@@ -1,13 +1,10 @@
 <?xml version="1.0"?>
 <launch>
-
-	<!-- start trajectory republisher -->
-	<node name="arm_trajectory_republisher" pkg="youbot_description" type="arm_trajectory_republisher" output="screen"/>
-
+	
 	<!-- start base command republisher -->
 	<node name="base_command_republisher" pkg="youbot_description" type="base_command_republisher" output="screen"/>-->
-
-	<!-- start gazebo -->
+	
+        <!-- start gazebo -->
 	<param name="/use_sim_time" value="true" />
 	<node name="gazebo" pkg="gazebo" type="gazebo" args="$(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen">
 		<env name="GAZEBO_RESOURCE_PATH" value="$(find youbot_description):$(find gazebo_worlds):$(find gazebo)/gazebo/share/gazebo" />
@@ -15,20 +12,11 @@
 	</node>
 
 	<!-- push robot_description to factory and spawn robot in gazebo -->
-	<node name="youbot_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -model youBot -x 0.0 -y 0.0 -z 0.1" respawn="false" output="screen" />
+	<node name="youbot_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -model youBot -x 0 -y 0 -z 0.3" respawn="false" output="screen" />
 
-	<!-- adding a wall -->
-	<node name="wall_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param wall_description -model wall -x 2.0 -y 2.0 -z 0.51" respawn="false" output="screen" />
-
-        <!-- arm controllers -->
+        <!-- base controllers -->
         <include file="$(find pr2_controller_manager)/controller_manager.launch" />
         
-	<rosparam file="$(find youbot_description)/controller/youbot_arm_controller.yaml" command="load"/>
-	<node name="arm_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="arm_controller" />
-	<group ns="arm_controller">
-		<node name="arm_joint_trajectory_action_node" pkg="joint_trajectory_action" type="joint_trajectory_action" />
-	</group>
-
 	<!-- base control -->
   	<rosparam file="$(find youbot_description)/controller/youbot_base_controller.yaml" command="load" />
 
