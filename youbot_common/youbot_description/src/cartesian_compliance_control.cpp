@@ -185,7 +185,7 @@ CartesianComplianceController::CartesianComplianceController()
 	this->orientationYPR[2] = 0;
 #ifdef DEBUG_INFO
 	debugInfo = new CartesianComplianceControllerDebug(this);
-	ROS_INFO("sdfsfsdfsfsfsdf\n");
+
 #else
 	debugInfo = new Debug(this);
 #endif

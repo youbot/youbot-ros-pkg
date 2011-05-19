@@ -197,7 +197,7 @@ int main(int argc, char **argv) {
     ypr2Quat(0.0, 0.0, 0.0, tipOrientation);
     setCartesianVectorMsg(tipPose, tipPosition, tipOrientation, "/odom", "/target", ros::Time::now());
 
-	armCommandPublisher = n.advertise<brics_actuator::CartesianPose> ("arm_controller/command", 1);
+	armCommandPublisher = n.advertise<brics_actuator::CartesianPose> ("gazebo_arm_controller/command", 1);
 
 
 	ros::Rate rate(20); //Hz

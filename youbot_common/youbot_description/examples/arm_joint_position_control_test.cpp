@@ -62,8 +62,8 @@ int main(int argc, char **argv) {
 		trajectory_msgs::JointTrajectory armCommand;
 		trajectory_msgs::JointTrajectoryPoint desiredConfiguration;
 
-		desiredConfiguration.positions.resize(numberOfJoints);
-		armCommand.joint_names.resize(numberOfJoints);
+		desiredConfiguration.positions.resize(numberOfJoints + 1);  //5 arm joints + 1 gripper joint
+		armCommand.joint_names.resize(numberOfJoints + 1);
 
 
 		std::stringstream jointName;
@@ -79,17 +79,17 @@ int main(int argc, char **argv) {
 
 		};
 
-	/*	cout << "Please type in value for gripper " << endl;
+		cout << "Please type in value for gripper " << endl;
 		cin >> readValue;
 		desiredConfiguration.positions[numberOfJoints] = readValue;
 		armCommand.joint_names[numberOfJoints] = "gripper_joint";
-*/
+
 
 		armCommand.header.stamp = ros::Time::now();
 		armCommand.header.frame_id = "base_link";
 		armCommand.points.resize(1); // only one point so far
 		armCommand.points[0] = desiredConfiguration;
-        armCommand.points[0].time_from_start = ros::Duration(0.0000001); // 1 ns
+        	armCommand.points[0].time_from_start = ros::Duration(0.0000001); // 1 ns
 
 		cout << "sending command ..." << endl;
 		armJointTrajectoryPublisher.publish(armCommand);

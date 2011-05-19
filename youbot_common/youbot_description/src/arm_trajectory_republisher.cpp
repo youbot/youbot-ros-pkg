@@ -46,6 +46,9 @@
 
 using namespace std;
 
+
+//Deprecated. In the current version only remaps joint_l and joint_r to joint and sets time from start value = 1ns
+
 vector <string> armJointStateNames;     //arm joint names, published by state_publisher from urdf model
 vector <double> currentArmJointValues;  //arm joint value
 vector <string> gripperJointStateNames; //gripper joint names, published by state_publisher from urdf model
@@ -131,7 +134,7 @@ void onArmCommand(const trajectory_msgs::JointTrajectory& armCommand)
 		    //armDesiredState.velocities.push_back(armCommandIterator->second);
 		    /* calculating delta, which is proportional to time_from_start */
 		    double delta = fabs(armDesiredState.positions.back() - currentArmJointValues[i]);
-		    ROS_INFO("Delta = %f\n", delta);
+		    //ROS_INFO("Delta = %f\n", delta);
 		    if (delta > maxDelta)
                 maxDelta = delta;   /*taking the maximum delta*/
 		}

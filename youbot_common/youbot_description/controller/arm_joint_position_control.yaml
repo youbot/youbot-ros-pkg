@@ -6,6 +6,8 @@ arm_controller:
     - arm_joint_3
     - arm_joint_4
     - arm_joint_5
+    - gripper_finger_joint_l
+    - gripper_finger_joint_r
     
    
   gains:
@@ -24,6 +26,12 @@ arm_controller:
     arm_joint_5:
       p: 10
       d: 2.0
+    gripper_finger_joint_l:
+      p: 10.0
+      d: 2.0
+    gripper_finger_joint_r:
+      p: 10.0
+      d: 2.0
    
    
     
@@ -35,6 +43,8 @@ arm_controller:
       - arm_joint_3
       - arm_joint_4
       - arm_joint_5
+      - gripper_finger_joint_l
+      - gripper_finger_joint_r
      
         
     constraints:
@@ -48,6 +58,10 @@ arm_controller:
       arm_joint_4:
         goal: 0.0
       arm_joint_5:
+        goal: 0.0
+      gripper_finger_joint_l:
+        goal: 0.0
+      gripper_finger_joint_r:
         goal: 0.0
     
 
