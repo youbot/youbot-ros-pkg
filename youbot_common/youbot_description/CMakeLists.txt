@@ -41,11 +41,8 @@ ENDIF(WITH_DEBUG_INFO)
 rosbuild_add_executable(youbot_keyboard_teleop_experiment examples/keyboard_teleop_experiment.cpp)
 
 #test for a joint position control of the youbot arm
-rosbuild_add_executable(arm_joint_position_control_test examples/arm_joint_position_control_test.cpp)
-
-#joint velocity control of the youbot arm its test
-rosbuild_add_library(arm_joint_velocity_control src/arm_joint_velocity_control.cpp)
-rosbuild_add_executable(arm_joint_velocity_control_test examples/arm_joint_velocity_control_test.cpp)
+rosbuild_add_library(joint_position_control src/joint_position_control.cpp)
+rosbuild_add_executable(joint_position_control_test examples/joint_position_control_test.cpp)
 
 #cartesian compliance control for the unified youbot arm and base system
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/20_sim_cartesian_compliance_control)
@@ -57,6 +54,5 @@ rosbuild_add_executable(cartesian_compliance_control_test examples/cartesian_com
 rosbuild_add_executable(static_joint_publisher src/static_joint_publisher.cpp)
 
 #depricated
-rosbuild_add_executable(arm_trajectory_republisher src/arm_trajectory_republisher.cpp)
 rosbuild_add_executable(base_command_republisher src/base_command_republisher.cpp)
 

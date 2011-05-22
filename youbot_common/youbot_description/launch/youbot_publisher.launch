@@ -14,6 +14,7 @@
 		<remap from="arm_controller/base_controller/command" to="base_controller/command"/>
 		<remap from="arm_controller/base_odometry/odometry" to="base_odometry/odom"/>
 		<remap from="arm_controller/command" to="gazebo_arm_controller/command"/>
+		<remap from="gripper_controller/command" to="gazebo_gripper_controller/command"/>
 	</node>
 
 	<!-- push robot_description to factory and spawn robot in gazebo -->

@@ -37,22 +37,22 @@
  *
  ******************************************************************************/
 
-#ifndef JOINT_VELOCITY_CONTROLLER_H
-#define JOINT_VELOCITY_CONTROLLER_H
+#ifndef JOINT_POSITION_CONTROLLER_H
+#define JOINT_POSITION_CONTROLLER_H
 
 #include <vector>
 #include <ros/node_handle.h>
 #include <control_toolbox/pid.h>
 #include <pr2_controller_interface/controller.h>
-#include "brics_actuator/JointVelocities.h"
+#include "brics_actuator/JointPositions.h"
 
 namespace controller {
 
-class JointVelocityController : public pr2_controller_interface::Controller {
+class JointPositionController : public pr2_controller_interface::Controller {
 public:
 
-	JointVelocityController();
-	~JointVelocityController();
+	JointPositionController();
+	~JointPositionController();
 
 	bool init(pr2_mechanism_model::RobotState *robotPtr, const std::string &jointName, const control_toolbox::Pid &pid);
 	bool init(pr2_mechanism_model::RobotState *robotPtr, ros::NodeHandle &nodeHandle);
@@ -65,10 +65,11 @@ private:
 	std::vector<pr2_mechanism_model::JointState*> joints;
 	std::vector<control_toolbox::Pid> pids;
 	ros::Time lastTime;
-	std::vector <double> targetVelocities;
+	std::vector <double> targetPositions;
 
 	ros::Subscriber subscriber;
-	void velocityCommand(const brics_actuator::JointVelocities &jointVelocities);
+	void updateJoint(double targetValue, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt);
+	void positionCommand(const brics_actuator::JointPositions &jointPositions);
 };
 
 } // namespace
