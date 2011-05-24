@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # Initial code created by Graylin Trevor Jay (tjay@cs.brown.edu) an published under Crative Commens Attribution license.
+# addition for signal interrupt by Koen Buys
 
 import roslib; roslib.load_manifest('youbot_oodl')
 import rospy
 
 from geometry_msgs.msg import Twist
 
-import sys, select, termios, tty
+import sys, select, termios, tty, signal
 
 msg = """
 Reading from the keyboard  and Publishing to Twist!
@@ -45,12 +46,29 @@ speedBindings={
 		'c':(1,.9),
 	      }
 
+class TimeoutException(Exception): 
+    pass 
+
 def getKey():
-	tty.setraw(sys.stdin.fileno())
-	select.select([sys.stdin], [], [], 0)
-	key = sys.stdin.read(1)
-	termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-	return key
+    def timeout_handler(signum, frame):
+        raise TimeoutException()
+    
+    old_handler = signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(1) #this is the watchdog timing
+    tty.setraw(sys.stdin.fileno())
+    select.select([sys.stdin], [], [], 0)
+    try:
+       key = sys.stdin.read(1)
+       #print "Read key"
+    except TimeoutException:
+       #print "Timeout"
+       return "-"
+    finally:
+       signal.signal(signal.SIGALRM, old_handler)
+
+    signal.alarm(0)
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+    return key
 
 speed = 0.1
 turn = 0.1
