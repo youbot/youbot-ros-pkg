@@ -106,6 +106,7 @@ void YouBotOODLWrapper::initializeBase() {
 
 	try {
 		youBotBase = new youbot::YouBotBase("youbot-base", mkstr(YOUBOT_CONFIGURATIONS_DIR));
+		youBotBase->doJointCommutation();
 //	} catch (youbot::FileNotFoundException& e) {
 	} catch (std::exception& e) {
 		std::string errorMessage = e.what();
@@ -132,6 +133,8 @@ void YouBotOODLWrapper::initializeArm() {
 
 	try {
 		youBotArm = new youbot::YouBotManipulator("youbot-manipulator", mkstr(YOUBOT_CONFIGURATIONS_DIR));
+		youBotArm->doJointCommutation();
+		youBotArm->calibrateManipulator();
 //	} catch (youbot::FileNotFoundException& e) {
 	} catch (std::exception& e) {
 		std::string errorMessage = e.what();
