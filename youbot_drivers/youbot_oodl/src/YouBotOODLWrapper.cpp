@@ -123,7 +123,7 @@ void YouBotOODLWrapper::initializeBase() {
 
 	/* setup frame_ids */
 	youBotOdometryFrameID = "odom";
-	youBotOdometryChildFrameID = "world";
+	youBotOdometryChildFrameID = "base_footprint";
 
 	ROS_INFO("Base is initialized.");
 	hasBase = true;
@@ -153,7 +153,7 @@ void YouBotOODLWrapper::initializeArm() {
 			youBotArm->getArmJoint(i+1).setData(jointVelocity);
 		} catch (std::exception& e) {
 			std::string errorMessage = e.what();
-			ROS_WARN("Cannot set arm velocity %i: \n %s", i, errorMessage.c_str());
+			ROS_WARN("Cannot set arm velocity %i: \n %s", i+1, errorMessage.c_str());
 		}
 	}
 
@@ -274,7 +274,7 @@ void YouBotOODLWrapper::armCommandCallback(const trajectory_msgs::JointTrajector
 					youBotArm->getArmJoint(i + 1).setData(desiredAngle); //youBot joints start with 1 not with 0 -> i + 1
 				} catch (std::exception& e) {
 					std::string errorMessage = e.what();
-					ROS_WARN("Cannot set arm joint %i: \n %s", i, errorMessage.c_str());
+					ROS_WARN("Cannot set arm joint %i: \n %s", i+1, errorMessage.c_str());
 				}
 			}
 		}
