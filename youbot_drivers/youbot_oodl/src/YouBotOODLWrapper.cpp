@@ -40,10 +40,6 @@
 #include "YouBotOODLWrapper.h"
 #include <sstream>
 
-/* Stringification helper macros */
-#define mkstr2(X) #X
-#define mkstr(X) mkstr2(X)
-
 namespace youBot {
 
 
@@ -165,6 +161,74 @@ void YouBotOODLWrapper::initializeArm() {
 	youBotArmFrameID = "arm";  //TODO find default topic name
 
 	lastGripperCommand = 0.0; //This is true if the gripper is calibrated.
+
+	ROS_INFO("Arm is initialized.");
+	hasArm = true;
+}
+
+void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGripper) {
+	youbot::JointName jointNameParameter;
+	std::string jointName;
+
+	try {
+		ROS_INFO("Configfile path: %s", youBotConfiguration.configurationFilePath.c_str());
+		youBotArm = new youbot::YouBotManipulator(armName, youBotConfiguration.configurationFilePath);
+
+		YouBotArmConfiguration tmpArmConfig;//TODO spwan somewhere else?
+		tmpArmConfig.armID = armName;
+		tmpArmConfig.commandTopicName = armName;
+		tmpArmConfig.parentFrameIDName = armName; //?
+		tmpArmConfig.youBotArm = youBotArm;
+		for (int i = 0; i < youBotArmDoF; ++i) {
+			youBotArm->getArmJoint(i+1).getConfigurationParameter(jointNameParameter);
+			jointNameParameter.getParameter(jointName);
+			tmpArmConfig.jointNameToJointIndexMapping.insert(make_pair(jointName, i+1));
+			ROS_INFO("Joint %i for arm %s has name: %s", i+1, armName.c_str(), jointName.c_str()); //TODO DEBUG
+		}
+		youBotConfiguration.youBotArmConfigurations.push_back(tmpArmConfig);
+
+
+//		youBotConfiguration.youBotArmConfigurations.back();
+
+		youBotArm->doJointCommutation();
+		youBotArm->calibrateManipulator();
+		if(enableStandardGripper) {
+			youBotArm->calibrateGripper();
+		}
+	} catch (std::exception& e) {
+		std::string errorMessage = e.what();
+		ROS_FATAL("Cannot open youBot driver: \n %s ", errorMessage.c_str());
+		ROS_ERROR("Arm could not be initialized!");
+		hasArm = false;
+		return;
+	}
+
+	/* (optional) set all joints into velocity mode -> so the arm can be manually moved */
+	youbot::JointVelocitySetpoint jointVelocity;
+	for (int i = 0; i < youBotArmDoF; ++i) {
+		jointVelocity.angularVelocity = 0.0 * radian_per_second;
+		try {
+			youBotArm->getArmJoint(i+1).setData(jointVelocity);
+		} catch (std::exception& e) {
+			std::string errorMessage = e.what();
+			ROS_WARN("Cannot set arm velocity %i: \n %s", i+1, errorMessage.c_str());
+		}
+	}
+
+	/* setup input/output communication */
+	armPositionCommandSubscriber1 = node.subscribe("arm_controller/positionCommand", 1000, &YouBotOODLWrapper::armPositionsCommandCallback, this);
+	armVelocityCommandSubscriber1 = node.subscribe("arm_controller/velocityCommand", 1000, &YouBotOODLWrapper::armVelocitiesCommandCallback, this);
+	armJointStatePublisher = node.advertise<sensor_msgs::JointState>("joint_states", 1);
+
+	if(enableStandardGripper) {
+		gripperPositionCommandSubscriber = node.subscribe("gripper_controller/positionCommand", 1000, &YouBotOODLWrapper::gripperPositionsCommandCallback, this);
+		lastGripperCommand = 0.0; //This is true if the gripper is calibrated.
+	}
+
+	/* setup frame_ids */
+	youBotArmFrameID = "arm";  //TODO find default topic name
+
+
 
 	ROS_INFO("Arm is initialized.");
 	hasArm = true;
@@ -296,6 +360,130 @@ void YouBotOODLWrapper::armCommandCallback(const trajectory_msgs::JointTrajector
 			}
 		}
 
+	} else {
+		ROS_ERROR("No arm initialized!");
+	}
+}
+
+void YouBotOODLWrapper::armPositionsCommandCallback(const brics_actuator::JointPositions& youbotArmCommand) {
+	if (hasArm) { // in case stop has been invoked
+
+		if (youbotArmCommand.positions.size() < 1){
+			ROS_WARN("youBot driver received an invalid joint positions command.");
+			return;
+		}
+
+		youbot::JointAngleSetpoint desiredAngle;
+
+		/* populate mapping between joint names and values  */
+		std::map<string, double> jointNameToValueMapping;
+		for (int i = 0; i < static_cast<int>(youbotArmCommand.positions.size()); ++i) {
+			jointNameToValueMapping.insert(make_pair(youbotArmCommand.positions[i].joint_uri, youbotArmCommand.positions[i].value));
+		}
+
+		/* loop over all youBot arm joints and check if something is in the received message that requires action */
+		ROS_ASSERT(jointNames.size() == static_cast<unsigned int>(youBotArmDoF));
+		for (int i = 0; i < youBotArmDoF; ++i) {
+
+			/* check what is in map */
+			map<string, double>::const_iterator jointIterator = jointNameToValueMapping.find(jointNames[i]);
+			if (jointIterator != jointNameToValueMapping.end()) {
+
+				/* set the desired joint value */
+				ROS_DEBUG("Trying to set joint %s to new position value %f", (jointNames[i]).c_str(), jointIterator->second);
+				desiredAngle.angle = jointIterator->second * radian;
+				try {
+					youBotArm->getArmJoint(i + 1).setData(desiredAngle); //youBot joints start with 1 not with 0 -> i + 1
+				} catch (std::exception& e) {
+					std::string errorMessage = e.what();
+					ROS_WARN("Cannot set arm joint %i: \n %s", i+1, errorMessage.c_str());
+				}
+			}
+		}
+	} else {
+		ROS_ERROR("No arm initialized!");
+	}
+}
+
+void YouBotOODLWrapper::armVelocitiesCommandCallback(const brics_actuator::JointVelocities& youbotArmCommand) {
+	if (hasArm) { // in case stop has been invoked
+
+		if (youbotArmCommand.velocities.size() < 1){
+			ROS_WARN("youBot driver received an invalid joint velocities command.");
+			return;
+		}
+
+		youbot::JointVelocitySetpoint desiredAngularVelocity;
+
+		/* populate mapping between joint names and values  */
+		std::map<string, double> jointNameToValueMapping;
+		for (int i = 0; i < static_cast<int>(youbotArmCommand.velocities.size()); ++i) {
+			jointNameToValueMapping.insert(make_pair(youbotArmCommand.velocities[i].joint_uri, youbotArmCommand.velocities[i].value));
+		}
+
+		/* loop over all youBot arm joints and check if something is in the received message that requires action */
+		ROS_ASSERT(jointNames.size() == static_cast<unsigned int>(youBotArmDoF));
+		for (int i = 0; i < youBotArmDoF; ++i) {
+
+			/* check what is in map */
+			map<string, double>::const_iterator jointIterator = jointNameToValueMapping.find(jointNames[i]);
+			if (jointIterator != jointNameToValueMapping.end()) {
+
+				/* set the desired joint value */
+				ROS_DEBUG("Trying to set joint %s to new velocity value %f", (jointNames[i]).c_str(), jointIterator->second);
+				desiredAngularVelocity.angularVelocity = jointIterator->second * radian_per_second;
+				try {
+					youBotArm->getArmJoint(i + 1).setData(desiredAngularVelocity); //youBot joints start with 1 not with 0 -> i + 1
+				} catch (std::exception& e) {
+					std::string errorMessage = e.what();
+					ROS_WARN("Cannot set arm joint %i: \n %s", i+1, errorMessage.c_str());
+				}
+			}
+		}
+	} else {
+		ROS_ERROR("No arm initialized!");
+	}
+}
+
+void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::JointPositions& youbotArmCommand){ //TODO rename
+	if (hasArm) { // in case stop has been invoked
+
+		if (youbotArmCommand.positions.size() < 1){
+			ROS_WARN("youBot driver received an invalid gripper positions command.");
+			return;
+		}
+		youbot::GripperBarSpacingSetPoint gripperSlideRailDistance;
+		gripperSlideRailDistance.barSpacing = 0 * meter;
+		bool validGripperCommandReceived = false;
+
+		/* populate mapping between joint names and values  */
+		std::map<string, double> jointNameToValueMapping;
+		for (int i = 0; i < static_cast<int>(youbotArmCommand.positions.size()); ++i) {
+			jointNameToValueMapping.insert(make_pair(youbotArmCommand.positions[i].joint_uri, youbotArmCommand.positions[i].value));
+		}
+
+		/* loop over all youBot gripper joints and check if something is in the received message that requires action */
+		ROS_ASSERT(gripperFingerNames.size() == static_cast<unsigned int>(youBotNumberOfFingers));
+		for (int i = 0; i < youBotNumberOfFingers; ++i) {
+
+			/* check if there is something in in the message for the gripper */
+			map<string, double>::const_iterator gripperIterator = jointNameToValueMapping.find(gripperFingerNames[i]);
+			if (gripperIterator != jointNameToValueMapping.end()) {
+				ROS_DEBUG("Trying to set the gripper to new value %f", gripperIterator->second);
+
+				gripperSlideRailDistance.barSpacing += gripperIterator->second * meter; //for now just stack all values, as long youBot oodl API does not suport two fingers
+				validGripperCommandReceived = true;
+			}
+		}
+		if (validGripperCommandReceived) { // at least one valid command received that requires action (set accumulated gripper value)
+			try {
+				youBotArm->getArmGripper().setData(gripperSlideRailDistance);
+				lastGripperCommand = gripperSlideRailDistance.barSpacing.value();
+			} catch (std::exception& e) {
+				std::string errorMessage = e.what();
+				ROS_WARN("Cannot set the gripper: \n %s", errorMessage.c_str());
+			}
+		}
 	} else {
 		ROS_ERROR("No arm initialized!");
 	}

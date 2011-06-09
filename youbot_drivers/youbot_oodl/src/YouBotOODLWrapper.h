@@ -40,6 +40,10 @@
 #ifndef YOUBOTOODLWRAPPER_H_
 #define YOUBOTOODLWRAPPER_H_
 
+/* Stringification helper macros */
+#define mkstr2(X) #X
+#define mkstr(X) mkstr2(X)
+
 /* ROS includes */
 #include "geometry_msgs/Twist.h"
 #include "tf/transform_broadcaster.h"
@@ -48,9 +52,15 @@
 #include "trajectory_msgs/JointTrajectory.h"
 #include "sensor_msgs/JointState.h"
 
+#include "brics_actuator/JointPositions.h"
+#include "brics_actuator/JointVelocities.h"
+#include "brics_actuator/JointTorques.h"
+
 /* OODL includes */
 #include "youbot/YouBotBase.hpp"
 #include "youbot/YouBotManipulator.hpp"
+
+#include "YouBotConfiguration.h"
 
 namespace youBot {
 
@@ -85,12 +95,15 @@ public:
 	void initializeArm();
 
 	/**
+	 * @brief Initializes a youBot arm.
+	 */
+	void initializeArm(std::string armName, bool enableStandardGripper = true);
+
+	/**
 	 * @brief Stops all initialized elements.
 	 * Stops arm and/or base (if initialized).
 	 */
 	void stop();
-
-	/* Configuration: */
 
 
 	/* Communication: */
@@ -102,6 +115,7 @@ public:
 	void baseCommandCallback(const geometry_msgs::Twist& youbotBaseCommand);
 
 	/**
+	 * @deprecated
 	 * @brief Callback that is executed when a commend for the arm comes in.
 	 * @param youbotArmCommand Message that contains the desired joint configuration.
 	 *
@@ -109,6 +123,10 @@ public:
 	 * Velocity and acceleration values are ignored.
 	 */
 	void armCommandCallback(const trajectory_msgs::JointTrajectory& youbotArmCommand);
+
+	void armPositionsCommandCallback(const brics_actuator::JointPositions& youbotArmCommand);
+	void armVelocitiesCommandCallback(const brics_actuator::JointVelocities& youbotArmCommand);
+	void gripperPositionsCommandCallback(const brics_actuator::JointPositions& youbotArmCommand);
 
 	/**
 	 * @brief Publishes all sensor measurements. Both for base and arm.
@@ -124,6 +142,10 @@ public:
 	 * @brief Mapps OODL values to ROS messages
 	 */
 	void computeOODLSensorReadings();
+
+	/* Configuration: */
+
+	YouBotConfiguration youBotConfiguration;
 
 private:
 
@@ -182,14 +204,18 @@ private:
 	ros::Time currentTime;
 
 
-	/**
-	 * Receives JointTrajectory messages for the arm.
-	 * Currently only the first configuration (JointTrajectoryPoint) per message is processed.
-	 */
+	/// Receives Twist messages for the base.
 	ros::Subscriber baseCommandSubscriber;
 
-	/// Receives Twist messages for the base.
+	//@depricated
 	ros::Subscriber armCommandSubscriber;
+
+	ros::Subscriber armPositionCommandSubscriber1;
+	ros::Subscriber armVelocityCommandSubscriber1;
+	ros::Subscriber armPositionCommandSubscriber2;
+	ros::Subscriber armVelocityCommandSubscriber2;
+
+	ros::Subscriber gripperPositionCommandSubscriber;
 
 	/// Publishes Odometry messages
 	ros::Publisher baseOdometryPublisher;

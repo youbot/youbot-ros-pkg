@@ -37,47 +37,64 @@
 *
 ******************************************************************************/
 
-#include "YouBotOODLWrapper.h"
+#ifndef YOUBOTCONFIGURATION_H_
+#define YOUBOTCONFIGURATION_H_
 
-int main(int argc, char **argv)
-{
+#include "youbot/YouBotBase.hpp"
+#include "youbot/YouBotManipulator.hpp"
 
-	ros::init(argc, argv, "youbot_oodl_driver");
-	ros::NodeHandle n;
-	youBot::YouBotOODLWrapper youBot(n);
+namespace youBot {
 
+class YouBotBaseConfiguration {
+public:
+	YouBotBaseConfiguration();
+	virtual ~YouBotBaseConfiguration();
 
-	/* configuration */
-//	std::string configurationFilePath; //TODO doubled...
+	/// "Name" of the base. Typically derived from name of youBot configuration file.
+	std::string baseID;
 
-	bool youBotHasBase;
-	bool youBotHasArm;
-	n.param("youBotHasBase", youBotHasBase, true);
-	n.param("youBotHasArm", youBotHasArm, true);
-	n.param<std::string>("youBotConfigurationFilePath", youBot.youBotConfiguration.configurationFilePath, mkstr(YOUBOT_CONFIGURATIONS_DIR));
-
-	ROS_ASSERT((youBotHasBase == true) || (youBotHasArm == true)); // At least one should be true, otherwise nothing to be started.
-	if (youBotHasBase == true) {
-		youBot.initializeBase();
-	}
-
-	if (youBotHasArm == true) {
-		//youBot.initializeArm();
-		youBot.initializeArm("youbot-manipulator_arm_only");
-	}
+	/// Handle to the base
+	youbot::YouBotBase* youBotBase;
 
 
-	/* coordination */
-	ros::Rate rate(20); //Input and output at the same time... (in Hz)
-	while (n.ok()){
-		ros::spinOnce();
-		youBot.computeOODLSensorReadings();
-		youBot.publishOODLSensorReadings();
-		rate.sleep();
-	}
 
-	youBot.stop();
+};
 
-  return 0;
-}
+class YouBotArmConfiguration {
+public:
+	YouBotArmConfiguration();
+	virtual ~YouBotArmConfiguration();
 
+	std::string armID;
+
+	/// Handle to the arm
+	youbot::YouBotManipulator* youBotArm;
+
+	std::string commandTopicName;
+	std::string parentFrameIDName;
+	std::map<std::string, int> jointNameToJointIndexMapping;
+
+};
+
+/**
+ * @brief Aggregation class for instantiated parts of a youBot systems and all its name mapping between ROS and the youBot API.
+ */
+class YouBotConfiguration {
+public:
+	YouBotConfiguration();
+	virtual ~YouBotConfiguration();
+
+	std:: string configurationFilePath;
+
+	YouBotBaseConfiguration baseConfiguration;
+	std::vector<YouBotArmConfiguration> youBotArmConfigurations;
+};
+
+
+
+
+}  // namespace youBot
+
+#endif /* YOUBOTCONFIGURATION_H_ */
+
+/* EOF */

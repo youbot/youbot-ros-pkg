@@ -37,47 +37,42 @@
 *
 ******************************************************************************/
 
-#include "YouBotOODLWrapper.h"
+#include "YouBotConfiguration.h"
 
-int main(int argc, char **argv)
-{
+namespace youBot {
 
-	ros::init(argc, argv, "youbot_oodl_driver");
-	ros::NodeHandle n;
-	youBot::YouBotOODLWrapper youBot(n);
-
-
-	/* configuration */
-//	std::string configurationFilePath; //TODO doubled...
-
-	bool youBotHasBase;
-	bool youBotHasArm;
-	n.param("youBotHasBase", youBotHasBase, true);
-	n.param("youBotHasArm", youBotHasArm, true);
-	n.param<std::string>("youBotConfigurationFilePath", youBot.youBotConfiguration.configurationFilePath, mkstr(YOUBOT_CONFIGURATIONS_DIR));
-
-	ROS_ASSERT((youBotHasBase == true) || (youBotHasArm == true)); // At least one should be true, otherwise nothing to be started.
-	if (youBotHasBase == true) {
-		youBot.initializeBase();
-	}
-
-	if (youBotHasArm == true) {
-		//youBot.initializeArm();
-		youBot.initializeArm("youbot-manipulator_arm_only");
-	}
-
-
-	/* coordination */
-	ros::Rate rate(20); //Input and output at the same time... (in Hz)
-	while (n.ok()){
-		ros::spinOnce();
-		youBot.computeOODLSensorReadings();
-		youBot.publishOODLSensorReadings();
-		rate.sleep();
-	}
-
-	youBot.stop();
-
-  return 0;
+YouBotBaseConfiguration::YouBotBaseConfiguration() {
+	youBotBase = 0;
 }
 
+YouBotBaseConfiguration::~YouBotBaseConfiguration() {
+	if (youBotBase) {
+		delete youBotBase;
+		youBotBase = 0;
+	}
+}
+
+YouBotArmConfiguration::YouBotArmConfiguration() {
+	youBotArm = 0;
+	jointNameToJointIndexMapping.clear();
+}
+
+YouBotArmConfiguration::~YouBotArmConfiguration() {
+	if (youBotArm) {
+		delete youBotArm;
+		youBotArm = 0;
+	}
+}
+
+YouBotConfiguration::YouBotConfiguration() {
+	youBotArmConfigurations.clear();
+
+}
+
+YouBotConfiguration::~YouBotConfiguration() {
+	// TODO Auto-generated destructor stub
+}
+
+}  // namespace youBot
+
+/* EOF */
