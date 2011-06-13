@@ -85,16 +85,14 @@ public:
 
 	/**
 	 * @brief Initializes a youBot base.
+	 * @param baseName Name of the base. Used to open the configuration file e.g. youbot-base.cfg
 	 */
-	void initializeBase();
+	void initializeBase(std::string baseName);
 
 	/**
-	 * @brief Initializes a youBot arm.
-	 */
-	void initializeArm();
-
-	/**
-	 * @brief Initializes a youBot arm.
+	 * @brief Initializes a youBot base.
+	 * @param armName Name of the base. Used to open the configuration file e.g. youbot-manipulator.cfg
+	 * @param enableStandardGripper If set to true, then the default gripper of the youBot will be initialized.
 	 */
 	void initializeArm(std::string armName, bool enableStandardGripper = true);
 
@@ -123,11 +121,26 @@ public:
 	 */
 	void armCommandCallback(const trajectory_msgs::JointTrajectory& youbotArmCommand);
 
+	/**
+	 * @brief Callback that is executed when a position command for the arm comes in.
+	 * @param youbotArmCommand Message that contains the desired joint configuration.
+	 * @param armIndex Index that identifies the arm
+	 */
 	void armPositionsCommandCallback(const brics_actuator::JointPositionsConstPtr& youbotArmCommand, int armIndex);
-	void armVelocitiesCommandCallback(const brics_actuator::JointVelocities& youbotArmCommand/*, const int& armIndex*/);
-	void gripperPositionsCommandCallback(const brics_actuator::JointPositions& youbotArmCommand/*, const int& armIndex*/);
 
-//	void armPositionsCommandCallback2(const ros::MessageEvent<brics_actuator::JointPositions const>& youbotArmCommand, const int& armIndex);
+	/**
+	 * @brief Callback that is executed when a velocity command for the arm comes in.
+	 * @param youbotArmCommand Message that contains the desired joint configuration.
+	 * @param armIndex Index that identifies the arm
+	 */
+	void armVelocitiesCommandCallback(const brics_actuator::JointVelocitiesConstPtr& youbotArmCommand, int armIndex);
+
+	/**
+	 * @brief Callback that is executed when a position command for the gripper comes in.
+	 * @param youbotGripperCommand Message that contains the desired joint configuration.
+	 * @param armIndex Index that identifies the arm
+	 */
+	void gripperPositionsCommandCallback(const brics_actuator::JointPositionsConstPtr& youbotGripperCommand, int armIndex);
 
 	/**
 	 * @brief Publishes all sensor measurements. Both for base and arm.
@@ -146,6 +159,7 @@ public:
 
 	/* Configuration: */
 
+	/// Handle the aggregates all parts of a youBot system
 	YouBotConfiguration youBotConfiguration;
 
 private:
@@ -153,10 +167,10 @@ private:
 	YouBotOODLWrapper(); //forbid default constructor
 
 	///Flag to indicate if youBot has a base (set after successful initialization)
-	bool hasBase;
+//	bool hasBase;
 
 	///Flag to indicate if youBot has an arm (set after successful initialization)
-	bool hasArm;
+//	bool hasArm;
 
 
 	/// Degrees of freedom for the youBot manipulator
@@ -178,13 +192,13 @@ private:
 
 
     /// Handle to the base
-	youbot::YouBotBase* youBotBase;
+//	youbot::YouBotBase* youBotBase;
 
 	/// Handle to the arm
-	youbot::YouBotManipulator* youBotArm;
+//	youbot::YouBotManipulator* youBotArm;
 
 	/// Path to the configuration files, required by OODL (e.g. youbot-base.cfg)
-	std::string configurationFilePath;
+//	std::string configurationFilePath;
 
 
 	std::string youBotChildFrameID;
@@ -204,19 +218,7 @@ private:
 	/// ROS timestamp
 	ros::Time currentTime;
 
-
-	/// Receives Twist messages for the base.
-	ros::Subscriber baseCommandSubscriber;
-
-	//@depricated
-	ros::Subscriber armCommandSubscriber;
-
-//	ros::Subscriber armPositionCommandSubscriber1;
-//	ros::Subscriber armVelocityCommandSubscriber1;
-//	ros::Subscriber armPositionCommandSubscriber2;
-//	ros::Subscriber armVelocityCommandSubscriber2;
-//
-//	ros::Subscriber gripperPositionCommandSubscriber;
+	//TODO: move publishers to config class
 
 	/// Publishes Odometry messages
 	ros::Publisher baseOdometryPublisher;

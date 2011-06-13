@@ -61,6 +61,7 @@ public:
 	/// Handle to the base
 	youbot::YouBotBase* youBotBase;
 
+	/// Receives Twist messages for the base.
 	ros::Subscriber baseCommandSubscriber;
 
 
@@ -78,7 +79,8 @@ public:
 
 	std::string commandTopicName;
 	std::string parentFrameIDName;
-	std::map<std::string, int> jointNameToJointIndexMapping;
+	std::map<std::string, int> jointNameToJointIndexMapping; //TODO really needed?
+	std::vector<std::string> jointNames;
 
 	ros::Subscriber armPositionCommandSubscriber;
 	ros::Subscriber armVelocityCommandSubscriber;
@@ -94,9 +96,13 @@ public:
 	YouBotConfiguration();
 	virtual ~YouBotConfiguration();
 
+	/// Path to the configuration files, required by OODL (e.g. youbot-base.cfg)
 	std:: string configurationFilePath;
+
+	///Flag to indicate if youBot has a base (set after successful initialization)
 	bool hasBase;
-	/// True for one ore more arms
+
+	///Flag to indicate if youBot has one or more arms (set after successful initialization)
 	bool hasArms;
 
 	YouBotBaseConfiguration baseConfiguration;

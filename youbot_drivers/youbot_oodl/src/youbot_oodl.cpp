@@ -56,12 +56,13 @@ int main(int argc, char **argv)
 
 	ROS_ASSERT((youBotHasBase == true) || (youBotHasArm == true)); // At least one should be true, otherwise nothing to be started.
 	if (youBotHasBase == true) {
-		youBot.initializeBase();
+		youBot.initializeBase("youbot-base");
 	}
 
 	if (youBotHasArm == true) {
-		//youBot.initializeArm();
-		youBot.initializeArm("youbot-manipulator");
+//		youBot.initializeArm("youbot-manipulator");
+		youBot.initializeArm("youbot-manipulator1");
+		youBot.initializeArm("youbot-manipulator2");
 	}
 
 

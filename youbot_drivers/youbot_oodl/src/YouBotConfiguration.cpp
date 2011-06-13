@@ -55,6 +55,7 @@ YouBotBaseConfiguration::~YouBotBaseConfiguration() {
 YouBotArmConfiguration::YouBotArmConfiguration() {
 	youBotArm = 0;
 	jointNameToJointIndexMapping.clear();
+	jointNames.clear();
 }
 
 YouBotArmConfiguration::~YouBotArmConfiguration() {
@@ -62,6 +63,8 @@ YouBotArmConfiguration::~YouBotArmConfiguration() {
 		delete youBotArm;
 		youBotArm = 0;
 	}
+	jointNameToJointIndexMapping.clear();
+	jointNames.clear();
 }
 
 YouBotConfiguration::YouBotConfiguration() {
@@ -73,7 +76,8 @@ YouBotConfiguration::YouBotConfiguration() {
 }
 
 YouBotConfiguration::~YouBotConfiguration() {
-	// TODO Auto-generated destructor stub
+	youBotArmConfigurations.clear();
+	armNameToArmIndexMapping.clear();
 }
 
 }  // namespace youBot
