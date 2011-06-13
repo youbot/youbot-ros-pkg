@@ -48,8 +48,6 @@ int main(int argc, char **argv)
 
 
 	/* configuration */
-//	std::string configurationFilePath; //TODO doubled...
-
 	bool youBotHasBase;
 	bool youBotHasArm;
 	n.param("youBotHasBase", youBotHasBase, true);
@@ -63,7 +61,7 @@ int main(int argc, char **argv)
 
 	if (youBotHasArm == true) {
 		//youBot.initializeArm();
-		youBot.initializeArm("youbot-manipulator_arm_only");
+		youBot.initializeArm("youbot-manipulator");
 	}
 
 

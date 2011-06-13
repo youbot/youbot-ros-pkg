@@ -54,7 +54,6 @@
 
 #include "brics_actuator/JointPositions.h"
 #include "brics_actuator/JointVelocities.h"
-#include "brics_actuator/JointTorques.h"
 
 /* OODL includes */
 #include "youbot/YouBotBase.hpp"
@@ -124,9 +123,11 @@ public:
 	 */
 	void armCommandCallback(const trajectory_msgs::JointTrajectory& youbotArmCommand);
 
-	void armPositionsCommandCallback(const brics_actuator::JointPositions& youbotArmCommand);
-	void armVelocitiesCommandCallback(const brics_actuator::JointVelocities& youbotArmCommand);
-	void gripperPositionsCommandCallback(const brics_actuator::JointPositions& youbotArmCommand);
+	void armPositionsCommandCallback(const brics_actuator::JointPositionsConstPtr& youbotArmCommand, int armIndex);
+	void armVelocitiesCommandCallback(const brics_actuator::JointVelocities& youbotArmCommand/*, const int& armIndex*/);
+	void gripperPositionsCommandCallback(const brics_actuator::JointPositions& youbotArmCommand/*, const int& armIndex*/);
+
+//	void armPositionsCommandCallback2(const ros::MessageEvent<brics_actuator::JointPositions const>& youbotArmCommand, const int& armIndex);
 
 	/**
 	 * @brief Publishes all sensor measurements. Both for base and arm.
@@ -210,12 +211,12 @@ private:
 	//@depricated
 	ros::Subscriber armCommandSubscriber;
 
-	ros::Subscriber armPositionCommandSubscriber1;
-	ros::Subscriber armVelocityCommandSubscriber1;
-	ros::Subscriber armPositionCommandSubscriber2;
-	ros::Subscriber armVelocityCommandSubscriber2;
-
-	ros::Subscriber gripperPositionCommandSubscriber;
+//	ros::Subscriber armPositionCommandSubscriber1;
+//	ros::Subscriber armVelocityCommandSubscriber1;
+//	ros::Subscriber armPositionCommandSubscriber2;
+//	ros::Subscriber armVelocityCommandSubscriber2;
+//
+//	ros::Subscriber gripperPositionCommandSubscriber;
 
 	/// Publishes Odometry messages
 	ros::Publisher baseOdometryPublisher;

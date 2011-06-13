@@ -14,6 +14,7 @@
   <depend package="geometry_msgs"/>
   <depend package="nav_msgs"/>
   <depend package="trajectory_msgs"/>
+  <depend package="brics_actuator"/> <!--BRICS interface messages, version 0.1-->
   <rosdep name="setcap" />
   
 

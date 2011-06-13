@@ -40,6 +40,11 @@
 #ifndef YOUBOTCONFIGURATION_H_
 #define YOUBOTCONFIGURATION_H_
 
+#include "ros/ros.h"
+
+#include "brics_actuator/JointPositions.h"
+#include "brics_actuator/JointVelocities.h"
+
 #include "youbot/YouBotBase.hpp"
 #include "youbot/YouBotManipulator.hpp"
 
@@ -56,6 +61,7 @@ public:
 	/// Handle to the base
 	youbot::YouBotBase* youBotBase;
 
+	ros::Subscriber baseCommandSubscriber;
 
 
 };
@@ -74,6 +80,10 @@ public:
 	std::string parentFrameIDName;
 	std::map<std::string, int> jointNameToJointIndexMapping;
 
+	ros::Subscriber armPositionCommandSubscriber;
+	ros::Subscriber armVelocityCommandSubscriber;
+	ros::Subscriber gripperPositionCommandSubscriber;
+
 };
 
 /**
@@ -85,9 +95,13 @@ public:
 	virtual ~YouBotConfiguration();
 
 	std:: string configurationFilePath;
+	bool hasBase;
+	/// True for one ore more arms
+	bool hasArms;
 
 	YouBotBaseConfiguration baseConfiguration;
 	std::vector<YouBotArmConfiguration> youBotArmConfigurations;
+	std::map<std::string, int> armNameToArmIndexMapping;
 };
 
 

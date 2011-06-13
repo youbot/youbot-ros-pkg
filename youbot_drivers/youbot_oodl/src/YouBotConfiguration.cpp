@@ -66,6 +66,9 @@ YouBotArmConfiguration::~YouBotArmConfiguration() {
 
 YouBotConfiguration::YouBotConfiguration() {
 	youBotArmConfigurations.clear();
+	armNameToArmIndexMapping.clear();
+	hasBase = false;
+	hasArms = false;
 
 }
 
