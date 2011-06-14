@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 	if (youBotHasArm == true) {
 //		youBot.initializeArm("youbot-manipulator");
 		youBot.initializeArm("youbot-manipulator1");
-		youBot.initializeArm("youbot-manipulator2");
+//		youBot.initializeArm("youbot-manipulator2");
 	}
 
 

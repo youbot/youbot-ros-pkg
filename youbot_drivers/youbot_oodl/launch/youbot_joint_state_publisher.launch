@@ -6,11 +6,14 @@
 		<!-- remap from="joint_states" to="youbot_state"/> -->
 	
 	<!-- start robot_state_publisher -->
-	<node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher" output="screen"/>
+	<!--<node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher" output="screen"/>-->
+	<node pkg="robot_state_publisher" type="state_publisher" name="robot_arm_state_publisher" output="screen">
+		<remap from="joint_states" to="arm_1/joint_states"/> 
+	</node>
 
 
 	<node pkg="robot_state_publisher" type="state_publisher" name="robot_base_state_publisher" output="screen">
-		<remap from="joint_states" to="base_joint_states"/> 
+		<remap from="joint_states" to="base/joint_states"/> 
 	</node>
 
 	<!-- <node pkg="robot_state_publisher" type="state_publisher" name="robot_base_static_state_publisher" output="screen">

@@ -40,11 +40,11 @@
 #ifndef YOUBOTCONFIGURATION_H_
 #define YOUBOTCONFIGURATION_H_
 
+/* ROS includes */
 #include "ros/ros.h"
+#include "tf/transform_broadcaster.h"
 
-#include "brics_actuator/JointPositions.h"
-#include "brics_actuator/JointVelocities.h"
-
+/* OODL includes */
 #include "youbot/YouBotBase.hpp"
 #include "youbot/YouBotManipulator.hpp"
 
@@ -52,39 +52,89 @@ namespace youBot {
 
 class YouBotBaseConfiguration {
 public:
-	YouBotBaseConfiguration();
-	virtual ~YouBotBaseConfiguration();
 
-	/// "Name" of the base. Typically derived from name of youBot configuration file.
-	std::string baseID;
+	/// Standard constructor
+	YouBotBaseConfiguration();
+
+	/// Standard destructor
+	virtual ~YouBotBaseConfiguration();
 
 	/// Handle to the base
 	youbot::YouBotBase* youBotBase;
 
+
+	/// "Name" of the base. Typically derived from name of youBot configuration file.
+	std::string baseID;
+
+	/// Joint names for the wheels
+	std::vector<std::string> wheelNames;
+
+
 	/// Receives Twist messages for the base.
 	ros::Subscriber baseCommandSubscriber;
+
+
+	/// Publishes Odometry messages
+	ros::Publisher baseOdometryPublisher;
+
+	/// Publishes JointState messages with angles/velocities for the wheels.
+	ros::Publisher baseJointStatePublisher;
+
+	/// Publishes tf frames as odometry
+	tf::TransformBroadcaster odometryBroadcaster;
 
 
 };
 
 class YouBotArmConfiguration {
 public:
-	YouBotArmConfiguration();
-	virtual ~YouBotArmConfiguration();
 
-	std::string armID;
+	/// Standard constructor
+	YouBotArmConfiguration();
+
+	/// Standard destructor
+	virtual ~YouBotArmConfiguration();
 
 	/// Handle to the arm
 	youbot::YouBotManipulator* youBotArm;
 
+
+	/// "Name" of the arm. Typically derived from name of youBot configuration file.
+	std::string armID;
+
+	/// Name prefix for topic e.g arm_1/...
 	std::string commandTopicName;
+
+	/// Parent frameID for the published messages
 	std::string parentFrameIDName;
-	std::map<std::string, int> jointNameToJointIndexMapping; //TODO really needed?
+
+	/// Names of the joints. Are typically derived from the configuration files
 	std::vector<std::string> jointNames;
 
+	///Joint names for the gripper fingers
+	std::vector<std::string> gripperFingerNames;
+
+
+	/// Receives "brics_actuator/JointPositions" for the arm joints
 	ros::Subscriber armPositionCommandSubscriber;
+
+	/// Receives "brics_actuator/JointVelocities" for the arm joints
 	ros::Subscriber armVelocityCommandSubscriber;
+
+	/// Receives "brics_actuator/JointPositions" for the gripper
 	ros::Subscriber gripperPositionCommandSubscriber;
+
+
+	/// Publishes JointState messages with angles for the arm.
+	ros::Publisher armJointStatePublisher;
+
+	/**
+	 * This variable memorizes the last successfully set value for the gripper,
+	 * so it can be published in the joint state message. This is necessary at the moment, as
+	 * it is not yet possible to measure the actual distance. Consider the gripper joint state
+	 * as an open loop value.
+	 */
+	double lastGripperCommand;
 
 };
 
@@ -105,7 +155,10 @@ public:
 	///Flag to indicate if youBot has one or more arms (set after successful initialization)
 	bool hasArms;
 
+	/// A youbot system has one base
 	YouBotBaseConfiguration baseConfiguration;
+
+	/// A youbot system has one or more arms
 	std::vector<YouBotArmConfiguration> youBotArmConfigurations;
 	std::map<std::string, int> armNameToArmIndexMapping;
 };

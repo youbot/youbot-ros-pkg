@@ -43,6 +43,27 @@ namespace youBot {
 
 YouBotBaseConfiguration::YouBotBaseConfiguration() {
 	youBotBase = 0;
+
+	/* provide some default values for the joint names (might be overwritten) */
+	/*
+	 *  numbering of youBot wheels:
+	 *
+	 *    FRONT
+	 *
+	 * 1 ---+--- 2
+	 *      |
+	 *      |
+	 *      |
+	 *      |
+	 * 3 ---+--- 4
+	 *
+	 *    BACK
+	 */
+	wheelNames.clear();
+	wheelNames.push_back("wheel_joint_fl"); //wheel #1
+	wheelNames.push_back("wheel_joint_fr"); //wheel #2
+	wheelNames.push_back("wheel_joint_bl"); //wheel #3
+	wheelNames.push_back("wheel_joint_br"); //wheel #4
 }
 
 YouBotBaseConfiguration::~YouBotBaseConfiguration() {
@@ -50,12 +71,24 @@ YouBotBaseConfiguration::~YouBotBaseConfiguration() {
 		delete youBotBase;
 		youBotBase = 0;
 	}
+
+
 }
 
 YouBotArmConfiguration::YouBotArmConfiguration() {
 	youBotArm = 0;
-	jointNameToJointIndexMapping.clear();
+
+	/* provide some default values for the joint names (might be overwritten) */
 	jointNames.clear();
+	jointNames.push_back("arm_joint_1");
+	jointNames.push_back("arm_joint_2");
+	jointNames.push_back("arm_joint_3");
+	jointNames.push_back("arm_joint_4");
+	jointNames.push_back("arm_joint_5");
+
+	gripperFingerNames.clear();
+	gripperFingerNames.push_back("gripper_finger_joint_l");
+	gripperFingerNames.push_back("gripper_finger_joint_r");
 }
 
 YouBotArmConfiguration::~YouBotArmConfiguration() {
@@ -63,7 +96,6 @@ YouBotArmConfiguration::~YouBotArmConfiguration() {
 		delete youBotArm;
 		youBotArm = 0;
 	}
-	jointNameToJointIndexMapping.clear();
 	jointNames.clear();
 }
 

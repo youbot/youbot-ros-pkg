@@ -56,9 +56,6 @@
 #include "brics_actuator/JointVelocities.h"
 
 /* OODL includes */
-#include "youbot/YouBotBase.hpp"
-#include "youbot/YouBotManipulator.hpp"
-
 #include "YouBotConfiguration.h"
 
 namespace youBot {
@@ -166,12 +163,6 @@ private:
 
 	YouBotOODLWrapper(); //forbid default constructor
 
-	///Flag to indicate if youBot has a base (set after successful initialization)
-//	bool hasBase;
-
-	///Flag to indicate if youBot has an arm (set after successful initialization)
-//	bool hasArm;
-
 
 	/// Degrees of freedom for the youBot manipulator
 	static const int youBotArmDoF = 5;
@@ -182,34 +173,11 @@ private:
 	/// Number of wheels attached to the base.
 	static const int youBotNumberOfWheels = 4;
 
-	/**
-	 * This variable memorizes the last successfully set value for the gripper,
-	 * so it can be published in the joint state message. This is necessary at the moment, as
-	 * it is not yet possible to measure the actual distance. Consider the gripper joint state
-	 * as an open loop value.
-	 */
-	double lastGripperCommand;
-
-
-    /// Handle to the base
-//	youbot::YouBotBase* youBotBase;
-
-	/// Handle to the arm
-//	youbot::YouBotManipulator* youBotArm;
-
-	/// Path to the configuration files, required by OODL (e.g. youbot-base.cfg)
-//	std::string configurationFilePath;
-
 
 	std::string youBotChildFrameID;
 	std::string youBotOdometryFrameID;
 	std::string youBotOdometryChildFrameID;
 	std::string youBotArmFrameID;
-
-	std::vector<std::string> wheelNames;
-	std::vector<std::string> jointNames;
-	std::string gripperJointName;
-	std::vector<std::string> gripperFingerNames;
 
 
 	/// The ROS node handle
@@ -217,21 +185,6 @@ private:
 
 	/// ROS timestamp
 	ros::Time currentTime;
-
-	//TODO: move publishers to config class
-
-	/// Publishes Odometry messages
-	ros::Publisher baseOdometryPublisher;
-
-	/// Publishes JointState messages with angles/velocities for the wheels.
-	ros::Publisher baseJointStatePublisher;
-
-	/// Publishes JointState messages with angles for the arm.
-	ros::Publisher armJointStatePublisher;
-
-	/// Puglishes tf frames as odomery
-	tf::TransformBroadcaster odometryBroadcaster;
-
 
 
 	/// The published odometry message with distances in [m], angles in [RAD] and velocities in [m/s] and [RAD/s]
@@ -246,8 +199,8 @@ private:
 	/// The published joint state of the base (wheels) with angles in [RAD] and velocities in [RAD/s]
 	sensor_msgs::JointState baseJointStateMessage;
 
-	/// The published joint state of the arm with angles in [RAD]
-	sensor_msgs::JointState jointStateMessage; //TODO rename
+	/// Vector of the published joint states of per arm with angles in [RAD]
+	vector<sensor_msgs::JointState> armJointStateMessages;
 
 };
 
