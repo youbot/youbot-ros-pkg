@@ -47,6 +47,7 @@ INCLUDE_DIRECTORIES(
 rosbuild_add_executable(youbot_oodl 
     src/youbot_oodl.cpp 
     src/YouBotOODLWrapper.cpp
+    src/YouBotConfiguration.cpp
 )
 target_link_libraries(youbot_oodl ${OODL_YOUBOT_LIBRARIES} ${SOEM_LIBRARIES} ${Boost_LIBRARIES})
 
@@ -64,3 +65,6 @@ rosbuild_add_executable(youbot_arm_test
     examples/youbot_arm_test.cpp 
 )
 
+#rosbuild_add_executable(youbot_arm_velocity_test 
+#    examples/youbot_arm_velocity_test.cpp 
+#)
