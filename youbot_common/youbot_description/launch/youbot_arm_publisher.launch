@@ -11,7 +11,7 @@
 	</node>
 
 	<!-- push robot_description to factory and spawn robot in gazebo -->
-	<node name="youbot_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -model youBot -x 0.4 -y 0.4 -z 0.05" respawn="false" output="screen" />
+	<node name="youbot_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -model youBot -x 0.4 -y 2 -z 0.05" respawn="false" output="screen" />
 	
 
 </launch>

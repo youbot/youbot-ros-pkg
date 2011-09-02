@@ -42,59 +42,96 @@
 
 #include "ros/ros.h"
 #include "trajectory_msgs/JointTrajectory.h"
+#include "brics_actuator/CartesianWrench.h"
 
+#include <boost/units/systems/si/torque.hpp>
+#include <boost/units/systems/si/force.hpp>
+#include <boost/units/io.hpp>
+
+#include <boost/units/systems/angle/degrees.hpp>
+#include <boost/units/conversion.hpp>
+
+#include <iostream>
+#include <assert.h>
+
+#include "ros/ros.h"
+#include "trajectory_msgs/JointTrajectory.h"
+#include "brics_actuator/JointPositions.h"
+
+#include <boost/units/systems/si/length.hpp>
+#include <boost/units/systems/si/plane_angle.hpp>
+#include <boost/units/systems/si/velocity.hpp>
+#include <boost/units/io.hpp>
+
+#include <boost/units/systems/angle/degrees.hpp>
+#include <boost/units/conversion.hpp>
 
 using namespace std;
 
 int main(int argc, char **argv) {
 
-	ros::init(argc, argv, "youbot_arm_test");
+	ros::init(argc, argv, "youbot_arm_position_control_test");
 	ros::NodeHandle n;
-	ros::Publisher armJointTrajectoryPublisher;
+	ros::Publisher armPositionsPublisher;
+	ros::Publisher gripperPositionPublisher;
 
-	armJointTrajectoryPublisher = n.advertise<trajectory_msgs::JointTrajectory > ("arm_controller/command", 1);
+	armPositionsPublisher = n.advertise<brics_actuator::JointPositions > ("arm_controller/position_command", 1);
+	gripperPositionPublisher = n.advertise<brics_actuator::JointPositions > ("gripper_controller/position_command", 1);
 
 	ros::Rate rate(20); //Hz
 	double readValue;
-	static const int numberOfJoints = 5;
+	static const int numberOfArmJoints = 5;
+	static const int numberOfGripperJoints = 2;
 	while (n.ok()) {
+		brics_actuator::JointPositions command;
+		vector <brics_actuator::JointValue> armJointPositions;
+		vector <brics_actuator::JointValue> gripperJointPositions;
 
-		trajectory_msgs::JointTrajectory armCommand;
-		trajectory_msgs::JointTrajectoryPoint desiredConfiguration;
-
-		desiredConfiguration.positions.resize(numberOfJoints + 1);  //5 arm joints + 1 gripper joint
-		armCommand.joint_names.resize(numberOfJoints + 1);
-
+		armJointPositions.resize(numberOfArmJoints); //TODO:change that
+		gripperJointPositions.resize(numberOfGripperJoints);
 
 		std::stringstream jointName;
-		for (int i = 0; i < numberOfJoints; ++i) {
+
+
+		// ::io::base_unit_info <boost::units::si::angular_velocity>).name();
+		for (int i = 0; i < numberOfArmJoints; ++i) {
 			cout << "Please type in value for joint " << i + 1 << endl;
 			cin >> readValue;
 
 			jointName.str("");
 			jointName << "arm_joint_" << (i + 1);
 
-			desiredConfiguration.positions[i] = readValue;
-			armCommand.joint_names[i] = jointName.str();
+			armJointPositions[i].joint_uri = jointName.str();
+			armJointPositions[i].value = readValue;
+
+			armJointPositions[i].unit = boost::units::to_string(boost::units::si::radians);
+			cout << "Joint " << armJointPositions[i].joint_uri << " = " << armJointPositions[i].value << " " << armJointPositions[i].unit << endl;
 
 		};
 
-		cout << "Please type in value for gripper " << endl;
+		cout << "Please type in value for a left jaw of the gripper " << endl;
 		cin >> readValue;
-		desiredConfiguration.positions[numberOfJoints] = readValue;
-		armCommand.joint_names[numberOfJoints] = "gripper_joint";
+		gripperJointPositions[0].joint_uri = "gripper_finger_joint_l";
+		gripperJointPositions[0].value = readValue;
+		gripperJointPositions[0].unit = boost::units::to_string(boost::units::si::meter);
 
-
-		armCommand.header.stamp = ros::Time::now();
-		armCommand.header.frame_id = "base_link";
-		armCommand.points.resize(1); // only one point so far
-		armCommand.points[0] = desiredConfiguration;
-        	armCommand.points[0].time_from_start = ros::Duration(0.0000001); // 1 ns
+		cout << "Please type in value for a right jaw of the gripper " << endl;
+		cin >> readValue;
+		gripperJointPositions[1].joint_uri = "gripper_finger_joint_r";
+		gripperJointPositions[1].value = readValue;
+		gripperJointPositions[1].unit = boost::units::to_string(boost::units::si::meter);
 
 		cout << "sending command ..." << endl;
-		armJointTrajectoryPublisher.publish(armCommand);
+
+		command.positions = armJointPositions;
+		armPositionsPublisher.publish(command);
+
+		command.positions = gripperJointPositions;
+        gripperPositionPublisher.publish(command);
+
 		cout << "--------------------" << endl;
 		rate.sleep();
+
 	}
 
 	return 0;

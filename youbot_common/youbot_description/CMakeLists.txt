@@ -42,7 +42,12 @@ rosbuild_add_executable(youbot_keyboard_teleop_experiment examples/keyboard_tele
 
 #test for a joint position control of the youbot arm
 rosbuild_add_library(joint_position_control src/joint_position_control.cpp)
-rosbuild_add_executable(joint_position_control_test examples/joint_position_control_test.cpp)
+
+#youbot universal controller: joint space position control, joint velocity control, joint torque control
+rosbuild_add_library(youbot_universal_control src/youbot_universal_control.cpp)
+rosbuild_add_executable(arm_joint_position_control_test examples/arm_joint_position_control_test.cpp)
+rosbuild_add_executable(arm_joint_velocity_control_test examples/arm_joint_velocity_control_test.cpp)
+rosbuild_add_executable(arm_joint_torque_control_test examples/arm_joint_torque_control_test.cpp)
 
 #cartesian compliance control for the unified youbot arm and base system
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/20_sim_cartesian_compliance_control)

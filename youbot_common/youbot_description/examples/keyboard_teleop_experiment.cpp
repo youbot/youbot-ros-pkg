@@ -140,8 +140,8 @@ void KeyboardTeleoperation::init() {
 	baseCommand.linear.y = 0;
 	baseCommand.angular.z = 0;
 
-	baseCommandPublisher = n.advertise<geometry_msgs::Twist>("cmd_vel", 1);
-	baseOdometrySubscriber = n.subscribe("odom", 1, &KeyboardTeleoperation::baseOdometryCallback, this); // subscribing for joint states
+	baseCommandPublisher = n.advertise<geometry_msgs::Twist>("base_controller/command", 1);
+	baseOdometrySubscriber = n.subscribe("base_odometry/odom", 1, &KeyboardTeleoperation::baseOdometryCallback, this); // subscribing for joint states
 
 	ros::NodeHandle n_private("~");
 

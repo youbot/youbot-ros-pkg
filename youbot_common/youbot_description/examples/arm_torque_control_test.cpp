@@ -56,10 +56,9 @@
 
 #include "ros/ros.h"
 #include "trajectory_msgs/JointTrajectory.h"
-#include "brics_actuator/JointPositions.h"
+#include "brics_actuator/JointVelocities.h"
 
-#include <boost/units/systems/si/length.hpp>
-#include <boost/units/systems/si/plane_angle.hpp>
+#include <boost/units/systems/si/angular_velocity.hpp>
 #include <boost/units/systems/si/velocity.hpp>
 #include <boost/units/io.hpp>
 
@@ -72,63 +71,53 @@ int main(int argc, char **argv) {
 
 	ros::init(argc, argv, "youbot_arm_test");
 	ros::NodeHandle n;
-	ros::Publisher armPositionsPublisher;
-	ros::Publisher gripperPositionPublisher;
+	ros::Publisher armJointVelocitiesPublisher;
 
-	armPositionsPublisher = n.advertise<brics_actuator::JointPositions > ("gazebo_arm_controller/position_command", 1);
-	gripperPositionPublisher = n.advertise<brics_actuator::JointPositions > ("gazebo_gripper_controller/position_command", 1);
+	armJointVelocitiesPublisher = n.advertise<brics_actuator::JointVelocities > ("arm_controller/torque_command", 1);
 
 	ros::Rate rate(20); //Hz
 	double readValue;
-	static const int numberOfArmJoints = 5;
-	static const int numberOfGripperJoints = 2;
+	static const int numberOfJoints = 5;
 	while (n.ok()) {
-		brics_actuator::JointPositions command;
-		vector <brics_actuator::JointValue> armJointPositions;
-		vector <brics_actuator::JointValue> gripperJointPositions;
+		brics_actuator::JointVelocities command;
+		vector <brics_actuator::JointValue> setPoints;
 
-		armJointPositions.resize(numberOfArmJoints); //TODO:change that
-		gripperJointPositions.resize(numberOfGripperJoints);
+		setPoints.resize(numberOfJoints /*+ 2*/); //TODO:change that
 
 		std::stringstream jointName;
 
-
+		boost::units::quantity<boost::units::si::angular_velocity> g;
+		cout << boost::units::to_string(boost::units::si::radian_per_second) << endl;
 		// ::io::base_unit_info <boost::units::si::angular_velocity>).name();
-		for (int i = 0; i < numberOfArmJoints; ++i) {
+		for (int i = 0; i < numberOfJoints; ++i) {
 			cout << "Please type in value for joint " << i + 1 << endl;
 			cin >> readValue;
 
 			jointName.str("");
 			jointName << "arm_joint_" << (i + 1);
 
-			armJointPositions[i].joint_uri = jointName.str();
-			armJointPositions[i].value = readValue;
+			setPoints[i].joint_uri = jointName.str();
+			setPoints[i].value = readValue;
 
-			armJointPositions[i].unit = boost::units::to_string(boost::units::si::radians);
-			cout << "Joint " << armJointPositions[i].joint_uri << " = " << armJointPositions[i].value << " " << armJointPositions[i].unit << endl;
+			setPoints[i].unit = boost::units::to_string(boost::units::si::radian_per_second);
+			cout << "Joint " << setPoints[i].joint_uri << " = " << setPoints[i].value << " " << setPoints[i].unit << endl;
 
 		};
 
-		cout << "Please type in value for a left jaw of the gripper " << endl;
+		/*cout << "Please type in value for gripper " << endl;
 		cin >> readValue;
-		gripperJointPositions[0].joint_uri = "gripper_finger_joint_l";
-		gripperJointPositions[0].value = readValue;
-		gripperJointPositions[0].unit = boost::units::to_string(boost::units::si::meter);
+		setPoints[numberOfJoints].joint_uri = "gripper_finger_joint_l";
+		setPoints[numberOfJoints].value = readValue;
+		setPoints[numberOfJoints].unit = boost::units::to_string(boost::units::si::meter_per_second);
 
-		cout << "Please type in value for a right jaw of the gripper " << endl;
-		cin >> readValue;
-		gripperJointPositions[1].joint_uri = "gripper_finger_joint_r";
-		gripperJointPositions[1].value = readValue;
-		gripperJointPositions[1].unit = boost::units::to_string(boost::units::si::meter);
+		setPoints[numberOfJoints + 1].joint_uri = "gripper_finger_joint_r";
+		setPoints[numberOfJoints + 1].value = readValue;
+		setPoints[numberOfJoints + 1].unit = boost::units::to_string(boost::units::si::meter_per_second);
 
 		cout << "sending command ..." << endl;
-
-		command.positions = armJointPositions;
-		armPositionsPublisher.publish(command);
-
-		command.positions = gripperJointPositions;
-        gripperPositionPublisher.publish(command);
-
+		 */
+		command.velocities = setPoints;
+		armJointVelocitiesPublisher.publish(command);
 		cout << "--------------------" << endl;
 		rate.sleep();
 
