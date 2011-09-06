@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- start trajectory republisher -->
+	<!--<node name="arm_trajectory_republisher" pkg="youbot_description" type="arm_trajectory_republisher" output="screen"/>-->
+
+	<!-- start base command republisher -->
+	<!--<node name="base_command_republisher" pkg="youbot_description" type="base_command_republisher" output="screen"/>-->
+
+	<!-- start gazebo -->
+	<param name="/use_sim_time" value="true" />
+	<node name="gazebo" pkg="gazebo" type="gazebo" args="$(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen">
+		<env name="GAZEBO_RESOURCE_PATH" value="$(find youbot_description):$(find gazebo_worlds):$(find gazebo)/gazebo/share/gazebo" />
+		<remap from="arm_controller/base_controller/command" to="base_controller/command"/>
+		<remap from="arm_controller/base_odometry/odometry" to="base_odometry/odom"/>
+		<remap from="arm_controller/command" to="gazebo_arm_controller/command"/>
+		<remap from="gripper_controller/command" to="gazebo_gripper_controller/command"/>
+	</node>
+
+	<!-- push robot_description to factory and spawn robot in gazebo -->
+	<node name="youbot_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -model youBot -x 0.0 -y 0.0 -z 0.1" respawn="false" output="screen" />
+
+	<node name="hanoi_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param hanoi_description -model hanoi_tower -x 0.5 -y 0.0 -z 0" respawn="false" output="screen" />
+	
+</launch>

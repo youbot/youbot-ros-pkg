@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+        
+        <rosparam file="$(find youbot_description)/controller/gripper_joint_position_control.yaml" command="load"/>
+	<node name="gripper_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="gripper_controller" />
+</launch>
