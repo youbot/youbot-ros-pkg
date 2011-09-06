@@ -16,7 +16,7 @@
   <include filename="$(find youbot_description)/urdf/youbot_plate/plate.urdf.xacro" /> 
 
   <!-- youbot arm -->
-  <include filename="$(find youbot_description)/urdf/youbot_arm/arm.urdf.xacro" />
+  <include filename="$(find youbot_description)/urdf/youbot_arm/arm.urdf.xacro"/>
 
   <!-- youbot gripper -->
   <include filename="$(find youbot_description)/urdf/youbot_gripper/gripper.urdf.xacro" />

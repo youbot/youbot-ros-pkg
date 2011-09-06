@@ -1,0 +1,172 @@
+<robot name="tower_of_hanoi">
+  <link name="zone1">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="1 1 0.01" />
+      </geometry>
+    </visual>
+    <inertial>
+      <origin xyz="0 0 0.01" /> 
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+  </link>
+  
+  <joint name="join1" type="floating">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="zone1"/>
+    <child link="box1"/>
+  </joint>
+
+  <link name="box1">
+    <inertial>
+      <origin xyz="0 0 0.025" /> 
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.025"/>
+      <geometry>
+        <box size="0.05 0.05 0.05" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.025"/>
+      <geometry>
+        <box size="0.05 0.05 0.05" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="join2" type="floating">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="zone1"/>
+    <child link="box2"/>
+  </joint>
+
+  <link name="box2">
+    <inertial>
+      <origin xyz="0 0.06 0.025" /> 
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0.06 0.025"/>
+      <geometry>
+        <box size="0.05 0.05 0.05" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0.06 0.025"/>
+      <geometry>
+        <box size="0.05 0.05 0.05" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="join3" type="floating">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="zone1"/>
+    <child link="box3"/>
+  </joint>
+
+  <link name="box3">
+    <inertial>
+      <origin xyz="0 -0.06 0.025" /> 
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.06 0.025"/>
+      <geometry>
+        <box size="0.05 0.05 0.05" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.06 0.025"/>
+      <geometry>
+        <box size="0.05 0.05 0.05" />
+      </geometry>
+    </collision>
+  </link>
+
+ <joint name="join4" type="floating">
+    <origin xyz="0 0.03 0.1" rpy="0 0 0"/>
+    <parent link="zone1"/>
+    <child link="box4"/>
+  </joint>
+
+ <link name="box4">
+    <inertial>
+      <origin xyz="0 0.0 0.0" /> 
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0.0 0.0" /> 
+      <geometry>
+        <box size="0.05 0.05 0.05" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0.0 0.0" /> 
+      <geometry>
+        <box size="0.05 0.05 0.05" />
+      </geometry>
+    </collision>
+  </link>
+
+ <joint name="join5" type="floating">
+    <origin xyz="0 -0.03 0.1" rpy="0 0 0"/>
+    <parent link="zone1"/>
+    <child link="box5"/>
+  </joint>
+
+ <link name="box5">
+    <inertial>
+      <origin xyz="0 0 0" /> 
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" /> 
+      <geometry>
+        <box size="0.05 0.05 0.05" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" /> 
+      <geometry>
+        <box size="0.05 0.05 0.05" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="zone1">
+    <material>Gazebo/Red</material>
+    <selfCollide>true</selfCollide>	
+  </gazebo>
+  <gazebo reference="box1">
+    <material>Gazebo/Blue</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="box2">
+    <material>Gazebo/Blue</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="box3">
+    <material>Gazebo/Blue</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="box4">
+    <material>Gazebo/Red</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="box5">
+    <material>Gazebo/Red</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+
+</robot>

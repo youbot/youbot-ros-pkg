@@ -61,6 +61,7 @@
 #define KEYCODE_J 0x6A
 #define KEYCODE_I 0x69
 #define KEYCODE_K 0x6B
+#define KEYCODE_SAPCEBAR 0x20
 
 #define KEYCODE_A_CAP 0x41
 #define KEYCODE_D_CAP 0x44
@@ -139,8 +140,8 @@ void KeyboardTeleoperation::init() {
 	baseCommand.linear.y = 0;
 	baseCommand.angular.z = 0;
 
-	baseCommandPublisher = n.advertise<geometry_msgs::Twist>("cmd_vel", 1);
-	baseOdometrySubscriber = n.subscribe("odom", 1, &KeyboardTeleoperation::baseOdometryCallback, this); // subscribing for joint states
+	baseCommandPublisher = n.advertise<geometry_msgs::Twist>("base_controller/command", 1);
+	baseOdometrySubscriber = n.subscribe("base_odometry/odom", 1, &KeyboardTeleoperation::baseOdometryCallback, this); // subscribing for joint states
 
 	ros::NodeHandle n_private("~");
 
@@ -181,10 +182,10 @@ void KeyboardTeleoperation::keyboardLoop() {
 			exit(-1);
 		}
 
-		baseCommand.linear.x = 0;
-		baseCommand.linear.y = 0;
-		baseCommand.angular.z = 0;
-
+		//baseCommand.linear.x = 0;
+		//baseCommand.linear.y = 0;
+		//baseCommand.angular.z = 0;
+        ROS_INFO("key code %d}\n", c);
 		switch(c) {
 
 		/* Move commands */
@@ -249,6 +250,7 @@ void KeyboardTeleoperation::keyboardLoop() {
 }
 
 void KeyboardTeleoperation::startExperiment() {
+
 	experimentNumber ++;
 	startTimeStamp = ros::Time::now();
 	ROS_INFO_STREAM("Experiment #" << experimentNumber << ": Commanded velocities x,y,theta: " << baseCommand.linear.x << " " << baseCommand.linear.y << " " << baseCommand.angular.z);
@@ -259,6 +261,10 @@ void KeyboardTeleoperation::startExperiment() {
 }
 
 void KeyboardTeleoperation::stopExperiment() {
+    ROS_INFO("Stop experiment\n");
+    baseCommand.linear.x = 0;
+	baseCommand.linear.y = 0;
+	baseCommand.angular.z = 0;
 	if (experimentIsRunning == true) {
 		ros::Duration timeSinceLastCommand = ros::Time::now() - startTimeStamp; //[s]
 

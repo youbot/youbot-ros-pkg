@@ -1,0 +1,12 @@
+<library path="lib/libjoint_position_control">
+  <class name="youbot_description/JointPositionController" type="controller::JointPositionController" base_class_type="pr2_controller_interface::Controller" />
+</library>
+<library path="lib/libyoubot_universal_control">
+  <class name="youbot_description/YouBotUniversalController" type="controller::YouBotUniversalController" base_class_type="pr2_controller_interface::Controller" />
+</library>
+<library path="lib/libarm_joint_velocity_control">
+  <class name="youbot_description/JointVelocityController" type="controller::JointVelocityController" base_class_type="pr2_controller_interface::Controller" />
+</library>
+<library path="lib/libcartesian_compliance_control">
+  <class name="youbot_description/CartesianComplianceController" type="controller::CartesianComplianceController" base_class_type="pr2_controller_interface::Controller" />
+</library>

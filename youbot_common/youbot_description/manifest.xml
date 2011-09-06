@@ -11,7 +11,17 @@
   <depend package="robot_state_publisher"/>
   <depend package="urdf"/>
   <depend package="trajectory_msgs"/>
+  <depend package="brics_actuator"/> <!--BRICS interface messages, version 0.1-->
   <depend package="nav_msgs"/>
+  <depend package="pr2_controller_interface"/>
+  <depend package="control_toolbox"/>
+  <depend package="pr2_controllers_msgs" />
+  <depend package="realtime_tools" />
+
+  <export>
+    <pr2_controller_interface plugin="${prefix}/controller_plugins.xml" />
+     <cpp cflags="-I${prefix}/include" />
+    </export>
 
 </package>
 
