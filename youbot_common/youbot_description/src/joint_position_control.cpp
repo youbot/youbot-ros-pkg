@@ -128,6 +128,8 @@ bool JointPositionController::init(pr2_mechanism_model::RobotState *robotPtr, ro
     if (!nodeHandle.getParam("gains", gainsNS))
         gainsNS = nodeHandle.getNamespace() + "/gains";
 
+    ROS_INFO("gains: %s\n", gainsNS.c_str());
+
     pids.resize(joints.size());
 
     for (unsigned int i = 0; i < joints.size(); ++i)
@@ -143,7 +145,7 @@ bool JointPositionController::init(pr2_mechanism_model::RobotState *robotPtr, ro
         ROS_DEBUG("PID for joint %s: p=%f, i=%f, d=%f, i_max=%f, i_min=%f\n", joints[i]->joint_->name.c_str(), p, i, d, i_max, i_min);
     }
 
-    subscriber = nodeHandle.subscribe("command", 1, &JointPositionController::positionCommand, this);
+    subscriber = nodeHandle.subscribe("position_command", 1, &JointPositionController::positionCommand, this);
 
     return true;
 }
@@ -170,37 +172,13 @@ void JointPositionController::update()
     {
         updateJoint(targetPositions[i], joints[i], &pids[i], dt);
     }
-    // Calculating time interval dt between cycles
-    /*	ros::Time currentTime = robotPtr->getTime();
-    	ros::Duration dt = currentTime - lastTime;
-    	lastTime = currentTime;
-
-    	// Initializing error vector
-    	std::vector<double> error(joints.size());
-
-    	// Doing control here, calculating and applying the efforts
-    	for (unsigned int i = 0; i < joints.size(); ++i) {
-    		error[i] = joints[i]->position_ - targetPositions[i];
-    		joints[i]->commanded_effort_ += pids[i].updatePid(error[i], dt);
-    	}
-    	*/
 }
 
 void JointPositionController::updateJoint(double targetValue, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt)
 {
-    /*if (!joint_state_->calibrated_)
-        return;
 
-    assert(robot_ != NULL);*/
     double error(0);
-    //ros::Time time = robot->getTime();
     assert(joint_state_->joint_);
-
-    /*    if (!initialized_)
-        {
-            initialized_ = true;
-            command_ = joint_state_->position_;
-        }*/
 
     double command_ = targetValue;
 
@@ -226,39 +204,12 @@ void JointPositionController::updateJoint(double targetValue, pr2_mechanism_mode
     //double commanded_effort = pid_controller_.updatePid(error, dt_);
     double commanded_effort = pid_controller_ -> updatePid(error, dt); // assuming desired velocity is 0
     joint_state_->commanded_effort_ = commanded_effort;
-
-
-    /*
-        if(loop_count_ % 10 == 0)
-        {
-            if(controller_state_publisher_ && controller_state_publisher_->trylock())
-            {
-                controller_state_publisher_->msg_.header.stamp = time;
-                controller_state_publisher_->msg_.set_point = command_;
-                controller_state_publisher_->msg_.process_value = joint_state_->position_;
-                controller_state_publisher_->msg_.process_value_dot = joint_state_->velocity_;
-                controller_state_publisher_->msg_.error = error;
-                controller_state_publisher_->msg_.time_step = dt.toSec();
-                controller_state_publisher_->msg_.command = commanded_effort;
-
-                double dummy;
-                getGains(controller_state_publisher_->msg_.p,
-                         controller_state_publisher_->msg_.i,
-                         controller_state_publisher_->msg_.d,
-                         controller_state_publisher_->msg_.i_clamp,
-                         dummy);
-                controller_state_publisher_->unlockAndPublish();
-            }
-        }
-        loop_count_++;
-    */
-//    last_time_ = time;
 }
 
 
 void JointPositionController::positionCommand(const brics_actuator::JointPositions &jointPositions)
 {
-    ROS_INFO("Readin the target positions from the brics_actuator::JointPositions message\n");
+    ROS_DEBUG("Readin the target positions from the brics_actuator::JointPositions message\n");
     std::vector <brics_actuator::JointValue> positions = jointPositions.positions;
 
     if (positions.empty())
@@ -307,41 +258,6 @@ void JointPositionController::positionCommand(const brics_actuator::JointPositio
     }
 
 
-    /*	if (velocities.empty()) {
-    		starting();
-    		return;
-    	}
-
-    	//Correlates the joints we're commanding to the joints in the message
-    	std::vector<int> lookup(joints.size(), -1); // Maps from an index in joints_ to an index in the msg
-    	for (unsigned int j = 0; j < joints.size(); ++j) {
-
-    		for (unsigned int k = 0; k < velocities.size(); ++k) {
-    			if (velocities[k].joint_uri == joints[j]->joint_->name) {
-    				lookup[j] = k;
-    				break;
-    			}
-    		}
-    		if (lookup[j] == -1)
-    			ROS_ERROR("Unable to locate joint %s in the commanded velocities.", joints[j]->joint_->name.c_str());
-    	}
-
-    	std::vector<double> actualVelocities;
-    	targetVelocities.resize(velocities.size());
-    	using namespace boost::units;
-
-    	for (unsigned int j = 0; j < joints.size(); ++j) {
-    		if (lookup[j] != -1) {
-    			ROS_DEBUG("Joint %s = %f %s, ", velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].value, velocities[lookup[j]].unit.c_str());
-    			if (velocities[lookup[j]].unit != to_string(si::radian_per_second))
-    				ROS_ERROR("Joint %s has the value in the inpcompatible units %s", velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].unit.c_str());
-    			if (!targetVelocities.empty())
-    				targetVelocities[j] = velocities[lookup[j]].value;
-    		}
-    	}
-
-    }
-    */
 }
 } // end of the namespace
 

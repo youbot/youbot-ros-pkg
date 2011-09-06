@@ -50,9 +50,11 @@
 
 
 
-namespace controller {
+namespace controller
+{
 
-class YouBotUniversalController : public pr2_controller_interface::Controller {
+class YouBotUniversalController : public pr2_controller_interface::Controller
+{
 public:
 
     enum ControlMode
@@ -65,35 +67,35 @@ public:
 
     ControlMode currentControlMode;
 
-	YouBotUniversalController();
-	~YouBotUniversalController();
+    YouBotUniversalController();
+    ~YouBotUniversalController();
 
-	bool init(pr2_mechanism_model::RobotState *robotPtr, const std::string &jointName, const control_toolbox::Pid &pid);
-	bool init(pr2_mechanism_model::RobotState *robotPtr, ros::NodeHandle &nodeHandle);
-	void starting();
-	void update();
+    bool init(pr2_mechanism_model::RobotState *robotPtr, const std::string &jointName, const control_toolbox::Pid &pid);
+    bool init(pr2_mechanism_model::RobotState *robotPtr, ros::NodeHandle &nodeHandle);
+    void starting();
+    void update();
 
 private:
-	ros::NodeHandle nodeHandle;
-	pr2_mechanism_model::RobotState *robotPtr;
-	std::vector<pr2_mechanism_model::JointState*> joints;
-	std::vector<control_toolbox::Pid> pids;
-	ros::Time lastTime;
-	std::vector <double> setPoints;
+    ros::NodeHandle nodeHandle;
+    pr2_mechanism_model::RobotState *robotPtr;
+    std::vector<pr2_mechanism_model::JointState*> joints;
+    std::vector<control_toolbox::Pid> pids;
+    ros::Time lastTime;
+    std::vector <double> setPoints;
 
-	ros::Subscriber positionCommandSubscriber;
-	ros::Subscriber velocityCommandSubscriber;
-	ros::Subscriber torqueCommandSubscriber;
+    ros::Subscriber positionCommandSubscriber;
+    ros::Subscriber velocityCommandSubscriber;
+    ros::Subscriber torqueCommandSubscriber;
 
-	void updateJointPosition(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt);
-	void updateJointTorque(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt);
+    void updateJointPosition(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt);
+    void updateJointTorque(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt);
     void updateJointVelocity(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt);
 
-	void positionCommand(const brics_actuator::JointPositions &jointPositions);
-	void velocityCommand(const brics_actuator::JointVelocities &jointVelocities);
-	void torqueCommand(const brics_actuator::JointTorques &jointTorques);
+    void positionCommand(const brics_actuator::JointPositions &jointPositions);
+    void velocityCommand(const brics_actuator::JointVelocities &jointVelocities);
+    void torqueCommand(const brics_actuator::JointTorques &jointTorques);
 
-	double filteredVelocity;
+    double filteredVelocity;
 };
 
 } // namespace

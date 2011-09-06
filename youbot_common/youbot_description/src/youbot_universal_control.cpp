@@ -173,43 +173,30 @@ void YouBotUniversalController::update()
     {
         switch (currentControlMode)
         {
-            case YouBotUniversalController::POSITION :
-            {
-                updateJointPosition(setPoints[i], joints[i], &pids[i], dt);
-                break;
-            }
-            case YouBotUniversalController::VELOCITY :
-            {
-                updateJointVelocity(setPoints[i], joints[i], &pids[i], dt);
-                break;
-            }
-            case YouBotUniversalController::TORQUE :
-            {
-                updateJointTorque(setPoints[i], joints[i], &pids[i], dt);
-                break;
-            }
-            default :
-            {
-                ROS_WARN("Joint %d has unsupported control mode \n", i);
-            }
+        case YouBotUniversalController::POSITION :
+        {
+            updateJointPosition(setPoints[i], joints[i], &pids[i], dt);
+            break;
+        }
+        case YouBotUniversalController::VELOCITY :
+        {
+            updateJointVelocity(setPoints[i], joints[i], &pids[i], dt);
+            break;
+        }
+        case YouBotUniversalController::TORQUE :
+        {
+            updateJointTorque(setPoints[i], joints[i], &pids[i], dt);
+            break;
+        }
+        default :
+        {
+            ROS_WARN("Joint %d has unsupported control mode \n", i);
+        }
 
         }
 
     }
-    // Calculating time interval dt between cycles
-    /*	ros::Time currentTime = robotPtr->getTime();
-    	ros::Duration dt = currentTime - lastTime;
-    	lastTime = currentTime;
 
-    	// Initializing error vector
-    	std::vector<double> error(joints.size());
-
-    	// Doing control here, calculating and applying the efforts
-    	for (unsigned int i = 0; i < joints.size(); ++i) {
-    		error[i] = joints[i]->position_ - targetPositions[i];
-    		joints[i]->commanded_effort_ += pids[i].updatePid(error[i], dt);
-    	}
-    	*/
 }
 
 void YouBotUniversalController::updateJointVelocity(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt)
@@ -222,7 +209,7 @@ void YouBotUniversalController::updateJointVelocity(double setPoint, pr2_mechani
     const double T = 1;
     filteredVelocity = filteredVelocity + (velocity_ - filteredVelocity) * dt.toSec()/(dt.toSec()+T);
     error = filteredVelocity - command_;
-    ROS_INFO("Current velocity: %f, filtered velocity: %f, Error: %f\n",velocity_, filteredVelocity, error);
+    ROS_DEBUG("Current velocity: %f, filtered velocity: %f, Error: %f\n",velocity_, filteredVelocity, error);
 
     double commanded_effort = pid_controller_ -> updatePid(error, dt);
     joint_state_->commanded_effort_ = commanded_effort;
@@ -238,17 +225,11 @@ void YouBotUniversalController::updateJointTorque(double setPoint, pr2_mechanism
 void YouBotUniversalController::updateJointPosition(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt)
 {
     double error(0);
-    //ros::Time time = robot->getTime();
+
     assert(joint_state_->joint_);
 
-    /*    if (!initialized_)
-        {
-            initialized_ = true;
-            command_ = joint_state_->position_;
-        }*/
-
     double command_ = setPoint;
-    ROS_INFO("Current position: %f, target position: %f", joint_state_->position_, command_);
+    ROS_DEBUG("Current position: %f, target position: %f", joint_state_->position_, command_);
     if(joint_state_->joint_->type == urdf::Joint::REVOLUTE)
     {
         angles::shortest_angular_distance_with_limits(command_, joint_state_->position_, joint_state_->joint_->limits->lower, joint_state_->joint_->limits->upper,error);
@@ -271,40 +252,13 @@ void YouBotUniversalController::updateJointPosition(double setPoint, pr2_mechani
     //double commanded_effort = pid_controller_.updatePid(error, dt_);
     double commanded_effort = pid_controller_ -> updatePid(error, dt); // assuming desired velocity is 0
     joint_state_->commanded_effort_ = commanded_effort;
-
-
-    /*
-        if(loop_count_ % 10 == 0)
-        {
-            if(controller_state_publisher_ && controller_state_publisher_->trylock())
-            {
-                controller_state_publisher_->msg_.header.stamp = time;
-                controller_state_publisher_->msg_.set_point = command_;
-                controller_state_publisher_->msg_.process_value = joint_state_->position_;
-                controller_state_publisher_->msg_.process_value_dot = joint_state_->velocity_;
-                controller_state_publisher_->msg_.error = error;
-                controller_state_publisher_->msg_.time_step = dt.toSec();
-                controller_state_publisher_->msg_.command = commanded_effort;
-
-                double dummy;
-                getGains(controller_state_publisher_->msg_.p,
-                         controller_state_publisher_->msg_.i,
-                         controller_state_publisher_->msg_.d,
-                         controller_state_publisher_->msg_.i_clamp,
-                         dummy);
-                controller_state_publisher_->unlockAndPublish();
-            }
-        }
-        loop_count_++;
-    */
-//    last_time_ = time;
 }
 
 void YouBotUniversalController::torqueCommand(const brics_actuator::JointTorques &jointTorques)
 {
     currentControlMode = YouBotUniversalController::TORQUE;
 
-    ROS_INFO("Readin the target torques from the brics_actuator::JointVelocities message\n");
+    ROS_DEBUG("Readin the target torques from the brics_actuator::JointVelocities message\n");
     std::vector <brics_actuator::JointValue> torques = jointTorques.torques;
 
     if (torques.empty())
@@ -353,7 +307,7 @@ void YouBotUniversalController::velocityCommand(const brics_actuator::JointVeloc
 {
     currentControlMode = YouBotUniversalController::VELOCITY;
 
-    ROS_INFO("Readin the target velocities from the brics_actuator::JointVelocities message\n");
+    ROS_DEBUG("Readin the target velocities from the brics_actuator::JointVelocities message\n");
     std::vector <brics_actuator::JointValue> velocities = jointVelocities.velocities;
 
     if (velocities.empty())
@@ -401,7 +355,7 @@ void YouBotUniversalController::positionCommand(const brics_actuator::JointPosit
 {
     currentControlMode = YouBotUniversalController::POSITION;
 
-    ROS_INFO("Readin the target positions from the brics_actuator::JointPositions message\n");
+    ROS_DEBUG("Readin the target positions from the brics_actuator::JointPositions message\n");
     std::vector <brics_actuator::JointValue> positions = jointPositions.positions;
 
     if (positions.empty())

@@ -75,8 +75,8 @@ int main(int argc, char **argv) {
 	ros::Publisher armPositionsPublisher;
 	ros::Publisher gripperPositionPublisher;
 
-	armPositionsPublisher = n.advertise<brics_actuator::JointPositions > ("arm_controller/position_command", 1);
-	gripperPositionPublisher = n.advertise<brics_actuator::JointPositions > ("gripper_controller/position_command", 1);
+	armPositionsPublisher = n.advertise<brics_actuator::JointPositions > ("arm1/arm_controller/position_command", 1);
+	gripperPositionPublisher = n.advertise<brics_actuator::JointPositions > ("arm1/gripper_controller/position_command", 1);
 
 	ros::Rate rate(20); //Hz
 	double readValue;
