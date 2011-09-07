@@ -273,6 +273,7 @@ void YouBotOODLWrapper::armPositionsCommandCallback(const brics_actuator::JointP
 
 		/* loop over all youBot arm joints and check if something is in the received message that requires action */
 		ROS_ASSERT(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames.size() == static_cast<unsigned int>(youBotArmDoF));
+		youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
 		for (int i = 0; i < youBotArmDoF; ++i) {
 
 			/* check what is in map */
@@ -290,6 +291,7 @@ void YouBotOODLWrapper::armPositionsCommandCallback(const brics_actuator::JointP
 				}
 			}
 		}
+		youbot::EthercatMaster::getInstance().AutomaticSendOn(true); // ensure that all joint values will be send at the same time
 	} else {
 		ROS_ERROR("Arm%i is not correctly initialized!", armIndex + 1);
 	}
@@ -323,6 +325,7 @@ void YouBotOODLWrapper::armVelocitiesCommandCallback(const brics_actuator::Joint
 
 		/* loop over all youBot arm joints and check if something is in the received message that requires action */
 		ROS_ASSERT(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames.size() == static_cast<unsigned int>(youBotArmDoF));
+		youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
 		for (int i = 0; i < youBotArmDoF; ++i) {
 
 			/* check what is in map */
@@ -340,6 +343,7 @@ void YouBotOODLWrapper::armVelocitiesCommandCallback(const brics_actuator::Joint
 				}
 			}
 		}
+		youbot::EthercatMaster::getInstance().AutomaticSendOn(true); // ensure that all joint values will be send at the same time
 	} else {
 		ROS_ERROR("Arm%i is not correctly initialized!", armIndex + 1);
 	}
@@ -372,6 +376,7 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 
 		/* loop over all youBot gripper joints and check if something is in the received message that requires action */
 		ROS_ASSERT(youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames.size() == static_cast<unsigned int>(youBotNumberOfFingers));
+		youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
 		for (int i = 0; i < youBotNumberOfFingers; ++i) {
 
 			/* check if there is something in in the message for the gripper */
@@ -392,6 +397,7 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 				ROS_WARN("Cannot set the gripper: \n %s", errorMessage.c_str());
 			}
 		}
+		youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
 	} else {
 		ROS_ERROR("Arm%i is not correctly initialized!", armIndex + 1);
 	}
@@ -402,6 +408,8 @@ void YouBotOODLWrapper::computeOODLSensorReadings() {
 	currentTime = ros::Time::now();
     youbot::JointSensedAngle currentAngle;
     youbot::JointSensedVelocity currentVelocity;
+
+	youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
 
 	if (youBotConfiguration.hasBase == true) {
 		double x = 0.0;
@@ -584,6 +592,7 @@ void YouBotOODLWrapper::computeOODLSensorReadings() {
 
 	}
 
+	youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
 
 }
 
