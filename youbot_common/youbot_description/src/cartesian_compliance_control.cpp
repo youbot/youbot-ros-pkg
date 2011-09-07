@@ -347,7 +347,8 @@ void CartesianComplianceController::update20SimControl() {
 	u[2] = currentBasePose.position.y; //is not active
 	u[3] = joints[0]->position_ - 170 * M_PI / 180; // -170 +170, clockwise
 	u[4] = joints[1]->position_ - 65 * M_PI / 180; // -65  +90,  counterclockwis
-	u[5] = joints[2]->position_ - 146 * M_PI / 180; // +146 -151, clockwise
+	u[5] = -joints[2]->position_ - 146 * M_PI / 180; // +146 -151, clockwise
+	//ROS_INFO("joint 3: %f", u[5]);
 	u[6] = joints[3]->position_ - 102.5 * M_PI / 180; // -102 +102, counterclockwise
 	u[7] = joints[4]->position_ - 167.5 * M_PI / 180; // -167 +167, clockwise
 	/* velocities of the joints used for active dumping*/
@@ -375,7 +376,7 @@ void CartesianComplianceController::update20SimControl() {
 	targetSpeed[0] = y[16]; // rot
 	targetSpeed[1] = y[17]; // y
 	targetSpeed[2] = y[18]; // x
-
+    ROS_INFO("joint 3: %f", y[21]);
 	targetEfforts[0] = y[19]; // -170 +170, clockwise
 	targetEfforts[1] = y[20]; // -65  +90,  counterclockwise
 	targetEfforts[2] = y[21]; // +146 -151, clockwise

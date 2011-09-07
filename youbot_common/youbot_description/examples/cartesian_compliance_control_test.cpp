@@ -97,7 +97,7 @@ void setCartesianVectorMsg(brics_actuator::CartesianPose& tipPose,
 const int delay = 10;
 void test1(const ros::Publisher& armCommandPublisher) {
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 0; i++) {
     brics_actuator::CartesianVector tipPosition;
     btQuaternion tipOrientation;
 

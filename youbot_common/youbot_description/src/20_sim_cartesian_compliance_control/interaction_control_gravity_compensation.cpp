@@ -153,7 +153,7 @@ void interaction_control_gravity_compensation::Initialize (XXDouble *u, XXDouble
 	m_C[13] = 1.0;
 	m_C[14] = 0.0;
 	m_C[15] = 0.0;		/* CalculateJ\omega3 */
-	m_C[16] = -1.0;
+	m_C[16] = 1.0;
 	m_C[17] = 0.0;
 	m_C[18] = 0.0;		/* CalculateJ\omega4 */
 	m_C[19] = 1.0;
