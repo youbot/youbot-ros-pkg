@@ -488,17 +488,25 @@ void YouBotOODLWrapper::computeOODLSensorReadings() {
 		 * Here we add values for "virtual" rotation joints in URDF - robot_state_publisher can't
 		 * handle non-aggregated jointState messages well ...
 		 */
-		baseJointStateMessage.name[4] = "rotation_joint_fl";
+		baseJointStateMessage.name[4] = "caster_joint_fl";
 		baseJointStateMessage.position[4] = 0.0;
 
-		baseJointStateMessage.name[5] = "rotation_joint_fr";
+		baseJointStateMessage.name[5] = "caster_joint_fr";
 		baseJointStateMessage.position[5] = 0.0;
 
-		baseJointStateMessage.name[6] = "rotation_joint_bl";
+		baseJointStateMessage.name[6] = "caster_joint_bl";
 		baseJointStateMessage.position[6] = 0.0;
 
-		baseJointStateMessage.name[7] = "rotation_joint_br";
+		baseJointStateMessage.name[7] = "caster_joint_br";
 		baseJointStateMessage.position[7] = 0.0;
+
+		/*
+		 * Yet another hack to make the published values compatible with the URDF description.
+		 * We actually flipp the directions of the wheel on the right side such that the standard ROS controllers
+		 * (e.g. for PR2) can be used for the youBot
+		 */
+		baseJointStateMessage.position[2] = -baseJointStateMessage.position[2];
+		baseJointStateMessage.position[4] = -baseJointStateMessage.position[4];
 
 	}
 

@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <launch>
         
-        <rosparam file="$(find youbot_description)/controller/gripper_joint_position_control.yaml" command="load" ns="arm1"/>
-	<node name="gripper_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="arm1/gripper_controller" />
+        <rosparam file="$(find youbot_description)/controller/gripper_joint_position_control.yaml" command="load" ns="arm_1"/>
+	<node name="gripper_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="arm_1/gripper_controller" />
 
-        <rosparam file="$(find youbot_description)/controller/arm_joint_universal_control.yaml" command="load" ns="arm1"/>
-	<node name="arm_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="arm1/arm_controller"/>
+        <rosparam file="$(find youbot_description)/controller/arm_joint_universal_control.yaml" command="load" ns="arm_1"/>
+	<node name="arm_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="arm_1/arm_controller"/>
 
          <!-- base control -->
   	<rosparam file="$(find youbot_description)/controller/base_velocity_control.yaml" command="load" />
