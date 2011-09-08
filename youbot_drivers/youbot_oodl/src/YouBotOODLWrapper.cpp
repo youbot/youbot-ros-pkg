@@ -133,7 +133,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
 		std::string errorMessage = e.what();
 		ROS_FATAL("Cannot open youBot driver: \n %s ", errorMessage.c_str());
 		ROS_ERROR("Arm \"%s\" could not be initialized.", armName.c_str());
-		ROS_INFO("System has %i initialized arms.", static_cast<int>(youBotConfiguration.youBotArmConfigurations.size()));
+		ROS_INFO("System has %i initialized arm(s).", static_cast<int>(youBotConfiguration.youBotArmConfigurations.size()));
 		return;
 	}
 
@@ -178,7 +178,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
 	youBotArmFrameID = "arm";  //TODO find default topic name
 
 	ROS_INFO("Arm \"%s\" is initialized.", armName.c_str());
-	ROS_INFO("System has %i initialized arms.", static_cast<int>(youBotConfiguration.youBotArmConfigurations.size()));
+	ROS_INFO("System has %i initialized arm(s).", static_cast<int>(youBotConfiguration.youBotArmConfigurations.size()));
 	youBotConfiguration.hasArms = true;
 }
 
@@ -253,6 +253,7 @@ void YouBotOODLWrapper::armPositionsCommandCallback(const brics_actuator::JointP
 
 	if (youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm != 0) { // in case stop has been invoked
 
+		ROS_DEBUG("Arm ID is: %s", youBotConfiguration.youBotArmConfigurations[armIndex].armID.c_str());
 		if (youbotArmCommand->positions.size() < 1){
 			ROS_WARN("youBot driver received an invalid joint positions command.");
 			return;
@@ -437,7 +438,7 @@ void YouBotOODLWrapper::computeOODLSensorReadings() {
 		vx = longitudinalVelocity.value();
 		vy = transversalVelocity.value();
 		vtheta = angularVelocity.value();
-		ROS_DEBUG("Perceived odometric values (x,y,tetha, vx,vy,vtetha): %f, %f, %f \t %f, %f, %f", x, y, theta, vx, vy, vtheta);
+		//ROS_DEBUG("Perceived odometric values (x,y,tetha, vx,vy,vtetha): %f, %f, %f \t %f, %f, %f", x, y, theta, vx, vy, vtheta);
 
 
 		/* Setup odometry tf frame */
@@ -547,7 +548,6 @@ void YouBotOODLWrapper::computeOODLSensorReadings() {
 
 
 		for (int armIndex = 0; armIndex < static_cast<int>(youBotConfiguration.youBotArmConfigurations.size()); armIndex++) {
-
 			ROS_ASSERT(youBotConfiguration.youBotArmConfigurations.size() == armJointStateMessages.size());
 
 			/* fill joint state message */
@@ -563,10 +563,10 @@ void YouBotOODLWrapper::computeOODLSensorReadings() {
 
 			ROS_ASSERT(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames.size() == static_cast<unsigned int>(youBotArmDoF));
 			for (int i = 0; i < youBotArmDoF; ++i) {
-				youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getData(currentAngle); //youBot joints start with 1 not with 0 -> i + 1
+				youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getData(currentAngle); //youBot joints start with 1 not with 0 -> i + 1 //FIXME might segfault if only 1eout of 2 arms are initialized.
 				youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getData(currentVelocity);
 
-				armJointStateMessages[armIndex].name[i] = youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]; //TODO no unique nemes for URDF yet
+				armJointStateMessages[armIndex].name[i] = youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]; //TODO no unique names for URDF yet
 				armJointStateMessages[armIndex].position[i] = currentAngle.angle.value();
 				armJointStateMessages[armIndex].velocity[i] = currentVelocity.angularVelocity.value();
 
@@ -589,7 +589,6 @@ void YouBotOODLWrapper::computeOODLSensorReadings() {
 				armJointStateMessages[armIndex].position[youBotArmDoF + i] = youBotConfiguration.youBotArmConfigurations[armIndex].lastGripperCommand / 2; //as the distance is symmetric, each finger travels half of the distance
 			}
 		}
-
 	}
 
 	youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time

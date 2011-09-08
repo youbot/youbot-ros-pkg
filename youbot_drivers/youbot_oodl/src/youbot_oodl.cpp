@@ -45,23 +45,24 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "youbot_oodl_driver");
 	ros::NodeHandle n;
 	youBot::YouBotOODLWrapper youBot(n);
+	std::string armName1;
 
 
 	/* configuration */
 	bool youBotHasBase;
-	bool youBotHasArm;
+	bool youBotHasArms;
 	n.param("youBotHasBase", youBotHasBase, true);
-	n.param("youBotHasArm", youBotHasArm, true);
+	n.param("youBotHasArms", youBotHasArms, true);
 	n.param<std::string>("youBotConfigurationFilePath", youBot.youBotConfiguration.configurationFilePath, mkstr(YOUBOT_CONFIGURATIONS_DIR));
+	n.param<std::string>("youBotArmName1", armName1, "youbot-manipulator");
 
-	ROS_ASSERT((youBotHasBase == true) || (youBotHasArm == true)); // At least one should be true, otherwise nothing to be started.
+	ROS_ASSERT((youBotHasBase == true) || (youBotHasArms == true)); // At least one should be true, otherwise nothing to be started.
 	if (youBotHasBase == true) {
 		youBot.initializeBase("youbot-base");
 	}
 
-	if (youBotHasArm == true) {
-//		youBot.initializeArm("youbot-manipulator");
-		youBot.initializeArm("youbot-manipulator1");
+	if (youBotHasArms == true) {
+		youBot.initializeArm(armName1);
 //		youBot.initializeArm("youbot-manipulator2");
 	}
 
