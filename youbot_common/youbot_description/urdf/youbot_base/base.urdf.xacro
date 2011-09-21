@@ -101,7 +101,7 @@
     		</xacro:hokuyo_urg04_laser>
 		
 	<!-- front left wheel -->		
-		<joint name="caster_joint_fl" type="continuous">
+		<joint name="caster_joint_fl" type="fixed">
 			<origin xyz="${caster_offset_x} ${caster_offset_y} ${caster_offset_z}" rpy="0 0 0" />
       			<axis xyz="0 0 1" />
       			<limit effort="${caster_joint_effort}" velocity="${caster_joint_velocity}"/> 
@@ -120,7 +120,7 @@
       			</inertial>
    		</link>
 
-		<joint name="wheel_joint_fl" type="continuous">
+		<joint name="wheel_joint_fl" type="fixed">
       			<axis xyz="0 1 0" />
       			<limit effort="${wheel_joint_effort}" velocity="${wheel_joint_velocity}"/> 
             		<origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0" />
@@ -155,7 +155,7 @@
 
 
 	<!-- front right wheel -->
-		<joint name="caster_joint_fr" type="continuous">
+		<joint name="caster_joint_fr" type="fixed">
 			<origin xyz="${caster_offset_x} ${-caster_offset_y} ${caster_offset_z}" rpy="0 0 0" />
       			<axis xyz="0 0 1" />
       			<limit effort="${caster_joint_effort}" velocity="${caster_joint_velocity}"/> 
@@ -174,7 +174,7 @@
       				</inertial>
    		</link>
 
-		<joint name="wheel_joint_fr" type="continuous">
+		<joint name="wheel_joint_fr" type="fixed">
       			<axis xyz="0 1 0" />
       			<limit effort="${wheel_joint_effort}" velocity="${wheel_joint_velocity}"/> 
             		<dynamics damping="${wheel_joint_damping}" friction="${wheel_joint_friction}" />
@@ -210,7 +210,7 @@
 
 
 	<!-- back left wheel -->
-		<joint name="caster_joint_bl" type="continuous">
+		<joint name="caster_joint_bl" type="fixed">
 			<origin xyz="${-caster_offset_x} ${caster_offset_y} ${caster_offset_z}" rpy="0 0 0" />
       			<axis xyz="0 0 1" />
       			<limit effort="${caster_joint_effort}" velocity="${caster_joint_velocity}"/>  
@@ -229,7 +229,7 @@
       				</inertial>
    		</link>
 
-		<joint name="wheel_joint_bl" type="continuous">
+		<joint name="wheel_joint_bl" type="fixed">
       			<axis xyz="0 1 0" />
       			<limit effort="10" velocity="10"/> 
 			<limit effort="${wheel_joint_effort}" velocity="${wheel_joint_velocity}"/>             		
@@ -264,7 +264,7 @@
     		</link>
 
 	<!-- back right wheel -->
-		<joint name="caster_joint_br" type="continuous">
+		<joint name="caster_joint_br" type="fixed">
 			<origin xyz="${-caster_offset_x} ${-caster_offset_y} ${caster_offset_z}" rpy="0 0 0" />
       			<axis xyz="0 0 1" />
       			<limit effort="${caster_joint_effort}" velocity="${caster_joint_velocity}"/>  
@@ -283,7 +283,7 @@
       				</inertial>
    		</link>
 
-		<joint name="wheel_joint_br" type="continuous">
+		<joint name="wheel_joint_br" type="fixed">
       			<axis xyz="0 1 0" />
       			<limit effort="${wheel_joint_effort}" velocity="${wheel_joint_velocity}"/>  
             		<dynamics damping="${wheel_joint_damping}" friction="${wheel_joint_friction}" />
