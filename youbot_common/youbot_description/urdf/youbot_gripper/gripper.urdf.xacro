@@ -20,7 +20,7 @@
 		<link name="${name}_palm_link">
 			<inertial>
 				<origin xyz="0 0 0" rpy="0 0 0"/>
-				<mass value="0.1"/>
+				<mass value="0.75"/>
 				<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
 			</inertial>
 			
@@ -43,7 +43,7 @@
 
 		
 		
-		<joint name="${name}_finger_joint_l" type="prismatic">
+		<joint name="${name}_finger_joint_l" type="fixed">
 			<origin xyz="0.004 0.008 0.046" rpy="0 0 ${M_PI}" />
 			<parent link="${name}_palm_link"/>
 			<child link="${name}_finger_link_l"/>
@@ -78,7 +78,7 @@
 			</collision>
 		</link>
 
-               <joint name="${name}_finger_joint_r" type="prismatic">
+               <joint name="${name}_finger_joint_r" type="fixed">
 			<origin xyz="0.004 -0.008 0.046" rpy="0 0 0" />
 			<parent link="${name}_palm_link"/>
 			<child link="${name}_finger_link_r"/>
