@@ -1,0 +1,15 @@
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/ROSBUILD_genmsg_cpp.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/ROSBUILD_genmsg_lisp.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/ROSBUILD_gensrv_cpp.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/ROSBUILD_gensrv_lisp.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/clean-test-results.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/rosbuild_precompile.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/rosbuild_premsgsrvgen.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/rospack_genmsg.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/rospack_genmsg_libexe.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/rospack_gensrv.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/test.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/test-future.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/test-results.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/test-results-run.dir
+/home/alexey/workspace/ros_stacks/youbot-ros-pkg/youbot_navigation/build/CMakeFiles/tests.dir
