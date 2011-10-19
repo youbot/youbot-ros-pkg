@@ -1,5 +1,5 @@
 base_odometry:
-  publish_tf: false
+  publish_tf: true
   caster_names: caster_link_fr caster_link_fl caster_link_bl caster_link_br
   type: pr2_mechanism_controllers/Pr2Odometry
   ils_max_iterations: 3
@@ -16,5 +16,5 @@ base_odometry:
   wheel_radius_multiplier: 1.0
   caster_calibration_multiplier: 1.0
   odom_publish_rate: 100.0
-  state_publish_rate: 1.0
+  state_publish_rate: 100.0
   odometer_publish_rate: 1.0
