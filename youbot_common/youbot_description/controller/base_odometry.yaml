@@ -17,4 +17,5 @@ base_odometry:
   caster_calibration_multiplier: 1.0
   odom_publish_rate: 100.0
   state_publish_rate: 100.0
-  odometer_publish_rate: 100.0
+  odometer_publish_rate: 1.0
+
