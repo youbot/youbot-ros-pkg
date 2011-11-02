@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+        <!-- base control -->
+  	<rosparam file="$(find youbot_description)/controller/base_velocity_control.yaml" command="load" />
+  	<!-- base odometry -->
+  	<rosparam file="$(find youbot_description)/controller/base_odometry.yaml" command="load" /> 
+        <node name="base_controllers_spawner" pkg="pr2_controller_manager" type="spawner" output="screen" args="base_controller base_odometry">
+		<remap from="/base_odometry/odom" to="/odom" />
+        </node> 
+  	
+</launch>

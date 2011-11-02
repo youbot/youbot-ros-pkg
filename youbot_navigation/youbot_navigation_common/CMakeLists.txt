@@ -4,9 +4,6 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 ## check required prerequisites
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/external/cmake_modules")
 SET(Boost_ADDITIONAL_VERSIONS "1.39" "1.39.0" "1.40" "1.40.0" "1.41" "1.41.0" "1.42" "1.42.0" "1.43" "1.43.0" "1.44" "1.44.0" "1.45" "1.45.0" "1.46" "1.46.0")
-FIND_PACKAGE(Boost REQUIRED COMPONENTS thread date_time filesystem system)
-FIND_PACKAGE(Soem REQUIRED)
-FIND_PACKAGE(OODL_YouBot REQUIRED)
 
 ## preprocessor definitions
 ADD_DEFINITIONS(-DYOUBOT_CONFIGURATIONS_DIR="${OODL_YOUBOT_CONFIG_DIR}/")
@@ -38,37 +35,8 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 
 ## Set Compilter flags
-INCLUDE_DIRECTORIES(
-	${OODL_YOUBOT_INCLUDE_DIR}
-	${SOEM_INCLUDE_DIR}
-	${Boost_INCLUDE_DIR}
-)	
 
 rosbuild_add_executable(lowpass_filter 
     src/lowpass_filter.cpp 
 )
 
-rosbuild_add_executable(youbot_oodl 
-    src/youbot_oodl.cpp 
-    src/YouBotOODLWrapper.cpp
-    src/YouBotConfiguration.cpp
-)
-target_link_libraries(youbot_oodl ${OODL_YOUBOT_LIBRARIES} ${SOEM_LIBRARIES} ${Boost_LIBRARIES})
-
-OPTION(USE_SETCAP "Set permissions to access ethernet interface without sudo" ON)
-
-IF(USE_SETCAP)
-add_custom_command(TARGET youbot_oodl POST_BUILD
-    #COMMAND sudo setcap cap_net_raw+ep youbot_oodl
-    COMMAND gksu setcap cap_net_raw+ep youbot_oodl
-    WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
-)    
-endif(USE_SETCAP)
-
-rosbuild_add_executable(youbot_arm_test 
-    examples/youbot_arm_test.cpp 
-)
-
-#rosbuild_add_executable(youbot_arm_velocity_test 
-#    examples/youbot_arm_velocity_test.cpp 
-#)

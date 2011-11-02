@@ -1,0 +1,9 @@
+<stack>
+  <description brief="youbot_navigation">youbot_navigation</description>
+  <author>Alexey Zakharov</author>
+  <license>LGPL, BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_common</url>
+  <depend stack="ros" />
+
+</stack>
