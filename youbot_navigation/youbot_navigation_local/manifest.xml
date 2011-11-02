@@ -1,0 +1,15 @@
+<package>
+  <description brief="youbot_navigation_local">
+
+     Local navigation
+
+  </description>
+  <author>Alexey Zakharov</author>
+  <license>LGPL, BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_oodl</url>
+  <rosdep name="move_base" />
+  
+</package>
+
+

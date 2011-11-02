@@ -1,0 +1,28 @@
+map_type: costmap
+transform_tolerance: 0.2
+obstacle_range: 2.5
+raytrace_range: 3.0
+inflation_radius: 0.20
+
+observation_sources: base_scan
+
+#base_scan_marking: {sensor_frame: base_scan_link,
+#                    data_type: PointCloud2,
+#                    topic: /base_scan/marking,
+#                    expected_update_rate: 0.2,
+#                    observation_persistence: 0.0,
+#                    marking: true,
+#                    clearing: false,
+#                    min_obstacle_height: 0.06,
+#                    max_obstacle_height: 2.0}
+
+base_scan: {sensor_frame: base_laser_front_link,
+            data_type: LaserScan,
+            topic: /base_scan,
+            expected_update_rate: 0.2,
+            observation_persistence: 0.0,
+            marking: true,
+            clearing: true,
+            min_obstacle_height: -0.10,
+            max_obstacle_height: 2.0}
+

@@ -1,0 +1,14 @@
+<launch>
+
+<!-- start the hokuyo node -->
+<node type="hokuyo_node" pkg="hokuyo_node" name="hokuyo_node">  
+<param name="min_ang" type="double" value="-1.3" />
+<param name="max_ang" type="double" value="1.3" />
+<remap from="/scan" to="/base_scan"/>
+</node>
+
+<!-- configure the transform for hokuyo -->
+	<node pkg="tf" type="static_transform_publisher" name="front_hokuyo_frame" 
+	args="0 0 0 0 0 0 /base_laser_front_link /laser 1" />
+	
+</launch>

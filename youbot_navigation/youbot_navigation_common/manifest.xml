@@ -1,0 +1,17 @@
+<package>
+  <description brief="navigation_common">
+
+     Common files for local and local navigation of the youBot
+
+  </description>
+  <author>Alexey Zakharov</author>
+  <license>LGPL, BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_oodl</url>
+  <depend package="roscpp"/>
+  <depend package="geometry_msgs"/>
+  <rosdep name="hokuyo_node" />
+
+</package>
+
+
