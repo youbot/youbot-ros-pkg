@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
 	ros::NodeHandle n;
 	ros::Publisher armJointTorquesPublisher;
 
-	armJointTorquesPublisher = n.advertise<brics_actuator::JointTorques > ("arm1/arm_controller/torque_command", 1);
+	armJointTorquesPublisher = n.advertise<brics_actuator::JointTorques > ("arm_1/arm_controller/torque_command", 1);
 
 	ros::Rate rate(20); //Hz
 	double readValue;

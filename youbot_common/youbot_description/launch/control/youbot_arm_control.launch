@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+        
+        <rosparam file="$(find youbot_description)/controller/arm_joint_universal_control.yaml" command="load" ns="arm_1"/>
+        <node name="arm_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="arm_1/arm_controller"/>
+
+</launch>

@@ -5,15 +5,15 @@
     <!-- for moving -->
     <node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen">
         <!-- Load common configuration files -->
-        <rosparam file="$(find youbot_navigation)/navigation_config/move_base_params.yaml" command="load" />
-        <rosparam file="$(find youbot_navigation)/navigation_config/costmap_common_params.yaml" command="load" ns="global_costmap" />
-        <rosparam file="$(find youbot_navigation)/navigation_config/costmap_common_params.yaml" command="load" ns="local_costmap" />
-        <rosparam file="$(find youbot_navigation)/navigation_config/base_local_planner_params.yaml" command="load" ns="TrajectoryPlannerROS" />
+        <rosparam file="$(find youbot_navigation_common)/config/move_base_params.yaml" command="load" />
+        <rosparam file="$(find youbot_navigation_common)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find youbot_navigation_common)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <!--<rosparam file="$(find youbot_navigation)/navigation_common/base_local_planner_params.yaml" command="load" ns="TrajectoryPlannerROS" />-->
 
         <!-- Load global navigation specific parameters -->
-        <rosparam file="$(find youbot_navigation)/navigation_local/config/move_base_params.yaml" command="load" />
-        <rosparam file="$(find youbot_navigation)/navigation_local/config/local_costmap_params.yaml" command="load" />
-        <rosparam file="$(find youbot_navigation)/navigation_local/config/global_costmap_params.yaml" command="load" />
-        <rosparam file="$(find youbot_navigation)/navigation_config/base_local_planner_params.yaml" command="load" />
+        <!--<rosparam file="$(find youbot_navigation)/navigation_local/config/move_base_params.yaml" command="load" />-->
+        <rosparam file="$(find youbot_navigation_local)/config/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find youbot_navigation_local)/config/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find youbot_navigation_common)/config/base_local_planner_params.yaml" command="load" />
     </node>
 </launch>

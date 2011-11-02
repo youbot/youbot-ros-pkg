@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
 	ros::NodeHandle n;
 	ros::Publisher armJointVelocitiesPublisher;
 
-	armJointVelocitiesPublisher = n.advertise<brics_actuator::JointVelocities > ("arm_controller/velocity_command", 1);
+	armJointVelocitiesPublisher = n.advertise<brics_actuator::JointVelocities > ("arm_1/arm_controller/velocity_command", 1);
 
 	ros::Rate rate(20); //Hz
 	double readValue;
