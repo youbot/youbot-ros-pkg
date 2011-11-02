@@ -25,7 +25,7 @@
 
 	<!-- controllers that come up started -->
         <node name="base_controllers_spawner" pkg="pr2_controller_manager" type="spawner" output="screen" args="base_controller base_odometry">
-  		<!--<remap from="/base_odometry/odom" to="/base_controller/odometry" />-->
+  		<remap from="/base_odometry/odom" to="/odom" />
   	</node>
 
 </launch>

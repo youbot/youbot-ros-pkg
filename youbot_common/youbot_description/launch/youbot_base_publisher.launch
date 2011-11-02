@@ -10,6 +10,7 @@
 		<env name="GAZEBO_RESOURCE_PATH" value="$(find youbot_description):$(find gazebo_worlds):$(find gazebo)/gazebo/share/gazebo" />
 		<remap from="arm_controller/command" to="gazebo_arm_controller/command"/>
 		<remap from="scan_front" to="base_scan"/>
+                <remap from="/base_odometry/odom" to="/odom" />
 	</node>
 
 	<!-- push robot_description to factory and spawn robot in gazebo -->
@@ -25,8 +26,8 @@
   	<rosparam file="$(find youbot_description)/controller/youbot_base_odometry.yaml" command="load" /> 
 
 	<!-- controllers that come up started -->
-        <node name="base_controllers_spawner" pkg="pr2_controller_manager" type="spawner" output="screen" args="base_controller base_odometry">
-  		<!--<remap from="/base_odometry/odom" to="/base_controller/odometry" />-->
-  	</node>
-
+        <!--<node name="base_controllers_spawner" pkg="pr2_controller_manager" type="spawner" output="screen" args="base_controller base_odometry">
+  		<remap from="/base_odometry/odom" to="/odom" />
+  	</node>-->
+-->
 </launch>

@@ -44,6 +44,10 @@ INCLUDE_DIRECTORIES(
 	${Boost_INCLUDE_DIR}
 )	
 
+rosbuild_add_executable(lowpass_filter 
+    src/lowpass_filter.cpp 
+)
+
 rosbuild_add_executable(youbot_oodl 
     src/youbot_oodl.cpp 
     src/YouBotOODLWrapper.cpp
