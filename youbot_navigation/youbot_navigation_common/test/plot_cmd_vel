@@ -1,2 +1,0 @@
-rxplot /cmd_vel/linear/x,/cmd_vel_filtered/linear/x /cmd_vel/angular/z,/cmd_vel_filtered/angular/z
-

@@ -11,17 +11,11 @@ or enable the USE_SETCAP flag in the cmake file and recompile again.
 -->
 
 <launch>
-	<param name="T" type="double" value="0.3"/>
-	<param name="dt" type="double" value="0.1"/>
- 
-	<node name="lowpass_filter" pkg="youbot_oodl" type="lowpass_filter" output="screen"/>
-	
-
-	<param name="youBotHasBase" type="bool" value="true"/>
+	<aram name="youBotHasBase" type="bool" value="true"/>
 	<param name="youBotHasArm" type="bool" value="true"/> 
 
 	<node name="youbot_oodl_driver" pkg="youbot_oodl" type="youbot_oodl" output="screen">
-		<remap from="cmd_vel" to="cmd_vel_filtered" />
+		
 	</node>
 
 	
