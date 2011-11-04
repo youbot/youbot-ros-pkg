@@ -1,0 +1,212 @@
+1. Installation
+===============
+
+-- We assume that BRICS_3D and ROS(diamondback - at least) is already installed in your system. If not:
+	-- For ROS Installation: http://www.ros.org/wiki/ROS/Installation
+	-- For BRICS_3D Installation: < link will be updated soon :) >
+ 
+-- Place the downloaded perception_sdk_ros_pkg such that it is reachable through your ROS_PACKAGE_PATH
+
+-- To build the package:
+	$ roscd perception_sdk_ros_pkg
+	$ rosmake
+
+-- If the package builds with no failures then go ahead and start detecting the objects :)
+
+
+2. Basic Usage
+==============
+
+	2-a.  HSV Limits Finder
+	=====================	    
+	First we need to find the best Hue and Saturation limits so that our perception system can 
+	correctly distinguish the objects of interests in the current lightning conditions. To find 
+	the HSV limits we will use the hsvLimitsFinder node.
+
+	-- Start the kinect driver	
+	
+		$ roslaunch openni_camera openni_node.launch
+
+	-- Start the HSV-Limit Finder node:
+	
+		$ rosrun perception_sdk_ros_pkg hsvLimitsFinder
+	
+	This will start extracting a ROI with some default Hue-Saturation Limits. To change the limits in real-time
+	we need to use the dynamic_configure tool. 
+	
+	-- Start the dynamic configure tool, use:
+		
+		$rosrun dynamic_reconfigure reconfigure_gui
+
+	Select the "/hsvLimitsFinder" in the dynamic configure gui to change the Hue-Saturation Limits. To visualize 
+	the extracted region based on current limits use the rviz tool and subscribe to the topic "extracted_region_1" 
+	with "Fixed Frame = /openni_rgb_optical_frame". For usage detail of rviz: http://www.ros.org/wiki/rviz
+		
+	
+	To save the current configuration of Hue-Saturation Limits, interrupt the hsvLimitsFinder node using Ctrl+c. 
+	The program will prompt for saving the configuration. Enter "y" to continue and "n" to exit. Please enter the 
+	full-relative path with the filename when prompted. For example: "./demoHSVConfig.cfg"
+
+
+	2-b. Color Based Region of Interest (ROI) Extraction
+	==================================================
+	
+	The node extracts the region in the input image which satisfies a HSV-space color configuration. 
+	The color-configuration is acceted from the user for extraction purpose.
+	
+	Usage:
+	
+	-- Start the kinect driver	
+	
+		$ roslaunch openni_camera openni_node.launch
+
+	-- Start the Color Based ROI Extractor Node:
+	
+		$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
+			<hsv_config_file_2> .....
+	
+		<no_of_regions>:     This refers to the number of different color based ROI we want to extract
+		<hsv_config_file_n>: This refers to the full-relative file path (including the filename) which
+				     will be used to extract the nth ROI. 
+				     Number of <hsv_config_file_n> = <no_of_regions>
+
+		For example :
+		
+			$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor 1 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
+
+
+	The extracted regions of interests will be published with the topic names: extracted_region_n
+	To visualize the extracted region based use the rviz tool and subscribe to the topics "extracted_region_1",
+	"extracted_region_2" and so on with "Fixed Frame = /openni_rgb_optical_frame".
+
+
+	2-c. Object Cluster Extractor and 3d pose estimator
+	=================================================
+	The objectClusterExtractor node finds the object clusters in the extracted ROIs by the node colorBasedRoiExtractor explained above. 
+	The  node finds the clusters and publishes:
+
+	-- individual object cluster with topic name: "region_n_obj_cluster_m"
+	   n = corresponds region number in the topic "extracted_region_n" from  colorBasedRoiExtractor	 
+	   m = cluster number in the order of detection by the algorithm
+
+	-- 3D pose of the clusters: a tf frame for each object-cluster with respect to the "openni_rgb_optical_frame"
+	   of kinect driver with the topic name : "region_n_obj_cluster_m"	
+
+	Usage:
+	
+	-- Start the kinect driver	
+	
+		$ roslaunch openni_camera openni_node.launch
+
+	-- Start the Color Based ROI Extractor Node:
+	
+		$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
+			<hsv_config_file_2> .....
+	
+		<no_of_regions>     : This refers to the number of different color based ROI we want to extract
+		<hsv_config_file_n> : This refers to the full-relative file path (including the filename) which
+				      will be used to extract the nth ROI. 
+				      Number of <hsv_config_file_n> = <no_of_regions>
+
+		For example :
+		
+			$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor 1 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
+	
+	-- Start the object cluster extraction node:
+		
+		$ rosrun perception_sdk_ros_pkg objectClusterExtractor <max_no_of_regions> <max_no_of_objects_possible>
+
+		<max_no_of_regions>          : max number of object clusters possible in each region, default value 1       
+		<max_no_of_objects_possible> : corresponds to the count of difrent regions of intersets, ex: green, red 
+					       default value 1
+
+
+	2-d. Model Fitting
+	==================
+
+	The modelFittingICP node finds the 6D pose of a cube best approximating the object clusters in the extracted 
+	ROIs  explained above. It uses ICP to fit a model of cube into the cluster-cloud.
+	
+	The modelFittingICP node calculates the best approximating pose and publishes:
+
+	-- individual final-transformed cube model with topic name: "region_n_obj_model_m"
+	   n = corresponds region number in the topic "extracted_region_n" from  colorBasedRoiExtractor	 
+	   m = cluster/object number in the order of detection by the objectClusterExtractor node
+
+	-- 6D pose of the clusters: a tf frame for each object-cluster with respect to the "openni_rgb_optical_frame"
+	   of kinect driver with the topic name : "region_n_obj_cluster_m_frame"	
+
+	Usage:
+	
+	-- Start the kinect driver	
+	
+		$ roslaunch openni_camera openni_node.launch
+
+	-- Start the Color Based ROI Extractor Node:
+	
+		$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
+			<hsv_config_file_2> .....
+	
+		<no_of_regions>     : This refers to the number of different color based ROI we want to extract
+		<hsv_config_file_n> : This refers to the full-relative file path (including the filename) which
+				      will be used to extract the nth ROI. 
+				      Number of <hsv_config_file_n> = <no_of_regions>
+
+		For example :
+		
+			$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor 1 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
+	
+	-- Start the object cluster extraction node:
+		
+		$ rosrun perception_sdk_ros_pkg objectClusterExtractor <max_no_of_regions> <max_no_of_objects_possible>
+
+		<max_no_of_regions>          : max number of object clusters possible in each region, default value 1       
+		<max_no_of_objects_possible> : corresponds to the count of difrent regions of intersets, ex: green, red 
+					       default value 1
+
+	-- Start the model fitting node:
+		
+		$ rosrun perception_sdk_ros_pkg modelFittingICP <max_no_of_regions> <max_no_of_objects_possible>
+
+		<max_no_of_regions>          : max number of object clusters possible in each region, default value 1       
+		<max_no_of_objects_possible> : corresponds to the count of difrent regions of intersets, ex: green, red 
+					       default value 1
+	
+	
+	
+	2-e. Pose Estimation 6D
+	=======================
+	
+	The PoseEstimation6DNode can be used to estimate the poses of the objects from the kinect-camera
+	view. A launch file PoseEstimation6D.launch is provided to set up the relevant parameters and 
+	user inputs required by the node initially. Following parameters are alwaye required by the node:
+		
+		-- No of regions of interests to be extracted
+		-- Maximum number of object to be found in each ROI
+		-- HSV-Limits Configuration Files with full path
+		-- Region Labes used by the nodes to publish the transforms
+	
+	
+	2-f Controlling the Pose-Estimation Node
+	========================================
+	
+	The pose estimation node subsribes to /perceptionControl messages which can be used to 
+	pause/resume the object recognition process. An example is provided as perceptionEngineController
+	node. The usage will be:
+	
+		$ rosrun perception_sdk_ros_pkg  perceptionEngineController
+		
+	2-g Configuring parameters of the Pose-Estimation Node
+	======================================================
+	
+	The pose estimation node subsribes to /perceptionConfiguration messages which can be used to 
+	configure the parameters of the object recognition process. 
+	An example is provided as perceptionEngineConfigurator node. The usage will be:
+	
+		$ rosrun perception_sdk_ros_pkg  perceptionEngineConfigurator
+	 
+	 Following parameters can be changed in its current version:
+	 
+	 	- Number of color-based ROI to be extracted
+	 	- Maximum number of objects possible in each ROI
+	 	
