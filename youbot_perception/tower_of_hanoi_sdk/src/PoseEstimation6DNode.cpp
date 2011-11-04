@@ -20,8 +20,8 @@
 //ROS specific Headers
 #include <ros/ros.h>
 #include "sensor_msgs/PointCloud2.h"
-#include "perception_sdk_ros_pkg/Coordination.h"
-#include "perception_sdk_ros_pkg/Configuration.h"
+#include "tower_of_hanoi_sdk/Coordination.h"
+#include "tower_of_hanoi_sdk/Configuration.h"
 #include "ros/publisher.h"
 
 //PCL specific Headers
@@ -59,7 +59,7 @@ void kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
 }
 
 
-void perceptionControlCallback(const perception_sdk_ros_pkg::Coordination message){
+void perceptionControlCallback(const tower_of_hanoi_sdk::Coordination message){
 
 
 
@@ -74,7 +74,7 @@ void perceptionControlCallback(const perception_sdk_ros_pkg::Coordination messag
 }
 
 
-void perceptionConfigurationCallback(const perception_sdk_ros_pkg::Configuration message){
+void perceptionConfigurationCallback(const tower_of_hanoi_sdk::Configuration message){
 
 	//Checking if the new configuration is valid or not
 	std::vector< std::string > configFiles;

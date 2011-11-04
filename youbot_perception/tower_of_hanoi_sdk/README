@@ -5,10 +5,10 @@
 	-- For ROS Installation: http://www.ros.org/wiki/ROS/Installation
 	-- For BRICS_3D Installation: < link will be updated soon :) >
  
--- Place the downloaded perception_sdk_ros_pkg such that it is reachable through your ROS_PACKAGE_PATH
+-- Place the downloaded tower_of_hanoi_sdk such that it is reachable through your ROS_PACKAGE_PATH
 
 -- To build the package:
-	$ roscd perception_sdk_ros_pkg
+	$ roscd tower_of_hanoi_sdk
 	$ rosmake
 
 -- If the package builds with no failures then go ahead and start detecting the objects :)
@@ -29,7 +29,7 @@
 
 	-- Start the HSV-Limit Finder node:
 	
-		$ rosrun perception_sdk_ros_pkg hsvLimitsFinder
+		$ rosrun tower_of_hanoi_sdk hsvLimitsFinder
 	
 	This will start extracting a ROI with some default Hue-Saturation Limits. To change the limits in real-time
 	we need to use the dynamic_configure tool. 
@@ -62,7 +62,7 @@
 
 	-- Start the Color Based ROI Extractor Node:
 	
-		$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
+		$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
 			<hsv_config_file_2> .....
 	
 		<no_of_regions>:     This refers to the number of different color based ROI we want to extract
@@ -72,7 +72,7 @@
 
 		For example :
 		
-			$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor 1 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
+			$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor 1 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
 
 
 	The extracted regions of interests will be published with the topic names: extracted_region_n
@@ -100,7 +100,7 @@
 
 	-- Start the Color Based ROI Extractor Node:
 	
-		$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
+		$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
 			<hsv_config_file_2> .....
 	
 		<no_of_regions>     : This refers to the number of different color based ROI we want to extract
@@ -110,11 +110,11 @@
 
 		For example :
 		
-			$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor 1 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
+			$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor 1 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
 	
 	-- Start the object cluster extraction node:
 		
-		$ rosrun perception_sdk_ros_pkg objectClusterExtractor <max_no_of_regions> <max_no_of_objects_possible>
+		$ rosrun tower_of_hanoi_sdk objectClusterExtractor <max_no_of_regions> <max_no_of_objects_possible>
 
 		<max_no_of_regions>          : max number of object clusters possible in each region, default value 1       
 		<max_no_of_objects_possible> : corresponds to the count of difrent regions of intersets, ex: green, red 
@@ -144,7 +144,7 @@
 
 	-- Start the Color Based ROI Extractor Node:
 	
-		$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
+		$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
 			<hsv_config_file_2> .....
 	
 		<no_of_regions>     : This refers to the number of different color based ROI we want to extract
@@ -154,11 +154,11 @@
 
 		For example :
 		
-			$ rosrun perception_sdk_ros_pkg colorBasedRoiExtractor 1 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
+			$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor 1 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
 	
 	-- Start the object cluster extraction node:
 		
-		$ rosrun perception_sdk_ros_pkg objectClusterExtractor <max_no_of_regions> <max_no_of_objects_possible>
+		$ rosrun tower_of_hanoi_sdk objectClusterExtractor <max_no_of_regions> <max_no_of_objects_possible>
 
 		<max_no_of_regions>          : max number of object clusters possible in each region, default value 1       
 		<max_no_of_objects_possible> : corresponds to the count of difrent regions of intersets, ex: green, red 
@@ -166,7 +166,7 @@
 
 	-- Start the model fitting node:
 		
-		$ rosrun perception_sdk_ros_pkg modelFittingICP <max_no_of_regions> <max_no_of_objects_possible>
+		$ rosrun tower_of_hanoi_sdk modelFittingICP <max_no_of_regions> <max_no_of_objects_possible>
 
 		<max_no_of_regions>          : max number of object clusters possible in each region, default value 1       
 		<max_no_of_objects_possible> : corresponds to the count of difrent regions of intersets, ex: green, red 
@@ -194,7 +194,7 @@
 	pause/resume the object recognition process. An example is provided as perceptionEngineController
 	node. The usage will be:
 	
-		$ rosrun perception_sdk_ros_pkg  perceptionEngineController
+		$ rosrun tower_of_hanoi_sdk  perceptionEngineController
 		
 	2-g Configuring parameters of the Pose-Estimation Node
 	======================================================
@@ -203,7 +203,7 @@
 	configure the parameters of the object recognition process. 
 	An example is provided as perceptionEngineConfigurator node. The usage will be:
 	
-		$ rosrun perception_sdk_ros_pkg  perceptionEngineConfigurator
+		$ rosrun tower_of_hanoi_sdk  perceptionEngineConfigurator
 	 
 	 Following parameters can be changed in its current version:
 	 

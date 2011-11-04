@@ -19,7 +19,7 @@
 
 //ROS specific Headers
 #include <ros/ros.h>
-#include "perception_sdk_ros_pkg/Configuration.h"
+#include "tower_of_hanoi_sdk/Configuration.h"
 #include "ros/publisher.h"
 #include <iostream>
 #include <stdio.h>
@@ -28,12 +28,12 @@ int main(int argc, char* argv[]){
 	ros::init(argc, argv, "ConfigurePerception");
 	ros::NodeHandle nh;
 
-	ros::Publisher perceptionCommandPublisher = nh.advertise<perception_sdk_ros_pkg::Configuration>  ("/perceptionConfiguration", 1);
+	ros::Publisher perceptionCommandPublisher = nh.advertise<tower_of_hanoi_sdk::Configuration>  ("/perceptionConfiguration", 1);
 
 
 	std::string choice;
 	bool configure = true;
-	perception_sdk_ros_pkg::Configuration message;
+	tower_of_hanoi_sdk::Configuration message;
 
 	while(configure){
 

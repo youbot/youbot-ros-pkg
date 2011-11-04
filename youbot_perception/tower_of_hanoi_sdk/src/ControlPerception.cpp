@@ -19,7 +19,7 @@
 
 //ROS specific Headers
 #include <ros/ros.h>
-#include "perception_sdk_ros_pkg/Coordination.h"
+#include "tower_of_hanoi_sdk/Coordination.h"
 #include "ros/publisher.h"
 #include <iostream>
 int main(int argc, char* argv[]){
@@ -27,7 +27,7 @@ int main(int argc, char* argv[]){
 	ros::init(argc, argv, "ControlPerception");
 	ros::NodeHandle nh;
 
-	ros::Publisher perceptionCommandPublisher = nh.advertise<perception_sdk_ros_pkg::Coordination>  ("/perceptionControl", 1);
+	ros::Publisher perceptionCommandPublisher = nh.advertise<tower_of_hanoi_sdk::Coordination>  ("/perceptionControl", 1);
 
 
 	std::cout << "\n\t\tEnter 1 to pause the perception engine"
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]){
 
 
 	int choice = 5;
-	perception_sdk_ros_pkg::Coordination message;
+	tower_of_hanoi_sdk::Coordination message;
 
 	while(choice != 0){
 		std::cout << "Your command: \n";
