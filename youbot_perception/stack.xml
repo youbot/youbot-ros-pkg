@@ -1,0 +1,9 @@
+<stack>
+  <description brief="youbot_perception">youbot_perception</description>
+  <author>Sebastian Blumenthal, Pinaki Sunil Banerjee</author>
+  <license>LGPL, BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_perception</url>
+  <depend stack="ros" />
+
+</stack>
