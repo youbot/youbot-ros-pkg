@@ -11,7 +11,7 @@ or enable the USE_SETCAP flag in the cmake file and recompile again.
 -->
 
 <launch>
-	<aram name="youBotHasBase" type="bool" value="true"/>
+	<param name="youBotHasBase" type="bool" value="true"/>
 	<param name="youBotHasArm" type="bool" value="true"/> 
 
 	<node name="youbot_oodl_driver" pkg="youbot_oodl" type="youbot_oodl" output="screen">
