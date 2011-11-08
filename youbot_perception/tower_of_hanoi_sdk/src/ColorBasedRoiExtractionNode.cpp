@@ -64,7 +64,7 @@ int main(int argc, char* argv[]){
 	noOfRegions = atoi(argv[1]);
 
 //    noOfRegions = 1;
-//    argv[2] = "/home/pinaki/hack-arena/ROS/perception_sdk_ros_pkg/redRoiConfig.cfg";
+//    argv[2] = "/home/pinaki/hack-arena/ROS/tower_of_hanoi_sdk/redRoiConfig.cfg";
 
 	//Define the publishers for each extracted region
 	ros::Publisher extractedRoiPublisher[noOfRegions];

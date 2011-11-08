@@ -36,7 +36,7 @@
 #include <sstream>
 
 /**
- * usage: rosrun perception_sdk_pkg objectClusterExtractor <no_of_regions> <max_no_of_objects_in_each_region>
+ * usage: rosrun tower_of_hanoi_sdk objectClusterExtractor <no_of_regions> <max_no_of_objects_in_each_region>
  *
  * Finds object clusters from the hsv-based extracted regions of interests
  *
