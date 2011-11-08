@@ -19,7 +19,7 @@
 
 //ROS specific Headers
 #include "ros/ros.h"
-#include "perception_sdk_ros_pkg/perception_sdk_ros_pkgConfig.h"
+#include "tower_of_hanoi_sdk/tower_of_hanoi_sdkConfig.h"
 #include "dynamic_reconfigure/server.h"
 
 //PCL specific Headers
@@ -37,7 +37,7 @@
 
 
 /**
- * usage: rosrun perception_sdk_ros_pkg hsvLimitsFinder
+ * usage: rosrun tower_of_hanoi_sdk hsvLimitsFinder
  *
  * start the dynamic reconfigure using: rosrun dynamic_configure reconfigure_gui
  * to play with the HSV limits.
@@ -72,7 +72,7 @@ void kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
 /**
  *Callback for dynamic reconfigure
  */
-void callback(perception_sdk_ros_pkg::perception_sdk_ros_pkgConfig &config, uint32_t level)
+void callback(tower_of_hanoi_sdk::tower_of_hanoi_sdkConfig &config, uint32_t level)
 {
 	minH = config.minimum_H;
 	maxH = config.maximum_H;
@@ -107,8 +107,8 @@ int main(int argc, char* argv[]){
 	ros::NodeHandle nh;
 
 	//set up the dynamic configure
-	dynamic_reconfigure::Server<perception_sdk_ros_pkg::perception_sdk_ros_pkgConfig> srv;
-	dynamic_reconfigure::Server<perception_sdk_ros_pkg::perception_sdk_ros_pkgConfig>::CallbackType f;
+	dynamic_reconfigure::Server<tower_of_hanoi_sdk::tower_of_hanoi_sdkConfig> srv;
+	dynamic_reconfigure::Server<tower_of_hanoi_sdk::tower_of_hanoi_sdkConfig>::CallbackType f;
 	f = boost::bind(&callback, _1, _2);
 	srv.setCallback(f);
 

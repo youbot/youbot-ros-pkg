@@ -6,7 +6,7 @@
 <!-- HSV-Limits Configuration Files with full path -->
 <!-- Region Labes used by the nodes to publish the transforms -->
 
-	<node name="poseEstimator6D" pkg="perception_sdk_ros_pkg" type="poseEstimator6D" 
-					args="1 2 $(find perception_sdk_ros_pkg)/redRoiConfig.cfg red" />
+	<node name="poseEstimator6D" pkg="tower_of_hanoi_sdk" type="poseEstimator6D" 
+					args="1 2 $(find tower_of_hanoi_sdk)/redRoiConfig.cfg red" />
 
 </launch>
