@@ -172,9 +172,9 @@ void ModelFitting::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
 	}
 
 
-    double yRot = asin (-(*(bestTransformation))[2]);
-    double xRot = asin ((*(bestTransformation))[6]/cos(yRot));
-    double zRot = asin ((*(bestTransformation))[1]/cos(yRot));
+    double yRot = asin (-(*(bestTransformation))(2));
+    double xRot = asin ((*(bestTransformation))(6)/cos(yRot));
+    double zRot = asin ((*(bestTransformation))(1)/cos(yRot));
 
     static tf::TransformBroadcaster br;
      tf::Transform transform;

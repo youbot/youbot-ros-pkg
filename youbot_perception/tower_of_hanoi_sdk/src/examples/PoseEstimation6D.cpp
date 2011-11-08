@@ -51,9 +51,9 @@ PoseEstimation6D::PoseEstimation6D() {
 	Eigen::Matrix4f  tempHomogenousMatrix;
 	calculateHomogeneousMatrix(90,0,0,0,0,0,tempHomogenousMatrix,true);
 	BRICS_3D::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
-			tempHomogenousMatrix[0], tempHomogenousMatrix[4], tempHomogenousMatrix[8],
-			tempHomogenousMatrix[1], tempHomogenousMatrix[5], tempHomogenousMatrix[9],
-			tempHomogenousMatrix[2], tempHomogenousMatrix[6], tempHomogenousMatrix[10],
+			tempHomogenousMatrix(0), tempHomogenousMatrix(4), tempHomogenousMatrix(8),
+			tempHomogenousMatrix(1), tempHomogenousMatrix(5), tempHomogenousMatrix(9),
+			tempHomogenousMatrix(2), tempHomogenousMatrix(6), tempHomogenousMatrix(10),
 			0,0,0);
 
 	cube2D->homogeneousTransformation(homogeneousTrans);
@@ -243,9 +243,9 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 	}
 
 
-    double yRot = asin (-(*(bestTransformation[objCount]))[2]);
-    double xRot = asin ((*(bestTransformation[objCount]))[6]/cos(yRot));
-    double zRot = asin ((*(bestTransformation[objCount]))[1]/cos(yRot));
+    double yRot = asin (-(*(bestTransformation[objCount]))(2));
+    double xRot = asin ((*(bestTransformation[objCount]))(6)/cos(yRot));
+    double zRot = asin ((*(bestTransformation[objCount]))(1)/cos(yRot));
 
 //	Eigen::Matrix4f  tempHomogenousMatrix;
 //  calculateHomogeneousMatrix(xRot, yRot, zRot, translation[0], translation[1], translation[2],tempHomogenousMatrix,0);
