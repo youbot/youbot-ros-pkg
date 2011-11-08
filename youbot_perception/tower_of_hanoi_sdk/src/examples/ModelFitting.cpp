@@ -38,9 +38,9 @@ ModelFitting::ModelFitting() {
 	Eigen::Matrix4f  tempHomogenousMatrix;
 	calculateHomogeneousMatrix(90,0,0,0,0,0,tempHomogenousMatrix,true);
 	BRICS_3D::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
-			tempHomogenousMatrix[0], tempHomogenousMatrix[4], tempHomogenousMatrix[8],
-			tempHomogenousMatrix[1], tempHomogenousMatrix[5], tempHomogenousMatrix[9],
-			tempHomogenousMatrix[2], tempHomogenousMatrix[6], tempHomogenousMatrix[10],
+			tempHomogenousMatrix(0), tempHomogenousMatrix(4), tempHomogenousMatrix(8),
+			tempHomogenousMatrix(1), tempHomogenousMatrix(5), tempHomogenousMatrix(9),
+			tempHomogenousMatrix(2), tempHomogenousMatrix(6), tempHomogenousMatrix(10),
 			0,0,0);
 
 	cube2D->homogeneousTransformation(homogeneousTrans);
@@ -195,9 +195,9 @@ void ModelFitting::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
  	}
 
  	homogeneousTrans = new HomogeneousMatrix44(
-			tempHomogenousMatrix[0], tempHomogenousMatrix[4], tempHomogenousMatrix[8],
-			tempHomogenousMatrix[1], tempHomogenousMatrix[5], tempHomogenousMatrix[9],
-			tempHomogenousMatrix[2], tempHomogenousMatrix[6], tempHomogenousMatrix[10],
+			tempHomogenousMatrix(0), tempHomogenousMatrix(4), tempHomogenousMatrix(8),
+			tempHomogenousMatrix(1), tempHomogenousMatrix(5), tempHomogenousMatrix(9),
+			tempHomogenousMatrix(2), tempHomogenousMatrix(6), tempHomogenousMatrix(10),,
 			xtranslation,ytranslation,ztranslation);
  	finalModel->homogeneousTransformation(homogeneousTrans);
  //	pclTypecaster.convertToPCLDataType(estimated_model_ptr,finalModel);

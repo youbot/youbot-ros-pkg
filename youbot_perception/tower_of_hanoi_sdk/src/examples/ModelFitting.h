@@ -126,28 +126,28 @@ class ModelFitting {
 		 */
 
 
-		homogeneousMatrix[3]=0;
-		homogeneousMatrix[7]=0;
-		homogeneousMatrix[11]=0;
-		homogeneousMatrix[15]=1;
+		homogeneousMatrix(3)=0;
+		homogeneousMatrix(7)=0;
+		homogeneousMatrix(11)=0;
+		homogeneousMatrix(15)=1;
 
 	    //translation
-	    homogeneousMatrix[12]=xtrans;
-		homogeneousMatrix[13]=ytrans;
-		homogeneousMatrix[14]=ztrans;
+	    homogeneousMatrix(12)=xtrans;
+		homogeneousMatrix(13)=ytrans;
+		homogeneousMatrix(14)=ztrans;
 
 		//rotation
-		homogeneousMatrix[0] = cos(yRot)*cos(zRot);
-		homogeneousMatrix[1] = cos(yRot)*sin(zRot);
-		homogeneousMatrix[2] = -sin(yRot);
+		homogeneousMatrix(0) = cos(yRot)*cos(zRot);
+		homogeneousMatrix(1) = cos(yRot)*sin(zRot);
+		homogeneousMatrix(2) = -sin(yRot);
 
-		homogeneousMatrix[4] = -cos(xRot)*sin(zRot) + sin(xRot)*sin(yRot)*cos(zRot);
-		homogeneousMatrix[5] = cos(xRot)*cos(zRot) + sin(xRot)*sin(yRot)*sin(zRot);
-		homogeneousMatrix[6] = sin(xRot)*cos(yRot);
+		homogeneousMatrix(4) = -cos(xRot)*sin(zRot) + sin(xRot)*sin(yRot)*cos(zRot);
+		homogeneousMatrix(5) = cos(xRot)*cos(zRot) + sin(xRot)*sin(yRot)*sin(zRot);
+		homogeneousMatrix(6) = sin(xRot)*cos(yRot);
 
-		homogeneousMatrix[8] = sin(xRot)*sin(zRot) + cos(xRot)*sin(yRot)*cos(zRot);
-		homogeneousMatrix[9] = -sin(xRot)*cos(zRot) + cos(xRot)*sin(yRot)*sin(zRot);
-		homogeneousMatrix[10]= cos(xRot)*cos(yRot);
+		homogeneousMatrix(8) = sin(xRot)*sin(zRot) + cos(xRot)*sin(yRot)*cos(zRot);
+		homogeneousMatrix(9) = -sin(xRot)*cos(zRot) + cos(xRot)*sin(yRot)*sin(zRot);
+		homogeneousMatrix(10)= cos(xRot)*cos(yRot);
 
 
 	}
