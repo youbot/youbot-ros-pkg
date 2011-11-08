@@ -4,7 +4,9 @@
 -- We assume that BRICS_3D and ROS(diamondback - at least) is already installed in your system. If not:
 	-- For ROS Installation: http://www.ros.org/wiki/ROS/Installation
 	-- For BRICS_3D Installation: < link will be updated soon :) >
- 
+	-- Install ar_toolkit from ROS: http://www.ros.org/wiki/artoolkit
+	-- Install ar_kinect from ROS: http://www.ros.org/wiki/ar_kinect
+	 
 -- Place the downloaded tower_of_hanoi_sdk such that it is reachable through your ROS_PACKAGE_PATH
 
 -- To build the package:
@@ -55,6 +57,7 @@
 	The color-configuration is acceted from the user for extraction purpose.
 	
 	Usage:
+	======
 	
 	-- Start the kinect driver	
 	
@@ -93,6 +96,7 @@
 	   of kinect driver with the topic name : "region_n_obj_cluster_m"	
 
 	Usage:
+	======
 	
 	-- Start the kinect driver	
 	
@@ -137,6 +141,7 @@
 	   of kinect driver with the topic name : "region_n_obj_cluster_m_frame"	
 
 	Usage:
+	======
 	
 	-- Start the kinect driver	
 	
@@ -210,3 +215,37 @@
 	 	- Number of color-based ROI to be extracted
 	 	- Maximum number of objects possible in each ROI
 	 	
+	 	
+	 2-f Start , Auxillary and Goal Position Detection	
+	==================================================
+	
+	We will be using augmented reality markers (http://www.hitl.washington.edu/artoolkit/)  to 
+	represent the location of intersets for the tower of Hanoi Problem, namely "Start", "Goal"
+	and "Auxillary".
+	
+	To find more information about artoolkit please visit : http://www.hitl.washington.edu/artoolkit/
+	
+	A launch file id provided to get started with the toolkit once ar_toolkit and ar_kinect are installed.
+	We have chosen the following markers to represent the locations:
+	
+		-- Start : 		4x4_384_42
+		-- Goal : 		4x4_384_78
+		-- Auxillary : 	4x4_384_99
+		
+	Printable versions of the can be found in $(tower_of_hanoi_sdk)/data/
+	
+	Usage:	
+	=====
+	
+	Print the ar_markers and start the kinect driver using:
+		
+		$ roslaunch openni_camera openni_node.launch
+	
+	To start detecting the positions start:
+	
+		$ roslaunch tower_of_hanoi_sdk PositionDetection.launch
+		
+	TF frames with topic names: "/auxillary", "/start", "/goal" will be published once they are 
+	visible in the kinect-view. The position of the markers will be published with respect to the 
+	"/openni_rgb_optical_frame"
+	
