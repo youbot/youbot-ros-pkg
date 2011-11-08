@@ -197,7 +197,7 @@ void ModelFitting::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
  	homogeneousTrans = new HomogeneousMatrix44(
 			tempHomogenousMatrix(0), tempHomogenousMatrix(4), tempHomogenousMatrix(8),
 			tempHomogenousMatrix(1), tempHomogenousMatrix(5), tempHomogenousMatrix(9),
-			tempHomogenousMatrix(2), tempHomogenousMatrix(6), tempHomogenousMatrix(10),,
+			tempHomogenousMatrix(2), tempHomogenousMatrix(6), tempHomogenousMatrix(10),
 			xtranslation,ytranslation,ztranslation);
  	finalModel->homogeneousTransformation(homogeneousTrans);
  //	pclTypecaster.convertToPCLDataType(estimated_model_ptr,finalModel);
