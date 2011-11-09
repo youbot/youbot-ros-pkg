@@ -1,4 +1,5 @@
-/bin      
+/bin
+/bin/*      
 /build
 /msg_gen
 /src/tower_of_hanoi_sdk
