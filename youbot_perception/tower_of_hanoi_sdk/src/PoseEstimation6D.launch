@@ -1,0 +1,12 @@
+<launch>
+
+<!-- Arguments required by the node -->
+<!-- No of regions of interests to be extracted -->
+<!-- Maximum number of object to be found in each ROI -->
+<!-- HSV-Limits Configuration Files with full path -->
+<!-- Region Labes used by the nodes to publish the transforms -->
+
+	<node name="poseEstimator6D" pkg="tower_of_hanoi_sdk" type="poseEstimator6D" 
+					args="1 2 $(find tower_of_hanoi_sdk)/redRoiConfig.cfg red" />
+
+</launch>

@@ -1,0 +1,20 @@
+#the number of patterns to be recognized
+3
+
+#pattern goal
+goal
+data/4x4/4x4_42.patt
+80.0
+0.0 0.0
+
+#pattern auxillary
+auxillary
+data/4x4/4x4_99.patt
+80.0
+0.0 0.0
+
+#pattern start
+start
+data/4x4/4x4_78.patt
+80.0
+0.0 0.0

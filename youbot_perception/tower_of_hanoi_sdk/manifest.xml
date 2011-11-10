@@ -1,0 +1,25 @@
+<package>
+  <description brief="tower_of_hanoi_sdk">
+
+     tower_of_hanoi_sdk
+
+  </description>
+  <author>Pinaki Sunil Banerjee</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/tower_of_hanoi_sdk"</url>
+  <depend package="tf"/>
+  <depend package="std_msgs"/>
+  <depend package="roscpp"/>
+  <depend package="rospy"/>
+  <depend package="sensor_msgs"/>
+  <depend package="image_transport"/>
+  <depend package="pcl"/>
+  <depend package="pcl_ros"/>
+  <depend package="opencv2"/>
+  <depend package="cv_bridge"/>
+  <depend package="dynamic_reconfigure"/>
+
+</package>
+
+

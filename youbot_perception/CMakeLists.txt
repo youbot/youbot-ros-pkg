@@ -6,7 +6,7 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 # be excluded from the distro.  This is not the place to put things that
 # should be ignored everywhere, like "build" directories; that happens in
 # rosbuild/rosbuild.cmake.  Here should be listed packages that aren't
-# ready for inclusion in a distro.
+# ready for inclusion in a distro. 
 #
 # This list is combined with the list in rosbuild/rosbuild.cmake.  Note
 # that CMake 2.6 may be required to ensure that the two lists are combined

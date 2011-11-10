@@ -1,0 +1,291 @@
+1. Installation
+===============
+
+-- We assume that BRICS_3D and ROS (diamondback, electric, or later) are already installed in your system. If not:
+	-- For ROS Installation: http://www.ros.org/wiki/ROS/Installation
+	-- For BRICS_3D Installation: < link will be updated soon :) >
+	-- Install ar_toolkit from ROS: http://www.ros.org/wiki/artoolkit
+	-- Install ar_kinect from ROS: http://www.ros.org/wiki/ar_kinect
+	 
+-- Ensure that the downloaded tower_of_hanoi_sdk folder is reachable through your ROS_PACKAGE_PATH environment variable
+
+-- To build the package:
+	$ roscd tower_of_hanoi_sdk
+	$ rosmake
+
+-- If the package builds with no failures then go ahead and start detecting the objects :)
+
+
+2. Object Detection
+=================================
+
+	2-a. Quick Start
+	================
+
+	-- Calibrate colors as described in Section 2-b below. The program itself runs without calibration as well,
+	   but it will probably not detect objects as intended.
+
+	-- Start the kinect driver. If it is already running from the step above, you can skip this step.
+
+		$ roslaunch openni_camera openni_node.launch
+
+	-- Start the object detection node
+	   
+		$ roslaunch tower_of_hanoi_sdk PoseEstimation6D.launch
+
+	-- Run rviz to see the results
+
+		$ rosrun rviz rviz
+		
+		In the rviz window click on the button "Add" (inside the Displays window). A dialog should appear,
+		choose under Display Type "Builtin->TF" and press OK. Under .Global Options->Fixed Frame 
+		select "/openni_rgb_optical_frame".
+
+	If everything worked out, you should see some coordinate frames displayed in rviz. If you hold an object
+	in front of the camera (and it can get detected successfully) a new coordinate frame should appear for
+	the detected object. The frame moves around according to the detected position relative to the camera.
+
+	The next sections will give more detailed information on how to run and check individual steps of
+	the object detection task. In case you did not get the intended result in this quick start, follow
+	the steps one after another in order to get help finding out what is going wrong.
+
+
+	2-b.  Color Calibration: HSV Limits Finder
+	==========================================   
+	First we need to find adequate hue and saturation limits so that our perception system can 
+	correctly distinguish the objects of interests in the given lighting conditions. To find 
+	and save these limits we will use the hsvLimitsFinder node.
+
+	-- Start the kinect driver	
+	
+		$ roslaunch openni_camera openni_node.launch
+
+	-- Start the HSV-Limit Finder node:
+	
+		$ rosrun tower_of_hanoi_sdk hsvLimitsFinder
+	
+	This will start extracting a region of interest (ROI) with some default Hue-Saturation Limits.
+	To change the limits in real-time we need to use the dynamic_reconfigure tool. 
+	
+	-- Start the dynamic reconfigure tool, use:
+		
+		$rosrun dynamic_reconfigure reconfigure_gui
+
+	Select the "/hsvLimitsFinder" in the dynamic configure gui to change the Hue-Saturation Limits. To visualize 
+	the extracted region based on current limits use the rviz tool and subscribe via the builtin type
+	PointCloud 2 to the topic "extracted_region_1". Also set "Fixed Frame = /openni_rgb_optical_frame".
+	For usage of rviz see http://www.ros.org/wiki/rviz
+	
+	To save the current configuration of hue-saturation limits, interrupt the hsvLimitsFinder node using Ctrl+C. 
+	The program will prompt for saving the configuration. Enter "y" to continue with saving; or "n" to exit. Please
+	enter the path (relative to the directory from where you started the node) with the filename when prompted,
+	for example: "./demoHSVConfig.cfg"
+
+
+	2-c. Color Based Region of Interest (ROI) Extraction
+	====================================================
+	
+	This node extracts the region in the input image which satisfies a HSV-space color configuration. 
+	The color configuration is taken from a file, like it was created in the last step 2-b.
+	
+	Usage:
+	======
+	
+	-- Start the kinect driver	
+	
+		$ roslaunch openni_camera openni_node.launch
+
+	-- Start the Color Based ROI Extractor Node:
+	
+		$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
+			<hsv_config_file_2> .....
+	
+		<no_of_regions>:     This refers to the number of different color based ROI we want to extract
+		<hsv_config_file_n>: This refers to the file (including path) which will be used to extract the nth ROI. 
+		                     Number of <hsv_config_file_n> = <no_of_regions>
+
+		For example :
+		
+			$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor 2 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
+
+
+	The extracted regions of interest will be published with the topic names: extracted_region_n
+	To visualize the extracted regions use rviz and subscribe via the builtin type PointCloud 2 to the topics
+	"extracted_region_1", "extracted_region_2" and so on with "Fixed Frame = /openni_rgb_optical_frame".
+
+
+	2-d. Object Cluster Extractor and 3d pose estimator
+	===================================================
+	The objectClusterExtractor node finds the object clusters in the ROIs extracted by the node colorBasedRoiExtractor explained above. 
+	The node finds the clusters and publishes:
+
+	-- individual object clusters with topic name: "region_n_obj_cluster_m"
+	   n = corresponds to the region number in the topic "extracted_region_n" from  colorBasedRoiExtractor	 
+	   m = cluster number in the order of detection by the algorithm
+
+	-- 3D pose of the clusters: a tf frame for each object-cluster with respect to the "openni_rgb_optical_frame"
+	   of kinect driver with the topic name : "region_n_obj_cluster_m"	
+
+	Usage:
+	======
+	
+	-- Start the kinect driver	
+	
+		$ roslaunch openni_camera openni_node.launch
+
+	-- Start the Color Based ROI Extractor Node:
+	
+		$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
+			<hsv_config_file_2> .....
+	
+		<no_of_regions>    : This refers to the number of different color based ROI we want to extract
+		<hsv_config_file_n>: This refers to the file (including path) which will be used to extract the nth ROI. 
+		                     Number of <hsv_config_file_n> = <no_of_regions>
+
+		For example :
+		
+			$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor 2 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
+	
+	-- Start the object cluster extraction node:
+		
+		$ rosrun tower_of_hanoi_sdk objectClusterExtractor <max_no_of_regions> <max_no_of_objects_possible>
+
+		<max_no_of_regions>          : max number of object clusters possible in each region, default value 1       
+		<max_no_of_objects_possible> : corresponds to the count of diffrent regions of interest, ex: green, red 
+		                               default value 1
+
+
+	2-e. Model Fitting
+	==================
+
+	The modelFittingICP node finds the 6D pose of a cube best approximating the object clusters in the extracted 
+	ROIs explained above. It uses ICP to fit a model of a cube into the cluster-cloud.
+	
+	The modelFittingICP node calculates the best approximating pose and publishes:
+
+	-- individual final-transformed cube model with topic name: "region_n_obj_model_m"
+	   n = corresponds to the region number in the topic "extracted_region_n" from  colorBasedRoiExtractor	 
+	   m = cluster/object number in the order of detection by the objectClusterExtractor node
+
+	-- 6D pose of the cluster: a tf frame for each object-cluster with respect to the "openni_rgb_optical_frame"
+	   of kinect driver with the topic name : "region_n_obj_cluster_m_frame"	
+
+	Usage:
+	======
+	
+	-- Start the kinect driver	
+	
+		$ roslaunch openni_camera openni_node.launch
+
+	-- Start the Color Based ROI Extractor Node:
+	
+		$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor <no_of_different_regions> <hsv_config_file_1> 
+			<hsv_config_file_2> .....
+	
+		<no_of_regions>    : This refers to the number of different color based ROI we want to extract
+		<hsv_config_file_n>: This refers to the file (including path) which will be used to extract the nth ROI. 
+		                     Number of <hsv_config_file_n> = <no_of_regions>
+
+		For example :
+		
+			$ rosrun tower_of_hanoi_sdk colorBasedRoiExtractor 2 ./demoHSVCon1.cfg ./demoHSVCon2.cfg
+	
+	-- Start the object cluster extraction node:
+		
+		$ rosrun tower_of_hanoi_sdk objectClusterExtractor <max_no_of_regions> <max_no_of_objects_possible>
+
+		<max_no_of_regions>          : max number of object clusters possible in each region, default value 1       
+		<max_no_of_objects_possible> : corresponds to the count of different regions of interests, ex: green, red 
+		                               default value 1
+
+	-- Start the model fitting node:
+		
+		$ rosrun tower_of_hanoi_sdk modelFittingICP <max_no_of_regions> <max_no_of_objects_possible>
+
+		<max_no_of_regions>          : max number of object clusters possible in each region, default value 1       
+		<max_no_of_objects_possible> : corresponds to the count of difrent regions of interests, ex: green, red 
+		                               default value 1
+	
+	
+	
+	2-f. Pose Estimation 6D
+	=======================
+	
+	The PoseEstimation6DNode can be used to estimate the poses of the objects from the kinect-camera
+	view. A launch file PoseEstimation6D.launch is provided to set up the relevant parameters and 
+	user inputs required by the node initially. The following parameters are alwaye required by the node:
+		
+		-- No of regions of interests to be extracted
+		-- Maximum number of object to be found in each ROI
+		-- HSV-Limits Configuration Files with full path
+		-- Region Labels used by the nodes to publish the transforms
+  
+	Usage:
+	======
+	
+	-- Start the kinect driver	
+	
+		$ roslaunch openni_camera openni_node.launch
+
+	-- Start the pose estimation node
+
+		$ roslaunch tower_of_hanoi_sdk PoseEstimation6D.launch
+
+	
+	2-g Controlling the Pose-Estimation Node
+	========================================
+	
+	The pose estimation node subsribes to /perceptionControl messages which can be used to 
+	pause/resume the object recognition process. An example is provided as perceptionEngineController
+	node. The usage is:
+	
+		$ rosrun tower_of_hanoi_sdk  perceptionEngineController
+		
+	2-h Configuring parameters of the Pose-Estimation Node
+	======================================================
+	
+	The pose estimation node subsribes to /perceptionConfiguration messages which can be used to 
+	configure the parameters of the object recognition process. 
+	An example is provided as perceptionEngineConfigurator node. The usage is:
+	
+		$ rosrun tower_of_hanoi_sdk  perceptionEngineConfigurator
+	 
+	 Following parameters can be changed in its current version:
+	 
+	 	- Number of color-based ROI to be extracted
+	 	- Maximum number of objects possible in each ROI
+	 	
+	 	
+
+3 Marker Detection for Start, Auxillary and Goal Position
+=========================================================
+	
+We use augmented reality markers (http://www.hitl.washington.edu/artoolkit/)  to represent
+the locations of interest for the Tower of Hanoi problem, namely "Start", "Goal" and "Auxillary".
+
+To find more information about artoolkit please visit : http://www.hitl.washington.edu/artoolkit/
+
+A launch file is provided to get started with the toolkit once ar_toolkit and ar_kinect are installed.
+We have chosen the following markers to represent the locations:
+
+	-- Start : 		4x4_384_42
+	-- Goal : 		4x4_384_78
+	-- Auxillary : 	4x4_384_99
+	
+Printable versions of these can be found in the folder $(tower_of_hanoi_sdk)/data/
+
+Usage:	
+======
+
+Print the ar_markers and start the kinect driver using:
+	
+	$ roslaunch openni_camera openni_node.launch
+
+To start detecting the positions start:
+
+	$ roslaunch tower_of_hanoi_sdk PositionDetection.launch
+	
+TF frames with topic names "/auxillary", "/start", "/goal" will be published once they are 
+visible in the kinect-view. The position of the markers will be published with respect to the 
+"/openni_rgb_optical_frame".
+
