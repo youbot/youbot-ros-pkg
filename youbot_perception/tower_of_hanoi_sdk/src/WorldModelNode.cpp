@@ -20,6 +20,7 @@
 //ROS specific Headers
 #include <ros/ros.h>
 #include <tf/transform_listener.h>
+#include <tower_of_hanoi_sdk/GetSceneObjects.h>
 
 //BRICS_3D specific headers
 #include "worldModel/WorldModel.h"
@@ -45,7 +46,55 @@ public:
 		rootFrameId = "/openni_rgb_optical_frame";
 		associationDistanceTreshold = 0.02; // [m]
 
+		getObjectsService = node.advertiseService("youbot_3d_world_model/getSceneObjects", &YouBotWorldModel::onGetSceneObjects, this);
 //		BRICS_3D::Logger::setMinLoglevel(BRICS_3D::Logger::LOGDEBUG);
+	}
+
+	bool onGetSceneObjects (tower_of_hanoi_sdk::GetSceneObjects::Request &req,
+	           tower_of_hanoi_sdk::GetSceneObjects::Response &res) {
+
+		/* parse request */
+		ROS_DEBUG("Receiving new query.");
+		vector<BRICS_3D::RSG::Attribute> queryArributes;
+		for (unsigned int i = 0; i < static_cast<unsigned int>(req.attributes.size()); ++i) {
+			queryArributes.push_back(Attribute(req.attributes[i].key ,req.attributes[i].value));
+		}
+
+		/* query */
+		vector<BRICS_3D::SceneObject> resultObjects;
+		myWM.getSceneObjects(queryArributes, resultObjects);
+
+		/* setup response */
+		res.results.resize(resultObjects.size());
+		geometry_msgs::Quaternion tmpQuaternion;
+		geometry_msgs::TransformStamped tmpTransform;
+		for (unsigned int i = 0; i < static_cast<unsigned int>(resultObjects.size()); ++i) {
+			tower_of_hanoi_sdk::SceneObject tmpSceneObject;
+			tmpSceneObject.id = resultObjects[i].id;
+			tmpSceneObject.parentId = resultObjects[i].parentId;
+
+			const double* matrixPtr;
+			matrixPtr = resultObjects[i].transform->getRawData();
+			double xStored = matrixPtr[12];
+			double yStored = matrixPtr[13];
+			double zStored = matrixPtr[14];
+
+			tmpQuaternion = tf::createQuaternionMsgFromYaw(0.0); //TODO correct rotation
+			tmpTransform.header.stamp = ros::Time::now();
+			tmpTransform.header.frame_id = rootFrameId;
+			tmpTransform.child_frame_id = "object_X"; //TODO node ID
+			tmpTransform.transform.translation.x = xStored;
+			tmpTransform.transform.translation.y = yStored;
+			tmpTransform.transform.translation.z = zStored;
+			tmpTransform.transform.rotation = tmpQuaternion;
+
+			tmpSceneObject.transform = tmpTransform;
+
+			res.results[i] = tmpSceneObject;
+		}
+
+
+		return true;
 	}
 
 	void processTfTopic () {
@@ -147,6 +196,8 @@ private:
 
 	/// Receives TF
 	tf::TransformListener tfListener;
+
+	ros::ServiceServer getObjectsService;
 
 	string rootFrameId;
 
