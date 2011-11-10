@@ -20,6 +20,7 @@ gencfg()
 
 
 rosbuild_genmsg()
+rosbuild_gensrv()
 
 ADD_DEFINITIONS(-DEIGEN3)
 
