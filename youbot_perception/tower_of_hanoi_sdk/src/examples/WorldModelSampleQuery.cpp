@@ -30,8 +30,10 @@ int main(int argc, char **argv)
   ros::ServiceClient client = n.serviceClient<tower_of_hanoi_sdk::GetSceneObjects>("youbot_3d_world_model/getSceneObjects");
   tower_of_hanoi_sdk::GetSceneObjects srv;
   srv.request.attributes.resize(1);
-  srv.request.attributes[0].key = "color";
-  srv.request.attributes[0].value = "red";
+//  srv.request.attributes[0].key = "color";
+//  srv.request.attributes[0].value = "red";
+  srv.request.attributes[0].key = "taskType";
+  srv.request.attributes[0].value = "targetArea";
 
   if (!client.call(srv)) {
     ROS_ERROR("Failed to call service GetSceneObjects");

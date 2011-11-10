@@ -48,6 +48,53 @@ public:
 
 		getObjectsService = node.advertiseService("youbot_3d_world_model/getSceneObjects", &YouBotWorldModel::onGetSceneObjects, this);
 //		BRICS_3D::Logger::setMinLoglevel(BRICS_3D::Logger::LOGDEBUG);
+
+		startFrameId = "start";
+//		auxiliaryFrameId = "auxiliary";
+		auxiliaryFrameId = "auxillary";
+		goalFrameId = "goal";
+		redBoxFrameId = "red_object_";
+		greenBoxFrameId = "green_object_";
+		yellowBoxFrameId = "yellow_object_";
+
+
+		objectClasses.clear();
+		vector<BRICS_3D::RSG::Attribute> objectAttributes;
+
+		objectAttributes.clear();
+		objectAttributes.push_back(Attribute("shapeType","Box"));
+		objectAttributes.push_back(Attribute("taskType","targetArea"));
+		objectAttributes.push_back(Attribute("name","start"));
+		objectClasses.insert(std::make_pair(startFrameId, objectAttributes));
+
+		objectAttributes.clear();
+		objectAttributes.push_back(Attribute("shapeType","Box"));
+		objectAttributes.push_back(Attribute("taskType","targetArea"));
+		objectAttributes.push_back(Attribute("name","auxiliary"));
+		objectClasses.insert(std::make_pair(auxiliaryFrameId, objectAttributes));
+
+		objectAttributes.clear();
+		objectAttributes.push_back(Attribute("shapeType","Box"));
+		objectAttributes.push_back(Attribute("taskType","targetArea"));
+		objectAttributes.push_back(Attribute("name","goal"));
+		objectClasses.insert(std::make_pair(goalFrameId, objectAttributes));
+
+
+		objectAttributes.clear();
+		objectAttributes.push_back(Attribute("shapeType","Box"));
+		objectAttributes.push_back(Attribute("color","red"));
+		objectClasses.insert(std::make_pair(redBoxFrameId, objectAttributes));
+
+		objectAttributes.clear();
+		objectAttributes.push_back(Attribute("shapeType","Box"));
+		objectAttributes.push_back(Attribute("color","green"));
+		objectClasses.insert(std::make_pair(greenBoxFrameId, objectAttributes));
+
+		objectAttributes.clear();
+		objectAttributes.push_back(Attribute("shapeType","Box"));
+		objectAttributes.push_back(Attribute("color","yellow"));
+		objectClasses.insert(std::make_pair(yellowBoxFrameId, objectAttributes));
+
 	}
 
 	bool onGetSceneObjects (tower_of_hanoi_sdk::GetSceneObjects::Request &req,
@@ -55,14 +102,14 @@ public:
 
 		/* parse request */
 		ROS_DEBUG("Receiving new query.");
-		vector<BRICS_3D::RSG::Attribute> queryArributes;
+		vector<BRICS_3D::RSG::Attribute> queryAttributes;;
 		for (unsigned int i = 0; i < static_cast<unsigned int>(req.attributes.size()); ++i) {
-			queryArributes.push_back(Attribute(req.attributes[i].key ,req.attributes[i].value));
+			queryAttributes.push_back(Attribute(req.attributes[i].key ,req.attributes[i].value));
 		}
 
 		/* query */
 		vector<BRICS_3D::SceneObject> resultObjects;
-		myWM.getSceneObjects(queryArributes, resultObjects);
+		myWM.getSceneObjects(queryAttributes, resultObjects);
 
 		/* setup response */
 		res.results.resize(resultObjects.size());
@@ -93,96 +140,105 @@ public:
 			res.results[i] = tmpSceneObject;
 		}
 
-
 		return true;
 	}
 
 	void processTfTopic () {
-		string objectFrameId = "red_object_1";
-		tf::StampedTransform transform;
-		try{
-			tfListener.lookupTransform(rootFrameId, objectFrameId, ros::Time(0), transform);
-		}
-		catch (tf::TransformException ex){
-			ROS_WARN("%s",ex.what());
-		}
-		ROS_INFO("TF found.");
+		map <string, vector<BRICS_3D::RSG::Attribute> >::iterator iter = objectClasses.begin();
+		for (iter = objectClasses.begin(); iter != objectClasses.end(); iter++) {
 
-
-		/* query */
-		vector<BRICS_3D::RSG::Attribute> queryArributes;
-		queryArributes.push_back(Attribute("shapeType","Box"));
-		queryArributes.push_back(Attribute("color","red"));
-		vector<BRICS_3D::SceneObject> resultObjects;
-
-		myWM.getSceneObjects(queryArributes, resultObjects);
-		ROS_INFO("Number of boxes: %i " , static_cast<unsigned int>(resultObjects.size()));
-
-		/* associate */
-		unsigned int index = -1;
-		double minSquardDistanceToExistingObjects = std::numeric_limits<double>::max();
-		const double* matrixPtr;
-
-		for (unsigned int i = 0; i < static_cast<unsigned int>(resultObjects.size()) ; ++i) {
-			matrixPtr = resultObjects[i].transform->getRawData();
-			double squardDistanceToExistingObjects;
-			double xPercieved = transform.getOrigin().x();
-			double yPercieved = transform.getOrigin().y();
-			double zPercieved = transform.getOrigin().z();
-			double xStored = matrixPtr[12];
-			double yStored = matrixPtr[13];
-			double zStored = matrixPtr[14];
-
-			squardDistanceToExistingObjects = 	(xPercieved - xStored) * (xPercieved - xStored) +
-												(yPercieved - yStored) * (yPercieved - yStored) +
-												(zPercieved - zStored) * (zPercieved - zStored);
-
-			if (squardDistanceToExistingObjects < minSquardDistanceToExistingObjects) {
-				minSquardDistanceToExistingObjects = squardDistanceToExistingObjects;
-				index = i;
+//			string objectFrameId = "red_object_1";
+			string objectFrameId = iter->first;
+			tf::StampedTransform transform;
+			try{
+				tfListener.lookupTransform(rootFrameId, objectFrameId, ros::Time(0), transform);
 			}
-		}
+			catch (tf::TransformException ex){
+				ROS_WARN("%s",ex.what());
+				continue;
+			}
 
-		ROS_INFO("Shortest distance %lf to found result object %i.", minSquardDistanceToExistingObjects, index);
+			ROS_INFO("TF found for %s.", iter->first.c_str());
 
-		if (minSquardDistanceToExistingObjects < associationDistanceTreshold) {
+			/* query */
+			vector<BRICS_3D::RSG::Attribute> queryAttributes;;
+//			queryAttributes;.push_back(Attribute("shapeType","Box"));
+//			queryAttributes;.push_back(Attribute("color","red"));
+			queryAttributes = iter->second;
+			vector<BRICS_3D::SceneObject> resultObjects;
 
-			/* update existing */
-			ROS_INFO("Updating existing scene object with object ID: %i", resultObjects[index].id);
-			BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr newTransform(new BRICS_3D::HomogeneousMatrix44(1,0,0,  	//Rotation coefficients
-			                                                             0,1,0,
-			                                                             0,0,1,
-			                                                             transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())); 						//Translation coefficients
-			myWM.insertTransform(resultObjects[index].id, newTransform);
+			myWM.getSceneObjects(queryAttributes, resultObjects);
+//			ROS_INFO("Number of boxes: %i " , static_cast<unsigned int>(resultObjects.size()));
 
-		} else {
+			/* associate */
+			unsigned int index = -1;
+			double minSquardDistanceToExistingObjects = std::numeric_limits<double>::max();
+			const double* matrixPtr;
 
-			/* insert */
-			ROS_INFO("Inserting new scene object");
-			BRICS_3D::RSG::Shape::ShapePtr boxShape(new BRICS_3D::RSG::Box(0.054, 0.054, 0.054)); // in [m]
-			BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr initialTransform(new BRICS_3D::HomogeneousMatrix44(1,0,0,  	//Rotation coefficients
-			                                                             0,1,0,
-			                                                             0,0,1,
-			                                                             transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())); 						//Translation coefficients
-			BRICS_3D::SceneObject tmpSceneObject;
-			tmpSceneObject.shape = boxShape;
-			tmpSceneObject.transform = initialTransform;
-			tmpSceneObject.parentId =  myWM.getRootNodeId(); // hook in after root node
-			tmpSceneObject.attributes.clear();
-			tmpSceneObject.attributes.push_back(Attribute("shapeType","Box"));
-			tmpSceneObject.attributes.push_back(Attribute("color","red"));
+			for (unsigned int i = 0; i < static_cast<unsigned int>(resultObjects.size()) ; ++i) {
+				matrixPtr = resultObjects[i].transform->getRawData();
+				double squardDistanceToExistingObjects;
+				double xPercieved = transform.getOrigin().x();
+				double yPercieved = transform.getOrigin().y();
+				double zPercieved = transform.getOrigin().z();
+				double xStored = matrixPtr[12];
+				double yStored = matrixPtr[13];
+				double zStored = matrixPtr[14];
 
-			unsigned int returnedId;
-			myWM.addSceneObject(tmpSceneObject, returnedId);
+				squardDistanceToExistingObjects = 	(xPercieved - xStored) * (xPercieved - xStored) +
+						(yPercieved - yStored) * (yPercieved - yStored) +
+						(zPercieved - zStored) * (zPercieved - zStored);
+
+				if (squardDistanceToExistingObjects < minSquardDistanceToExistingObjects) {
+					minSquardDistanceToExistingObjects = squardDistanceToExistingObjects;
+					index = i;
+				}
+			}
+
+			ROS_INFO("Shortest distance %lf to found result object %i.", minSquardDistanceToExistingObjects, index);
+
+			if (minSquardDistanceToExistingObjects < associationDistanceTreshold) {
+
+				/* update existing */
+				ROS_INFO("Updating existing scene object with object ID: %i", resultObjects[index].id);
+				BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr newTransform(new BRICS_3D::HomogeneousMatrix44(1,0,0,  	//Rotation coefficients
+						0,1,0,
+						0,0,1,
+						transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())); 						//Translation coefficients
+						myWM.insertTransform(resultObjects[index].id, newTransform);
+
+			} else {
+
+				/* insert */
+				ROS_INFO("Inserting new scene object");
+				BRICS_3D::RSG::Shape::ShapePtr boxShape(new BRICS_3D::RSG::Box(0.054, 0.054, 0.054)); // in [m]
+				BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr initialTransform(new BRICS_3D::HomogeneousMatrix44(1,0,0,  	//Rotation coefficients
+						0,1,0,
+						0,0,1,
+						transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())); 						//Translation coefficients
+						BRICS_3D::SceneObject tmpSceneObject;
+						tmpSceneObject.shape = boxShape;
+						tmpSceneObject.transform = initialTransform;
+						tmpSceneObject.parentId =  myWM.getRootNodeId(); // hook in after root node
+						tmpSceneObject.attributes.clear();
+//						tmpSceneObject.attributes.push_back(Attribute("shapeType","Box"));
+//						tmpSceneObject.attributes.push_back(Attribute("color","red"));
+						tmpSceneObject.attributes = iter->second;
+
+						unsigned int returnedId;
+						myWM.addSceneObject(tmpSceneObject, returnedId);
+			}
+
 		}
 
 		/* query */
-		queryArributes.clear();
-		queryArributes.push_back(Attribute("shapeType","Box"));
-		queryArributes.push_back(Attribute("color","red"));
+		vector<BRICS_3D::RSG::Attribute> queryAttributes;
+		vector<BRICS_3D::SceneObject> resultObjects;
+		queryAttributes.push_back(Attribute("shapeType","Box"));
+//		queryAttributes.push_back(Attribute("color","red"));
 
-		myWM.getSceneObjects(queryArributes, resultObjects);
-		ROS_INFO("Number of boxes: %i " , static_cast<unsigned int>(resultObjects.size()));
+		myWM.getSceneObjects(queryAttributes, resultObjects);
+		ROS_INFO("Total number of boxes: %i " , static_cast<unsigned int>(resultObjects.size()));
 
 	}
 
@@ -203,6 +259,16 @@ private:
 
 	double associationDistanceTreshold;
 
+	/* hanoi specifc IDs */
+	string startFrameId;
+	string auxiliaryFrameId;
+	string goalFrameId;
+
+	string redBoxFrameId;
+	string greenBoxFrameId;
+	string yellowBoxFrameId;
+
+	map <string, vector<BRICS_3D::RSG::Attribute> > objectClasses;
 };
 
 
