@@ -6,7 +6,7 @@
 
 	<!-- dynamic map generation from unified scan -->
 	<node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
-		<remap from="scan" to="scan_front"/>
+		<remap from="scan" to="base_scan"/>
 		<!--remap from="scan" to="scan_unified"/-->
 		<param name="maxUrange" type="int" value="8"/>
 		<param name="xmin" type="int" value="-8"/>
