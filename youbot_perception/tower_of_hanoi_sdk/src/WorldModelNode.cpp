@@ -242,6 +242,46 @@ public:
 
 	}
 
+
+
+	/* Some helper functions */
+	void tfTransformToHomogeniousMatrix (const tf::Transform& tfTransform, BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr& transformMatrix)
+	{
+		double mv[12];
+
+		tfTransform.getBasis().getOpenGLSubMatrix(mv);
+		tf::Vector3 origin = tfTransform.getOrigin();
+
+		double* matrixPtr = transformMatrix->setRawData();
+
+		/* matrices are column-major */
+		matrixPtr[0] = mv[0]; matrixPtr[4] = mv[4]; matrixPtr[8] = mv[8];   matrixPtr[12] = origin.x();
+		matrixPtr[1] = mv[1]; matrixPtr[5] = mv[5]; matrixPtr[9] = mv[9];   matrixPtr[13] = origin.y();
+		matrixPtr[2] = mv[2]; matrixPtr[6] = mv[6]; matrixPtr[10] = mv[10]; matrixPtr[14] = origin.z();
+		matrixPtr[3] = 1;     matrixPtr[7] = 1;     matrixPtr[11] = 1;      matrixPtr[15] = 1;
+
+	}
+
+	void HomogeniousMatrixToTfTransform (const BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr& transformMatrix, tf::Transform& tfTransform) {
+		const double* matrixPtr = transformMatrix->getRawData();
+
+		btVector3 translation;
+		btMatrix3x3 rotation;
+
+		translation.setX(matrixPtr[12]);
+		translation.setY(matrixPtr[13]);
+		translation.setZ(matrixPtr[14]);
+
+		rotation.setValue(
+				matrixPtr[0], matrixPtr[4], matrixPtr[8],
+				matrixPtr[1], matrixPtr[5], matrixPtr[9],
+				matrixPtr[2], matrixPtr[6], matrixPtr[10]
+		);
+
+		tfTransform.setOrigin(translation);
+		tfTransform.setBasis(rotation);
+	}
+
 private:
 
 	/// The ROS node handle
