@@ -17,7 +17,7 @@
 *
 ******************************************************************************/
 
-//ROS specific Headers
+//ROS specific headers
 #include <ros/ros.h>
 #include <tf/transform_listener.h>
 #include <tower_of_hanoi_sdk/GetSceneObjects.h>
@@ -27,6 +27,9 @@
 #include "worldModel/sceneGraph/Box.h"
 #include "core/HomogeneousMatrix44.h"
 #include "core/Logger.h"
+
+//System headers
+#include <sstream>
 
 namespace youBot {
 
@@ -83,17 +86,23 @@ public:
 		objectAttributes.clear();
 		objectAttributes.push_back(Attribute("shapeType","Box"));
 		objectAttributes.push_back(Attribute("color","red"));
-		objectClasses.insert(std::make_pair(redBoxFrameId, objectAttributes));
+		objectClasses.insert(std::make_pair(redBoxFrameId + "1", objectAttributes));
+		objectClasses.insert(std::make_pair(redBoxFrameId + "2", objectAttributes));
+		objectClasses.insert(std::make_pair(redBoxFrameId + "3", objectAttributes));
 
 		objectAttributes.clear();
 		objectAttributes.push_back(Attribute("shapeType","Box"));
 		objectAttributes.push_back(Attribute("color","green"));
-		objectClasses.insert(std::make_pair(greenBoxFrameId, objectAttributes));
+		objectClasses.insert(std::make_pair(greenBoxFrameId + "1", objectAttributes));
+		objectClasses.insert(std::make_pair(greenBoxFrameId + "2", objectAttributes));
+		objectClasses.insert(std::make_pair(greenBoxFrameId + "3", objectAttributes));
 
 		objectAttributes.clear();
 		objectAttributes.push_back(Attribute("shapeType","Box"));
 		objectAttributes.push_back(Attribute("color","yellow"));
-		objectClasses.insert(std::make_pair(yellowBoxFrameId, objectAttributes));
+		objectClasses.insert(std::make_pair(yellowBoxFrameId + "1", objectAttributes));
+		objectClasses.insert(std::make_pair(yellowBoxFrameId + "2", objectAttributes));
+		objectClasses.insert(std::make_pair(yellowBoxFrameId + "3", objectAttributes));
 
 	}
 
@@ -115,6 +124,7 @@ public:
 		res.results.resize(resultObjects.size());
 		geometry_msgs::Quaternion tmpQuaternion;
 		geometry_msgs::TransformStamped tmpTransform;
+		std::stringstream objectSceneFrameID;
 		for (unsigned int i = 0; i < static_cast<unsigned int>(resultObjects.size()); ++i) {
 			tower_of_hanoi_sdk::SceneObject tmpSceneObject;
 			tmpSceneObject.id = resultObjects[i].id;
@@ -129,7 +139,9 @@ public:
 			tmpQuaternion = tf::createQuaternionMsgFromYaw(0.0); //TODO correct rotation
 			tmpTransform.header.stamp = ros::Time::now();
 			tmpTransform.header.frame_id = rootFrameId;
-			tmpTransform.child_frame_id = "object_X"; //TODO node ID
+			objectSceneFrameID.str("");
+			objectSceneFrameID << "scene_object_" << resultObjects[i].id;
+			tmpTransform.child_frame_id = objectSceneFrameID.str();
 			tmpTransform.transform.translation.x = xStored;
 			tmpTransform.transform.translation.y = yStored;
 			tmpTransform.transform.translation.z = zStored;
@@ -216,17 +228,17 @@ public:
 						0,1,0,
 						0,0,1,
 						transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())); 						//Translation coefficients
-						BRICS_3D::SceneObject tmpSceneObject;
-						tmpSceneObject.shape = boxShape;
-						tmpSceneObject.transform = initialTransform;
-						tmpSceneObject.parentId =  myWM.getRootNodeId(); // hook in after root node
-						tmpSceneObject.attributes.clear();
-//						tmpSceneObject.attributes.push_back(Attribute("shapeType","Box"));
-//						tmpSceneObject.attributes.push_back(Attribute("color","red"));
-						tmpSceneObject.attributes = iter->second;
+				BRICS_3D::SceneObject tmpSceneObject;
+				tmpSceneObject.shape = boxShape;
+				tmpSceneObject.transform = initialTransform;
+				tmpSceneObject.parentId =  myWM.getRootNodeId(); // hook in after root node
+				tmpSceneObject.attributes.clear();
+				//						tmpSceneObject.attributes.push_back(Attribute("shapeType","Box"));
+				//						tmpSceneObject.attributes.push_back(Attribute("color","red"));
+				tmpSceneObject.attributes = iter->second;
 
-						unsigned int returnedId;
-						myWM.addSceneObject(tmpSceneObject, returnedId);
+				unsigned int returnedId;
+				myWM.addSceneObject(tmpSceneObject, returnedId);
 			}
 
 		}

@@ -43,7 +43,8 @@ int main(int argc, char **argv)
   ROS_INFO("Number of found objects %i", srv.response.results.size());
   for (unsigned int i = 0; i < static_cast<unsigned int>(srv.response.results.size()); ++i) {
 	  ROS_INFO("	Object with ID %i has transform: ", srv.response.results[i].id);
-	  std::cout << srv.response.results[i].transform;
+//	  std::cout << srv.response.results[i].transform;
+	  std::cout << srv.response.results[i];
   }
 
   return 0;
