@@ -111,7 +111,7 @@ public:
 
 		/* parse request */
 		ROS_DEBUG("Receiving new query.");
-		vector<BRICS_3D::RSG::Attribute> queryAttributes;;
+		vector<BRICS_3D::RSG::Attribute> queryAttributes;
 		for (unsigned int i = 0; i < static_cast<unsigned int>(req.attributes.size()); ++i) {
 			queryAttributes.push_back(Attribute(req.attributes[i].key ,req.attributes[i].value));
 		}
@@ -123,31 +123,41 @@ public:
 		/* setup response */
 		res.results.resize(resultObjects.size());
 		geometry_msgs::Quaternion tmpQuaternion;
-		geometry_msgs::TransformStamped tmpTransform;
+		geometry_msgs::TransformStamped tmpTransformMsg;
 		std::stringstream objectSceneFrameID;
 		for (unsigned int i = 0; i < static_cast<unsigned int>(resultObjects.size()); ++i) {
 			tower_of_hanoi_sdk::SceneObject tmpSceneObject;
 			tmpSceneObject.id = resultObjects[i].id;
 			tmpSceneObject.parentId = resultObjects[i].parentId;
 
-			const double* matrixPtr;
-			matrixPtr = resultObjects[i].transform->getRawData();
-			double xStored = matrixPtr[12];
-			double yStored = matrixPtr[13];
-			double zStored = matrixPtr[14];
-
-			tmpQuaternion = tf::createQuaternionMsgFromYaw(0.0); //TODO correct rotation
-			tmpTransform.header.stamp = ros::Time::now();
-			tmpTransform.header.frame_id = rootFrameId;
+			tf::Transform tmpTransform;
+			homogeniousMatrixToTfTransform(resultObjects[i].transform, tmpTransform);
+			tmpTransformMsg.header.stamp = ros::Time::now();
+			tmpTransformMsg.header.frame_id = rootFrameId;
 			objectSceneFrameID.str("");
 			objectSceneFrameID << "scene_object_" << resultObjects[i].id;
-			tmpTransform.child_frame_id = objectSceneFrameID.str();
-			tmpTransform.transform.translation.x = xStored;
-			tmpTransform.transform.translation.y = yStored;
-			tmpTransform.transform.translation.z = zStored;
-			tmpTransform.transform.rotation = tmpQuaternion;
+			tmpTransformMsg.child_frame_id = objectSceneFrameID.str();
+			tmpTransformMsg.transform.translation.x = tmpTransform.getOrigin().getX();
+			tmpTransformMsg.transform.translation.y = tmpTransform.getOrigin().getY();
+			tmpTransformMsg.transform.translation.z = tmpTransform.getOrigin().getZ();
+			tmpTransformMsg.transform.rotation.x = tmpTransform.getRotation().getX();
+			tmpTransformMsg.transform.rotation.y = tmpTransform.getRotation().getY();
+			tmpTransformMsg.transform.rotation.z = tmpTransform.getRotation().getZ();
+			tmpTransformMsg.transform.rotation.w = tmpTransform.getRotation().getW();
 
-			tmpSceneObject.transform = tmpTransform;
+			tmpSceneObject.transform = tmpTransformMsg;
+
+			tmpSceneObject.shape.type = geometric_shapes_msgs::Shape::BOX; //TODO support multible shapes
+			tmpSceneObject.shape.dimensions.resize(3);
+			tmpSceneObject.shape.dimensions[0] = 1;
+			tmpSceneObject.shape.dimensions[1] = 1;
+			tmpSceneObject.shape.dimensions[2] = 1;
+
+			tmpSceneObject.attributes.resize(resultObjects[i].attributes.size());
+			for (unsigned int j = 0; j < static_cast<unsigned int>(resultObjects[i].attributes.size()); ++j) {
+				tmpSceneObject.attributes[j].key = resultObjects[i].attributes[j].key;
+				tmpSceneObject.attributes[j].value = resultObjects[i].attributes[j].value;
+			}
 
 			res.results[i] = tmpSceneObject;
 		}
@@ -159,7 +169,6 @@ public:
 		map <string, vector<BRICS_3D::RSG::Attribute> >::iterator iter = objectClasses.begin();
 		for (iter = objectClasses.begin(); iter != objectClasses.end(); iter++) {
 
-//			string objectFrameId = "red_object_1";
 			string objectFrameId = iter->first;
 			tf::StampedTransform transform;
 			try{
@@ -174,8 +183,6 @@ public:
 
 			/* query */
 			vector<BRICS_3D::RSG::Attribute> queryAttributes;;
-//			queryAttributes;.push_back(Attribute("shapeType","Box"));
-//			queryAttributes;.push_back(Attribute("color","red"));
 			queryAttributes = iter->second;
 			vector<BRICS_3D::SceneObject> resultObjects;
 
@@ -213,28 +220,22 @@ public:
 
 				/* update existing */
 				ROS_INFO("Updating existing scene object with object ID: %i", resultObjects[index].id);
-				BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr newTransform(new BRICS_3D::HomogeneousMatrix44(1,0,0,  	//Rotation coefficients
-						0,1,0,
-						0,0,1,
-						transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())); 						//Translation coefficients
-						myWM.insertTransform(resultObjects[index].id, newTransform);
+				BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr newTransform(new BRICS_3D::HomogeneousMatrix44());
+				tfTransformToHomogeniousMatrix(transform, newTransform);
+				myWM.insertTransform(resultObjects[index].id, newTransform);
 
 			} else {
 
 				/* insert */
 				ROS_INFO("Inserting new scene object");
 				BRICS_3D::RSG::Shape::ShapePtr boxShape(new BRICS_3D::RSG::Box(0.054, 0.054, 0.054)); // in [m]
-				BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr initialTransform(new BRICS_3D::HomogeneousMatrix44(1,0,0,  	//Rotation coefficients
-						0,1,0,
-						0,0,1,
-						transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())); 						//Translation coefficients
+				BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr initialTransform(new BRICS_3D::HomogeneousMatrix44());
+				tfTransformToHomogeniousMatrix(transform, initialTransform);
 				BRICS_3D::SceneObject tmpSceneObject;
 				tmpSceneObject.shape = boxShape;
 				tmpSceneObject.transform = initialTransform;
 				tmpSceneObject.parentId =  myWM.getRootNodeId(); // hook in after root node
 				tmpSceneObject.attributes.clear();
-				//						tmpSceneObject.attributes.push_back(Attribute("shapeType","Box"));
-				//						tmpSceneObject.attributes.push_back(Attribute("color","red"));
 				tmpSceneObject.attributes = iter->second;
 
 				unsigned int returnedId;
@@ -274,7 +275,7 @@ public:
 
 	}
 
-	void HomogeniousMatrixToTfTransform (const BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr& transformMatrix, tf::Transform& tfTransform) {
+	void homogeniousMatrixToTfTransform (const BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr& transformMatrix, tf::Transform& tfTransform) {
 		const double* matrixPtr = transformMatrix->getRawData();
 
 		btVector3 translation;

@@ -32,8 +32,11 @@ int main(int argc, char **argv)
   srv.request.attributes.resize(1);
 //  srv.request.attributes[0].key = "color";
 //  srv.request.attributes[0].value = "red";
-  srv.request.attributes[0].key = "taskType";
-  srv.request.attributes[0].value = "targetArea";
+//  srv.request.attributes[0].key = "taskType";
+//  srv.request.attributes[0].value = "targetArea";
+  srv.request.attributes[0].key = "shapeType";
+  srv.request.attributes[0].value = "Box";
+
 
   if (!client.call(srv)) {
     ROS_ERROR("Failed to call service GetSceneObjects");
