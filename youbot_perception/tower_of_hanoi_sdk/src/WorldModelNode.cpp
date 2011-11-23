@@ -147,11 +147,16 @@ public:
 
 			tmpSceneObject.transform = tmpTransformMsg;
 
-			tmpSceneObject.shape.type = geometric_shapes_msgs::Shape::BOX; //TODO support multible shapes
-			tmpSceneObject.shape.dimensions.resize(3);
-			tmpSceneObject.shape.dimensions[0] = 1;
-			tmpSceneObject.shape.dimensions[1] = 1;
-			tmpSceneObject.shape.dimensions[2] = 1;
+			BRICS_3D::RSG::Box::BoxPtr tmpBox = boost::dynamic_pointer_cast<Box>(resultObjects[i].shape);
+
+			if ( tmpBox != 0) {
+				tmpSceneObject.shape.type = geometric_shapes_msgs::Shape::BOX; //TODO support multible shapes
+				tmpSceneObject.shape.dimensions.resize(3);
+				tmpSceneObject.shape.dimensions[0] = tmpBox->getSizeX();
+				tmpSceneObject.shape.dimensions[1] = tmpBox->getSizeY();
+				tmpSceneObject.shape.dimensions[2] = tmpBox->getSizeZ();
+			}
+
 
 			tmpSceneObject.attributes.resize(resultObjects[i].attributes.size());
 			for (unsigned int j = 0; j < static_cast<unsigned int>(resultObjects[i].attributes.size()); ++j) {
@@ -161,6 +166,7 @@ public:
 
 			res.results[i] = tmpSceneObject;
 		}
+
 
 		return true;
 	}
