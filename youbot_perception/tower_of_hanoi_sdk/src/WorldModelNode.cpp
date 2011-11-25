@@ -301,6 +301,15 @@ public:
 		tfTransform.setBasis(rotation);
 	}
 
+	/// To this TF frame_id all objects in the world model relate. Default is the Kinect frame.
+	string rootFrameId;
+
+	/// Minimal distance the needs to be exceeded to associate a perceived object with an already seen/stored one.
+	double associationDistanceTreshold;
+
+	/// The x,y,z sizes of the cubes to be grasped.
+	double cubeSize;
+
 private:
 
 	/// The ROS node handle
@@ -312,11 +321,8 @@ private:
 	/// Receives TF
 	tf::TransformListener tfListener;
 
+	/// Provided service to get access to the stored data
 	ros::ServiceServer getObjectsService;
-
-	string rootFrameId;
-
-	double associationDistanceTreshold;
 
 	/* hanoi specifc IDs */
 	string startFrameId;
@@ -327,6 +333,7 @@ private:
 	string greenBoxFrameId;
 	string yellowBoxFrameId;
 
+	/// Mapping that assignes attributes to relevant TF frame_ids
 	map <string, vector<BRICS_3D::RSG::Attribute> > objectClasses;
 };
 
@@ -340,6 +347,12 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "youbot_3d_world_model");
 	ros::NodeHandle n;
 	youBot::YouBotWorldModel youbotWM(n);
+
+
+	/* configuration */
+	n.param<std::string>("worldModelRootFrameId", youbotWM.rootFrameId, "/openni_rgb_optical_frame");
+	n.param<double>("worldModelcubeSize", youbotWM.cubeSize, 0.05);
+	n.param<double>("worldModelassociationDistanceTreshold", youbotWM.associationDistanceTreshold, 0.02);
 
 	/* coordination */
 //	ros::spin();
