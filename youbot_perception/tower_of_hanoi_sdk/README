@@ -3,9 +3,17 @@
 
 -- We assume that BRICS_3D and ROS (diamondback, electric, or later) are already installed in your system. If not:
 	-- For ROS Installation: http://www.ros.org/wiki/ROS/Installation
-	-- For BRICS_3D Installation: < link will be updated soon :) >
+	-- For BRICS_3D Installation: see below
 	-- Install ar_toolkit from ROS: http://www.ros.org/wiki/artoolkit
 	-- Install ar_kinect from ROS: http://www.ros.org/wiki/ar_kinect
+	-- Install motion_planning_common from ROS http://www.ros.org/wiki/motion_planning_common
+
+		-- NOTE: As motion_planning_common does not (yet) have an Ubuntu package you might directly install 
+		the source version on the KUKA youBot via:
+
+			$ cd ~/ros_stacks
+			$ svn co https://code.ros.org/svn/wg-ros-pkg/stacks/motion_planning_common/trunk
+
 	 
 -- Ensure that the downloaded tower_of_hanoi_sdk folder is reachable through your ROS_PACKAGE_PATH environment variable
 
@@ -14,6 +22,32 @@
 	$ rosmake
 
 -- If the package builds with no failures then go ahead and start detecting the objects :)
+
+
+	Installation of BRICS_3D
+	========================
+
+	As the webite for BRICS_3D is currently in the process of being setup, short instructions for 
+	installation is given below.  You must have installed the following dependencies: (otherwise 
+	the commands show how to install them on a standard Ubuntu system).
+
+	-- Eigen3: $ sudo apt-get install libeigen3-dev
+	-- Boost (vers. 1.40 or newer): $ sudo apt-get install libboost-dev
+	-- OpenCV (vers. 2.3 or newer): $ sudo apt-get install libopencv2.3-dev 
+
+	-- To checkout BRICS_3D (you might checkout into any folder you like, as example we use here the home folder ~/brics_3d):
+
+		$ cd ~
+		$ svn co https://svn.best-of-robotics.org/brics/BROCRE/BRICS_3D/trunk brics_3d
+
+	-- Compile and install:
+
+		$ cd ~/brics_3d
+		$ mkdir build
+		$ cd build
+		$ cmake ..
+		$ make
+		$ sudo make install
 
 
 2. Object Detection
@@ -288,4 +322,25 @@ To start detecting the positions start:
 TF frames with topic names "/auxillary", "/start", "/goal" will be published once they are 
 visible in the kinect-view. The position of the markers will be published with respect to the 
 "/openni_rgb_optical_frame".
+
+
+4 3D World Model
+================
+
+The tower of hanoi package contains a node to store the percieved 3D data over time. Essentially this node 
+evaluates all information given on the tf topic and addes prior knowledge like the size of the cubes. The
+GetSceneObjects.srv service allwows to get acces to the stored data.   
+
+Usage:	
+======
+
+Start the perception nodes as decribed above. Then start the worl model mode:
+
+	$ rosrun tower_of_hanoi_sdk worldModel
+
+An example query can be found in WorldModelSampleQuery.cpp. To start it invoke:
+
+	$rosrun tower_of_hanoi_sdk worldModelSampleQuery 
+
+You can pose similar queries in your own application to solve the tower of hanoi challenge.
 
