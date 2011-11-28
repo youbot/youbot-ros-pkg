@@ -22,7 +22,14 @@
 #include <tower_of_hanoi_sdk/GetSceneObjects.h>
 #include <visualization_msgs/Marker.h>
 
-
+extern bool attributeListContainsAttribute(std::vector<tower_of_hanoi_sdk::Attribute> attributeList, tower_of_hanoi_sdk::Attribute queryAttribute) {
+	for (unsigned int i = 0; i < static_cast<unsigned int>(attributeList.size()); ++i) {
+		if ( (attributeList[i].key.compare(queryAttribute.key) == 0) && (attributeList[i].value.compare(queryAttribute.value) == 0) ) {
+			return true;
+		}
+	}
+	return false;
+}
 
 int main(int argc, char **argv)
 {
@@ -77,10 +84,42 @@ int main(int argc, char **argv)
 		  marker.scale.z = srv.response.results[i].shape.dimensions[2];
 
 		  // Set the color -- be sure to set alpha to something non-zero!
-		  marker.color.r = 0.5f;
-		  marker.color.g = 0.5f;
-		  marker.color.b = 1.0f;
-		  marker.color.a = 0.8;
+		  tower_of_hanoi_sdk::Attribute green;
+		  green.key = "color";
+		  green.value = "green";
+		  tower_of_hanoi_sdk::Attribute yellow;
+		  yellow.key = "color";
+		  yellow.value = "yellow";
+		  tower_of_hanoi_sdk::Attribute red;
+		  red.key = "color";
+		  red.value = "red";
+
+		  if ( attributeListContainsAttribute(srv.response.results[i].attributes, green) ) {
+			  marker.color.r = 0.0f;
+			  marker.color.g = 1.0f;
+			  marker.color.b = 0.0f;
+			  marker.color.a = 0.8;
+
+		  } else if (attributeListContainsAttribute(srv.response.results[i].attributes, yellow)) {
+			  marker.color.r = 1.0f;
+			  marker.color.g = 1.0f;
+			  marker.color.b = 0.0f;
+			  marker.color.a = 0.8;
+
+		  } else if (attributeListContainsAttribute(srv.response.results[i].attributes, red)) {
+			  marker.color.r = 1.0f;
+			  marker.color.g = 0.0f;
+			  marker.color.b = 0.0f;
+			  marker.color.a = 0.8;
+
+		  } else {
+			  marker.color.r = 1.0f;
+			  marker.color.g = 1.0f;
+			  marker.color.b = 1.0f;
+			  marker.color.a = 0.8;
+		  }
+
+
 
 		  marker.lifetime = ros::Duration();
 
