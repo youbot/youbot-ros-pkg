@@ -222,7 +222,7 @@ public:
 
 			ROS_INFO("Shortest distance %lf to found result object %i.", minSquardDistanceToExistingObjects, index);
 
-			if (minSquardDistanceToExistingObjects < associationDistanceTreshold) {
+			if (minSquardDistanceToExistingObjects < (associationDistanceTreshold * associationDistanceTreshold) ) {
 
 				/* update existing */
 				ROS_INFO("Updating existing scene object with object ID: %i", resultObjects[index].id);
