@@ -14,7 +14,9 @@
   <depend package="geometry_msgs"/>
   <depend package="nav_msgs"/>
   <depend package="trajectory_msgs"/>
-  <depend package="brics_actuator"/> <!--BRICS interface messages, version 0.1-->
+  <depend package="brics_actuator"/> <!--BRICS interface messages, version 0.1 -->
+<!--  <depend package="soem"/>
+  <depend package="youbot_driver"/> -->
   <rosdep name="setcap" />
   
 

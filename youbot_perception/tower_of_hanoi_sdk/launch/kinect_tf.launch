@@ -1,0 +1,3 @@
+<launch>
+	<node pkg="tf" type="static_transform_publisher" name="youbot_to_kinect" args="0 0 0.44 0 0.2 0 /plate_link /openni_camera 500" />
+</launch>

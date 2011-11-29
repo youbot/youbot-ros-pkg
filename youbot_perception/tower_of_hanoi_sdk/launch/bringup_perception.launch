@@ -1,0 +1,14 @@
+<launch>
+	<!-- Start sensor + TF -->	
+	<include file="$(find openni_camera)/launch/openni_node.launch" />	
+	<include file="$(find tower_of_hanoi_sdk)/launch/kinect_tf.launch" />
+
+	<!-- Start ARMarker detection -->
+	<include file="$(find tower_of_hanoi_sdk)/launch/PositionDetection.launch" />
+
+	<!-- Start cube detection -->
+	<include file="$(find tower_of_hanoi_sdk)/launch/PoseEstimation6D.launch" />
+
+	<!-- Start 3D World Model -->
+	<!--<node name="youbot_3d_world_model" pkg="tower_of_hanoi_sdk" type="worldModel"/> -->
+</launch>
