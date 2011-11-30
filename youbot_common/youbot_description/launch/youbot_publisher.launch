@@ -17,6 +17,9 @@
 		
 	</node>
 
+	<!-- send youbot urdf to param server -->
+	<param name="robot_description" command="$(find xacro)/xacro.py '$(find youbot_description)/robots/youbot.urdf.xacro'"/>
+
 	<!-- push robot_description to factory and spawn robot in gazebo -->
 	<node name="youbot_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -model youBot -x 0.0 -y 0.0 -z 0.1" respawn="false" output="screen" />
 	

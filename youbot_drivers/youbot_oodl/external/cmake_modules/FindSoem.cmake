@@ -10,6 +10,7 @@ FIND_PATH(SOEM_INCLUDE_DIR NAMES ethercatmain.h
   PATHS
   $ENV{YOUBOTDIR}/include/soem/src 
   $ENV{ROBOTPKG_BASE}/include/soem/src 
+  ${soem_PACKAGE_PATH}/src
   ENV CPATH
   /usr/include/
   /usr/include/soem/src
@@ -24,6 +25,7 @@ FIND_LIBRARY(SOEM_LIBRARIES NAMES soem
   PATHS
   $ENV{YOUBOTDIR}/lib 
   $ENV{ROBOTPKG_BASE}/lib
+  ${soem_PACKAGE_PATH}/lib
   ENV LD_LIBRARY_PATH
   ENV LIBRARY_PATH
   /usr/lib
