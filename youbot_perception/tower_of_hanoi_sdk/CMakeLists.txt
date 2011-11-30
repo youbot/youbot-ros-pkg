@@ -79,7 +79,7 @@ rosbuild_add_executable(perceptionEngineController src/ControlPerception.cpp)
 rosbuild_add_executable(perceptionEngineConfigurator src/ConfigurePerception.cpp)
 
 #executable for finding positions
-rosbuild_add_executable(positionDetector src/PositionDetection.cpp)
+#rosbuild_add_executable(positionDetector src/PositionDetection.cpp)
 
 
 #---------------------------------------------------------------------------------experiments

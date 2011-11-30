@@ -6,9 +6,7 @@
 <!-- HSV-Limits Configuration Files with full path -->
 <!-- Region Labes used by the nodes to publish the transforms -->
 
-	<node name="poseEstimator6D" pkg="tower_of_hanoi_sdk" type="poseEstimator6D" output="screen"
-					args="3 3 $(find tower_of_hanoi_sdk)/redRoiConfig.cfg 
-					$(find tower_of_hanoi_sdk)/greenRoiConfig.cfg $(find tower_of_hanoi_sdk)/yellowRoiConfig.cfg
-					red green yellow" />
-
+	<node name="poseEstimator6D" pkg="tower_of_hanoi_sdk" type="poseEstimator6D" output="screen" args="3 3 $(find tower_of_hanoi_sdk)/redRoiConfig.cfg $(find tower_of_hanoi_sdk)/greenRoiConfig.cfg $(find tower_of_hanoi_sdk)/yellowRoiConfig.cfg red green yellow">
+	<rosparam command="load" file="$(find tower_of_hanoi_sdk)/cfg/poseEstimatorConfiguration.yaml" />
+	</node>
 </launch>
