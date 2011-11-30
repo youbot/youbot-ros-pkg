@@ -157,7 +157,7 @@ void perceptionConfigurationCallback(const tower_of_hanoi_sdk::Configuration mes
 		poseEstimators[i]->initializeLimits(minLimitH[i], maxLimitH[i], minLimitS[i], maxLimitS[i]);
 		//Initializing the cluster extractor limits
 		//ToDo Allow configurating these parameters too
-		poseEstimators[i]->initializeClusterExtractor(200,10000,0.01);
+		poseEstimators[i]->initializeClusterExtractor(200,2500,0.01);
 	}
 
 	perceptionPaused=false;
@@ -173,8 +173,18 @@ int main(int argc, char* argv[]){
 
 	ros::init(argc, argv, "PoseEstimation6D");
 	ros::NodeHandle nh;
+	/** configuration */
+	int minClusterSize, maxClusterSize;
+	double clusterTolerance;
+	ros::param::param<int>("/poseEstimator6D/minClusterSize", minClusterSize, 100);
+	ros::param::param<int>("/poseEstimator6D/maxClusterSize", maxClusterSize, 2000);
+	ros::param::param<double>("/poseEstimator6D/clusterTolerance", clusterTolerance, 0.01);	//1 cm by default
+
 	noOfRegions = 0;
 	maxNoOfObjects = 0;
+//	if (nh.hasParam("minClusterSize")){
+//		nh.getParam("minClusterSize", minClusterSize);
+//	}
 
 	if(argc < 4){
 
@@ -235,7 +245,8 @@ int main(int argc, char* argv[]){
 		//Initializing the limits in HSV space to extract the ROI
 		poseEstimators[i]->initializeLimits(minLimitH[i], maxLimitH[i], minLimitS[i], maxLimitS[i]);
 		//Initializing the cluster extractor limits
-		poseEstimators[i]->initializeClusterExtractor(200,10000,0.01);
+		ROS_INFO("Object Clustering Parametrs: [%d] [%d] [%f]", minClusterSize, maxClusterSize, clusterTolerance);
+		poseEstimators[i]->initializeClusterExtractor(minClusterSize,maxClusterSize,clusterTolerance);
 	}
 
 
