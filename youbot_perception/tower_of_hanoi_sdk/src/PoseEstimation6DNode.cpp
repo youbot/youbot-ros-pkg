@@ -157,7 +157,7 @@ void perceptionConfigurationCallback(const tower_of_hanoi_sdk::Configuration mes
 		poseEstimators[i]->initializeLimits(minLimitH[i], maxLimitH[i], minLimitS[i], maxLimitS[i]);
 		//Initializing the cluster extractor limits
 		//ToDo Allow configurating these parameters too
-		poseEstimators[i]->initializeClusterExtractor(200,10000,0.01);
+		poseEstimators[i]->initializeClusterExtractor(200,2500,0.01);
 	}
 
 	perceptionPaused=false;
