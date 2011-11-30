@@ -87,3 +87,4 @@ target_link_libraries(worldModel brics3d_world_model brics3d_util brics3d_algori
 rosbuild_add_executable(worldModelSampleQuery src/examples/WorldModelSampleQuery.cpp )
 rosbuild_add_executable(worldModelVisualizer src/examples/WorldModelVisualizer.cpp )
 
+

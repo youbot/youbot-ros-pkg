@@ -63,7 +63,7 @@ PoseEstimation6D::PoseEstimation6D() {
 	reliableScoreThreshold = 0.00008;
 
 	maxNoOfObjects = 0;
-
+	this->publishApproximatePoses = true;
 
 	//ToDO initialize
 //	bestTransformation[0]=0;
@@ -147,6 +147,7 @@ void PoseEstimation6D::initializeClusterExtractor(int minClusterSize, int maxClu
 void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCount){
 
 	Eigen::Vector3d centroid3d = centroid3DEstimator->computeCentroid(in_cloud);
+	bool reliableModelFound=true;
 	float xTrans = centroid3d[0];
 	float yTrans = centroid3d[1];
 	float zTrans = centroid3d[2];
@@ -210,6 +211,7 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 			if(score2D > reliableScoreThreshold){
 				ROS_INFO("[%s_%d] Approximate Model Found(2D)!! Object May Not be visible enough...",
 						regionLabel.c_str(),objCount);
+				reliableModelFound=false;
 			} else {
 				ROS_INFO("[%s_%d] Reliable Model Found(2D) :) ", regionLabel.c_str(), objCount);
 			}
@@ -228,6 +230,7 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 			if(score3D > reliableScoreThreshold){
 				ROS_INFO("[%s_%d] Approximate Model Found(3D)!! Object May Not be visible enough...",
 						regionLabel.c_str(),objCount);
+				reliableModelFound=false;
 			}else {
 				ROS_INFO("[%s_%d] Reliable Model Found(3D) :) ", regionLabel.c_str(), objCount);
 			}
@@ -257,8 +260,15 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
      transform.setRotation( tf::Quaternion(xRot, yRot, zRot) );
      std::stringstream ss;
      ss << regionLabel << "_object_" << objCount;
+     if(publishApproximatePoses){
      br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "/openni_rgb_optical_frame",
     		 ss.str()));
+     } else {
+    	 if(reliableModelFound){
+    		 br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "/openni_rgb_optical_frame",
+    		     		 ss.str()));
+    	 }
+     }
 
 	delete finalModel2D;
 	delete finalModel3D;

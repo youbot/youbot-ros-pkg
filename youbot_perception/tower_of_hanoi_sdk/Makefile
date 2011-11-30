@@ -203,19 +203,6 @@ colorBasedRoiExtractor/fast:
 .PHONY : colorBasedRoiExtractor/fast
 
 #=============================================================================
-# Target rules for targets named gopalModelGenerator
-
-# Build rule for target.
-gopalModelGenerator: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 gopalModelGenerator
-.PHONY : gopalModelGenerator
-
-# fast build rule for target.
-gopalModelGenerator/fast:
-	$(MAKE) -f CMakeFiles/gopalModelGenerator.dir/build.make CMakeFiles/gopalModelGenerator.dir/build
-.PHONY : gopalModelGenerator/fast
-
-#=============================================================================
 # Target rules for targets named hsvLimitsFinder
 
 # Build rule for target.
@@ -666,21 +653,6 @@ src/examples/PoseEstimation6D.s:
 	$(MAKE) -f CMakeFiles/poseEstimator6D.dir/build.make CMakeFiles/poseEstimator6D.dir/src/examples/PoseEstimation6D.s
 .PHONY : src/examples/PoseEstimation6D.s
 
-# target to build an object file
-src/experiments/GTModelGeneration.o:
-	$(MAKE) -f CMakeFiles/gopalModelGenerator.dir/build.make CMakeFiles/gopalModelGenerator.dir/src/experiments/GTModelGeneration.o
-.PHONY : src/experiments/GTModelGeneration.o
-
-# target to preprocess a source file
-src/experiments/GTModelGeneration.i:
-	$(MAKE) -f CMakeFiles/gopalModelGenerator.dir/build.make CMakeFiles/gopalModelGenerator.dir/src/experiments/GTModelGeneration.i
-.PHONY : src/experiments/GTModelGeneration.i
-
-# target to generate assembly for a file
-src/experiments/GTModelGeneration.s:
-	$(MAKE) -f CMakeFiles/gopalModelGenerator.dir/build.make CMakeFiles/gopalModelGenerator.dir/src/experiments/GTModelGeneration.s
-.PHONY : src/experiments/GTModelGeneration.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -696,7 +668,6 @@ help:
 	@echo "... clean-test-results"
 	@echo "... colorBasedRoiExtractor"
 	@echo "... edit_cache"
-	@echo "... gopalModelGenerator"
 	@echo "... hsvLimitsFinder"
 	@echo "... modelFittingICP"
 	@echo "... objectClusterExtractor"
@@ -756,9 +727,6 @@ help:
 	@echo "... src/examples/PoseEstimation6D.o"
 	@echo "... src/examples/PoseEstimation6D.i"
 	@echo "... src/examples/PoseEstimation6D.s"
-	@echo "... src/experiments/GTModelGeneration.o"
-	@echo "... src/experiments/GTModelGeneration.i"
-	@echo "... src/experiments/GTModelGeneration.s"
 .PHONY : help
 
 
