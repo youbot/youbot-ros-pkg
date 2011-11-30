@@ -222,7 +222,7 @@ public:
 
 			ROS_INFO("Shortest distance %lf to found result object %i.", minSquardDistanceToExistingObjects, index);
 
-			if (minSquardDistanceToExistingObjects < associationDistanceTreshold) {
+			if (minSquardDistanceToExistingObjects < (associationDistanceTreshold * associationDistanceTreshold) ) {
 
 				/* update existing */
 				ROS_INFO("Updating existing scene object with object ID: %i", resultObjects[index].id);
@@ -234,11 +234,18 @@ public:
 
 				/* insert */
 				ROS_INFO("Inserting new scene object");
-				BRICS_3D::RSG::Shape::ShapePtr boxShape(new BRICS_3D::RSG::Box(0.054, 0.054, 0.054)); // in [m]
+				BRICS_3D::RSG::Shape::ShapePtr boxShape(new BRICS_3D::RSG::Box(cubeSize, cubeSize, cubeSize)); // in [m]
+				BRICS_3D::RSG::Shape::ShapePtr targetAreaBoxShape(new BRICS_3D::RSG::Box(targetAreaSizeX, targetAreaSizeY, targetAreaSizeZ)); // in [m]
 				BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr initialTransform(new BRICS_3D::HomogeneousMatrix44());
 				tfTransformToHomogeniousMatrix(transform, initialTransform);
 				BRICS_3D::SceneObject tmpSceneObject;
-				tmpSceneObject.shape = boxShape;
+				if ( (iter->first.compare(startFrameId) == 0) || (iter->first.compare(auxiliaryFrameId) == 0) || (iter->first.compare(goalFrameId) == 0)) {
+					tmpSceneObject.shape = targetAreaBoxShape;
+				} else {
+					tmpSceneObject.shape = boxShape;
+				}
+
+//				tmpSceneObject.shape = boxShape;
 				tmpSceneObject.transform = initialTransform;
 				tmpSceneObject.parentId =  myWM.getRootNodeId(); // hook in after root node
 				tmpSceneObject.attributes.clear();
@@ -301,6 +308,20 @@ public:
 		tfTransform.setBasis(rotation);
 	}
 
+	/// To this TF frame_id all objects in the world model relate. Default is the Kinect frame.
+	string rootFrameId;
+
+	/// Minimal distance the needs to be exceeded to associate a perceived object with an already seen/stored one.
+	double associationDistanceTreshold;
+
+	/// The x,y,z sizes of the cubes to be grasped.
+	double cubeSize;
+
+	double targetAreaSizeX;
+	double targetAreaSizeY;
+	double targetAreaSizeZ;
+
+
 private:
 
 	/// The ROS node handle
@@ -312,11 +333,8 @@ private:
 	/// Receives TF
 	tf::TransformListener tfListener;
 
+	/// Provided service to get access to the stored data
 	ros::ServiceServer getObjectsService;
-
-	string rootFrameId;
-
-	double associationDistanceTreshold;
 
 	/* hanoi specifc IDs */
 	string startFrameId;
@@ -327,6 +345,7 @@ private:
 	string greenBoxFrameId;
 	string yellowBoxFrameId;
 
+	/// Mapping that assignes attributes to relevant TF frame_ids
 	map <string, vector<BRICS_3D::RSG::Attribute> > objectClasses;
 };
 
@@ -340,6 +359,16 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "youbot_3d_world_model");
 	ros::NodeHandle n;
 	youBot::YouBotWorldModel youbotWM(n);
+
+
+	/* configuration */
+	n.param<std::string>("worldModelRootFrameId", youbotWM.rootFrameId, "/openni_rgb_optical_frame");
+	n.param<double>("worldModelcubeSize", youbotWM.cubeSize, 0.048);
+	// (0.38, 0.13, 0.15) This is approx. a Kinect box...
+	n.param<double>("worldModelTargetAreaSizeX", youbotWM.targetAreaSizeX, 0.15);
+	n.param<double>("worldModelTargetAreaSizeY", youbotWM.targetAreaSizeY, 0.38);
+	n.param<double>("worldModelTargetAreaSizeZ", youbotWM.targetAreaSizeZ, 0.13);
+	n.param<double>("worldModelassociationDistanceTreshold", youbotWM.associationDistanceTreshold, 0.02);
 
 	/* coordination */
 //	ros::spin();

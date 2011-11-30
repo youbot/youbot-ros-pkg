@@ -29,6 +29,25 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
   ros::ServiceClient client = n.serviceClient<tower_of_hanoi_sdk::GetSceneObjects>("youbot_3d_world_model/getSceneObjects");
   tower_of_hanoi_sdk::GetSceneObjects srv;
+
+  /*
+   * The possible attributes for the tower of hanoi challenge are:
+   *
+   * ("shapeType","Box") 		-> common attribute for all objects
+   * ("taskType","targetArea") 	-> common attribute for the start, the auxiliary or the goal position
+   * ("name","start")			-> specific attribute for the start position
+   * ("name","auxiliary")		-> specific attribute for the auxiliary position
+   * ("name","goal")			-> specific attribute for the goal position
+   * ("color","red")			-> common attribute to a red graspable box
+   * ("color","green")			-> common attribute to a green graspable box
+   * ("color","yellow")			-> common attribute to a yellow graspable box
+   *
+   * In case you combine multiple attributes in one query the logical conjunction is AND.
+   *
+   */
+
+
+  /* Set up a query */
   srv.request.attributes.resize(1);
 //  srv.request.attributes[0].key = "color";
 //  srv.request.attributes[0].value = "red";
@@ -37,12 +56,13 @@ int main(int argc, char **argv)
   srv.request.attributes[0].key = "shapeType";
   srv.request.attributes[0].value = "Box";
 
-
+  /* Send the query*/
   if (!client.call(srv)) {
     ROS_ERROR("Failed to call service GetSceneObjects");
     return 1;
   }
 
+  /* Evaluate the results */
   ROS_INFO("Number of found objects %i", srv.response.results.size());
   for (unsigned int i = 0; i < static_cast<unsigned int>(srv.response.results.size()); ++i) {
 	  ROS_INFO("	Object with ID %i has transform: ", srv.response.results[i].id);
