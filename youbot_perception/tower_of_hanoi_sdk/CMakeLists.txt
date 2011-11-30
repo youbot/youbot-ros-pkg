@@ -77,12 +77,3 @@ rosbuild_add_executable(perceptionEngineController src/ControlPerception.cpp)
 
 #executable for configuring the perception system
 rosbuild_add_executable(perceptionEngineConfigurator src/ConfigurePerception.cpp)
-
-#executable for finding positions
-#rosbuild_add_executable(positionDetector src/PositionDetection.cpp)
-
-
-#---------------------------------------------------------------------------------experiments
-rosbuild_add_executable(gopalModelGenerator src/experiments/GTModelGeneration.cpp)
-target_link_libraries(gopalModelGenerator   
-										brics3d_util brics3d_algorithm brics3d_core)

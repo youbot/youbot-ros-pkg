@@ -176,9 +176,11 @@ int main(int argc, char* argv[]){
 	/** configuration */
 	int minClusterSize, maxClusterSize;
 	double clusterTolerance;
+	bool publishApproximatePoses;
 	ros::param::param<int>("/poseEstimator6D/minClusterSize", minClusterSize, 100);
 	ros::param::param<int>("/poseEstimator6D/maxClusterSize", maxClusterSize, 2000);
 	ros::param::param<double>("/poseEstimator6D/clusterTolerance", clusterTolerance, 0.01);	//1 cm by default
+	ros::param::param<bool>("/poseEstimator6D/publishApproximatePoses", publishApproximatePoses, true);	//1 cm by default
 
 	noOfRegions = 0;
 	maxNoOfObjects = 0;
@@ -247,6 +249,7 @@ int main(int argc, char* argv[]){
 		//Initializing the cluster extractor limits
 		ROS_INFO("Object Clustering Parametrs: [%d] [%d] [%f]", minClusterSize, maxClusterSize, clusterTolerance);
 		poseEstimators[i]->initializeClusterExtractor(minClusterSize,maxClusterSize,clusterTolerance);
+		poseEstimators[i]->setPublishingStatus(publishApproximatePoses);
 	}
 
 
