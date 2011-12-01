@@ -119,6 +119,11 @@ class PoseEstimation6D {
 	std::vector<float> ztranslation;
 
 	/**
+	 * Indicates if all the pose estimates should be published or only the reliable estimates
+	 */
+	bool publishApproximatePoses;
+
+	/**
 	 * Best transformation found by the model fitting process
 	 */
 	std::vector<Eigen::Matrix4f*> bestTransformation;
@@ -209,6 +214,9 @@ public:
 
 	std::string getRegionLabel() const;
     void setRegionLabel(std::string regionLabel);
+    void setPublishingStatus(bool publishApproximatePoses){
+    	this->publishApproximatePoses=publishApproximatePoses;
+    }
 };
 
 }
