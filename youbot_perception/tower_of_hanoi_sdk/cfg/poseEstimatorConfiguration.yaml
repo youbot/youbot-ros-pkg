@@ -1,4 +1,4 @@
-minClusterSize: 800
+minClusterSize: 200
 maxClusterSize: 2500
 clusterTolerance: 0.01
 publishApproximatePoses: false
