@@ -40,7 +40,7 @@
 
 
 <node pkg="amcl" type="amcl" name="amcl">
-  <remap from="scan" to="base_scan"/>-->
+  <remap from="scan" to="base_scan"/>
 
   <param name="odom_model_type" value="omni"/>
   <param name="odom_alpha5" value="0.1"/>
