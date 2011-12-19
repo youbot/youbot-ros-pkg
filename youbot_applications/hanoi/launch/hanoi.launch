@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+	<include file="$(find youbot_oodl)/launch/youbot_oodl_driver.launch" />
+	<include file="$(find youbot_oodl)/launch/youbot_joint_state_publisher.launch" />
+	<include file="$(find youbot_navigation_common)/launch/base_front_hokuyo_node.launch" />
+	<include file="$(find youbot_navigation_local)/launch/move_base_local.launch" />
+	<include file="$(find youbot_navigation_global)/launch/amcl.launch" />
+	<include file="$(find youbot_arm_navigation)/launch/youbot_arm_navigation.launch" />
+
+	<node name="armNavigator" pkg="youbot_arm_navigation" type="youbot_trajectory_controller"/>
+	<node name="hanoiRunner" pkg="hanoi" type="hanoi"/>
+</launch>
