@@ -5,7 +5,7 @@
 		<param name="threshold" type="int" value="100"/>
 	</node>
 <!-- configure the transform for hokuyo -->
-<node pkg="tf" type="static_transform_publisher" name="top_kinect_frame"
-args="-.30 0 .48 0 0 0 /base_link /openni_camera 1" />
+<!--<node pkg="tf" type="static_transform_publisher" name="top_kinect_frame"
+args="-.30 0 .48 0 0 0 /base_link /openni_camera 1" />-->
 
 </launch>
