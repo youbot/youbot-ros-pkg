@@ -1,0 +1,24 @@
+<package>
+  <description brief="youbot_arm_navigation">
+
+     youbot_arm_navigation
+
+  </description>
+  <author>Dominik Lechner</author>
+  <license>LGPL, BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_arm_navigation</url>
+  <depend package="planning_environment"/>
+  <depend package="arm_kinematics_constraint_aware"/>
+  <depend package="ompl_ros_interface"/>
+  <depend package="trajectory_filter_server"/>
+  <depend package="constraint_aware_spline_smoother"/>
+  <depend package="move_arm"/>
+
+
+  <depend package="trajectory_msgs" />
+  <depend package="brics_actuator" />
+
+</package>
+
+

@@ -1,0 +1,13 @@
+<launch>
+    <include file="$(find youbot_arm_navigation)/launch/youbot_planning_environment.launch" />
+    <include file="$(find youbot_arm_navigation)/launch/environment_server.launch">
+        <arg name="use_monitor" value="false" />
+        <arg name="use_collision_map" value="false" />
+        <!-- <remap from="/joint_states" to="/arm_1/joint_states"/> -->
+        <!-- <remap from="/joint_states" to="/base/joint_states"/> -->
+    </include>
+    <include file="$(find youbot_arm_navigation)/launch/constraint_aware_kinematics.launch" />
+    <include file="$(find youbot_arm_navigation)/launch/ompl_planning.launch" />
+    <include file="$(find youbot_arm_navigation)/launch/trajectory_filter_server.launch" />
+    <include file="$(find youbot_arm_navigation)/launch/move_groups.launch" />
+</launch>
