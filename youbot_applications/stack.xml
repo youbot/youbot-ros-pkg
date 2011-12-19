@@ -1,0 +1,9 @@
+<stack>
+  <description brief="youbot_applications">Contains various sample, demo or experimental applications for the KUKA youBot.</description>
+  <author>Sebastian Blumenthal</author>
+  <license>LGPL, BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_applications</url>
+  <depend stack="ros" />
+
+</stack>
