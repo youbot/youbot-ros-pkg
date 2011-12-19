@@ -8,7 +8,7 @@
   <license>LGPL, BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/youbot_navigation_global</url>
-  <rosdep name="amcl" />
+  <depend package="amcl" />
   
 </package>
 
