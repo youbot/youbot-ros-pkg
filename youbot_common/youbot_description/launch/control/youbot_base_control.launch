@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <launch>
 
+	<param name="publish_frequency" type="double" value="50.0" />
+
         <!-- base controllers -->
         <include file="$(find pr2_controller_manager)/controller_manager.launch" />
 
@@ -12,6 +14,6 @@
 
         <node name="base_controllers_spawner" pkg="pr2_controller_manager" type="spawner" output="screen" args="base_controller base_odometry">
 		<remap from="/base_odometry/odom" to="/odom" />
-        </node> 
+	</node> 
   	
 </launch>

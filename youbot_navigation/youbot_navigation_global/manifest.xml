@@ -1,0 +1,15 @@
+<package>
+  <description brief="youbot_navigation_global">
+
+     Global navigation
+
+  </description>
+  <author>Alexey Zakharov, Sebastian Blumenthal</author>
+  <license>LGPL, BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_navigation_global</url>
+  <depend package="amcl" />
+  
+</package>
+
+

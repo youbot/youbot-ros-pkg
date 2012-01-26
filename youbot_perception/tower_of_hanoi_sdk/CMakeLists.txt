@@ -20,6 +20,7 @@ gencfg()
 
 
 rosbuild_genmsg()
+rosbuild_gensrv()
 
 ADD_DEFINITIONS(-DEIGEN3)
 
@@ -78,3 +79,10 @@ rosbuild_add_executable(perceptionEngineController src/ControlPerception.cpp)
 #executable for configuring the perception system
 rosbuild_add_executable(perceptionEngineConfigurator src/ConfigurePerception.cpp)
 
+#executable for 3D world model
+rosbuild_add_executable(worldModel src/WorldModelNode.cpp )
+target_link_libraries(worldModel brics3d_world_model brics3d_util brics3d_algorithm brics3d_core)
+
+#examples for 3D world model
+rosbuild_add_executable(worldModelSampleQuery src/examples/WorldModelSampleQuery.cpp )
+rosbuild_add_executable(worldModelVisualizer src/examples/WorldModelVisualizer.cpp )
