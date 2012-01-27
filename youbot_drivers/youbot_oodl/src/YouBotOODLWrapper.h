@@ -48,6 +48,7 @@
 #include "geometry_msgs/Twist.h"
 #include "tf/transform_broadcaster.h"
 #include "nav_msgs/Odometry.h"
+#include "std_srvs/Empty.h"
 
 #include "trajectory_msgs/JointTrajectory.h"
 #include "sensor_msgs/JointState.h"
@@ -153,6 +154,17 @@ public:
 	 * @brief Mapps OODL values to ROS messages
 	 */
 	void computeOODLSensorReadings();
+  
+  bool switchOffBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+
+  bool switchOnBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+  
+  bool switchOffArm1MotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+
+  bool switchOnArm1MotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+  
+  bool calibrateArm1Callback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+  
 
 	/* Configuration: */
 

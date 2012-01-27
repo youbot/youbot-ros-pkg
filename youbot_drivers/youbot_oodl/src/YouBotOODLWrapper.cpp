@@ -83,6 +83,10 @@ void YouBotOODLWrapper::initializeBase(std::string baseName) {
 	youBotConfiguration.baseConfiguration.baseOdometryPublisher = node.advertise<nav_msgs::Odometry>("odom", 1);
 //	youBotConfiguration.baseConfiguration.baseJointStatePublisher = node.advertise<sensor_msgs::JointState>("base_joint_states", 1);
 	youBotConfiguration.baseConfiguration.baseJointStatePublisher = node.advertise<sensor_msgs::JointState>("base/joint_states", 1);
+  
+  /* setup services*/
+  youBotConfiguration.baseConfiguration.switchOffMotorsService = node.advertiseService("base/switchOffMotors", &YouBotOODLWrapper::switchOffBaseMotorsCallback, this);
+  youBotConfiguration.baseConfiguration.switchONMotorsService = node.advertiseService("base/switchOnMotors", &YouBotOODLWrapper::switchOnBaseMotorsCallback, this);
 
 	/* setup frame_ids */
 	youBotOdometryFrameID = "odom";
@@ -169,6 +173,13 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
 		youBotConfiguration.youBotArmConfigurations[armIndex].gripperPositionCommandSubscriber = node.subscribe<brics_actuator::JointPositions>(topicName.str(), 1000, boost::bind(&YouBotOODLWrapper::gripperPositionsCommandCallback, this, _1, armIndex));
 		youBotConfiguration.youBotArmConfigurations[armIndex].lastGripperCommand = 0.0; //This is true if the gripper is calibrated.
 	}
+  
+  /* setup services*/
+  if(armIndex == 0){
+    youBotConfiguration.youBotArmConfigurations[armIndex].switchOffMotorsService = node.advertiseService("arm_1/switchOffMotors", &YouBotOODLWrapper::switchOffArm1MotorsCallback, this);
+    youBotConfiguration.youBotArmConfigurations[armIndex].switchONMotorsService = node.advertiseService("arm_1/switchOnMotors", &YouBotOODLWrapper::switchOnArm1MotorsCallback, this);
+    youBotConfiguration.youBotArmConfigurations[armIndex].calibrateService = node.advertiseService("arm_1/calibrate", &YouBotOODLWrapper::calibrateArm1Callback, this);
+  }
 
 	/* initialize message vector for arm joint states */
 	sensor_msgs::JointState dummyMessage;
@@ -202,7 +213,7 @@ void YouBotOODLWrapper::stop() {
 		youBotConfiguration.hasArms = false;
 	}
 	armJointStateMessages.clear();
-
+ // youbot::EthercatMaster::getInstance().destroy();
 }
 
 void YouBotOODLWrapper::baseCommandCallback(const geometry_msgs::Twist& youbotBaseCommand){
@@ -618,6 +629,124 @@ void YouBotOODLWrapper::publishOODLSensorReadings() {
 	}
 
 
+}
+
+bool YouBotOODLWrapper::switchOffBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
+{
+  ROS_INFO("Switch off the base motors");
+  if (youBotConfiguration.hasBase) { // in case stop has been invoked
+    	
+    youbot::JointPWMSetpoint pwmStopMovement;
+    pwmStopMovement.pwm = 0;
+		try {
+      youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(1).setData(pwmStopMovement);
+      youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(2).setData(pwmStopMovement);
+      youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(3).setData(pwmStopMovement);
+      youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(4).setData(pwmStopMovement);
+      youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
+		} catch (std::exception& e) {
+			std::string errorMessage = e.what();
+			ROS_WARN("Cannot switch off the base motors: \n %s", errorMessage.c_str());
+      return false;
+		}
+
+	} else {
+		ROS_ERROR("No base initialized!");
+    return false;
+	}
+  return true;
+}
+
+bool YouBotOODLWrapper::switchOnBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
+{
+  ROS_INFO("Switch on the base motors");
+  if (youBotConfiguration.hasBase) { // in case stop has been invoked
+		quantity<si::velocity> longitudinalVelocity;
+		quantity<si::velocity> transversalVelocity;
+		quantity<si::angular_velocity> angularVelocity;
+
+		longitudinalVelocity =  0.0 * meter_per_second;
+		transversalVelocity = 0.0 * meter_per_second;
+		angularVelocity = 0.0 * radian_per_second;
+
+		try {
+			youBotConfiguration.baseConfiguration.youBotBase->setBaseVelocity(longitudinalVelocity, transversalVelocity, angularVelocity);
+		} catch (std::exception& e) {
+			std::string errorMessage = e.what();
+			ROS_WARN("Cannot set base velocities: \n %s", errorMessage.c_str());
+      return false;
+		}
+
+	} else {
+		ROS_ERROR("No base initialized!");
+    return false;
+	}
+  return true;
+}
+
+bool YouBotOODLWrapper::switchOffArm1MotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
+{
+  ROS_INFO("Switch off the arm 1 motors");	
+  if (youBotConfiguration.hasArms) {
+    
+    youbot::JointPWMSetpoint pwmStopMovement;
+    pwmStopMovement.pwm = 0;
+    try{
+      youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
+			youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(1).setData(pwmStopMovement);
+      youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(2).setData(pwmStopMovement);
+      youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(3).setData(pwmStopMovement);
+      youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(4).setData(pwmStopMovement);
+      youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(5).setData(pwmStopMovement);
+      youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
+    } catch (std::exception& e) {
+			std::string errorMessage = e.what();
+			ROS_WARN("Cannot switch off the arm motors: \n %s", errorMessage.c_str());
+      return false;
+		}
+  }else{
+    return false;
+  }
+  return true;
+}
+
+bool YouBotOODLWrapper::switchOnArm1MotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
+{
+  ROS_INFO("Switch on the arm 1 motors");
+  if (youBotConfiguration.hasArms) {
+   youbot::JointVelocitySetpoint desiredAngularVelocity;
+   desiredAngularVelocity = 0.0 * radian_per_second;
+   std::vector<youbot::JointVelocitySetpoint> desiredAngularVelocityVector;
+   desiredAngularVelocityVector.assign(5, desiredAngularVelocity);
+    try{
+			youBotConfiguration.youBotArmConfigurations[0].youBotArm->setJointData(desiredAngularVelocityVector);
+    } catch (std::exception& e) {
+			std::string errorMessage = e.what();
+			ROS_WARN("Cannot switch off the arm motors: \n %s", errorMessage.c_str());
+      return false;
+		}
+  }else{
+    return false;
+  }
+  return true;
+}
+
+bool YouBotOODLWrapper::calibrateArm1Callback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
+{
+ if (youBotConfiguration.hasArms) {
+   
+    try{
+			youBotConfiguration.youBotArmConfigurations[0].youBotArm->calibrateManipulator(true);
+    } catch (std::exception& e) {
+			std::string errorMessage = e.what();
+			ROS_WARN("Cannot calibrate the arm: \n %s", errorMessage.c_str());
+      return false;
+		}
+  }else{
+    return false;
+  }
+  return true;
 }
 
 }  // namespace youBot

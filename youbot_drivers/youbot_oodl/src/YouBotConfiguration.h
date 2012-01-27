@@ -79,11 +79,17 @@ public:
 
 	/// Publishes JointState messages with angles/velocities for the wheels.
 	ros::Publisher baseJointStatePublisher;
-
+  
+  /// Service to switch the motor off by setting the PWM value to zero
+  ros::ServiceServer switchOffMotorsService;
+  
+  /// Service to switch the motor ON by setting the velocity to zero
+  ros::ServiceServer switchONMotorsService;
+  
 	/// Publishes tf frames as odometry
 	tf::TransformBroadcaster odometryBroadcaster;
-
-
+  
+  
 };
 
 class YouBotArmConfiguration {
@@ -127,6 +133,15 @@ public:
 
 	/// Publishes JointState messages with angles for the arm.
 	ros::Publisher armJointStatePublisher;
+  
+  /// Service to switch the motor off by setting the PWM value to zero
+  ros::ServiceServer switchOffMotorsService;
+  
+  /// Service to switch the motor ON by setting the velocity to zero
+  ros::ServiceServer switchONMotorsService;
+  
+  /// Service to calibrate the arm
+  ros::ServiceServer calibrateService;
 
 	/**
 	 * This variable memorizes the last successfully set value for the gripper,
