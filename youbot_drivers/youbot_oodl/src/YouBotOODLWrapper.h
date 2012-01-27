@@ -165,6 +165,7 @@ public:
   
   bool calibrateArm1Callback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
   
+  bool reconnectCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 
 	/* Configuration: */
 

@@ -141,7 +141,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
 		return;
 	}
 
-	/* (optional) set all joints into velocity mode -> so the arm can be manually moved */
+	/* (optional) set all joints into velocity mode -> so the arm can be manually moved 
 	youbot::JointVelocitySetpoint jointVelocity;
 	for (int i = 0; i < youBotArmDoF; ++i) {
 		jointVelocity.angularVelocity = 0.0 * radian_per_second;
@@ -152,6 +152,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
 			ROS_WARN("Cannot set arm velocity %i: \n %s", i+1, errorMessage.c_str());
 		}
 	}
+  */
 
 	/* setup input/output communication */
 	topicName.str("");
@@ -173,7 +174,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
 		youBotConfiguration.youBotArmConfigurations[armIndex].gripperPositionCommandSubscriber = node.subscribe<brics_actuator::JointPositions>(topicName.str(), 1000, boost::bind(&YouBotOODLWrapper::gripperPositionsCommandCallback, this, _1, armIndex));
 		youBotConfiguration.youBotArmConfigurations[armIndex].lastGripperCommand = 0.0; //This is true if the gripper is calibrated.
 	}
-  
+
   /* setup services*/
   if(armIndex == 0){
     youBotConfiguration.youBotArmConfigurations[armIndex].switchOffMotorsService = node.advertiseService("arm_1/switchOffMotors", &YouBotOODLWrapper::switchOffArm1MotorsCallback, this);
@@ -187,7 +188,6 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
 
 	/* setup frame_ids */
 	youBotArmFrameID = "arm";  //TODO find default topic name
-
 	ROS_INFO("Arm \"%s\" is initialized.", armName.c_str());
 	ROS_INFO("System has %i initialized arm(s).", static_cast<int>(youBotConfiguration.youBotArmConfigurations.size()));
 	youBotConfiguration.hasArms = true;
@@ -200,6 +200,13 @@ void YouBotOODLWrapper::stop() {
 			delete youBotConfiguration.baseConfiguration.youBotBase;
 			youBotConfiguration.baseConfiguration.youBotBase = 0;
 		}
+    
+    youBotConfiguration.baseConfiguration.baseCommandSubscriber.shutdown();
+    youBotConfiguration.baseConfiguration.baseJointStatePublisher.shutdown();
+    youBotConfiguration.baseConfiguration.baseOdometryPublisher.shutdown();
+    youBotConfiguration.baseConfiguration.switchONMotorsService.shutdown();
+    youBotConfiguration.baseConfiguration.switchOffMotorsService.shutdown();
+   // youBotConfiguration.baseConfiguration.odometryBroadcaster.
 		youBotConfiguration.hasBase = false;
 	}
 
@@ -209,11 +216,21 @@ void YouBotOODLWrapper::stop() {
 				delete youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm;
 				youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm = 0;
 			}
-		}
+    
+      
+      youBotConfiguration.youBotArmConfigurations[armIndex].armJointStatePublisher.shutdown();
+      youBotConfiguration.youBotArmConfigurations[armIndex].armPositionCommandSubscriber.shutdown();
+      youBotConfiguration.youBotArmConfigurations[armIndex].armVelocityCommandSubscriber.shutdown();
+      youBotConfiguration.youBotArmConfigurations[armIndex].calibrateService.shutdown();
+      youBotConfiguration.youBotArmConfigurations[armIndex].gripperPositionCommandSubscriber.shutdown();
+      youBotConfiguration.youBotArmConfigurations[armIndex].switchONMotorsService.shutdown();
+      youBotConfiguration.youBotArmConfigurations[armIndex].switchOffMotorsService.shutdown();
+    }
 		youBotConfiguration.hasArms = false;
-	}
-	armJointStateMessages.clear();
- // youbot::EthercatMaster::getInstance().destroy();
+    youBotConfiguration.youBotArmConfigurations.clear();
+    armJointStateMessages.clear();
+  }
+  youbot::EthercatMaster::destroy();
 }
 
 void YouBotOODLWrapper::baseCommandCallback(const geometry_msgs::Twist& youbotBaseCommand){
@@ -746,6 +763,31 @@ bool YouBotOODLWrapper::calibrateArm1Callback(std_srvs::Empty::Request& request,
   }else{
     return false;
   }
+  return true;
+}
+
+bool YouBotOODLWrapper::reconnectCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
+{
+  
+  this->stop();
+    
+  /* configuration */
+	bool youBotHasBase;
+	bool youBotHasArms;
+  std::string armName1;
+	node.param("youBotHasBase", youBotHasBase, true);
+	node.param("youBotHasArms", youBotHasArms, true);
+	node.param<std::string>("youBotArmName1", armName1, "youbot-manipulator");
+  
+  ROS_ASSERT((youBotHasBase == true) || (youBotHasArms == true)); // At least one should be true, otherwise nothing to be started.
+	if (youBotHasBase == true) {
+		this->initializeBase("youbot-base");
+	}
+
+	if (youBotHasArms == true) {
+		this->initializeArm(armName1);
+//		youBot.initializeArm("youbot-manipulator2");
+	}
   return true;
 }
 

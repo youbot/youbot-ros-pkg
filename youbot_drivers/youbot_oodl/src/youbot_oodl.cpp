@@ -39,6 +39,8 @@
 
 #include "YouBotOODLWrapper.h"
 
+
+
 int main(int argc, char **argv)
 {
 
@@ -55,6 +57,8 @@ int main(int argc, char **argv)
 	n.param("youBotHasArms", youBotHasArms, true);
 	n.param<std::string>("youBotConfigurationFilePath", youBot.youBotConfiguration.configurationFilePath, mkstr(YOUBOT_CONFIGURATIONS_DIR));
 	n.param<std::string>("youBotArmName1", armName1, "youbot-manipulator");
+  
+  ros::ServiceServer reconnectService = n.advertiseService("reconnect", &youBot::YouBotOODLWrapper::reconnectCallback, &youBot);
 
 	ROS_ASSERT((youBotHasBase == true) || (youBotHasArms == true)); // At least one should be true, otherwise nothing to be started.
 	if (youBotHasBase == true) {
