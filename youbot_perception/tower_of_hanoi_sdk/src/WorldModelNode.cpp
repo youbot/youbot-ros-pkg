@@ -185,6 +185,10 @@ public:
 				continue;
 			}
 
+			if ( (ros::Time::now() - transform.stamp_) > maxTFCacheDuration ) { //simply ignore outdated TF frames
+				ROS_WARN("TF found for %s. But it is outdated. Skipping it.", iter->first.c_str());
+				continue;
+			}
 			ROS_INFO("TF found for %s.", iter->first.c_str());
 
 			/* query */
@@ -268,7 +272,9 @@ public:
 
 	}
 
-
+	void cleanUpWorldModelData() {
+		myWM.runOncePerception();
+	}
 
 	/* Some helper functions */
 	void tfTransformToHomogeniousMatrix (const tf::Transform& tfTransform, BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr& transformMatrix)
@@ -321,6 +327,7 @@ public:
 	double targetAreaSizeY;
 	double targetAreaSizeZ;
 
+	ros::Duration maxTFCacheDuration;
 
 private:
 
@@ -347,6 +354,7 @@ private:
 
 	/// Mapping that assignes attributes to relevant TF frame_ids
 	map <string, vector<BRICS_3D::RSG::Attribute> > objectClasses;
+
 };
 
 
@@ -356,6 +364,7 @@ private:
 int main(int argc, char **argv)
 {
 
+	BRICS_3D::Logger::setMinLoglevel(BRICS_3D::Logger::INFO);
 	ros::init(argc, argv, "youbot_3d_world_model");
 	ros::NodeHandle n;
 	youBot::YouBotWorldModel youbotWM(n);
@@ -370,6 +379,7 @@ int main(int argc, char **argv)
 	n.param<double>("worldModelTargetAreaSizeZ", youbotWM.targetAreaSizeZ, 0.13);
 	n.param<double>("worldModelassociationDistanceTreshold", youbotWM.associationDistanceTreshold, 0.02);
 
+	youbotWM.maxTFCacheDuration = ros::Duration(1.0); //[s]
 	/* coordination */
 //	ros::spin();
 
@@ -377,6 +387,7 @@ int main(int argc, char **argv)
 	while (n.ok()){
 		ros::spinOnce();
 		youbotWM.processTfTopic();
+		youbotWM.cleanUpWorldModelData();
 		rate.sleep();
 	}
 
