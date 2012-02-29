@@ -89,13 +89,13 @@ private:
 
     void updateJointPosition(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt);
     void updateJointTorque(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt);
-    void updateJointVelocity(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt);
+    void updateJointVelocity(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt, const int i);
 
     void positionCommand(const brics_actuator::JointPositions &jointPositions);
     void velocityCommand(const brics_actuator::JointVelocities &jointVelocities);
     void torqueCommand(const brics_actuator::JointTorques &jointTorques);
 
-    double filteredVelocity;
+    std::vector <double> filteredVelocity;
 };
 
 } // namespace

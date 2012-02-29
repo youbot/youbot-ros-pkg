@@ -123,6 +123,7 @@ bool YouBotUniversalController::init(pr2_mechanism_model::RobotState *robotPtr, 
 
     // Initializing targetVelocities vector
     setPoints.resize(joints.size());
+    filteredVelocity.resize(joints.size());
 
     // Sets up pid controllers for all of the joints from yaml file
     std::string gainsNS;
@@ -180,7 +181,7 @@ void YouBotUniversalController::update()
         }
         case YouBotUniversalController::VELOCITY :
         {
-            updateJointVelocity(setPoints[i], joints[i], &pids[i], dt);
+            updateJointVelocity(setPoints[i], joints[i], &pids[i], dt, i);
             break;
         }
         case YouBotUniversalController::TORQUE :
@@ -199,19 +200,23 @@ void YouBotUniversalController::update()
 
 }
 
-void YouBotUniversalController::updateJointVelocity(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt)
+void YouBotUniversalController::updateJointVelocity(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt, const int i)
 {
+    //std::cout << "setPoint: " << setPoint <<  std::endl;
     double error(0);
     assert(joint_state_->joint_);
 
     double command_ = setPoint;
     double velocity_ = joint_state_->velocity_;
+    //std::cout << "velocity_: " << velocity_ <<  std::endl;
     const double T = 1;
-    filteredVelocity = filteredVelocity + (velocity_ - filteredVelocity) * dt.toSec()/(dt.toSec()+T);
-    error = filteredVelocity - command_;
-    ROS_DEBUG("Current velocity: %f, filtered velocity: %f, Error: %f\n",velocity_, filteredVelocity, error);
+    filteredVelocity[i] = filteredVelocity[i] + (velocity_ - filteredVelocity[i]) * dt.toSec()/(dt.toSec()+T);
+    //filteredVelocity = velocity_;
+    error = filteredVelocity[i] - command_;
+    ROS_DEBUG("Current velocity: %f, filtered velocity: %f, Error: %f\n",velocity_, filteredVelocity[i], error);
 
     double commanded_effort = pid_controller_ -> updatePid(error, dt);
+    //std::cout << "commanded_effort: " << commanded_effort <<  std::endl;
     joint_state_->commanded_effort_ = commanded_effort;
 
 }
@@ -309,6 +314,7 @@ void YouBotUniversalController::velocityCommand(const brics_actuator::JointVeloc
 
     ROS_DEBUG("Readin the target velocities from the brics_actuator::JointVelocities message\n");
     std::vector <brics_actuator::JointValue> velocities = jointVelocities.velocities;
+    //std::cout << "Readin the target velocities from the brics_actuator::JointVelocities message" << std::endl;
 
     if (velocities.empty())
     {
@@ -325,6 +331,7 @@ void YouBotUniversalController::velocityCommand(const brics_actuator::JointVeloc
         {
             if (velocities[k].joint_uri == joints[j]->joint_->name)
             {
+                //std::cout << "velocities[k]: " << k << " - " << velocities[k].value <<  std::endl;
                 lookup[j] = k;
                 break;
             }
@@ -343,9 +350,12 @@ void YouBotUniversalController::velocityCommand(const brics_actuator::JointVeloc
         {
             ROS_DEBUG("Joint %s = %f %s, ", velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].value, velocities[lookup[j]].unit.c_str());
             if (velocities[lookup[j]].unit != to_string(si::radian_per_second))
-                ROS_ERROR("Joint %s has the value in the inpcompatible units %s", velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].unit.c_str());
-            if (!setPoints.empty())
+                ROS_ERROR("Joint %s has the value in the incompatible units %s", velocities[lookup[j]].joint_uri.c_str(), velocities[lookup[j]].unit.c_str());
+            if (!setPoints.empty()){
                 setPoints[j] = velocities[lookup[j]].value;
+                //std::cout << "setPoints[j]: " << j << " - " << setPoints[j] <<  std::endl;
+                //std::cout << "velocities[lookup[j]]: " << j << " - " << velocities[lookup[j]].value <<  std::endl;
+            }
         }
     }
 

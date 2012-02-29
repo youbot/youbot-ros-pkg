@@ -8,20 +8,20 @@
 
 		<gazebo reference="${name}_palm_link">
 			<material>Gazebo/Black</material>
-			<turnGravityOff>false</turnGravityOff>
-			<selfCollide>true</selfCollide>
+			<turnGravityOff>true</turnGravityOff>
+			<selfCollide>false</selfCollide>
 		</gazebo>
 	
-		<gazebo reference="${name}_finger_l_link">
+		<gazebo reference="${name}_finger_link_l">
 			<material>Gazebo/Black</material>
-			<turnGravityOff>false</turnGravityOff>
-			<selfCollide>true</selfCollide>
+			<turnGravityOff>true</turnGravityOff>
+			<selfCollide>false</selfCollide>
 		</gazebo>
 	
-		<gazebo reference="${name}_finger_r_link">
+		<gazebo reference="${name}_finger_link_r">
 			<material>Gazebo/Black</material>
-			<turnGravityOff>false</turnGravityOff>
-			<selfCollide>true</selfCollide>
+			<turnGravityOff>true</turnGravityOff>
+			<selfCollide>false</selfCollide>
 		</gazebo>
 	
 	</xacro:macro>
