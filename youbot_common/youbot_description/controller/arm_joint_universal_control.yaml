@@ -10,16 +10,21 @@ arm_controller:
   gains:
     arm_joint_1:
       p: 10
-      d: 1
+      i: 0.0
+      d: 7
     arm_joint_2:
       p: 10
-      d: 1
+      i: 0.0
+      d: 7
     arm_joint_3: 
       p: 10
-      d: 1
+      i: 0.0
+      d: 7
     arm_joint_4:
       p: 10
-      d: 1
+      i: 0.0
+      d: 7
     arm_joint_5:
       p: 10
-      d: 1
+      i: 0.0
+      d: 7

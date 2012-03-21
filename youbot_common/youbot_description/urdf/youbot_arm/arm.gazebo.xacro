@@ -9,37 +9,37 @@
 
 		<gazebo reference="${name}_link_0">
 			<material value="youbot/DarkGrey" />
-			<turnGravityOff>false</turnGravityOff>
+			<turnGravityOff>true</turnGravityOff>
 			
 		</gazebo>
 
 		<gazebo reference="${name}_link_1">
 			<!--<material value="youbot/Orange" />-->
-			<turnGravityOff>false</turnGravityOff>
+			<turnGravityOff>true</turnGravityOff>
 			
 		</gazebo>
 
 		<gazebo reference="${name}_link_2">
 			<!--<material value="youbot/Orange" />-->
-			<turnGravityOff>false</turnGravityOff>
+			<turnGravityOff>true</turnGravityOff>
 			
 		</gazebo>
 
 		<gazebo reference="${name}_link_3">
 			<!--<material value="youbot/Orange" />-->
-			<turnGravityOff>false</turnGravityOff>
+			<turnGravityOff>true</turnGravityOff>
 			
 		</gazebo>
 
 		<gazebo reference="${name}_link_4">
 			<!--<material value="youbot/Orange" />-->
-			<turnGravityOff>false</turnGravityOff>
+			<turnGravityOff>true</turnGravityOff>
 			
 		</gazebo>
 
 		<gazebo reference="${name}_link_5">
 			<!--<material value="youbot/DarkGrey" />-->
-			<turnGravityOff>false</turnGravityOff>
+			<turnGravityOff>true</turnGravityOff>
 			
 		</gazebo>
 
