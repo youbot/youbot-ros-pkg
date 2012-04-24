@@ -1,0 +1,303 @@
+<robot name="arena">
+  
+
+  	<link name="wall_1">
+    		<inertial>
+      			<origin xyz="0 1.20 0" /> 
+      			<mass value="10.0" />
+      			<inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    		</inertial>
+    		<visual>
+      			<origin xyz="0 1.20 0"/>
+      			<geometry>
+        			<box size="4 0.1 0.3" />
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<origin xyz="0 1.20 0"/>
+      		<geometry>
+        		<box size="4 0.1 0.3" />
+      		</geometry>
+    		</collision>
+  	</link>
+
+	<joint name="join1" type="fixed">
+    		<origin xyz="2 0 0" rpy="0 0 0"/>
+    		<parent link="wall_1"/>
+    		<child link="wall_2"/>
+  	</joint>
+
+    	<link name="wall_2">
+    		<inertial>
+      			<origin xyz="0 0 0" /> 
+      			<mass value="10.0" />
+      			<inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    		</inertial>
+    		<visual>
+      			<origin xyz="0 0 0"/>
+      			<geometry>
+        			<box size="0.1 -2.40 0.3" />
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<origin xyz="0 0 0"/>
+      			<geometry>
+        			<box size="0.1 -2.40 0.3" />
+      			</geometry>
+    		</collision>
+  	</link>
+
+	<joint name="join2" type="fixed">
+    		<origin xyz="-2 -1.2 0" rpy="0 0 0"/>
+    		<parent link="wall_2"/>
+    		<child link="wall_3"/>
+  	</joint>
+
+	<link name="wall_3">
+    		<inertial>
+      			<origin xyz="0 0 0" /> 
+      			<mass value="10.0" />
+      			<inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    		</inertial>
+    		<visual>
+      			<origin xyz="0 0 0"/>
+      			<geometry>
+        			<box size="4 0.1 0.3" />
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<origin xyz="0 0 0"/>
+      		<geometry>
+        		<box size="4 0.1 0.3" />
+      		</geometry>
+    		</collision>
+  	</link>
+
+	<joint name="join10" type="fixed">
+    		<origin xyz="-0.25 0.0 0.0" rpy="0 0 0"/>
+    		<parent link="wall_2"/>
+    		<child link="wall_10"/>
+  	</joint>
+
+	<link name="wall_10">
+    		<inertial>
+      			<origin xyz="0 0.0 -0.075" /> 
+      			<mass value="10.0" />
+      			<inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    		</inertial>
+    		<visual>
+      			<origin xyz="0 0.0 -0.075"/>
+      			<geometry>
+        			<box size="0.5 2.4 0.15" />
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<origin xyz="0 0.0 -0.075" /> 
+      		<geometry>
+        		<box size="0.5 2.4 0.15" />
+      		</geometry>
+    		</collision>
+  	</link>
+
+	<joint name="join3" type="fixed">
+    		<origin xyz="0 -0.4 0" rpy="0 0 0"/>
+    		<parent link="wall_3"/>
+    		<child link="wall_4"/>
+  	</joint>
+
+	<link name="wall_4">
+    		<inertial>
+      			<origin xyz="0 0.8 0" /> 
+      			<mass value="10.0" />
+      			<inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    		</inertial>
+    		<visual>
+      			<origin xyz="0 0.8 0"/>
+      			<geometry>
+        			<box size="0.1 0.8 0.3" />
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<origin xyz="0 0.8 0"/>
+      		<geometry>
+        		<box size="0.1 0.8 0.3" />
+      		</geometry>
+    		</collision>
+  	</link>
+
+	<joint name="join4" type="fixed">
+    		<origin xyz="0 0 0" rpy="0 0 0"/>
+    		<parent link="wall_1"/>
+    		<child link="wall_5"/>
+  	</joint>
+
+	<link name="wall_5">
+    		<inertial>
+      			<origin xyz="0 0.8 0" /> 
+      			<mass value="10.0" />
+      			<inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    		</inertial>
+    		<visual>
+      			<origin xyz="0 0.8 0"/>
+      			<geometry>
+        			<box size="0.1 0.8 0.3" />
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<origin xyz="0 0.8 0" /> 
+      		<geometry>
+        		<box size="0.1 0.8 0.3" />
+      		</geometry>
+    		</collision>
+  	</link>
+
+----------
+	<joint name="join5" type="fixed">
+    		<origin xyz="-2 -0.4 0" rpy="0 0 0"/>
+    		<parent link="wall_3"/>
+    		<child link="wall_6"/>
+  	</joint>
+
+	<link name="wall_6">
+    		<inertial>
+      			<origin xyz="0 0.8 0" /> 
+      			<mass value="10.0" />
+      			<inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    		</inertial>
+    		<visual>
+      			<origin xyz="0 0.8 0"/>
+      			<geometry>
+        			<box size="0.1 0.8 0.3" />
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<origin xyz="0 0.8 0"/>
+      		<geometry>
+        		<box size="0.1 0.8 0.3" />
+      		</geometry>
+    		</collision>
+  	</link>
+	
+	<joint name="join8" type="fixed">
+    		<origin xyz="0.25 0.8 0.0" rpy="0 0 0"/>
+    		<parent link="wall_6"/>
+    		<child link="wall_9"/>
+  	</joint>
+
+	<link name="wall_9">
+    		<inertial>
+      			<origin xyz="0 0.0 -0.075" /> 
+      			<mass value="10.0" />
+      			<inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    		</inertial>
+    		<visual>
+      			<origin xyz="0 0.0 -0.075"/>
+      			<geometry>
+        			<box size="0.5 0.8 0.15" />
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<origin xyz="0 0.0 -0.075" /> 
+      		<geometry>
+        		<box size="0.5 0.8 0.15" />
+      		</geometry>
+    		</collision>
+  	</link>
+
+	<joint name="join6" type="fixed">
+    		<origin xyz="-2 0 0" rpy="0 0 0"/>
+    		<parent link="wall_1"/>
+    		<child link="wall_7"/>
+  	</joint>
+
+	<link name="wall_7">
+    		<inertial>
+      			<origin xyz="0 0.8 0" /> 
+      			<mass value="10.0" />
+      			<inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    		</inertial>
+    		<visual>
+      			<origin xyz="0 0.8 0"/>
+      			<geometry>
+        			<box size="0.1 0.8 0.3" />
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<origin xyz="0 0.8 0" /> 
+      		<geometry>
+        		<box size="0.1 0.8 0.3" />
+      		</geometry>
+    		</collision>
+  	</link>
+
+	<joint name="join7" type="fixed">
+    		<origin xyz="0.25 0.8 0.0" rpy="0 0 0"/>
+    		<parent link="wall_7"/>
+    		<child link="wall_8"/>
+  	</joint>
+
+	<link name="wall_8">
+    		<inertial>
+      			<origin xyz="0 0.0 -0.075" /> 
+      			<mass value="10.0" />
+      			<inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    		</inertial>
+    		<visual>
+      			<origin xyz="0 0.0 -0.075"/>
+      			<geometry>
+        			<box size="0.5 0.8 0.15" />
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<origin xyz="0 0.0 -0.075" /> 
+      		<geometry>
+        		<box size="0.5 0.8 0.15" />
+      		</geometry>
+    		</collision>
+  	</link>
+
+
+
+
+  <gazebo reference="wall_1">
+	<material>Gazebo/Gray</material>
+	<selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="wall_2">
+	<material>Gazebo/Gray</material>
+	<selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="wall_3">
+	<material>Gazebo/Gray</material>
+	<selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="wall_4">
+	<material>Gazebo/Gray</material>
+	<selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="wall_5">
+	<material>Gazebo/Gray</material>
+	<selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="wall_6">
+	<material>Gazebo/Gray</material>
+	<selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="wall_7">
+	<material>Gazebo/Gray</material>
+	<selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="wall_8">
+	<material>Gazebo/Gray</material>
+	<selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="wall_9">
+	<material>Gazebo/Gray</material>
+	<selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="wall_10">
+	<material>Gazebo/Gray</material>
+	<selfCollide>true</selfCollide>
+  </gazebo>
+
+</robot>

@@ -123,6 +123,7 @@ bool YouBotUniversalController::init(pr2_mechanism_model::RobotState *robotPtr, 
 
     // Initializing targetVelocities vector
     setPoints.resize(joints.size());
+    filteredVelocity.resize(joints.size());
 
     // Sets up pid controllers for all of the joints from yaml file
     std::string gainsNS;
@@ -180,7 +181,7 @@ void YouBotUniversalController::update()
         }
         case YouBotUniversalController::VELOCITY :
         {
-            updateJointVelocity(setPoints[i], joints[i], &pids[i], dt);
+            updateJointVelocity(setPoints[i], joints[i], &pids[i], dt, i);
             break;
         }
         case YouBotUniversalController::TORQUE :
@@ -199,7 +200,7 @@ void YouBotUniversalController::update()
 
 }
 
-void YouBotUniversalController::updateJointVelocity(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt)
+void YouBotUniversalController::updateJointVelocity(double setPoint, pr2_mechanism_model::JointState* joint_state_, control_toolbox::Pid* pid_controller_, const ros::Duration& dt, const int& jointIndex)
 {
     double error(0);
     assert(joint_state_->joint_);
@@ -207,9 +208,9 @@ void YouBotUniversalController::updateJointVelocity(double setPoint, pr2_mechani
     double command_ = setPoint;
     double velocity_ = joint_state_->velocity_;
     const double T = 1;
-    filteredVelocity = filteredVelocity + (velocity_ - filteredVelocity) * dt.toSec()/(dt.toSec()+T);
-    error = filteredVelocity - command_;
-    ROS_DEBUG("Current velocity: %f, filtered velocity: %f, Error: %f\n",velocity_, filteredVelocity, error);
+    filteredVelocity[jointIndex] = filteredVelocity[jointIndex] + (velocity_ - filteredVelocity[jointIndex]) * dt.toSec()/(dt.toSec()+T);
+    error = filteredVelocity[jointIndex] - command_;
+    ROS_DEBUG("Current velocity: %f, filtered velocity: %f, Error: %f\n",velocity_, filteredVelocity[jointIndex], error);
 
     double commanded_effort = pid_controller_ -> updatePid(error, dt);
     joint_state_->commanded_effort_ = commanded_effort;
