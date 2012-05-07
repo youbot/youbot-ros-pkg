@@ -364,7 +364,7 @@ private:
 int main(int argc, char **argv)
 {
 
-	BRICS_3D::Logger::setMinLoglevel(BRICS_3D::Logger::INFO);
+	BRICS_3D::Logger::setMinLoglevel(BRICS_3D::Logger::LOGDEBUG);
 	ros::init(argc, argv, "youbot_3d_world_model");
 	ros::NodeHandle n;
 	youBot::YouBotWorldModel youbotWM(n);
