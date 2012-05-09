@@ -154,18 +154,18 @@ public:
 	 * @brief Mapps OODL values to ROS messages
 	 */
 	void computeOODLSensorReadings();
-  
-  bool switchOffBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 
-  bool switchOnBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
-  
-  bool switchOffArm1MotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+	bool switchOffBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 
-  bool switchOnArm1MotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
-  
-  bool calibrateArm1Callback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
-  
-  bool reconnectCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+	bool switchOnBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+
+	bool switchOffArmMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response, int armIndex);
+
+	bool switchOnArmMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response, int armIndex);
+
+	bool calibrateArmCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response, int armIndex);
+
+	bool reconnectCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 
 	/* Configuration: */
 
