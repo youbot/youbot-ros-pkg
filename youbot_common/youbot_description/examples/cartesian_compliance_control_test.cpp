@@ -62,7 +62,7 @@ void publishTf() {
     while(ros::ok()) {
         if (mutex) {
             tf::Vector3 position(tipPose.position.x, tipPose.position.y, tipPose.position.z);
-            btQuaternion orientation;
+            tf::Quaternion orientation;
             tf::quaternionMsgToTF(tipPose.orientation, orientation);
             tf::Transform transform(orientation, position);
             string parentFrameId = tipPose.base_frame_uri;
@@ -73,15 +73,15 @@ void publishTf() {
     }
 }
 
-void ypr2Quat(double yaw, double pitch, double roll, btQuaternion& quanternion) {
-        btMatrix3x3 rotMatrix;
-        rotMatrix.setEulerYPR(btScalar(yaw), btScalar(pitch), btScalar(roll));
+void ypr2Quat(double yaw, double pitch, double roll, tf::Quaternion& quanternion) {
+        tf::Matrix3x3 rotMatrix;
+        rotMatrix.setEulerYPR(tfScalar(yaw), tfScalar(pitch), tfScalar(roll));
         rotMatrix.getRotation(quanternion);
 }
 
 void setCartesianVectorMsg(brics_actuator::CartesianPose& tipPose,
                            const brics_actuator::CartesianVector& tipPosition,
-                           const btQuaternion& tipOrientation,
+                           const tf::Quaternion& tipOrientation,
                            const string baseFrameUri,
                            const string targetFrameUri,
                            ros::Time timeStamp) {
@@ -99,7 +99,7 @@ void test1(const ros::Publisher& armCommandPublisher) {
 
     for (int i = 0; i < 0; i++) {
     brics_actuator::CartesianVector tipPosition;
-    btQuaternion tipOrientation;
+    tf::Quaternion tipOrientation;
 
     //ref. position 1
     tipPosition.x = 0.0;
@@ -189,7 +189,7 @@ int main(int argc, char **argv) {
     ros::Publisher armCommandPublisher;
 
     brics_actuator::CartesianVector tipPosition;
-    btQuaternion tipOrientation;
+    tf::Quaternion tipOrientation;
 
     tipPosition.x = 0;
     tipPosition.y = 0;
