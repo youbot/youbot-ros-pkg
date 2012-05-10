@@ -1,9 +1,0 @@
-<launch>
-    <include file="$(find youbot_arm_navigation)/launch/youbot_planning_environment.launch" />
-    <node pkg="arm_kinematics_constraint_aware" type="arm_kinematics_constraint_aware" name="youbot_arm_kinematics">
-        <param name="group" type="string" value="arm" />
-        <param name="arm/root_name" type="string" value="base_link" />
-        <param name="arm/tip_name" type="string" value="arm_link_5" />
-        <param name="kinematics_solver" type="string" value="arm_kinematics_constraint_aware/KDLArmKinematicsPlugin" />
-    </node>
-</launch>
