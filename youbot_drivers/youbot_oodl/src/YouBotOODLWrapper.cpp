@@ -424,7 +424,7 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 		}
 		if (validGripperCommandReceived) { // at least one valid command received that requires action (set accumulated gripper value)
 			try {
-				youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmGripper().setData(gripperSlideRailDistance);
+				youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().setData(gripperSlideRailDistance);
 				youBotConfiguration.youBotArmConfigurations[armIndex].lastGripperCommand = gripperSlideRailDistance.barSpacing.value();
 			} catch (std::exception& e) {
 				std::string errorMessage = e.what();
@@ -618,16 +618,22 @@ void YouBotOODLWrapper::computeOODLSensorReadings() {
 			 * positions! The published values account for the distance between the gripper slide rails, not the fingers
 			 * themselves. Of course if the finger are screwed to the most inner position (i.e. the can close completely),
 			 * than it is correct.
-			 */
-			youbot::GripperBarSpacingSetPoint gripperSlideRailDistance;
-			//		youBotArm->getArmGripper().getData(gripperSlideRailDistance); // this is not yet implemented in OODL
-			//		double distance = gripperSlideRailDistance.barSpacing.value();
+			 */;
+			youbot::GripperSensedBarSpacing gripperSlideRailDistance;
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getData(gripperSlideRailDistance); // this is not yet implemented in OODL
+			double distance = gripperSlideRailDistance.barSpacing.value();
+
+			youbot::YouBotGripperBar& gripperBar1 = youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar1();
+			youbot::YouBotGripperBar& gripperBar2 = youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar2();
+
+			double gipperFingers[2]; //TODO replace distance by this
 
 			ROS_ASSERT(youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames.size() == static_cast<unsigned int>(youBotNumberOfFingers));
 			for (int i = 0; i < youBotNumberOfFingers; ++i) {
 
 				armJointStateMessages[armIndex].name[youBotArmDoF + i] = youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[i];
-				armJointStateMessages[armIndex].position[youBotArmDoF + i] = youBotConfiguration.youBotArmConfigurations[armIndex].lastGripperCommand / 2; //as the distance is symmetric, each finger travels half of the distance
+				//armJointStateMessages[armIndex].position[youBotArmDoF + i] = youBotConfiguration.youBotArmConfigurations[armIndex].lastGripperCommand / 2; //as the distance is symmetric, each finger travels half of the distance
+				armJointStateMessages[armIndex].position[youBotArmDoF + i] = distance / 2; //as the distance is symmetric, each finger travels half of the distance
 			}
 		}
 	}
