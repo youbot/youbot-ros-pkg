@@ -20,9 +20,12 @@
 	
 	<!-- send youbot urdf to param server -->
 	<param name="robot_description" command="$(find xacro)/xacro.py '$(find youbot_description)/robots/youbot.urdf.xacro'"/>
+        <param name="arena_description" command="$(find xacro)/xacro.py '$(find youbot_description)/urdf/environment/robocup_at_work.urdf'"/>
+	
 
 	<!-- push robot_description to factory and spawn robot in gazebo -->
 	<node name="youbot_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -model youBot -x 0.0 -y 0.0 -z 0.1" respawn="false" output="screen" />
+	<node name="arena_gazebo_model" pkg="gazebo" type="spawn_model" args="-urdf -param arena_description -model arena -x 0.0 -y 0.0 -z 0.2" respawn="false" output="screen" />
 	
 	<include file="$(find youbot_description)/launch/control/youbot_base_control.launch" />
 	<include file="$(find youbot_description)/launch/control/youbot_arm_control.launch" />

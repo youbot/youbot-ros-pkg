@@ -10,7 +10,7 @@
   <url>http://ros.org/wiki/youbot_oodl</url>
   <depend package="roscpp"/>
   <depend package="geometry_msgs"/>
-  <rosdep name="hokuyo_node" />
+  <depend package="hokuyo_node" />
 
 </package>
 

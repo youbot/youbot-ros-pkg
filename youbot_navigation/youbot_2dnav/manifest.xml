@@ -1,0 +1,20 @@
+<package>
+  <description brief="youbot_2dnav">
+
+     This Package provides launch files for running the youbot with the ROS navigation stack.
+
+  </description>
+  <author>Jan Paulus</author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://www.youbot-store.com</url>
+  
+  <depend package="move_base"/>
+  <depend package="map_server"/>
+  <depend package="robot_pose_ekf"/>
+  <depend package="amcl"/>
+  <depend package="topic_tools"/>
+  <depend package="youbot_2dslam"/>
+  <depend package="youbot_env"/>
+
+</package>
