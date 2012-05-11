@@ -393,10 +393,11 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 			ROS_WARN("youBot driver received an invalid gripper positions command.");
 			return;
 		}
-		youbot::GripperBarSpacingSetPoint gripperSlideRailDistance;
+
+		map<string, double>::const_iterator gripperIterator;
+		youbot::GripperBarPositionSetPoint leftGripperFingerPosition;
+		youbot::GripperBarPositionSetPoint rightGripperFingerPosition;
 		string unit = boost::units::to_string(boost::units::si::meter);
-		gripperSlideRailDistance.barSpacing = 0 * meter;
-		bool validGripperCommandReceived = false;
 
 		/* populate mapping between joint names and values */
 		std::map<string, double> jointNameToValueMapping;
@@ -408,29 +409,36 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 			}
 		}
 
-		/* loop over all youBot gripper joints and check if something is in the received message that requires action */
-		ROS_ASSERT(youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames.size() == static_cast<unsigned int>(youBotNumberOfFingers));
 		youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
-		for (int i = 0; i < youBotNumberOfFingers; ++i) {
 
-			/* check if there is something in in the message for the gripper */
-			map<string, double>::const_iterator gripperIterator = jointNameToValueMapping.find(youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[i]);
-			if (gripperIterator != jointNameToValueMapping.end()) {
-				ROS_DEBUG("Trying to set the gripper to new value %f", gripperIterator->second);
+		/* check if something is in the received message that requires action for the left finger gripper */
+		gripperIterator = jointNameToValueMapping.find(youBotConfiguration.youBotArmConfigurations[armIndex].leftGripperFingerName);
+		if (gripperIterator != jointNameToValueMapping.end()) {
+			ROS_DEBUG("Trying to set the left gripper finger to new value %f", gripperIterator->second);
 
-				gripperSlideRailDistance.barSpacing += gripperIterator->second * meter; //for now just stack all values, as long youBot oodl API does not suport two fingers
-				validGripperCommandReceived = true;
-			}
-		}
-		if (validGripperCommandReceived) { // at least one valid command received that requires action (set accumulated gripper value)
+			leftGripperFingerPosition.barPosition = gripperIterator->second * meter;
 			try {
-				youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().setData(gripperSlideRailDistance);
-				youBotConfiguration.youBotArmConfigurations[armIndex].lastGripperCommand = gripperSlideRailDistance.barSpacing.value();
+				youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar1().setData(leftGripperFingerPosition);
 			} catch (std::exception& e) {
 				std::string errorMessage = e.what();
-				ROS_WARN("Cannot set the gripper: \n %s", errorMessage.c_str());
+				ROS_WARN("Cannot set the left gripper finger: \n %s", errorMessage.c_str());
 			}
 		}
+
+		/* check if something is in the received message that requires action for the right finger gripper */
+		gripperIterator = jointNameToValueMapping.find(youBotConfiguration.youBotArmConfigurations[armIndex].rightGripperFingerName);
+		if (gripperIterator != jointNameToValueMapping.end()) {
+			ROS_DEBUG("Trying to set the right gripper to new value %f", gripperIterator->second);
+
+			rightGripperFingerPosition.barPosition = gripperIterator->second * meter;
+			try {
+				youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar2().setData(rightGripperFingerPosition);
+			} catch (std::exception& e) {
+				std::string errorMessage = e.what();
+				ROS_WARN("Cannot set the right gripper finger: \n %s", errorMessage.c_str());
+			}
+		}
+
 		youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
 	} else {
 		ROS_ERROR("Arm%i is not correctly initialized!", armIndex + 1);
@@ -618,23 +626,23 @@ void YouBotOODLWrapper::computeOODLSensorReadings() {
 			 * positions! The published values account for the distance between the gripper slide rails, not the fingers
 			 * themselves. Of course if the finger are screwed to the most inner position (i.e. the can close completely),
 			 * than it is correct.
-			 */;
-			youbot::GripperSensedBarSpacing gripperSlideRailDistance;
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getData(gripperSlideRailDistance); // this is not yet implemented in OODL
-			double distance = gripperSlideRailDistance.barSpacing.value();
+			 */
+			youbot::GripperSensedBarPosition gripperBar1Position;
+			youbot::GripperSensedBarPosition gripperBar2Position;
 
 			youbot::YouBotGripperBar& gripperBar1 = youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar1();
 			youbot::YouBotGripperBar& gripperBar2 = youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar2();
+			gripperBar1.getData(gripperBar1Position);
+			gripperBar2.getData(gripperBar2Position);
 
-			double gipperFingers[2]; //TODO replace distance by this
+			double leftGipperFingerPosition = gripperBar1Position.barPosition.value();
+			armJointStateMessages[armIndex].name[youBotArmDoF + 0] = youBotConfiguration.youBotArmConfigurations[armIndex].leftGripperFingerName;
+			armJointStateMessages[armIndex].position[youBotArmDoF + 0] = leftGipperFingerPosition;
 
-			ROS_ASSERT(youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames.size() == static_cast<unsigned int>(youBotNumberOfFingers));
-			for (int i = 0; i < youBotNumberOfFingers; ++i) {
+			double rightGipperFingerPosition = gripperBar2Position.barPosition.value();
+			armJointStateMessages[armIndex].name[youBotArmDoF + 1] = youBotConfiguration.youBotArmConfigurations[armIndex].rightGripperFingerName;
+			armJointStateMessages[armIndex].position[youBotArmDoF + 1] = rightGipperFingerPosition;
 
-				armJointStateMessages[armIndex].name[youBotArmDoF + i] = youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[i];
-				//armJointStateMessages[armIndex].position[youBotArmDoF + i] = youBotConfiguration.youBotArmConfigurations[armIndex].lastGripperCommand / 2; //as the distance is symmetric, each finger travels half of the distance
-				armJointStateMessages[armIndex].position[youBotArmDoF + i] = distance / 2; //as the distance is symmetric, each finger travels half of the distance
-			}
 		}
 	}
 

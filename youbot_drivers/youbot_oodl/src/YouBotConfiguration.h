@@ -80,11 +80,11 @@ public:
 	/// Publishes JointState messages with angles/velocities for the wheels.
 	ros::Publisher baseJointStatePublisher;
   
-  /// Service to switch the motor off by setting the PWM value to zero
-  ros::ServiceServer switchOffMotorsService;
+	/// Service to switch the motor off by setting the PWM value to zero
+	ros::ServiceServer switchOffMotorsService;
   
-  /// Service to switch the motor ON by setting the velocity to zero
-  ros::ServiceServer switchONMotorsService;
+	/// Service to switch the motor ON by setting the velocity to zero
+	ros::ServiceServer switchONMotorsService;
   
 	/// Publishes tf frames as odometry
 	tf::TransformBroadcaster odometryBroadcaster;
@@ -117,8 +117,14 @@ public:
 	/// Names of the joints. Are typically derived from the configuration files
 	std::vector<std::string> jointNames;
 
-	///Joint names for the gripper fingers
+	///Joint names for the gripper fingers @depricated
 	std::vector<std::string> gripperFingerNames;
+
+	///Joint name for the left gripper finger
+	std::string leftGripperFingerName;
+
+	///Joint name for the right gripper finger
+	std::string rightGripperFingerName;
 
 
 	/// Receives "brics_actuator/JointPositions" for the arm joints

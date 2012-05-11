@@ -89,6 +89,9 @@ YouBotArmConfiguration::YouBotArmConfiguration() {
 	gripperFingerNames.clear();
 	gripperFingerNames.push_back("gripper_finger_joint_l");
 	gripperFingerNames.push_back("gripper_finger_joint_r");
+
+	leftGripperFingerName = "gripper_finger_joint_l";
+	rightGripperFingerName = "gripper_finger_joint_r";
 }
 
 YouBotArmConfiguration::~YouBotArmConfiguration() {
