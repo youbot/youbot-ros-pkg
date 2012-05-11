@@ -89,6 +89,8 @@ class PoseEstimation6D {
 	 */
 	BRICS_3D::PointCloud3D *cube3D;
 
+	std::vector<BRICS_3D::PointCloud3D*> modelDatabase;
+
 	/**
 	 * Object to create the cube models
 	 */

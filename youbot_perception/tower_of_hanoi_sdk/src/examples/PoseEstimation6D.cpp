@@ -48,6 +48,11 @@ PoseEstimation6D::PoseEstimation6D() {
 	cubeModelGenerator.setNumOfFaces(3);
 	cubeModelGenerator.generatePointCloud(cube3D);
 
+	modelDatabase.clear();
+	modelDatabase.push_back(cube2D);
+	modelDatabase.push_back(cube3D);
+
+
 	Eigen::Matrix4f  tempHomogenousMatrix;
 	calculateHomogeneousMatrix(90,0,0,0,0,0,tempHomogenousMatrix,true);
 	BRICS_3D::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
@@ -165,31 +170,62 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 			0, 0, 1,
 			xTrans,yTrans,zTrans);
 
+	std::vector<BRICS_3D::PointCloud3D*> transformedModelDatabase;
+
 	BRICS_3D::PointCloud3D *transformedCubeModel2D = new BRICS_3D::PointCloud3D();
 	BRICS_3D::PointCloud3D *transformedCubeModel3D = new BRICS_3D::PointCloud3D();
 
-	for(unsigned int i=0; i<cube2D->getSize();i++){
-		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D(cube2D->getPointCloud()->data()[i].getX(),
-				cube2D->getPointCloud()->data()[i].getY(),
-				cube2D->getPointCloud()->data()[i].getZ());
-		transformedCubeModel2D->addPoint(tempPoint);
-		delete tempPoint;
+	for (int index = 0; index < modelDatabase.size(); ++index) {
+		modelDatabase[index] = new BRICS_3D::PointCloud3D();
+		for(unsigned int i=0; i< (*modelDatabase[index]).getSize(); i++){
+			BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*modelDatabase[index]).getPointCloud()->data()[i].getX(),
+					(*modelDatabase[index]).getPointCloud()->data()[i].getY(),
+					(*modelDatabase[index]).getPointCloud()->data()[i].getZ());
+			(*transformedModelDatabase[index]).addPoint(tempPoint);
+			delete tempPoint;
+		}
+		(*transformedModelDatabase[index]).homogeneousTransformation(homogeneousTrans);
 	}
-	transformedCubeModel2D->homogeneousTransformation(homogeneousTrans);
 
 
-	for(unsigned int i=0; i<cube3D->getSize();i++){
-		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D(cube3D->getPointCloud()->data()[i].getX(),
-				cube3D->getPointCloud()->data()[i].getY(),
-				cube3D->getPointCloud()->data()[i].getZ());
-		transformedCubeModel3D->addPoint(tempPoint);
-		delete tempPoint;
-	}
-	ROS_INFO("Resultant cloud size: %d", transformedCubeModel3D->getSize());
-	transformedCubeModel3D->homogeneousTransformation(homogeneousTrans);
+
+//	for(unsigned int i=0; i<cube2D->getSize();i++){
+//		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D(cube2D->getPointCloud()->data()[i].getX(),
+//				cube2D->getPointCloud()->data()[i].getY(),
+//				cube2D->getPointCloud()->data()[i].getZ());
+//		transformedCubeModel2D->addPoint(tempPoint);
+//		delete tempPoint;
+//	}
+//	transformedCubeModel2D->homogeneousTransformation(homogeneousTrans);
+//
+//
+//	for(unsigned int i=0; i<cube3D->getSize();i++){
+//		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D(cube3D->getPointCloud()->data()[i].getX(),
+//				cube3D->getPointCloud()->data()[i].getY(),
+//				cube3D->getPointCloud()->data()[i].getZ());
+//		transformedCubeModel3D->addPoint(tempPoint);
+//		delete tempPoint;
+//	}
+//	ROS_INFO("Resultant cloud size: %d", transformedCubeModel3D->getSize());
+//	transformedCubeModel3D->homogeneousTransformation(homogeneousTrans);
 
 	BRICS_3D::PointCloud3D *finalModel2D = new BRICS_3D::PointCloud3D();
 	BRICS_3D::PointCloud3D *finalModel3D = new BRICS_3D::PointCloud3D();
+
+	std::vector<BRICS_3D::PointCloud3D*> finalModels;
+	std::map<float, int> scoreToIndexMapping;
+
+	poseEstimatorICP->setDistance(0.1);
+	poseEstimatorICP->setMaxIterations(1000);
+	for (int index = 0; index < modelDatabase.size(); ++index) {
+		finalModels[index] = new BRICS_3D::PointCloud3D();
+
+		//Performing model alignment
+		poseEstimatorICP->setObjectModel(transformedModelDatabase[index]);
+		poseEstimatorICP->estimateBestFit(in_cloud, finalModels[index]);
+		float score = poseEstimatorICP->getFitnessScore();
+		Eigen::Matrix4f transformation2D = poseEstimatorICP->getFinalTransformation();
+	}
 
 	//Performing 2D model alignment
 	poseEstimatorICP->setDistance(0.1);
