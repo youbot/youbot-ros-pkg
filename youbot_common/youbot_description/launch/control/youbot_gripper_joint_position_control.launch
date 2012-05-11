@@ -2,5 +2,8 @@
 <launch>
         
         <rosparam file="$(find youbot_description)/controller/gripper_joint_position_control.yaml" command="load" ns="arm_1"/>
-	<node name="gripper_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="arm_1/gripper_controller" />-->
+	<node name="gripper_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="arm_1/gripper_controller">
+		<param name="publish_frequency" type="double" value="50.0" />	
+	</node>
+
 </launch>

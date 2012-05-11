@@ -8,11 +8,13 @@ FIND_PACKAGE(Boost REQUIRED COMPONENTS thread date_time filesystem system)
 
 rosbuild_find_ros_package(soem)
 rosbuild_find_ros_package(youbot_driver)
-FIND_PACKAGE(Soem REQUIRED)
-FIND_PACKAGE(OODL_YouBot REQUIRED)
+#FIND_PACKAGE(Soem REQUIRED)
+#FIND_PACKAGE(OODL_YouBot REQUIRED)
 
 ## preprocessor definitions
-ADD_DEFINITIONS(-DYOUBOT_CONFIGURATIONS_DIR="${OODL_YOUBOT_CONFIG_DIR}/")
+#ADD_DEFINITIONS(-DYOUBOT_CONFIGURATIONS_DIR="${OODL_YOUBOT_CONFIG_DIR}/")
+ADD_DEFINITIONS(-DYOUBOT_CONFIGURATIONS_DIR="${youbot_driver_PACKAGE_PATH}/config/")
+
 
 # Set the build type.  Options are:
 #  Coverage       : w/ debug symbols, w/o optimization, w/ code-coverage

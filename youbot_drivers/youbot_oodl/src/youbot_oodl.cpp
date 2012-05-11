@@ -39,6 +39,8 @@
 
 #include "YouBotOODLWrapper.h"
 
+
+
 int main(int argc, char **argv)
 {
 
@@ -51,10 +53,14 @@ int main(int argc, char **argv)
 	/* configuration */
 	bool youBotHasBase;
 	bool youBotHasArms;
+	double youBotDriverCycleFrequencyInHz;	//the driver recives commands and publishes them with a fixed frequency
 	n.param("youBotHasBase", youBotHasBase, true);
 	n.param("youBotHasArms", youBotHasArms, true);
+	n.param("youBotDriverCycleFrequencyInHz", youBotDriverCycleFrequencyInHz, 50.0);
 	n.param<std::string>("youBotConfigurationFilePath", youBot.youBotConfiguration.configurationFilePath, mkstr(YOUBOT_CONFIGURATIONS_DIR));
 	n.param<std::string>("youBotArmName1", armName1, "youbot-manipulator");
+  
+  ros::ServiceServer reconnectService = n.advertiseService("reconnect", &youBot::YouBotOODLWrapper::reconnectCallback, &youBot);
 
 	ROS_ASSERT((youBotHasBase == true) || (youBotHasArms == true)); // At least one should be true, otherwise nothing to be started.
 	if (youBotHasBase == true) {
@@ -68,7 +74,7 @@ int main(int argc, char **argv)
 
 
 	/* coordination */
-	ros::Rate rate(20); //Input and output at the same time... (in Hz)
+	ros::Rate rate(youBotDriverCycleFrequencyInHz); //Input and output at the same time... (in Hz)
 	while (n.ok()){
 		ros::spinOnce();
 		youBot.computeOODLSensorReadings();
