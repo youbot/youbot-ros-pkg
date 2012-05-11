@@ -439,7 +439,7 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 			}
 		}
 
-		youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
+		youbot::EthercatMaster::getInstance().AutomaticSendOn(true); // ensure that all joint values will be send at the same time
 	} else {
 		ROS_ERROR("Arm%i is not correctly initialized!", armIndex + 1);
 	}
