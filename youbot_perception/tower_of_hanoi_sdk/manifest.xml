@@ -14,7 +14,7 @@
   <depend package="rospy"/>
   <depend package="sensor_msgs"/>
   <depend package="geometry_msgs"/>
-  <depend package="geometric_shapes_msgs"/>
+  <depend package="arm_navigation_msgs"/>
   <depend package="visualization_msgs"/>
   <depend package="image_transport"/>
   <depend package="pcl"/>
