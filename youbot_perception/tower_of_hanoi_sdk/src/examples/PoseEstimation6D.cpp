@@ -18,6 +18,7 @@
 ******************************************************************************/
 
 #include "PoseEstimation6D.h"
+#include <limits>
 
 namespace BRICS_3D {
 
@@ -213,73 +214,107 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 	BRICS_3D::PointCloud3D *finalModel3D = new BRICS_3D::PointCloud3D();
 
 	std::vector<BRICS_3D::PointCloud3D*> finalModels;
+	std::vector<Eigen::Matrix4f> finalTransformations;
 	std::map<float, int> scoreToIndexMapping;
+	std::map<float, int>::const_iterator scoreToIndexMappingIterator;
 
 	poseEstimatorICP->setDistance(0.1);
 	poseEstimatorICP->setMaxIterations(1000);
 	for (int index = 0; index < modelDatabase.size(); ++index) {
-		finalModels[index] = new BRICS_3D::PointCloud3D();
+		finalModels.push_back(new BRICS_3D::PointCloud3D());
 
 		//Performing model alignment
 		poseEstimatorICP->setObjectModel(transformedModelDatabase[index]);
 		poseEstimatorICP->estimateBestFit(in_cloud, finalModels[index]);
 		float score = poseEstimatorICP->getFitnessScore();
-		Eigen::Matrix4f transformation2D = poseEstimatorICP->getFinalTransformation();
+		scoreToIndexMapping.insert(std::make_pair(score, index));
+		finalTransformations.push_back(poseEstimatorICP->getFinalTransformation());
 	}
 
-	//Performing 2D model alignment
-	poseEstimatorICP->setDistance(0.1);
-	poseEstimatorICP->setMaxIterations(1000);
-	poseEstimatorICP->setObjectModel(transformedCubeModel2D);
-	poseEstimatorICP->estimateBestFit(in_cloud, finalModel2D);
-	float score2D = poseEstimatorICP->getFitnessScore();
-	Eigen::Matrix4f transformation2D = poseEstimatorICP->getFinalTransformation();
 
-	//Performing 3D model alignment
-	poseEstimatorICP->setObjectModel(transformedCubeModel3D);
-	poseEstimatorICP->estimateBestFit(in_cloud, finalModel3D);
-	float score3D = poseEstimatorICP->getFitnessScore();
-	Eigen::Matrix4f transformation3D = poseEstimatorICP->getFinalTransformation();
-
-	if(score2D<score3D){
-		//publish model estimated using two sided cube
-		if(score2D < bestScore[objCount]){
-			if(score2D > reliableScoreThreshold){
-				ROS_INFO("[%s_%d] Approximate Model Found(2D)!! Object May Not be visible enough...",
-						regionLabel.c_str(),objCount);
-				reliableModelFound=false;
-			} else {
-				ROS_INFO("[%s_%d] Reliable Model Found(2D) :) ", regionLabel.c_str(), objCount);
-			}
-			*(bestTransformation[objCount]) = transformation2D;
-			centroid3d = centroid3DEstimator->computeCentroid(finalModel2D);
-			xtranslation[objCount]=centroid3d[0];
-			ytranslation[objCount]=centroid3d[1];
-			ztranslation[objCount]=centroid3d[2];
+	// real sorting might be better
+	double smallestError = std::numeric_limits<double>::max();
+	int smallestErrorIndex = 0;
+	for (scoreToIndexMappingIterator = scoreToIndexMapping.begin(); scoreToIndexMappingIterator != scoreToIndexMapping.end(); ++scoreToIndexMappingIterator) {
+		if (scoreToIndexMappingIterator->first < smallestError) {
+			smallestError = scoreToIndexMappingIterator->first;
+			smallestErrorIndex = scoreToIndexMappingIterator->second;
 		}
-		ROS_INFO("[%s_%d] Best score found by 2D model : %f", regionLabel.c_str(), objCount,score2D);
-		bestScore[objCount] = score2D;
-
-	} else {
-		//publish model estimated using three sided cube
-		if(score3D<bestScore[objCount]){
-			if(score3D > reliableScoreThreshold){
-				ROS_INFO("[%s_%d] Approximate Model Found(3D)!! Object May Not be visible enough...",
-						regionLabel.c_str(),objCount);
-				reliableModelFound=false;
-			}else {
-				ROS_INFO("[%s_%d] Reliable Model Found(3D) :) ", regionLabel.c_str(), objCount);
-			}
-			*(bestTransformation[objCount]) = transformation3D;
-			centroid3d = centroid3DEstimator->computeCentroid(finalModel3D);
-			xtranslation[objCount]=centroid3d[0];
-			ytranslation[objCount]=centroid3d[1];
-			ztranslation[objCount]=centroid3d[2];
-
-		}
-		ROS_INFO("[%s_%d] Best score found by 3D model : %f", regionLabel.c_str(), objCount, score3D);
-		bestScore[objCount]=score3D;
 	}
+
+//	//Performing 2D model alignment
+//	poseEstimatorICP->setDistance(0.1);
+//	poseEstimatorICP->setMaxIterations(1000);
+//	poseEstimatorICP->setObjectModel(transformedCubeModel2D);
+//	poseEstimatorICP->estimateBestFit(in_cloud, finalModel2D);
+//	float score2D = poseEstimatorICP->getFitnessScore();
+//	Eigen::Matrix4f transformation2D = poseEstimatorICP->getFinalTransformation();
+//
+//	//Performing 3D model alignment
+//	poseEstimatorICP->setObjectModel(transformedCubeModel3D);
+//	poseEstimatorICP->estimateBestFit(in_cloud, finalModel3D);
+//	float score3D = poseEstimatorICP->getFitnessScore();
+//	Eigen::Matrix4f transformation3D = poseEstimatorICP->getFinalTransformation();
+
+	scoreToIndexMappingIterator = scoreToIndexMapping.find(smallestError);
+	assert(scoreToIndexMappingIterator != scoreToIndexMapping.end());
+	if(scoreToIndexMappingIterator->first < bestScore[objCount]){
+		if(scoreToIndexMappingIterator->first > reliableScoreThreshold){
+			ROS_INFO("[%s_%d] Approximate Model Found. Object May Not be visible enough...", regionLabel.c_str(), objCount);
+			reliableModelFound=false;
+		} else {
+			ROS_INFO("[%s_%d] Reliable Model Found", regionLabel.c_str(), objCount);
+		}
+		*(bestTransformation[objCount]) = finalTransformations[scoreToIndexMappingIterator->second];
+		centroid3d = centroid3DEstimator->computeCentroid(finalModels[scoreToIndexMappingIterator->second]);
+		xtranslation[objCount]=centroid3d[0];
+		ytranslation[objCount]=centroid3d[1];
+		ztranslation[objCount]=centroid3d[2];
+	}
+	ROS_INFO("[%s_%d] Best score found for model %i : %f", regionLabel.c_str(), objCount, scoreToIndexMappingIterator->second, scoreToIndexMappingIterator->first);
+	bestScore[objCount] = scoreToIndexMappingIterator->first;
+
+
+
+//	if(score2D<score3D){
+//		//publish model estimated using two sided cube
+//		if(score2D < bestScore[objCount]){
+//			if(score2D > reliableScoreThreshold){
+//				ROS_INFO("[%s_%d] Approximate Model Found(2D)!! Object May Not be visible enough...",
+//						regionLabel.c_str(),objCount);
+//				reliableModelFound=false;
+//			} else {
+//				ROS_INFO("[%s_%d] Reliable Model Found(2D) :) ", regionLabel.c_str(), objCount);
+//			}
+//			*(bestTransformation[objCount]) = transformation2D;
+//			centroid3d = centroid3DEstimator->computeCentroid(finalModel2D);
+//			xtranslation[objCount]=centroid3d[0];
+//			ytranslation[objCount]=centroid3d[1];
+//			ztranslation[objCount]=centroid3d[2];
+//		}
+//		ROS_INFO("[%s_%d] Best score found by 2D model : %f", regionLabel.c_str(), objCount,score2D);
+//		bestScore[objCount] = score2D;
+//
+//	} else {
+//		//publish model estimated using three sided cube
+//		if(score3D<bestScore[objCount]){
+//			if(score3D > reliableScoreThreshold){
+//				ROS_INFO("[%s_%d] Approximate Model Found(3D)!! Object May Not be visible enough...",
+//						regionLabel.c_str(),objCount);
+//				reliableModelFound=false;
+//			}else {
+//				ROS_INFO("[%s_%d] Reliable Model Found(3D) :) ", regionLabel.c_str(), objCount);
+//			}
+//			*(bestTransformation[objCount]) = transformation3D;
+//			centroid3d = centroid3DEstimator->computeCentroid(finalModel3D);
+//			xtranslation[objCount]=centroid3d[0];
+//			ytranslation[objCount]=centroid3d[1];
+//			ztranslation[objCount]=centroid3d[2];
+//
+//		}
+//		ROS_INFO("[%s_%d] Best score found by 3D model : %f", regionLabel.c_str(), objCount, score3D);
+//		bestScore[objCount]=score3D;
+//	}
 
 
     double yRot = asin (-(*(bestTransformation[objCount]))(2));
@@ -310,6 +345,10 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 	delete finalModel3D;
 	delete transformedCubeModel2D;
 	delete transformedCubeModel3D;
+
+	for (int index = 0; index < finalModels.size(); ++index) {
+		delete finalModels[index];
+	}
 
 }
 
