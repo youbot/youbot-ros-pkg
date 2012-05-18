@@ -1,7 +1,7 @@
 <launch>
 	<!-- Run map server -->
 
- 	<node name="map_server" pkg="map_server" type="map_server" args="$(find youbot_navigation_global)/map/hanoi_map.yaml"/>
+<!-- 	<node name="map_server" pkg="map_server" type="map_server" args="$(find youbot_navigation_global)/map/hanoi_map.yaml"/>-->
 
 
 <!--
@@ -40,7 +40,7 @@
 
 
 <node pkg="amcl" type="amcl" name="amcl">
-  <remap from="scan" to="base_scan"/>-->
+  <remap from="scan" to="base_scan"/>
 
   <param name="odom_model_type" value="omni"/>
   <param name="odom_alpha5" value="0.1"/>
