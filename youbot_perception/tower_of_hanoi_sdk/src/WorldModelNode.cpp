@@ -150,7 +150,7 @@ public:
 			BRICS_3D::RSG::Box::BoxPtr tmpBox = boost::dynamic_pointer_cast<Box>(resultObjects[i].shape);
 
 			if ( tmpBox != 0) {
-				tmpSceneObject.shape.type = geometric_shapes_msgs::Shape::BOX; //TODO support multible shapes
+				tmpSceneObject.shape.type = arm_navigation_msgs::Shape::BOX; //TODO support multible shapes
 				tmpSceneObject.shape.dimensions.resize(3);
 				tmpSceneObject.shape.dimensions[0] = tmpBox->getSizeX();
 				tmpSceneObject.shape.dimensions[1] = tmpBox->getSizeY();
