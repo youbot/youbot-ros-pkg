@@ -26,5 +26,6 @@
 	
 	<include file="$(find youbot_description)/launch/control/youbot_base_control.launch" />
 	<include file="$(find youbot_description)/launch/control/youbot_arm_control.launch" />
+	<include file="$(find youbot_description)/launch/control/youbot_gripper_control.launch" />
 
 </launch>
