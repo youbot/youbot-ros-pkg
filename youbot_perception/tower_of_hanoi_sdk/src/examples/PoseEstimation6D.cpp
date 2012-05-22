@@ -173,11 +173,8 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 
 	std::vector<BRICS_3D::PointCloud3D*> transformedModelDatabase;
 
-	BRICS_3D::PointCloud3D *transformedCubeModel2D = new BRICS_3D::PointCloud3D();
-	BRICS_3D::PointCloud3D *transformedCubeModel3D = new BRICS_3D::PointCloud3D();
-
-	for (int index = 0; index < modelDatabase.size(); ++index) {
-		modelDatabase[index] = new BRICS_3D::PointCloud3D();
+	for (unsigned int index = 0; index < modelDatabase.size(); ++index) {
+		transformedModelDatabase.push_back(new BRICS_3D::PointCloud3D());
 		for(unsigned int i=0; i< (*modelDatabase[index]).getSize(); i++){
 			BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*modelDatabase[index]).getPointCloud()->data()[i].getX(),
 					(*modelDatabase[index]).getPointCloud()->data()[i].getY(),
@@ -187,40 +184,17 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 		}
 		(*transformedModelDatabase[index]).homogeneousTransformation(homogeneousTrans);
 	}
-
-
-
-//	for(unsigned int i=0; i<cube2D->getSize();i++){
-//		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D(cube2D->getPointCloud()->data()[i].getX(),
-//				cube2D->getPointCloud()->data()[i].getY(),
-//				cube2D->getPointCloud()->data()[i].getZ());
-//		transformedCubeModel2D->addPoint(tempPoint);
-//		delete tempPoint;
-//	}
-//	transformedCubeModel2D->homogeneousTransformation(homogeneousTrans);
-//
-//
-//	for(unsigned int i=0; i<cube3D->getSize();i++){
-//		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D(cube3D->getPointCloud()->data()[i].getX(),
-//				cube3D->getPointCloud()->data()[i].getY(),
-//				cube3D->getPointCloud()->data()[i].getZ());
-//		transformedCubeModel3D->addPoint(tempPoint);
-//		delete tempPoint;
-//	}
-//	ROS_INFO("Resultant cloud size: %d", transformedCubeModel3D->getSize());
-//	transformedCubeModel3D->homogeneousTransformation(homogeneousTrans);
-
-	BRICS_3D::PointCloud3D *finalModel2D = new BRICS_3D::PointCloud3D();
-	BRICS_3D::PointCloud3D *finalModel3D = new BRICS_3D::PointCloud3D();
+	assert(modelDatabase.size() == transformedModelDatabase.size());
+	std::cout << "Model database size = " << modelDatabase.size() << std::endl;
 
 	std::vector<BRICS_3D::PointCloud3D*> finalModels;
-	std::vector<Eigen::Matrix4f> finalTransformations;
+	std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Vector4f> > finalTransformations;
 	std::map<float, int> scoreToIndexMapping;
 	std::map<float, int>::const_iterator scoreToIndexMappingIterator;
 
 	poseEstimatorICP->setDistance(0.1);
 	poseEstimatorICP->setMaxIterations(1000);
-	for (int index = 0; index < modelDatabase.size(); ++index) {
+	for (unsigned int index = 0; index < modelDatabase.size(); ++index) {
 		finalModels.push_back(new BRICS_3D::PointCloud3D());
 
 		//Performing model alignment
@@ -242,20 +216,6 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 		}
 	}
 
-//	//Performing 2D model alignment
-//	poseEstimatorICP->setDistance(0.1);
-//	poseEstimatorICP->setMaxIterations(1000);
-//	poseEstimatorICP->setObjectModel(transformedCubeModel2D);
-//	poseEstimatorICP->estimateBestFit(in_cloud, finalModel2D);
-//	float score2D = poseEstimatorICP->getFitnessScore();
-//	Eigen::Matrix4f transformation2D = poseEstimatorICP->getFinalTransformation();
-//
-//	//Performing 3D model alignment
-//	poseEstimatorICP->setObjectModel(transformedCubeModel3D);
-//	poseEstimatorICP->estimateBestFit(in_cloud, finalModel3D);
-//	float score3D = poseEstimatorICP->getFitnessScore();
-//	Eigen::Matrix4f transformation3D = poseEstimatorICP->getFinalTransformation();
-
 	scoreToIndexMappingIterator = scoreToIndexMapping.find(smallestError);
 	assert(scoreToIndexMappingIterator != scoreToIndexMapping.end());
 	if(scoreToIndexMappingIterator->first < bestScore[objCount]){
@@ -273,49 +233,6 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 	}
 	ROS_INFO("[%s_%d] Best score found for model %i : %f", regionLabel.c_str(), objCount, scoreToIndexMappingIterator->second, scoreToIndexMappingIterator->first);
 	bestScore[objCount] = scoreToIndexMappingIterator->first;
-
-
-
-//	if(score2D<score3D){
-//		//publish model estimated using two sided cube
-//		if(score2D < bestScore[objCount]){
-//			if(score2D > reliableScoreThreshold){
-//				ROS_INFO("[%s_%d] Approximate Model Found(2D)!! Object May Not be visible enough...",
-//						regionLabel.c_str(),objCount);
-//				reliableModelFound=false;
-//			} else {
-//				ROS_INFO("[%s_%d] Reliable Model Found(2D) :) ", regionLabel.c_str(), objCount);
-//			}
-//			*(bestTransformation[objCount]) = transformation2D;
-//			centroid3d = centroid3DEstimator->computeCentroid(finalModel2D);
-//			xtranslation[objCount]=centroid3d[0];
-//			ytranslation[objCount]=centroid3d[1];
-//			ztranslation[objCount]=centroid3d[2];
-//		}
-//		ROS_INFO("[%s_%d] Best score found by 2D model : %f", regionLabel.c_str(), objCount,score2D);
-//		bestScore[objCount] = score2D;
-//
-//	} else {
-//		//publish model estimated using three sided cube
-//		if(score3D<bestScore[objCount]){
-//			if(score3D > reliableScoreThreshold){
-//				ROS_INFO("[%s_%d] Approximate Model Found(3D)!! Object May Not be visible enough...",
-//						regionLabel.c_str(),objCount);
-//				reliableModelFound=false;
-//			}else {
-//				ROS_INFO("[%s_%d] Reliable Model Found(3D) :) ", regionLabel.c_str(), objCount);
-//			}
-//			*(bestTransformation[objCount]) = transformation3D;
-//			centroid3d = centroid3DEstimator->computeCentroid(finalModel3D);
-//			xtranslation[objCount]=centroid3d[0];
-//			ytranslation[objCount]=centroid3d[1];
-//			ztranslation[objCount]=centroid3d[2];
-//
-//		}
-//		ROS_INFO("[%s_%d] Best score found by 3D model : %f", regionLabel.c_str(), objCount, score3D);
-//		bestScore[objCount]=score3D;
-//	}
-
 
     double yRot = asin (-(*(bestTransformation[objCount]))(2));
     double xRot = asin ((*(bestTransformation[objCount]))(6)/cos(yRot));
@@ -341,13 +258,12 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
     	 }
      }
 
-	delete finalModel2D;
-	delete finalModel3D;
-	delete transformedCubeModel2D;
-	delete transformedCubeModel3D;
 
-	for (int index = 0; index < finalModels.size(); ++index) {
+	for (unsigned int index = 0; index < finalModels.size(); ++index) {
 		delete finalModels[index];
+	}
+	for (unsigned int index = 0; index < transformedModelDatabase.size(); ++index) {
+		delete transformedModelDatabase[index];
 	}
 
 }
