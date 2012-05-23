@@ -36,6 +36,8 @@ PoseEstimation6D::PoseEstimation6D() {
 
 	poseEstimatorICP = new BRICS_3D::SDK::IterativeClosestPoint();
 
+	centroid3DEstimator =  new BRICS_3D::Centroid3D();
+
 	//default initialization of cube models
 	cube2D = new BRICS_3D::PointCloud3D();
 	cube3D = new BRICS_3D::PointCloud3D();
@@ -50,9 +52,9 @@ PoseEstimation6D::PoseEstimation6D() {
 	cubeModelGenerator.generatePointCloud(cube3D);
 
 	modelDatabase.clear();
-	modelDatabase.push_back(cube2D);
-	modelDatabase.push_back(cube3D);
-
+	modelNames.clear();
+	addModelToDataBase(cube2D, "cube_with_two_faces");
+	addModelToDataBase(cube3D, "cube_with_three_faces");
 
 	Eigen::Matrix4f  tempHomogenousMatrix;
 	calculateHomogeneousMatrix(90,0,0,0,0,0,tempHomogenousMatrix,true);
@@ -66,34 +68,15 @@ PoseEstimation6D::PoseEstimation6D() {
 	cube3D->homogeneousTransformation(homogeneousTrans);
 
 	ROS_INFO("Initialization Done....");
+
 	reliableScoreThreshold = 0.00008;
+	maxIterations = 1000;
+	maxCorrespondenceThreshold = 0.1;
 
 	maxNoOfObjects = 0;
 	this->publishApproximatePoses = true;
 
-	//ToDO initialize
-//	bestTransformation[0]=0;
-//	bestTransformation[1]=0;
-//	bestTransformation[2]=0;
-//	bestTransformation[3]=0;
-//	bestTransformation[4]=0;
-//	bestTransformation[5]=0;
-//	bestTransformation[6]=0;
-//	bestTransformation[7]=0;
-//	bestTransformation[8]=0;
-//	bestTransformation[9]=0;
-//	bestTransformation[10]=0;
-//	bestTransformation[11]=0;
-//	bestTransformation[12]=0;
-//	bestTransformation[13]=0;
-//	bestTransformation[14]=0;
-//	bestTransformation[15]=0;
 
-//	translation[0] = 0;
-//	translation[1] = 0;
-//	translation[2] = 0;
-
-	centroid3DEstimator =  new BRICS_3D::Centroid3D();
 
 }
 
@@ -150,6 +133,12 @@ void PoseEstimation6D::initializeClusterExtractor(int minClusterSize, int maxClu
 	this->euclideanClusterExtractor.setClusterTolerance(clusterTolerance);
 }
 
+void PoseEstimation6D::initializeModelFitting(int maxIterations, float maxCorrespondenceThreshold, float reliableScoreThreshold) {
+	this->maxIterations = maxIterations;
+	this->maxCorrespondenceThreshold = maxCorrespondenceThreshold;
+	this->reliableScoreThreshold = reliableScoreThreshold;
+}
+
 void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCount){
 
 	Eigen::Vector3d centroid3d = centroid3DEstimator->computeCentroid(in_cloud);
@@ -192,8 +181,9 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 	std::map<float, int> scoreToIndexMapping;
 	std::map<float, int>::const_iterator scoreToIndexMappingIterator;
 
-	poseEstimatorICP->setDistance(0.1);
-	poseEstimatorICP->setMaxIterations(1000);
+	poseEstimatorICP->setDistance(maxCorrespondenceThreshold);
+	poseEstimatorICP->setMaxIterations(maxIterations);
+	ROS_INFO("[%s_%d] Results for fitted models: index | score    | scoreThresh | name", regionLabel.c_str(), objCount);
 	for (unsigned int index = 0; index < modelDatabase.size(); ++index) {
 		finalModels.push_back(new BRICS_3D::PointCloud3D());
 
@@ -203,6 +193,7 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 		float score = poseEstimatorICP->getFitnessScore();
 		scoreToIndexMapping.insert(std::make_pair(score, index));
 		finalTransformations.push_back(poseEstimatorICP->getFinalTransformation());
+		ROS_INFO("[%s_%d]                                %i | %f | %f    | %s ", regionLabel.c_str(), objCount, index, score, reliableScoreThreshold, modelNames[index].c_str());
 	}
 
 
@@ -224,6 +215,10 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 			reliableModelFound=false;
 		} else {
 			ROS_INFO("[%s_%d] Reliable Model Found", regionLabel.c_str(), objCount);
+//			std::stringstream fileName;
+//			fileName.str("");
+//			fileName << "test_model_" << regionLabel.c_str() << "_" << objCount << ".txt";
+//			in_cloud->storeToTxtFile(fileName.str());
 		}
 		*(bestTransformation[objCount]) = finalTransformations[scoreToIndexMappingIterator->second];
 		centroid3d = centroid3DEstimator->computeCentroid(finalModels[scoreToIndexMappingIterator->second]);
@@ -318,6 +313,32 @@ void PoseEstimation6D::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud
 	delete color_based_roi;
 	extracted_clusters.clear();
 
+}
+
+void PoseEstimation6D::addModelToDataBase(BRICS_3D::PointCloud3D* model, std::string name) {
+	if (model->getSize() == 0) {
+		ROS_WARN("Model point cloud to be added to database is empty. Possibly the model was not loaded correctly.");
+		return;
+	}
+
+	/* Demean the model point cloud (should be already provided/assumed?) */
+	Eigen::Vector3d centroid3d = centroid3DEstimator->computeCentroid(model);
+	float xTrans = centroid3d[0];
+	float yTrans = centroid3d[1];
+	float zTrans = centroid3d[2];
+
+	ROS_DEBUG("Model centroid is transalated to origin by (%f, %f, %f)", -xTrans, -yTrans, -zTrans);
+	BRICS_3D::HomogeneousMatrix44* demeanTranslation = new HomogeneousMatrix44(
+			1, 0, 0,
+			0, 1, 0,
+			0, 0, 1,
+			-xTrans,-yTrans,-zTrans);
+	model->homogeneousTransformation(demeanTranslation);
+
+	modelDatabase.push_back(model);
+	modelNames.push_back(name);
+	ROS_INFO("Added a new model %s with %i points to database. Database has now %i models.", name.c_str(), model->getSize(), modelDatabase.size());
+	assert(modelDatabase.size() == modelNames.size());
 }
 
 }

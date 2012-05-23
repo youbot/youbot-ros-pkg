@@ -42,6 +42,8 @@
 
 //global variables
 std::vector<BRICS_3D::PoseEstimation6D*> poseEstimators;
+std::vector<BRICS_3D::PointCloud3D*> modelDataBase;
+std::vector<std::string> modelNames;
 bool perceptionPaused;
 unsigned int maxNoOfObjects;
 unsigned int noOfRegions;
@@ -177,6 +179,9 @@ int main(int argc, char* argv[]){
 	int minClusterSize, maxClusterSize;
 	double clusterTolerance;
 	bool publishApproximatePoses;
+	int maxIterations;
+	float maxCorrespondenceThreshold;
+	float reliableScoreThreshold;
 	ros::param::param<int>("/poseEstimator6D/minClusterSize", minClusterSize, 100);
 	ros::param::param<int>("/poseEstimator6D/maxClusterSize", maxClusterSize, 2000);
 	ros::param::param<double>("/poseEstimator6D/clusterTolerance", clusterTolerance, 0.01);	//1 cm by default
@@ -207,6 +212,11 @@ int main(int argc, char* argv[]){
 
 	ROS_INFO("Finding pose for at most [%d] object(s) in [%d] color based extracted regions",
 			maxNoOfObjects, noOfRegions);
+
+	BRICS_3D::PointCloud3D* tmpModel = new BRICS_3D::PointCloud3D;
+	tmpModel->readFromTxtFile("test_model_green_1.txt");
+	modelDataBase.push_back(tmpModel);
+	modelNames.push_back("test_model_green_1");
 
 	//define the HSV limit variables;
 	float minLimitH[noOfRegions], minLimitS[noOfRegions],
@@ -250,6 +260,12 @@ int main(int argc, char* argv[]){
 		ROS_INFO("Object Clustering Parametrs: [%d] [%d] [%f]", minClusterSize, maxClusterSize, clusterTolerance);
 		poseEstimators[i]->initializeClusterExtractor(minClusterSize,maxClusterSize,clusterTolerance);
 		poseEstimators[i]->setPublishingStatus(publishApproximatePoses);
+
+		//Add models to model database
+		assert(modelDataBase.size() == modelNames.size());
+		for (unsigned int j = 0; j < modelDataBase.size(); ++j) {
+			poseEstimators[i]->addModelToDataBase(modelDataBase[j], modelNames[j]);
+		}
 	}
 
 
