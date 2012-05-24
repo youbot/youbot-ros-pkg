@@ -90,6 +90,16 @@ class PoseEstimation6D {
 	BRICS_3D::PointCloud3D *cube3D;
 
 	/**
+	 * data base that holds all pont clouds representing the models
+	 */
+	std::vector<BRICS_3D::PointCloud3D*> modelDatabase;
+
+	/**
+	 * Vector that hold the associated names to the models.
+	 */
+	std::vector<std::string> modelNames;
+
+	/**
 	 * Object to create the cube models
 	 */
 	BRICS_3D::SimplePointCloudGeneratorCube cubeModelGenerator;
@@ -99,6 +109,16 @@ class PoseEstimation6D {
 	 * Fitting score threshold indicating a good match
 	 */
 	float reliableScoreThreshold;
+
+	/**
+	 * Max interations for ICP
+	 */
+	int maxIterations;
+
+	/**
+	 * Maximum distonce correspondence threshold for ICP
+	 */
+	float maxCorrespondenceThreshold;
 
 	/**
 	 * Best score found till now
@@ -210,6 +230,8 @@ public:
 
 	void initializeClusterExtractor(int minClusterSize, int maxClusterSize, float clusterTolerance);
 
+	void initializeModelFitting(int maxIterations, float maxCorrespondenceThreshold, float reliableScoreThreshold);
+
 	void estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCount);
 
 	std::string getRegionLabel() const;
@@ -217,6 +239,14 @@ public:
     void setPublishingStatus(bool publishApproximatePoses){
     	this->publishApproximatePoses=publishApproximatePoses;
     }
+
+    /**
+     * Add a new model - represented as point cloud - to the database.
+     * All models will in the database will be fit into a region of intrest and the one with a
+     * @param model The new model the will be added to the database
+     * @param name A name that helps to identify that model
+     */
+    void addModelToDataBase(BRICS_3D::PointCloud3D* model, std::string name);
 };
 
 }
