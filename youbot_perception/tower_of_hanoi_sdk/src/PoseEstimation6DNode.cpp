@@ -62,9 +62,6 @@ void kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
 
 
 void perceptionControlCallback(const tower_of_hanoi_sdk::Coordination message){
-
-
-
 	if(!message.command.compare("pause")){
 		perceptionPaused=true;
 		ROS_WARN("Pausing Perception Engine");
@@ -72,7 +69,6 @@ void perceptionControlCallback(const tower_of_hanoi_sdk::Coordination message){
 		perceptionPaused=false;
 		ROS_WARN("Resuming Perception Engine");
 	}
-
 }
 
 
@@ -175,23 +171,27 @@ int main(int argc, char* argv[]){
 
 	ros::init(argc, argv, "PoseEstimation6D");
 	ros::NodeHandle nh;
-	/** configuration */
+
+	/* configuration */
 	int minClusterSize, maxClusterSize;
 	double clusterTolerance;
 	bool publishApproximatePoses;
 	int maxIterations;
-	float maxCorrespondenceThreshold;
-	float reliableScoreThreshold;
+	double maxCorrespondenceThreshold;
+	double reliableScoreThreshold;
+
 	ros::param::param<int>("/poseEstimator6D/minClusterSize", minClusterSize, 100);
 	ros::param::param<int>("/poseEstimator6D/maxClusterSize", maxClusterSize, 2000);
 	ros::param::param<double>("/poseEstimator6D/clusterTolerance", clusterTolerance, 0.01);	//1 cm by default
-	ros::param::param<bool>("/poseEstimator6D/publishApproximatePoses", publishApproximatePoses, true);	//1 cm by default
+
+	ros::param::param<int>("/poseEstimator6D/maxIterations", maxIterations, 1000);
+	ros::param::param<double>("/poseEstimator6D/maxCorrespondenceThreshold", maxCorrespondenceThreshold, 0.1);
+	ros::param::param<double>("/poseEstimator6D/reliableScoreThreshold", reliableScoreThreshold, 0.00008);
+
+	ros::param::param<bool>("/poseEstimator6D/publishApproximatePoses", publishApproximatePoses, true);
 
 	noOfRegions = 0;
 	maxNoOfObjects = 0;
-//	if (nh.hasParam("minClusterSize")){
-//		nh.getParam("minClusterSize", minClusterSize);
-//	}
 
 	if(argc < 4){
 
@@ -213,10 +213,11 @@ int main(int argc, char* argv[]){
 	ROS_INFO("Finding pose for at most [%d] object(s) in [%d] color based extracted regions",
 			maxNoOfObjects, noOfRegions);
 
-	BRICS_3D::PointCloud3D* tmpModel = new BRICS_3D::PointCloud3D;
-	tmpModel->readFromTxtFile("test_model_green_1.txt");
-	modelDataBase.push_back(tmpModel);
-	modelNames.push_back("test_model_green_1");
+	/* load models from disk */
+//	BRICS_3D::PointCloud3D* tmpModel = new BRICS_3D::PointCloud3D;
+//	tmpModel->readFromTxtFile("test_model_green_1.txt");
+//	modelDataBase.push_back(tmpModel);
+//	modelNames.push_back("test_model_green_1");
 
 	//define the HSV limit variables;
 	float minLimitH[noOfRegions], minLimitS[noOfRegions],
@@ -259,6 +260,7 @@ int main(int argc, char* argv[]){
 		//Initializing the cluster extractor limits
 		ROS_INFO("Object Clustering Parametrs: [%d] [%d] [%f]", minClusterSize, maxClusterSize, clusterTolerance);
 		poseEstimators[i]->initializeClusterExtractor(minClusterSize,maxClusterSize,clusterTolerance);
+		poseEstimators[i]->initializeModelFitting(maxIterations, maxCorrespondenceThreshold, reliableScoreThreshold);
 		poseEstimators[i]->setPublishingStatus(publishApproximatePoses);
 
 		//Add models to model database

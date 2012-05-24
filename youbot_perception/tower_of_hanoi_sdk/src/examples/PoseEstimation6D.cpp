@@ -67,8 +67,6 @@ PoseEstimation6D::PoseEstimation6D() {
 	cube2D->homogeneousTransformation(homogeneousTrans);
 	cube3D->homogeneousTransformation(homogeneousTrans);
 
-	ROS_INFO("Initialization Done....");
-
 	reliableScoreThreshold = 0.00008;
 	maxIterations = 1000;
 	maxCorrespondenceThreshold = 0.1;
@@ -76,8 +74,7 @@ PoseEstimation6D::PoseEstimation6D() {
 	maxNoOfObjects = 0;
 	this->publishApproximatePoses = true;
 
-
-
+	ROS_INFO("Initialization done.");
 }
 
 int PoseEstimation6D::getMaxNoOfObjects() const
