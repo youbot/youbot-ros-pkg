@@ -1,7 +1,7 @@
 <launch>
 	<!-- Run map server -->
 
- 	<node name="map_server" pkg="map_server" type="map_server" args="$(find youbot_navigation_global)/map/hanoi_map.yaml"/>
+<!-- 	<node name="map_server" pkg="map_server" type="map_server" args="$(find youbot_navigation_global)/map/hanoi_map.yaml"/>-->
 
 
 <!--
