@@ -1,0 +1,27 @@
+<launch>
+    <!-- Throttle the voxel grid that is being published for rviz -->
+   <!-- <node ns="move_base_node/local_costmap" name="voxel_grid_throttle" pkg="topic_tools" type="throttle" args="messages voxel_grid 3.0 voxel_grid_throttled" /> -->
+    
+    <param name="T" type="double" value="0.2"/>
+    <param name="dt" type="double" value="0.1"/>
+    <node pkg="youbot_navigation_common" type="lowpass_filter" respawn="false" name="lowpass_filter" output="screen">
+        
+    </node>
+ 
+	
+    <!-- for moving -->
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen">
+        <!-- Load common configuration files -->
+	<remap from="cmd_vel" to="move_base/cmd_vel"/> 
+        <rosparam file="$(find youbot_navigation_common)/config/move_base_params.yaml" command="load" />
+        <rosparam file="$(find youbot_navigation_common)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find youbot_navigation_common)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <!--<rosparam file="$(find youbot_navigation)/navigation_common/base_local_planner_params.yaml" command="load" ns="TrajectoryPlannerROS" />-->
+
+        <!-- Load global navigation specific parameters -->
+        <!--<rosparam file="$(find youbot_navigation)/navigation_local/config/move_base_params.yaml" command="load" />-->
+        <rosparam file="$(find youbot_navigation_global)/config/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find youbot_navigation_global)/config/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find youbot_navigation_common)/config/base_local_planner_params.yaml" command="load" />
+    </node>
+</launch>
