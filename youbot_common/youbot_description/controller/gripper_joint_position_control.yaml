@@ -12,3 +12,11 @@ gripper_controller:
       p: 10
       d: 2.0
 
+    
+  limits:
+    gripper_finger_joint_l:
+      min: 0.0
+      max: 0.0115
+	gripper_finger_joint_r:
+      min: 0
+      max: 0.0115
