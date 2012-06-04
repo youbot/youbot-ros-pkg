@@ -97,9 +97,9 @@ void ModelFitting::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
 			xTrans,yTrans,zTrans);
 
 	for(unsigned int i=0; i<cube2D->getSize();i++){
-		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D(cube2D->getPointCloud()->data()[i].getX(),
-				cube2D->getPointCloud()->data()[i].getY(),
-				cube2D->getPointCloud()->data()[i].getZ());
+		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*cube2D->getPointCloud())[i].getX(),
+				(*cube2D->getPointCloud())[i].getY(),
+				(*cube2D->getPointCloud())[i].getZ());
 		transformedCubeModel2D->addPoint(tempPoint);
 		delete tempPoint;
 	}
@@ -107,9 +107,9 @@ void ModelFitting::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
 
 
 	for(unsigned int i=0; i<cube3D->getSize();i++){
-		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D(cube3D->getPointCloud()->data()[i].getX(),
-				cube3D->getPointCloud()->data()[i].getY(),
-				cube3D->getPointCloud()->data()[i].getZ());
+		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*cube3D->getPointCloud())[i].getX(),
+				(*cube3D->getPointCloud())[i].getY(),
+				(*cube3D->getPointCloud())[i].getZ());
 		transformedCubeModel3D->addPoint(tempPoint);
 		delete tempPoint;
 	}
@@ -187,9 +187,9 @@ void ModelFitting::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
      calculateHomogeneousMatrix(xRot,yRot,zRot,xtranslation,ytranslation,ztranslation,tempHomogenousMatrix,0);
      BRICS_3D::PointCloud3D *finalModel = new BRICS_3D::PointCloud3D();
  	for(unsigned int i=0; i<cube3D->getSize();i++){
- 		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D(cube3D->getPointCloud()->data()[i].getX(),
- 				cube3D->getPointCloud()->data()[i].getY(),
- 				cube3D->getPointCloud()->data()[i].getZ());
+ 		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*cube3D->getPointCloud())[i].getX(),
+ 				(*cube3D->getPointCloud())[i].getY(),
+ 				(*cube3D->getPointCloud())[i].getZ());
  		finalModel->addPoint(tempPoint);
  		delete tempPoint;
  	}

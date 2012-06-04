@@ -162,9 +162,9 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 	for (unsigned int index = 0; index < modelDatabase.size(); ++index) {
 		transformedModelDatabase.push_back(new BRICS_3D::PointCloud3D());
 		for(unsigned int i=0; i< (*modelDatabase[index]).getSize(); i++){
-			BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*modelDatabase[index]).getPointCloud()->data()[i].getX(),
-					(*modelDatabase[index]).getPointCloud()->data()[i].getY(),
-					(*modelDatabase[index]).getPointCloud()->data()[i].getZ());
+			BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*(*modelDatabase[index]).getPointCloud())[i].getX(),
+					(*(*modelDatabase[index]).getPointCloud())[i].getY(),
+					(*(*modelDatabase[index]).getPointCloud())[i].getZ());
 			(*transformedModelDatabase[index]).addPoint(tempPoint);
 			delete tempPoint;
 		}
@@ -266,8 +266,8 @@ void PoseEstimation6D::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud
 
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyz_rgb_ptr(new pcl::PointCloud<pcl::PointXYZRGB>());
 
-	BRICS_3D::ColoredPointCloud3D *in_cloud = new BRICS_3D::ColoredPointCloud3D();
-	BRICS_3D::PointCloud3D *color_based_roi = new BRICS_3D::ColoredPointCloud3D();
+	BRICS_3D::PointCloud3D *in_cloud = new BRICS_3D::PointCloud3D();
+	BRICS_3D::PointCloud3D *color_based_roi = new BRICS_3D::PointCloud3D();
 	std::vector<BRICS_3D::PointCloud3D*> extracted_clusters;
 
 	//Transform sensor_msgs::PointCloud2 msg to pcl::PointCloud
@@ -280,7 +280,7 @@ void PoseEstimation6D::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud
 	if(in_cloud->getSize() < euclideanClusterExtractor.getMinClusterSize()) return;
 	/**==================================================================================================== [color based roi extraction]**/
 	//perform HSV color based extraction
-	hsvBasedRoiExtractor.extractColorBasedROI(in_cloud, color_based_roi);
+	hsvBasedRoiExtractor.filter(in_cloud, color_based_roi);
 	ROS_INFO("[%s] Size of extracted cloud : %d ", regionLabel.c_str(),color_based_roi->getSize());
 	if(color_based_roi->getSize() < euclideanClusterExtractor.getMinClusterSize()) return;
 	/**==================================================================================================== [cluster extraction]**/

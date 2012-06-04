@@ -34,7 +34,6 @@
 #include "algorithm/filtering/ColorBasedROIExtractorHSV.h"
 #include "core/ColorSpaceConvertor.h"
 #include "util/PCLTypecaster.h"
-#include "core/ColoredPointCloud3D.h"
 
 namespace BRICS_3D {
 

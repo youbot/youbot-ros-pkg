@@ -28,7 +28,6 @@
 //BRICS_3D headers
 #include "algorithm/filtering/ColorBasedROIExtractorHSV.h"
 #include "util/PCLTypecaster.h"
-#include "core/ColoredPointCloud3D.h"
 #include "EuclideanClustering.h"
 #include "algorithm/featureExtraction/Centroid3D.h"
 #include "core/HomogeneousMatrix44.h"
