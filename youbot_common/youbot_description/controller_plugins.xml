@@ -1,5 +1,5 @@
 <library path="lib/libjoint_position_control">
-  <class name="youbot_description/JointPositionController" type="controller::JointPositionController" base_class_type="pr2_controller_interface::Controller" />
+  <class name="youbot_description/JointPositionController" type="youbotcontroller::JointPositionController" base_class_type="pr2_controller_interface::Controller" />
 </library>
 <library path="lib/libyoubot_universal_control">
   <class name="youbot_description/YouBotUniversalController" type="controller::YouBotUniversalController" base_class_type="pr2_controller_interface::Controller" />
