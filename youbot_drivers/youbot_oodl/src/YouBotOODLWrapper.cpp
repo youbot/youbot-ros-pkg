@@ -56,7 +56,7 @@ YouBotOODLWrapper::YouBotOODLWrapper(ros::NodeHandle n) :
 
 	youBotChildFrameID = "base_link"; //holds true for both: base and arm
 	armJointStateMessages.clear();
-
+	gripperCycleCounter = 0;
 }
 
 YouBotOODLWrapper::~YouBotOODLWrapper() {
@@ -627,13 +627,18 @@ void YouBotOODLWrapper::computeOODLSensorReadings() {
 			 * themselves. Of course if the finger are screwed to the most inner position (i.e. the can close completely),
 			 * than it is correct.
 			 */
-			youbot::GripperSensedBarPosition gripperBar1Position;
-			youbot::GripperSensedBarPosition gripperBar2Position;
+			//youbot::GripperSensedBarPosition gripperBar1Position;
+			//youbot::GripperSensedBarPosition gripperBar2Position;
 
 			youbot::YouBotGripperBar& gripperBar1 = youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar1();
 			youbot::YouBotGripperBar& gripperBar2 = youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar2();
-			gripperBar1.getData(gripperBar1Position);
-			gripperBar2.getData(gripperBar2Position);
+
+			if  (gripperCycleCounter == 0) { //workaround: avoid congestion of mailbox message by querying only every ith iteration
+			gripperCycleCounter = 10; //every tenth iteration here
+				gripperBar1.getData(gripperBar1Position);
+				gripperBar2.getData(gripperBar2Position);
+			}
+			gripperCycleCounter--;
 
 			double leftGipperFingerPosition = gripperBar1Position.barPosition.value();
 			armJointStateMessages[armIndex].name[youBotArmDoF + 0] = youBotConfiguration.youBotArmConfigurations[armIndex].leftGripperFingerName;
