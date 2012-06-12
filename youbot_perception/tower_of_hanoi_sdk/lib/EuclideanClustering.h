@@ -21,8 +21,6 @@
 #define EUCLEDEANCLUSTEREXTRACTION_H_
 
 #include "core/PointCloud3D.h"
-#include "core/ColoredPointCloud3D.h"
-
 
 #include <vector>
 #include<stdio.h>
