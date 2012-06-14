@@ -1,0 +1,123 @@
+1. What is it?
+==============
+
+	-- The youbot_registration package contains a method to compute an unknown 
+	   camera frame (extrinsic camera parameters) relative to the KUKA youBot
+	   in particular for the Kinect 3D camera. This package will use a marker placed 
+	   on the gripper at the KUKA youBot manipulator and assumes the pattern will 
+	   be visible by the camera.
+
+2. Installation
+===============
+
+	To install the package invoke: 
+	
+		$rosmake youbot_registration
+
+	This package assumes OpenCV and PCL packages to be installed.
+	
+3. Usage
+========
+
+	3-a. Quick Start
+	================
+	
+	-- Glue the pattern on the youBot manipulator at the center of the finger tip
+	   of the left finger (gripper_finger_link_l).
+
+	-- Start youbot driver, joint_sate publisher, and the registration method.
+	
+		$ roslaunch youbot_oodl youbot_oodl_driver.launch
+		$ roslaunch youbot_oodl youbot_joint_state_publisher.launch
+		$ roslaunch youbot_registration kinect_registration.launch 
+		
+	-- Print frame between robot and camera and save results in a launch file for 
+	   a static transform publisher.
+	   
+		$ rosrun tf tf_echo /base_footprint /openni_camera	
+
+
+	3-b. Preparation of Marker pattern
+	==================================	
+
+	-- Print out the pattern. It is located in data/circlesgrid.png. Cut it along
+	   the black line and put some double-faced tape on its back.
+	   The exact size of the pattern is not so important as long as all circles 
+	   will be visible later.
+	
+	-- Turn of the arm and manually move it to its home position. Then glue the
+	   pattern seen from back to front of the youBot on the left gripper finger
+	   in such a way that the pattern faces to the front. It is important that 
+	   the finger tip is in coincidence with the circle center in the middle of
+	   the pattern (cf. Illustration below).
+	   Internally this position is represented by the frame /pattern_circle_center
+	   Feel free to put the marker to another location but then you need to
+	   precisely update that very frame. It can be set up in the kinect_registration.launch
+	   file. 
+
+
+		Center the marker at the X:
+			         
+                       --X-- -----	   
+                       |   | |   |		
+                       |   | |   |
+                       |   | |   |		          
+                     __|   | |   |__
+                    |o o o | | o o o|
+                 -----------------------
+                |                       |
+               |         Gripper         |                                                              			     	
+
+
+
+	3-c. Running the registration software
+	======================================
+	
+	-- Turn on the youBot and start the driver as usual.
+		$ roslaunch youbot_oodl youbot_oodl_driver.launch
+		$ roslaunch youbot_oodl youbot_joint_state_publisher.launch
+		
+	-- Start the registration procedure		
+		$ roslaunch youbot_registration kinect_registration.launch
+	
+	   The procedure will move the arm along a list of predifined configurations
+	   while it captures the perceived points as well as the reference point  
+	   defined in the internal model. Finally the registration estimates a transform
+	   between these two point sets.
+	   
+	-- During the procedure some points might not be visible, depending on the camera setup,
+	   however these point will be ignored. The warning "FindCircles failed" will be printed.
+	   The registration will still work as long as at least 3 points in total will be visible. 
+	   
+	-- The procedure typically stops with the message "Registration Succeed". The reuslting TF frame 
+	   from will be published from now on.
+
+
+	3-d. Storing the result
+	========================
+	
+	-- You can get the values of the registered camera fram via invoking	
+
+		$ rosrun tf tf_echo /base_footprint /openni_camera
+		
+	   The result will look something like: 	
+		
+		At time 1339671252.201
+		- Translation: [-0.137, 0.124, 0.573]
+		- Rotation: in Quaternion [0.069, 0.185, -0.290, 0.936]
+		            in RPY [0.023, 0.397, -0.596]
+		            
+	-- If you want to store the result you could craete a new launch file that
+	   will start an appropriate static_transform_publisher. Just copy over the
+	   translation and rotation values.		            
+		                        
+		<launch>
+			<node pkg="tf" type="static_transform_publisher" name="youbot_kinect_static_registration" args="-0.137 0.124 0.573 0.069 0.185 -0.290 0.936 /base_footprint /openni_camera 500" />
+		</launch>
+
+
+4. Acknowledgements
+===================
+
+Special thanks goes to inos Automationssoftware GmbH for contibutng to this package. 
+See also http://www.inos-automation.de/

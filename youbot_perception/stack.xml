@@ -1,6 +1,6 @@
 <stack>
   <description brief="youbot_perception">youbot_perception</description>
-  <author>Sebastian Blumenthal, Pinaki Sunil Banerjee</author>
+  <author>Maintained by Sebastian Blumenthal</author>
   <license>LGPL, BSD</license>  
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/youbot_perception</url>
