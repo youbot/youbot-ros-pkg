@@ -23,3 +23,20 @@ arm_controller:
     arm_joint_5:
       p: 1000
       d: 1
+  
+  limits:
+    arm_joint_1:
+      min: 0.0100692
+      max: 5.84014
+	arm_joint_2:
+      min: 0.0100692
+      max: 2.61799
+    arm_joint_3:
+      min: -5.02655
+      max: -0.015708
+    arm_joint_4:
+      min: 0.0221239
+      max: 3.4292
+    arm_joint_5:
+      min: 0.110619
+      max: 5.64159
