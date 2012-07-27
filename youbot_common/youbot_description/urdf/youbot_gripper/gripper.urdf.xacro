@@ -27,7 +27,7 @@
 			<visual>
 				<origin xyz="0 0 0" rpy="0 0 0" />
 				<geometry>
-					<mesh filename="package://youbot_description/meshes/youbot_gripper/palm.stl" />
+					<mesh filename="package://youbot_description/meshes/youbot_gripper/palm.dae" />
 				</geometry>
 				<material name="DarkGrey" />
 			</visual>
@@ -64,7 +64,7 @@
 			<visual>
 				<origin xyz="0 0 0" rpy="0 0 0" />
 				<geometry>
-					<mesh filename="package://youbot_description/meshes/youbot_gripper/finger.stl" />
+					<mesh filename="package://youbot_description/meshes/youbot_gripper/finger.dae" />
 				</geometry>
 				<material name="DarkGrey" />
 			</visual>
@@ -98,7 +98,7 @@
 			<visual>
 				<origin xyz="0 0 0" rpy="0 0 0" />
 				<geometry>
-					<mesh filename="package://youbot_description/meshes/youbot_gripper/finger.stl" />
+					<mesh filename="package://youbot_description/meshes/youbot_gripper/finger.dae" />
 				</geometry>
 				<material name="DarkGrey" />
 			</visual>
