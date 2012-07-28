@@ -100,7 +100,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--<box size="${base_size_x} ${base_size_y} ${base_size_z}" />-->
-        <mesh filename="package://youbot_description/meshes/youbot_base/base_convex.stl"/>
+        <mesh filename="package://youbot_description/meshes/youbot_base/base_convex.dae"/>
       </geometry>
     </collision>
   </link>
@@ -126,7 +126,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://youbot_description/meshes/sensors/hokuyo_convex.stl"/>
+        <mesh filename="package://youbot_description/meshes/sensors/hokuyo_convex.dae"/>
       </geometry>
     </collision>
   </link>
