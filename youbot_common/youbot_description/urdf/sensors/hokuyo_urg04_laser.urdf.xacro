@@ -31,7 +31,7 @@
       <collision>
 		<origin xyz="0 0 0" rpy="0 0 0" />
 		<geometry>
-			<mesh filename="package://youbot_description/meshes/sensors/hokuyo_convex.stl" />
+			<mesh filename="package://youbot_description/meshes/sensors/hokuyo_convex.dae" />
 			
 		</geometry>
 	</collision>
