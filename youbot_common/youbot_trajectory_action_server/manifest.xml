@@ -1,0 +1,25 @@
+<package>
+  <description brief="youbot_trajectory_action_server">
+
+     youbot_trajectory_action_server
+
+  </description>
+  <author>Alexey Zakharov</author>
+  <license>LGPL, BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url></url>
+  <depend package="roscpp"/>
+  <depend package="sensor_msgs"/>
+  <depend package="brics_actuator"/>
+  <depend package="actionlib"/>
+  <depend package="control_msgs"/>
+  <depend package="orocos_kdl"/>  
+
+<export>
+    <cpp cflags="-I${prefix}/cfg/cpp -I${prefix}/include `rosboost-cfg --cflags`" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib `rosboost-cfg --lflags thread` -lyoubot_trajectory_action_server"/>
+ </export>
+
+</package>
+
+
+

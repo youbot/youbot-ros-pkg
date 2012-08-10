@@ -1,9 +1,9 @@
 /******************************************************************************
  * Copyright (c) 2011
- * Locomotec
+ * GPS GmbH
  *
  * Author:
- * Sebastian Blumenthal
+ * Alexey Zakharov
  *
  *
  * This software is published under a dual-license: GNU Lesser General Public
@@ -18,7 +18,7 @@
  * * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
  * documentation and/or other materials provided with the distribution.
- * * Neither the name of Locomotec nor the names of its
+ * * Neither the name of GPS GmbH nor the names of its
  * contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission.
  *
@@ -37,54 +37,22 @@
  *
  ******************************************************************************/
 
-#include "YouBotOODLWrapper.h"
+#ifndef JOINTSTATEOBSERVER_H
+#define	JOINTSTATEOBSERVER_H
 
-int main(int argc, char **argv)
+#include <brics_actuator/JointTorques.h>
+#include <brics_actuator/JointVelocities.h>
+#include <brics_actuator/JointPositions.h>
+
+class JointStateObserver
 {
+public:
+    virtual void updatePosition(const brics_actuator::JointPositions& positions) = 0;
+    virtual void updateVelocity(const brics_actuator::JointVelocities& velocities) = 0;
+    virtual void updateTorque(const brics_actuator::JointTorques& torques) = 0;
+private:
 
-    ros::init(argc, argv, "youbot_oodl_driver");
-    ros::NodeHandle n;
-    youBot::YouBotOODLWrapper youBot(n);
-    std::string armName1;
+};
 
-
-    /* configuration */
-    bool youBotHasBase;
-    bool youBotHasArms;
-    double youBotDriverCycleFrequencyInHz; //the driver recives commands and publishes them with a fixed frequency
-    n.param("youBotHasBase", youBotHasBase, true);
-    n.param("youBotHasArms", youBotHasArms, true);
-    n.param("youBotDriverCycleFrequencyInHz", youBotDriverCycleFrequencyInHz, 50.0);
-    n.param<std::string > ("youBotConfigurationFilePath", youBot.youBotConfiguration.configurationFilePath, mkstr(YOUBOT_CONFIGURATIONS_DIR));
-    n.param<std::string > ("youBotArmName1", armName1, "youbot-manipulator");
-
-    ros::ServiceServer reconnectService = n.advertiseService("reconnect", &youBot::YouBotOODLWrapper::reconnectCallback, &youBot);
-
-    ROS_ASSERT((youBotHasBase == true) || (youBotHasArms == true)); // At least one should be true, otherwise nothing to be started.
-    if (youBotHasBase == true)
-    {
-        youBot.initializeBase("youbot-base");
-    }
-
-    if (youBotHasArms == true)
-    {
-        youBot.initializeArm(armName1);
-        //		youBot.initializeArm("youbot-manipulator2");
-    }
- 
-
-    /* coordination */
-    ros::Rate rate(youBotDriverCycleFrequencyInHz); //Input and output at the same time... (in Hz)
-    while (n.ok())
-    {
-        ros::spinOnce();
-        youBot.computeOODLSensorReadings();
-        youBot.publishOODLSensorReadings();
-        rate.sleep();
-    }
-
-    youBot.stop();
-
-    return 0;
-}
+#endif	/* JOINTSTATEOBSERVER_H */
 
