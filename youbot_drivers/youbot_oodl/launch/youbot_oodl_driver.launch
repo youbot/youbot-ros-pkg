@@ -15,10 +15,9 @@ or enable the USE_SETCAP flag in the cmake file and recompile again.
 	<!-- Set relevant parameters. -->
 	<param name="youBotHasBase" type="bool" value="true"/>
 	<param name="youBotHasArm" type="bool" value="true"/> 
-	<param name="youBotDriverCycleFrequencyInHz" type="double" value="100.0"/>
+	<param name="youBotDriverCycleFrequencyInHz" type="double" value="50.0"/>
 	<param name="trajectoryActionServerEnable" type="bool" value="true"/>
-        <param name="trajectoryVelocityGain" type="double" value="1.0"/>
-        <param name="trajectoryPositionGain" type="double" value="0.2"/>
+        <param name="trajectoryPositionGain" type="double" value="5.0"/>
    
 	<!-- Start the driver. NOTE: Every joint topic is mapped mapped to /joint_states, for convenience.
 	In case one wants to keep the default name just comment out the remap statements. -->

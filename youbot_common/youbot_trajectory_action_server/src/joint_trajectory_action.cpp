@@ -61,8 +61,8 @@ JointTrajectoryAction::JointTrajectoryAction(JointStateObserver* jointStateObser
 {
 
 
-    setPositionGain(0.1);
-    setVelocityGain(1.0);
+    setPositionGain(5.0);
+    setVelocityGain(0.0);
     setFrequency(50);
 
 }
@@ -137,12 +137,12 @@ double JointTrajectoryAction::calculateVelocity(double actualAngle,
 
         double desiredAngle = trajectoryComposite.Pos(actualTime).p.x();
         double desiredVelocity = trajectoryComposite.Vel(actualTime).vel.x();
-        //double velocityError = desiredVelocity - actualVelocity;
+        double velocityError = desiredVelocity - actualVelocity;
         double positionError = desiredAngle - actualAngle;
         double gain1 = getPositionGain();
         double gain2 = getVelocityGain();
 
-        error = gain1 * positionError + gain2 * desiredVelocity;
+        error = gain1 * positionError + gain2 * velocityError;
 
     }
 
@@ -300,6 +300,7 @@ void JointTrajectoryAction::jointStateCallback(const sensor_msgs::JointState& jo
                 if (current_state.name.at(j) == joint_state.name.at(i))
                 {
                     current_state.position[j] = joint_state.position.at(i);
+		    current_state.velocity[j] = joint_state.velocity.at(i);
                     k--;
                     break;
                 }

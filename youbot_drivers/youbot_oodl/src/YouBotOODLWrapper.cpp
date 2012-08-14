@@ -62,8 +62,8 @@ node(n)
 
     n.param("youBotDriverCycleFrequencyInHz", youBotDriverCycleFrequencyInHz, 50.0);
     n.param("trajectoryActionServerEnable", trajectoryActionServerEnable, false);
-    n.param("trajectoryVelocityGain", trajectoryVelocityGain, 0.8);
-    n.param("trajectoryPositionGain", trajectoryPositionGain, 0.2);
+    n.param("trajectoryVelocityGain", trajectoryVelocityGain, 0.0);
+    n.param("trajectoryPositionGain", trajectoryPositionGain, 5.0);
 }
 
 YouBotOODLWrapper::~YouBotOODLWrapper()
