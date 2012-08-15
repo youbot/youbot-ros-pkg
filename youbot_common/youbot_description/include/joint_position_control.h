@@ -46,7 +46,7 @@
 #include <pr2_controller_interface/controller.h>
 #include "brics_actuator/JointPositions.h"
 
-namespace controller {
+namespace youbotcontroller {
 
 class JointPositionController : public pr2_controller_interface::Controller {
 public:
