@@ -58,7 +58,7 @@ CartesianComplianceController* CartesianComplianceControllerDebug::getController
 
 void CartesianComplianceControllerDebug::toTransformMatrix(double* tf, tf::Transform& trans) {
 	trans.setOrigin(tf::Vector3(tf[3], tf[7], tf[11]));
-	btMatrix3x3 rotMatrix(tf[0], tf[1], tf[2],
+	tf::Matrix3x3 rotMatrix(tf[0], tf[1], tf[2],
 			tf[4], tf[5], tf[6],
 			tf[8], tf[9], tf[10]);
 	tf::Quaternion quat;
@@ -69,7 +69,7 @@ void CartesianComplianceControllerDebug::toTransformMatrix(double* tf, tf::Trans
 void CartesianComplianceControllerDebug::publishTf(double* tf, string parent, string child) {
 	/*tf::Transform trans;
 	trans.setOrigin(tf::Vector3(tf[3], tf[7], tf[11]));
-	btMatrix3x3 rotMatrix(tf[0], tf[1], tf[2],
+	tf::Matrix3x3 rotMatrix(tf[0], tf[1], tf[2],
 			tf[4], tf[5], tf[6],
 			tf[8], tf[9], tf[10]);
 	tf::Quaternion quat;
@@ -333,11 +333,11 @@ void CartesianComplianceController::starting() {
 void CartesianComplianceController::update20SimControl() {
 
     if (!locked) {
-        btQuaternion quat;
+        tf::Quaternion quat;
         tf::quaternionMsgToTF(currentBasePose.orientation, quat);
 
         double ypr[3];
-        btMatrix3x3(quat).getEulerYPR(ypr[0], ypr[1], ypr[2]);
+        tf::Matrix3x3(quat).getEulerYPR(ypr[0], ypr[1], ypr[2]);
 
         u[0] = ypr[0]; //is not active
      //  ROS_INFO("X: %f\n", u[0]);
@@ -451,9 +451,9 @@ void CartesianComplianceController::positionCommand(const brics_actuator::Cartes
 	this->position[1] = tipPosition.y;
 	this->position[2] = tipPosition.z;
 
-	btQuaternion quaternion;
+	tf::Quaternion quaternion;
 	tf::quaternionMsgToTF(tipOrientation, quaternion);
-	btMatrix3x3(quaternion).getEulerYPR(orientationYPR[0], orientationYPR[1], orientationYPR[2]);
+	tf::Matrix3x3(quaternion).getEulerYPR(orientationYPR[0], orientationYPR[1], orientationYPR[2]);
 
 }
 
