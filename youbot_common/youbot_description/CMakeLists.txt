@@ -54,7 +54,7 @@ rosbuild_add_executable(arm_joint_torque_control_test examples/arm_joint_torque_
 #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/20_sim_cartesian_compliance_control)
 #rosbuild_add_library(cartesian_compliance_control src/cartesian_compliance_control.cpp)
 #target_link_libraries(cartesian_compliance_control 20_sim_cartesian_compliance_control)
-rosbuild_add_executable(cartesian_compliance_control_test examples/cartesian_compliance_control_test.cpp)
+#rosbuild_add_executable(cartesian_compliance_control_test examples/cartesian_compliance_control_test.cpp)
 
 #static joint states publisher
 rosbuild_add_executable(static_joint_publisher src/static_joint_publisher.cpp)
