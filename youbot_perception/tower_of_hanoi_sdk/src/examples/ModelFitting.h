@@ -39,7 +39,7 @@
 #include <pcl/registration/icp.h>
 #include <pcl/registration/icp_nl.h>
 #include <pcl/registration/registration.h>
-#include <pcl/common/transform.h>
+#include <pcl/common/transforms.h>
 
 
 #include <Eigen/Geometry>
