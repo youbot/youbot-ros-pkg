@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<root xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+      xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+      xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+      xmlns:xacro="http://ros.org/wiki/xacro">
+  
+
+  <include filename="$(find youbot_description)/urdf/sensors/microsoft_lifecam.gazebo.xacro"/>
+
+  <xacro:macro name="microsoft_lifecam" params="name parent *origin">
+   <joint name="${name}_camera_joint" type="fixed">
+    <insert_block name="origin" />
+    <parent link="${parent}" />
+    <child link="${name}_camera" />
+   </joint>
+  
+   <link name="${name}_camera">
+    <inertial>
+      <mass value="0.01" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+        iyy="0.001" iyz="0.0"
+        izz="0.001" />
+    </inertial>
+
+    <visual>
+      <origin xyz="-0.04 -0.0035 -0.031" rpy="${M_PI/2} 0 ${M_PI/2}" />
+      <geometry>
+       <mesh filename="package://youbot_description/meshes/sensors/microsoft_lifecam.dae" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <origin xyz="-0.04 -0.0035 -0.031" rpy="${M_PI/2} 0 ${M_PI/2}" />
+      <geometry>
+        <mesh filename="package://youbot_description/meshes/sensors/microsoft_lifecam.dae" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  <!-- for simulation -->
+  <xacro:microsoft_lifecam_gazebo name="${name}" />
+
+ 
+</xacro:macro> 
+
+</root>
