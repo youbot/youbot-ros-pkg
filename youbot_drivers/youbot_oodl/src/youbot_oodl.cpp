@@ -47,29 +47,46 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "youbot_oodl_driver");
 	ros::NodeHandle n;
 	youBot::YouBotOODLWrapper youBot(n);
-	std::string armName1;
+	std::vector<std::string> armNames;
+	std::string youBotBaseName;
 
 
 	/* configuration */
 	bool youBotHasBase;
 	bool youBotHasArms;
 	double youBotDriverCycleFrequencyInHz;	//the driver recives commands and publishes them with a fixed frequency
-	n.param("youBotHasBase", youBotHasBase, true);
-	n.param("youBotHasArms", youBotHasArms, true);
+	n.param("youBotHasBase", youBotHasBase, false);
+	n.param("youBotHasArms", youBotHasArms, false);
 	n.param("youBotDriverCycleFrequencyInHz", youBotDriverCycleFrequencyInHz, 50.0);
 	n.param<std::string>("youBotConfigurationFilePath", youBot.youBotConfiguration.configurationFilePath, mkstr(YOUBOT_CONFIGURATIONS_DIR));
-	n.param<std::string>("youBotArmName1", armName1, "youbot-manipulator");
-  
-  ros::ServiceServer reconnectService = n.advertiseService("reconnect", &youBot::YouBotOODLWrapper::reconnectCallback, &youBot);
+	
+	n.param<std::string>("youBotBaseName", youBotBaseName, "youbot-base");
+
+	// Retrieve all defined arm names from the launch file params
+	int i = 1;
+	std::stringstream armNameParam;
+	armNameParam << "youBotArmName" << i; // youBotArmName1 is first checked param... then youBotArmName2, etc.
+	while (n.hasParam(armNameParam.str())) {
+		std::string armName;
+		n.getParam(armNameParam.str(), armName);
+		armNames.push_back(armName);
+		armNameParam.str("");
+		armNameParam << "youBotArmName" <<  (++i);
+	}
+
+
+	ros::ServiceServer reconnectService = n.advertiseService("reconnect", &youBot::YouBotOODLWrapper::reconnectCallback, &youBot);
 
 	ROS_ASSERT((youBotHasBase == true) || (youBotHasArms == true)); // At least one should be true, otherwise nothing to be started.
 	if (youBotHasBase == true) {
-		youBot.initializeBase("youbot-base");
+		youBot.initializeBase(youBotBaseName);
 	}
 
 	if (youBotHasArms == true) {
-		youBot.initializeArm(armName1);
-//		youBot.initializeArm("youbot-manipulator2");
+		std::vector<std::string>::iterator armNameIter;
+		for (armNameIter = armNames.begin(); armNameIter != armNames.end(); ++armNameIter) {
+			youBot.initializeArm(*armNameIter);
+		}
 	}
 
 

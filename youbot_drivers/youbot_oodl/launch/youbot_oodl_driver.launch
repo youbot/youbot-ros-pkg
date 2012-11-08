@@ -13,17 +13,47 @@ or enable the USE_SETCAP flag in the cmake file and recompile again.
 <launch>
 
 	<!-- Set relevant parameters. -->
-	<param name="youBotHasBase" type="bool" value="true"/>
-	<param name="youBotHasArm" type="bool" value="true"/> 
+	<param name="youBotHasBase" type="bool" value="false"/>
+	<param name="youBotHasArms" type="bool" value="true"/> 
 	<param name="youBotDriverCycleFrequencyInHz" type="double" value="50.0"/>
 
-	<!-- Start the driver. NOTE: Every joint topic is mapped mapped to /joint_states, for convenience.
-	In case one wants to keep the default name just comment out the remap statements. -->
-	<node name="youbot_oodl_driver" pkg="youbot_oodl" type="youbot_oodl" output="screen">
-		<remap from="base/joint_states" to="joint_states"/> 
-		<remap from="arm_1/joint_states" to="joint_states" /> 
-		<!--<remap from="arm_2/joint_states" to="joint_states" />-->
-	</node>
+
+	<!-- 
+	  Initialize youBot arms by name. Each named arm must have a matching config
+	  file. For example, the entry:	 
+		  <param name="youBotArmName1" type="str" value="MyArm"/>
+	  will attempt to initialize an arm using the config file "MyArm.cfg" in your
+	  default configuration path.
+
+	  To initialize multiple arms, simply define parameters naming each of them,
+	  beginning with the parameter "youBotArmName1", then "youBotArmName2", etc.
+	-->
+	
+	<!-- Default name values --> 
+	<param name="youBotBaseName" type="str" value="youbot-base"/>
+	<param name="youBotArmName1" type="str" value="youbot-manipulator"/>
+	
+
+	<!-- Start the driver. NOTE: Every joint topic is mapped to armName/joint_states -->
+	<node name="youbot_oodl_driver" pkg="youbot_oodl" type="youbot_oodl" output="screen"/>
+
+
+        <!-- start robot state publishers (REPLACES NEED FOR SEPARATE youbot_description LAUNCH FILES) -->
+
+	<!-- When customizing this for your robot setup, make sure you have a group defined for each base or arm
+	     that is defined above. -->
+
+	<group ns="youbot-base">
+	        <param name="robot_description" command="$(find xacro)/xacro.py '$(find youbot_description)/robots/youbot_base.urdf.xacro'"/>
+	        <param name="publish_frequency" type="double" value="50.0" />
+	        <node pkg="robot_state_publisher" type="state_publisher" name="rob_st_pub" />
+	</group>
+
+        <group ns="youbot-manipulator">
+        	<param name="robot_description" command="$(find xacro)/xacro.py '$(find youbot_description)/robots/youbot_arm.urdf.xacro'"/>
+                <node pkg="robot_state_publisher" type="state_publisher" name="rob_st_pub"/>
+        </group>
+
 
 </launch>
 

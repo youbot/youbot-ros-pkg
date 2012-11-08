@@ -1,3 +1,0 @@
-#source ~/ros/setup.sh
-source /opt/ros/cturtle/setup.sh
-rosrun youbot_oodl youbot_oodl

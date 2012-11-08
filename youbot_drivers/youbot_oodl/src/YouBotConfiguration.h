@@ -174,7 +174,7 @@ public:
 	YouBotBaseConfiguration baseConfiguration;
 
 	/// A youbot system has one or more arms
-	std::vector<YouBotArmConfiguration> youBotArmConfigurations;
+	std::vector<YouBotArmConfiguration*> youBotArmConfigurations;
 	std::map<std::string, int> armNameToArmIndexMapping;
 };
 

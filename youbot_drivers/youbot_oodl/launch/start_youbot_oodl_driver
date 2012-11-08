@@ -10,6 +10,5 @@
 # NOTE: setup.sh is assumed to be in ~/ros/setup.sh
 # ---- 
 
-sudo bash command.txt #the beneath commands need to be in some ASCII file (command.txt), otherwise no output can be seen, as all commands would be executed in a subshell
-#source ~/ros/setup.sh
-#rosrun youbot_oodl youbot_oodl
+echo "Please run 'roslaunch youbot_oodl youbot_oodl_driver.launch' instead."
+
