@@ -108,6 +108,14 @@ YouBotConfiguration::YouBotConfiguration() {
 }
 
 YouBotConfiguration::~YouBotConfiguration() {
+	std::vector<YouBotArmConfiguration*>::iterator iter;
+	for (iter = youBotArmConfigurations.begin(); iter != youBotArmConfigurations.end(); ++iter) {
+		YouBotArmConfiguration *config = *iter;
+		delete config;
+		config = NULL;
+	}
+
+
 	youBotArmConfigurations.clear();
 	armNameToArmIndexMapping.clear();
 }

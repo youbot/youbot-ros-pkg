@@ -11,11 +11,11 @@
 	<!-- start robot_state_publisher assuming /joint_states is not the default topic and the drivers default topics are used -->
 	<!--
 	<node pkg="robot_state_publisher" type="state_publisher" name="robot_arm_state_publisher" output="screen">
-		<remap from="joint_states" to="arm_1/joint_states"/> 
+		<remap from="joint_states" to="youbot-manipulator/joint_states"/> 
 	</node>
 
 	<node pkg="robot_state_publisher" type="state_publisher" name="robot_base_state_publisher" output="screen">
-		<remap from="joint_states" to="base/joint_states"/> 
+		<remap from="joint_states" to="youbot-base/joint_states"/> 
 	</node>
 	-->
 	
