@@ -780,36 +780,27 @@ void YouBotOODLWrapper::publishOODLSensorReadings()
 
 }
 
-bool YouBotOODLWrapper::switchOffBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
-{
-    ROS_INFO("Switch off the base motors");
-    if (youBotConfiguration.hasBase)
-    { // in case stop has been invoked
+bool YouBotOODLWrapper::switchOffBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
+	ROS_INFO("Switch off the base motors");
+	if (youBotConfiguration.hasBase) { // in case stop has been invoked
 
-        youbot::JointPWMSetpoint pwmStopMovement;
-        pwmStopMovement.pwm = 0;
-        try
-        {
-            youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
-            youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(1).setData(pwmStopMovement);
-            youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(2).setData(pwmStopMovement);
-            youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(3).setData(pwmStopMovement);
-            youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(4).setData(pwmStopMovement);
-            youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
-        }
-        catch (std::exception& e)
-        {
-            std::string errorMessage = e.what();
-            ROS_WARN("Cannot switch off the base motors: \n %s", errorMessage.c_str());
-            return false;
-        }
-    }
-    else
-    {
-        ROS_ERROR("No base initialized!");
-        return false;
-    }
-    return true;
+		try {
+			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(1).noMoreAction();
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(2).noMoreAction();
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(3).noMoreAction();
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(4).noMoreAction();
+			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
+		} catch (std::exception& e) {
+			std::string errorMessage = e.what();
+			ROS_WARN("Cannot switch off the base motors: \n %s", errorMessage.c_str());
+			return false;
+		}
+	} else {
+		ROS_ERROR("No base initialized!");
+		return false;
+	}
+	return true;
 }
 
 bool YouBotOODLWrapper::switchOnBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
@@ -844,39 +835,30 @@ bool YouBotOODLWrapper::switchOnBaseMotorsCallback(std_srvs::Empty::Request& req
     return true;
 }
 
-bool YouBotOODLWrapper::switchOffArmMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response, int armIndex)
-{
-    ROS_INFO("Switch off the arm%i motors", armIndex + 1);
-    ROS_ASSERT(0 <= armIndex && armIndex < static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
+bool YouBotOODLWrapper::switchOffArmMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response, int armIndex) {
+	ROS_INFO("Switch off the arm%i motors", armIndex+1);
+	ROS_ASSERT(0 <= armIndex && armIndex < static_cast<int>(youBotConfiguration.youBotArmConfigurations.size()));
 
-    if (youBotConfiguration.hasArms && youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm != 0)
-    { // in case stop has been invoked
+	if (youBotConfiguration.hasArms && youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm != 0) { // in case stop has been invoked
 
-        youbot::JointPWMSetpoint pwmStopMovement;
-        pwmStopMovement.pwm = 0;
-        try
-        {
-            youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
-            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(1).setData(pwmStopMovement);
-            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(2).setData(pwmStopMovement);
-            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(3).setData(pwmStopMovement);
-            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(4).setData(pwmStopMovement);
-            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(5).setData(pwmStopMovement);
-            youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
-        }
-        catch (std::exception& e)
-        {
-            std::string errorMessage = e.what();
-            ROS_WARN("Cannot switch off the arm motors: \n %s", errorMessage.c_str());
-            return false;
-        }
-    }
-    else
-    {
-        ROS_ERROR("Arm%i not initialized!", armIndex + 1);
-        return false;
-    }
-    return true;
+		try{
+			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(1).noMoreAction();
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(2).noMoreAction();
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(3).noMoreAction();
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(4).noMoreAction();
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(5).noMoreAction();
+			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
+		} catch (std::exception& e) {
+			std::string errorMessage = e.what();
+			ROS_WARN("Cannot switch off the arm motors: \n %s", errorMessage.c_str());
+			return false;
+		}
+	} else {
+		ROS_ERROR("Arm%i not initialized!", armIndex+1);
+		return false;
+	}
+	return true;
 }
 
 bool YouBotOODLWrapper::switchOnArmMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response, int armIndex)
