@@ -222,6 +222,10 @@ private:
     /// Vector of the published joint states of per arm with angles in [RAD]
     vector<sensor_msgs::JointState> armJointStateMessages;
 
+	youbot::GripperSensedBarPosition gripperBar1Position;
+	youbot::GripperSensedBarPosition gripperBar2Position;
+	int gripperCycleCounter;
+
     void executeActionServer(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal,  int armIndex);
     
     bool trajectoryActionServerEnable;

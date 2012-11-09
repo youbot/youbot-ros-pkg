@@ -129,6 +129,8 @@ public:
     ///Joint names for the gripper fingers
     std::vector<std::string> gripperFingerNames;
 
+    const static unsigned int LEFT_FINGER_INDEX = 0;
+    const static unsigned int RIGHT_FINGER_INDEX = 1;
 
     /// Receives "brics_actuator/JointPositions" for the arm joints
     ros::Subscriber armPositionCommandSubscriber;
