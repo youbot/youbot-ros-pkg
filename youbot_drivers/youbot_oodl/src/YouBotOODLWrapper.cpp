@@ -507,7 +507,7 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 		}
 
 		/* check if something is in the received message that requires action for the right finger gripper */
-		gripperIterator = jointNameToValueMapping.find(youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[YouBotArmConfiguration::LEFT_FINGER_INDEX]);
+		gripperIterator = jointNameToValueMapping.find(youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[YouBotArmConfiguration::RIGHT_FINGER_INDEX]);
 		if (gripperIterator != jointNameToValueMapping.end()) {
 			ROS_DEBUG("Trying to set the right gripper to new value %f", gripperIterator->second);
 
