@@ -117,7 +117,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
 
     try
     {
-        ROS_INFO("Configuration file path: %s", youBotConfiguration.configurationFilePath.c_str());
+        ROS_INFO("Configuration file path: %s", youBotConfiguration.configurationFilePath.c_str());   
         YouBotArmConfiguration tmpArmConfig;
         youBotConfiguration.youBotArmConfigurations.push_back(tmpArmConfig);
         armIndex = static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()) - 1;
@@ -672,24 +672,31 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
              * themselves. Of course if the finger are screwed to the most inner position (i.e. the can close completely),
              * than it is correct.
              */
-            youbot::YouBotGripperBar& gripperBar1 = youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar1();
-            youbot::YouBotGripperBar& gripperBar2 = youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar2();
+            try 
+            {
+                youbot::YouBotGripperBar& gripperBar1 = youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar1();
+                youbot::YouBotGripperBar& gripperBar2 = youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar2();
 
-            if  (gripperCycleCounter == 0) { //workaround: avoid congestion of mailbox message by querying only every ith iteration
-            	gripperCycleCounter = youBotDriverCycleFrequencyInHz/5; //approx. 5Hz here
-            	gripperBar1.getData(gripperBar1Position);
-            	gripperBar2.getData(gripperBar2Position);
+                if  (gripperCycleCounter == 0) { //workaround: avoid congestion of mailbox message by querying only every ith iteration
+            	    gripperCycleCounter = youBotDriverCycleFrequencyInHz/5; //approx. 5Hz here
+            	    gripperBar1.getData(gripperBar1Position);
+            	    gripperBar2.getData(gripperBar2Position);
+                }
+                gripperCycleCounter--;
+
+                armJointStateMessages[armIndex].name[youBotArmDoF + 0] = youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[YouBotArmConfiguration::LEFT_FINGER_INDEX];
+                double leftGipperFingerPosition = gripperBar1Position.barPosition.value();
+                armJointStateMessages[armIndex].position[youBotArmDoF + 0] = leftGipperFingerPosition;
+
+                double rightGipperFingerPosition = gripperBar2Position.barPosition.value();
+                armJointStateMessages[armIndex].name[youBotArmDoF + 1] = youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[YouBotArmConfiguration::RIGHT_FINGER_INDEX];
+                armJointStateMessages[armIndex].position[youBotArmDoF + 1] = rightGipperFingerPosition;
             }
-            gripperCycleCounter--;
-
-            armJointStateMessages[armIndex].name[youBotArmDoF + 0] = youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[YouBotArmConfiguration::LEFT_FINGER_INDEX];
-            double leftGipperFingerPosition = gripperBar1Position.barPosition.value();
-            armJointStateMessages[armIndex].position[youBotArmDoF + 0] = leftGipperFingerPosition;
-
-            double rightGipperFingerPosition = gripperBar2Position.barPosition.value();
-            armJointStateMessages[armIndex].name[youBotArmDoF + 1] = youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[YouBotArmConfiguration::RIGHT_FINGER_INDEX];
-            armJointStateMessages[armIndex].position[youBotArmDoF + 1] = rightGipperFingerPosition;
-
+            catch (std::exception& e)
+            {
+                std::string errorMessage = e.what();
+                ROS_WARN("Cannot read gripper values: \n %s", errorMessage.c_str());
+            }
 
             if (trajectoryActionServerEnable)
             {

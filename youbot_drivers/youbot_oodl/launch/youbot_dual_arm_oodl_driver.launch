@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<!--
+
+This launch file starts the ROS wrapper for the KUKA youBot API.
+
+
+If you receive an error message that contains "Excecute as root"
+then go to the bin folder and execute: sudo setcap cap_net_raw+ep
+or enable the USE_SETCAP flag in the cmake file and recompile again.
+-->
+
+<launch>
+
+	<!-- Set relevant parameters. -->
+	<param name="youBotHasBase" type="bool" value="true"/>
+	<param name="youBotHasArms" type="bool" value="true"/> 
+	<param name="youBotDriverCycleFrequencyInHz" type="double" value="50.0"/>
+	<param name="trajectoryActionServerEnable" type="bool" value="true"/>
+    	<param name="trajectoryPositionGain" type="double" value="5.0"/>
+    	<param name="trajectoryVelocityGain" type="double" value="0.0"/>
+
+	<!-- 
+	  Initialize youBot arms by name. Each named arm must have a matching config
+	  file. For example, the entry:	 
+		  <param name="youBotArmName1" type="str" value="MyArm"/>
+	  will attempt to initialize an arm using the config file "MyArm.cfg" in your
+	  default configuration path.
+
+	  To initialize multiple arms, simply define parameters naming each of them,
+	  beginning with the parameter "youBotArmName1", then "youBotArmName2", etc.
+	-->
+	
+	<!-- Default name values --> 
+	<param name="youBotBaseName" type="str" value="youbot-base"/>
+	<param name="youBotArmName1" type="str" value="youbot-manipulator"/>
+	<param name="youBotArmName2" type="str" value="youbot-manipulator2"/>
+	
+
+	<!-- Start the driver. NOTE: Every joint topic is mapped to armName/joint_states -->
+	<node name="youbot_oodl_driver" pkg="youbot_oodl" type="youbot_oodl" output="screen">
+			<remap from="base/joint_states" to="joint_states"/> 
+			<remap from="arm_1/joint_states" to="joint_states" /> 
+			<remap from="arm_2/joint_states" to="joint_states" />
+	</node>
+		  
+</launch>
+

@@ -73,6 +73,10 @@ rosbuild_add_executable(youbot_arm_test
     examples/youbot_arm_test.cpp 
 )
 
+rosbuild_add_executable(youbot_2nd_arm_test 
+    examples/youbot_2nd_arm_test.cpp 
+)
+
 #rosbuild_add_executable(youbot_arm_velocity_test 
 #    examples/youbot_arm_velocity_test.cpp 
 #)
