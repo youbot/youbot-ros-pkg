@@ -39,9 +39,28 @@ or enable the USE_SETCAP flag in the cmake file and recompile again.
 
 	<!-- Start the driver. NOTE: Every joint topic is mapped to armName/joint_states -->
 	<node name="youbot_oodl_driver" pkg="youbot_oodl" type="youbot_oodl" output="screen">
-			<remap from="base/joint_states" to="joint_states"/> 
+			<!-- Mapping all values to /joint_states does not work so well,
+				in particular some joint values for the first arm will be dropped. -->
+			<!--<remap from="base/joint_states" to="joint_states"/> 
 			<remap from="arm_1/joint_states" to="joint_states" /> 
-			<remap from="arm_2/joint_states" to="joint_states" />
+			<remap from="arm_2/joint_states" to="joint_states" />-->
+	</node>
+		
+
+	<!-- Load appropriate URDF model for dual arm system. -->  
+	<param name="robot_description" command="$(find xacro)/xacro.py '$(find youbot_description)/robots/youbot_dual_arm.urdf.xacro'"/>
+
+	<!-- Start TF publishers -->		  
+	<node pkg="robot_state_publisher" type="state_publisher" name="robot_base_state_publisher" output="screen">
+		  <remap from="joint_states" to="base/joint_states"/> 
+	</node>
+
+	<node pkg="robot_state_publisher" type="state_publisher" name="robot_arm_1_state_publisher" output="screen">
+		<remap from="joint_states" to="arm_1/joint_states"/> 
+	</node>
+
+	<node pkg="robot_state_publisher" type="state_publisher" name="robot_arm_2_state_publisher" output="screen">
+		<remap from="joint_states" to="arm_2/joint_states"/> 
 	</node>
 		  
 </launch>
