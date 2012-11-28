@@ -1,0 +1,14 @@
+<launch>
+	<node pkg="tf" type="static_transform_publisher" name="green1_tf" args="0.2 -0.07 1 0 0 0 /openni_rgb_optical_frame /green_object_1 500" />
+	<node pkg="tf" type="static_transform_publisher" name="green2_tf" args="0.2 0 1 0 0 0 /openni_rgb_optical_frame /green_object_2 500" />
+	<node pkg="tf" type="static_transform_publisher" name="green3_tf" args="0.2 0.07 1 0 0 0 /openni_rgb_optical_frame /green_object_3 500" />
+
+	<node pkg="tf" type="static_transform_publisher" name="yellow1_tf" args="0.15 -0.035 1 0 0 0 /openni_rgb_optical_frame /yellow_object_1 500" />
+	<node pkg="tf" type="static_transform_publisher" name="yellow2_tf" args="0.15 0.035 1 0 0 0 /openni_rgb_optical_frame /yellow_object_2 500" />
+
+	<node pkg="tf" type="static_transform_publisher" name="red1_tf" args="0.10 0.0 1 0 0 0 /openni_rgb_optical_frame /red_object_1 500" />
+
+   <node pkg="tf" type="static_transform_publisher" name="start_tf" args="0.30 0.0 0.95 0 0 0 /openni_rgb_optical_frame /start 500" />
+
+
+</launch>

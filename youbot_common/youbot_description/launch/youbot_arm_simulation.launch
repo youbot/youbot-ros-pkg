@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+        <include file="$(find youbot_description)/launch/xacroload.launch">
+		<arg name="gui" value="true"/>
+		<arg name="model" value="$(find youbot_description)/robots/youbot_arm.urdf.xacro"/>
+	</include>
+</launch>
+

@@ -1,0 +1,33 @@
+<package>
+  <description brief="youbot_registration">
+
+     youbot_registration
+     
+	   The youbot_registration package contains a method to compute an unknown 
+	   camera frame (extrinsic camera parameters) relative to the KUKA youBot
+	   in particular for the Kinect 3D camera. This package will use a marker placed 
+	   on the gripper at the KUKA youBot manipulator and assumes the pattern will 
+	   be visible by the camera.
+	   
+       The code has been contributed in cooperation with inos Automationssoftware GmbH.
+
+  </description>
+  <author>Constantinos Lantos (inos Automationssoftware GmbH)</author>
+  <license>LGPL, BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_registration</url>
+  
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+  <depend package="std_srvs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="pcl"/>
+  <depend package="tf"/>
+  <depend package="pcl_ros"/>
+  <depend package="brics_actuator"/>
+  <depend package="sensor_msgs"/>
+  <depend package="cv_bridge"/>
+
+</package>
+
+

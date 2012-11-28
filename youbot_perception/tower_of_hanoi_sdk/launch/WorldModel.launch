@@ -1,0 +1,6 @@
+<launch>
+	<!-- Start 3D World Model -->
+	<node name="youbot_3d_world_model" pkg="tower_of_hanoi_sdk" type="worldModel" output="screen"> 
+		<param name="worldModelRootFrameId" value="/map" /> <!-- This pararameter assumes a map to be present! -->	
+	</node>
+</launch>

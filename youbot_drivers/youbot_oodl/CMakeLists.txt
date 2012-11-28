@@ -54,8 +54,10 @@ rosbuild_add_executable(youbot_oodl
     src/youbot_oodl.cpp 
     src/YouBotOODLWrapper.cpp
     src/YouBotConfiguration.cpp
+    src/joint_state_observer_oodl.cpp
 )
-target_link_libraries(youbot_oodl ${OODL_YOUBOT_LIBRARIES} ${SOEM_LIBRARIES} ${Boost_LIBRARIES})
+
+target_link_libraries(youbot_oodl ${OODL_YOUBOT_LIBRARIES} ${SOEM_LIBRARIES} ${Boost_LIBRARIES} youbot_trajectory_action_server)
 
 OPTION(USE_SETCAP "Set permissions to access ethernet interface without sudo" ON)
 
@@ -74,6 +76,10 @@ endif(USE_SETCAP)
 
 rosbuild_add_executable(youbot_arm_test 
     examples/youbot_arm_test.cpp 
+)
+
+rosbuild_add_executable(youbot_2nd_arm_test 
+    examples/youbot_2nd_arm_test.cpp 
 )
 
 #rosbuild_add_executable(youbot_arm_velocity_test 

@@ -1,0 +1,9 @@
+<stack>
+  <description brief="youbot_manipulation">The youbot_manipulation stack contains algorithms for generation of trajectories for the KUKA youBot manipulator.</description>
+  <author>Sebastian Blumenthal</author>
+  <license>LGPL, BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_manipulation</url>
+  <depend stack="ros" />
+
+</stack>
