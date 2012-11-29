@@ -919,6 +919,8 @@ void YouBotOODLWrapper::publishDiagnostics()
 	if((ros::Time::now() - lastDiagnosticPublishTime).toSec() < 2.0)
 		return;
 
+	lastDiagnosticPublishTime = ros::Time::now();
+
 	diagnosticArrayMessage.header.stamp = ros::Time::now();
 	diagnosticArrayMessage.status.clear();
 
