@@ -1,7 +1,9 @@
 .cproject
 .project
+.pydevproject
 .settings
 CMakeCache.txt
 cmake_install.cmake
 CMakeFiles
 nbproject
+
