@@ -62,9 +62,11 @@
 #include <control_msgs/FollowJointTrajectoryAction.h>
 #include <actionlib/server/simple_action_server.h>
 
-#include <pr2_msgs/DashboardState.h>
-#include <diagnostic_msgs/DiagnosticArray.h>
 #include <diagnostic_msgs/DiagnosticStatus.h>
+#include <diagnostic_msgs/DiagnosticArray.h>
+
+#include <std_msgs/Bool.h>
+#include <pr2_msgs/AccessPoint.h>
 
 typedef actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction> Server;
 
@@ -212,8 +214,10 @@ private:
     /// diagnostic msgs
     ros::Time lastDiagnosticPublishTime;
 
-    ros::Publisher dashboardStatePublisher;
-	pr2_msgs::DashboardState dashboardStateMessage;
+    ros::Publisher armDashboardPublisher;
+    ros::Publisher baseDashboardPublisher;
+    std_msgs::Bool baseDashboardMessage;
+    pr2_msgs::AccessPoint armDashboardMessage;
 
 	ros::Publisher diagnosticArrayPublisher;
 	diagnostic_msgs::DiagnosticArray diagnosticArrayMessage;

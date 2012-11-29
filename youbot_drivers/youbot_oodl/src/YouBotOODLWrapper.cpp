@@ -53,7 +53,9 @@ YouBotOODLWrapper::YouBotOODLWrapper()
 YouBotOODLWrapper::YouBotOODLWrapper(ros::NodeHandle n) :
 node(n)
 {
-	dashboardStatePublisher = n.advertise<pr2_msgs::DashboardState>("/dashboard_agg", 1);
+	baseDashboardPublisher = n.advertise<std_msgs::Bool>("/dashboard/base_status", 1);
+	armDashboardPublisher = n.advertise<pr2_msgs::AccessPoint>("/dashboard/arm_status", 1);
+
 	diagnosticArrayPublisher = n.advertise<diagnostic_msgs::DiagnosticArray>("/diagnostics", 1);
 
     youBotConfiguration.hasBase = false;
@@ -957,16 +959,14 @@ void YouBotOODLWrapper::publishDiagnostics()
 
 
 	// dashboard message
-	dashboardStateMessage.motors_halted_valid = true;
-	dashboardStateMessage.motors_halted.data = youBotConfiguration.hasBase;
-	// miss use the access point field for the arm status
-	dashboardStateMessage.access_point_valid = true;
-	dashboardStateMessage.access_point.header.stamp = ros::Time::now();
-	dashboardStateMessage.access_point.signal = youBotConfiguration.hasArms;
+	baseDashboardMessage.data = !youBotConfiguration.hasBase;
+	armDashboardMessage.signal = youBotConfiguration.hasArms;
 
 
 	// publish established messages
-	dashboardStatePublisher.publish(dashboardStateMessage);
+	baseDashboardPublisher.publish(baseDashboardMessage);
+	armDashboardPublisher.publish(armDashboardMessage);
+
 	diagnosticArrayPublisher.publish(diagnosticArrayMessage);
 }
 
