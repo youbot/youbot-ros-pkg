@@ -928,13 +928,31 @@ void YouBotOODLWrapper::publishDiagnostics()
 
 	// diagnostics message
 	diagnosticStatusMessage.name = "base";
-	diagnosticStatusMessage.level = youBotConfiguration.hasBase ? diagnosticStatusMessage.OK : diagnosticStatusMessage.ERROR;
-	diagnosticStatusMessage.message = "base is present";
+    if(youBotConfiguration.hasBase)
+    {
+    	diagnosticStatusMessage.message = "base is present";
+        diagnosticStatusMessage.level = diagnosticStatusMessage.OK;
+    }
+    else
+    {
+    	diagnosticStatusMessage.message = "base is not connected or switched off";
+        diagnosticStatusMessage.level = diagnosticStatusMessage.ERROR;
+    }
+
 	diagnosticArrayMessage.status.push_back(diagnosticStatusMessage);
 
 	diagnosticStatusMessage.name = "arm";
-	diagnosticStatusMessage.level = youBotConfiguration.hasArms ? diagnosticStatusMessage.OK : diagnosticStatusMessage.ERROR;
-	diagnosticStatusMessage.message = "arm is present";
+    if(youBotConfiguration.hasArms)
+    {
+    	diagnosticStatusMessage.message = "arm is present";
+        diagnosticStatusMessage.level = diagnosticStatusMessage.OK;
+    }
+    else
+    {
+        diagnosticStatusMessage.message = "arm is not connected or switched off";
+        diagnosticStatusMessage.level = diagnosticStatusMessage.ERROR;
+    }
+
 	diagnosticArrayMessage.status.push_back(diagnosticStatusMessage);
 
 
