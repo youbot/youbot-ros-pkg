@@ -222,7 +222,9 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     youBotArmFrameID = "arm"; //TODO find default topic name
     ROS_INFO("Arm \"%s\" is initialized.", armName.c_str());
     ROS_INFO("System has %i initialized arm(s).", static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
-    youBotConfiguration.hasArms = true;
+
+    if(static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()) > 0)
+        youBotConfiguration.hasArms = true;
 }
 
 void YouBotOODLWrapper::executeActionServer(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal, int armIndex)
