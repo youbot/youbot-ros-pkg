@@ -6,9 +6,11 @@ gripper_controller:
      
   gains:
     gripper_finger_joint_l:
-      p: 10
+      p: 1000
+      i: 10
       d: 2.0
     gripper_finger_joint_r:
-      p: 10
+      p: 1000
+      i: 10
       d: 2.0
 

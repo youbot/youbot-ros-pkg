@@ -53,6 +53,10 @@ YouBotOODLWrapper::YouBotOODLWrapper()
 YouBotOODLWrapper::YouBotOODLWrapper(ros::NodeHandle n) :
 node(n)
 {
+	baseDashboardPublisher = n.advertise<std_msgs::Bool>("/dashboard/base_status", 1);
+	armDashboardPublisher = n.advertise<pr2_msgs::AccessPoint>("/dashboard/arm_status", 1);
+
+	diagnosticArrayPublisher = n.advertise<diagnostic_msgs::DiagnosticArray>("/diagnostics", 1);
 
     youBotConfiguration.hasBase = false;
     youBotConfiguration.hasArms = false;
@@ -222,7 +226,9 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     youBotArmFrameID = "arm"; //TODO find default topic name
     ROS_INFO("Arm \"%s\" is initialized.", armName.c_str());
     ROS_INFO("System has %i initialized arm(s).", static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
-    youBotConfiguration.hasArms = true;
+
+    if(static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()) > 0)
+        youBotConfiguration.hasArms = true;
 }
 
 void YouBotOODLWrapper::executeActionServer(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal, int armIndex)
@@ -909,6 +915,59 @@ bool YouBotOODLWrapper::reconnectCallback(std_srvs::Empty::Request& request, std
 		}
 	}
 	return true;
+}
+
+void YouBotOODLWrapper::publishDiagnostics()
+{
+	// only publish every 2 seconds
+	if((ros::Time::now() - lastDiagnosticPublishTime).toSec() < 2.0)
+		return;
+
+	lastDiagnosticPublishTime = ros::Time::now();
+
+	diagnosticArrayMessage.header.stamp = ros::Time::now();
+	diagnosticArrayMessage.status.clear();
+
+	// diagnostics message
+	diagnosticStatusMessage.name = "base";
+    if(youBotConfiguration.hasBase)
+    {
+    	diagnosticStatusMessage.message = "base is present";
+        diagnosticStatusMessage.level = diagnosticStatusMessage.OK;
+    }
+    else
+    {
+    	diagnosticStatusMessage.message = "base is not connected or switched off";
+        diagnosticStatusMessage.level = diagnosticStatusMessage.ERROR;
+    }
+
+	diagnosticArrayMessage.status.push_back(diagnosticStatusMessage);
+
+	diagnosticStatusMessage.name = "arm";
+    if(youBotConfiguration.hasArms)
+    {
+    	diagnosticStatusMessage.message = "arm is present";
+        diagnosticStatusMessage.level = diagnosticStatusMessage.OK;
+    }
+    else
+    {
+        diagnosticStatusMessage.message = "arm is not connected or switched off";
+        diagnosticStatusMessage.level = diagnosticStatusMessage.ERROR;
+    }
+
+	diagnosticArrayMessage.status.push_back(diagnosticStatusMessage);
+
+
+	// dashboard message
+	baseDashboardMessage.data = !youBotConfiguration.hasBase;
+	armDashboardMessage.signal = youBotConfiguration.hasArms;
+
+
+	// publish established messages
+	baseDashboardPublisher.publish(baseDashboardMessage);
+	armDashboardPublisher.publish(armDashboardMessage);
+
+	diagnosticArrayPublisher.publish(diagnosticArrayMessage);
 }
 
 } // namespace youBot
