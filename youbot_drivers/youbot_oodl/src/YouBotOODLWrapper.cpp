@@ -53,6 +53,8 @@ YouBotOODLWrapper::YouBotOODLWrapper()
 YouBotOODLWrapper::YouBotOODLWrapper(ros::NodeHandle n) :
 node(n)
 {
+	dashboardStatePublisher = n.advertise<pr2_msgs::DashboardState>("/dashboard_agg", 1);
+	diagnosticArrayPublisher = n.advertise<diagnostic_msgs::DiagnosticArray>("/diagnostics", 1);
 
     youBotConfiguration.hasBase = false;
     youBotConfiguration.hasArms = false;
@@ -909,6 +911,41 @@ bool YouBotOODLWrapper::reconnectCallback(std_srvs::Empty::Request& request, std
 		}
 	}
 	return true;
+}
+
+void YouBotOODLWrapper::publishDiagnostics()
+{
+	// only publish every 2 seconds
+	if((ros::Time::now() - lastDiagnosticPublishTime).toSec() < 2.0)
+		return;
+
+	diagnosticArrayMessage.header.stamp = ros::Time::now();
+	diagnosticArrayMessage.status.clear();
+
+	// diagnostics message
+	diagnosticStatusMessage.name = "base";
+	diagnosticStatusMessage.level = youBotConfiguration.hasBase ? diagnosticStatusMessage.OK : diagnosticStatusMessage.ERROR;
+	diagnosticStatusMessage.message = "base is present";
+	diagnosticArrayMessage.status.push_back(diagnosticStatusMessage);
+
+	diagnosticStatusMessage.name = "arm";
+	diagnosticStatusMessage.level = youBotConfiguration.hasArms ? diagnosticStatusMessage.OK : diagnosticStatusMessage.ERROR;
+	diagnosticStatusMessage.message = "arm is present";
+	diagnosticArrayMessage.status.push_back(diagnosticStatusMessage);
+
+
+	// dashboard message
+	dashboardStateMessage.motors_halted_valid = true;
+	dashboardStateMessage.motors_halted.data = youBotConfiguration.hasBase;
+	// miss use the access point field for the arm status
+	dashboardStateMessage.access_point_valid = true;
+	dashboardStateMessage.access_point.header.stamp = ros::Time::now();
+	dashboardStateMessage.access_point.signal = youBotConfiguration.hasArms;
+
+
+	// publish established messages
+	dashboardStatePublisher.publish(dashboardStateMessage);
+	diagnosticArrayPublisher.publish(diagnosticArrayMessage);
 }
 
 } // namespace youBot
