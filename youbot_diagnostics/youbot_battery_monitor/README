@@ -1,0 +1,30 @@
+##########################################
+# Authors: Frederik Hegger, Jan Paulus
+##########################################
+
+The battery status monitor connects via the serial connection to the charing unit of the youBot. By this the battery monitor reads out the voltage of the battery and the external power supply. Additionally, the monitor reads the IP addresses of at most two network devices (e.g. eth0 and wlan0) 
+and writes the information to the LCD display of the youBot base.
+
+The program can be executed as standalone program (without a ROS master):
+
+./bin/youbot_battery_monitor SERIAL_PORT NETWORK_DEVICE_1 NETWORK_DEVICE_2
+
+If the battery level (in percentage) drops below 30% it executes the beep command.  You can install 'beep' with
+
+	sudo apt-get install beep
+
+On the youBot you have to enable the mainboard speaker by removing or commenting the following line from "/etc/modprobe.d/blacklist.conf" ...
+ 
+    blacklist pcspkr
+
+...  and add the following line to disable the internal soundcard
+
+    blacklist snd_hda_intel
+
+In order to ease the use of the program with recommend to add a new udev rule file to the directory "/etc/udev/rules.d" consisting the following line:
+
+SUBSYSTEM=="tty", BUS=="usb", SYSFS{idVendor}=="16d0", SYSFS{idProduct}=="059d", SYMLINK+="youbot/lcd_display", RUN+="/etc/youbot/youbot_battery_monitor.sh"
+
+In the example above, it mounts the serial interface of the charging unit to "/dev/youbot/lcd_display". If the device is mounted successfully it executes the script "/etc/youbot/youbot_battery_monitor.sh" (which you can find in this package under scripts), which starts the youbot battery monitor. 
+
+If a ROS master is started at any time, the monitor also publishes the voltage information as diagnostics and dashboard messages. 
