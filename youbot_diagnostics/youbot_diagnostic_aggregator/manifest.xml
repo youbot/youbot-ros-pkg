@@ -1,0 +1,15 @@
+<package>
+  <description brief="youbot_diagnostic_aggregator">
+
+     youbot_diagnostic_aggregator
+
+  </description>
+  <author>Frederik Hegger</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_diagnostic_aggregator</url>
+
+  <depend package="diagnostic_aggregator" />
+</package>
+
+
