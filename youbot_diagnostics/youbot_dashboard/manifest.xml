@@ -1,0 +1,27 @@
+<package>
+    <description brief="youbot_dashboard">
+    
+      youbot_dashboard is a modified version of pr2_dashboard package.
+    
+    </description>
+    <author>Frederik Hegger</author>
+    <license>BSD</license>
+    <url>http://ros.org/wiki/youbot_dashboard</url>
+    <depend package="rxtools"/>
+    <depend package="robot_monitor"/>
+    <depend package="rospy"/>
+    <depend package="roslib"/>
+    <depend package="std_srvs"/>
+    <depend package="std_msgs"/>
+    <depend package="pr2_power_board"/>
+    <depend package="pr2_msgs"/>
+    <depend package="pr2_dashboard"/>
+    <depend package="pr2_dashboard_aggregator"/>
+    
+    <rosdep name="wxwidgets"/>
+    <rosdep name="wxpython"/>
+    <platform os="ubuntu" version="9.04"/>
+    <platform os="ubuntu" version="9.10"/>
+    <platform os="ubuntu" version="10.04"/>
+</package>
+

@@ -1,0 +1,9 @@
+<stack>
+  <description brief="youbot_diagnostics">youbot_diagnostics</description>
+  <author>Maintained by Frederik Hegger</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/youbot_diagnostics</url>
+  <depend stack="ros" />
+
+</stack>

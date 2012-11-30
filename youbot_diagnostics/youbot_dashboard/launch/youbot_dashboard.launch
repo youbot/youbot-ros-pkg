@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+   
+	<node pkg="youbot_dashboard" type="youbot_dashboard.py" name="youbot_dashboard" output="screen"/>
+    
+</launch>

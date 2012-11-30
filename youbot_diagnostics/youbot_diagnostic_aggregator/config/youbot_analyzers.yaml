@@ -1,0 +1,7 @@
+pub_rate: 1.0
+analyzers:
+    platform:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Platform
+        find_and_remove_prefix: platform_
+
