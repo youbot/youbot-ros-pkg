@@ -734,14 +734,16 @@ void YouBotOODLWrapper::publishOODLSensorReadings()
 
 bool YouBotOODLWrapper::switchOffBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
 	ROS_INFO("Switch off the base motors");
+	youbot::JointCurrentSetpoint currentSetpoint;
+	currentSetpoint.current = 0 * ampere;
 	if (youBotConfiguration.hasBase) { // in case stop has been invoked
 
 		try {
 			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
-			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(1).noMoreAction();
-			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(2).noMoreAction();
-			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(3).noMoreAction();
-			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(4).noMoreAction();
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(1).setData(currentSetpoint);
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(2).setData(currentSetpoint);
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(3).setData(currentSetpoint);
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(4).setData(currentSetpoint);
 			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
 		} catch (std::exception& e) {
 			std::string errorMessage = e.what();
@@ -790,16 +792,18 @@ bool YouBotOODLWrapper::switchOnBaseMotorsCallback(std_srvs::Empty::Request& req
 bool YouBotOODLWrapper::switchOffArmMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response, int armIndex) {
 	ROS_INFO("Switch off the arm%i motors", armIndex+1);
 	ROS_ASSERT(0 <= armIndex && armIndex < static_cast<int>(youBotConfiguration.youBotArmConfigurations.size()));
+	youbot::JointCurrentSetpoint currentSetpoint;
+	currentSetpoint.current = 0 * ampere;
 
 	if (youBotConfiguration.hasArms && youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm != 0) { // in case stop has been invoked
 
 		try{
 			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(1).noMoreAction();
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(2).noMoreAction();
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(3).noMoreAction();
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(4).noMoreAction();
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(5).noMoreAction();
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(1).setData(currentSetpoint);
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(2).setData(currentSetpoint);
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(3).setData(currentSetpoint);
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(4).setData(currentSetpoint);
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(5).setData(currentSetpoint);
 			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
 		} catch (std::exception& e) {
 			std::string errorMessage = e.what();
