@@ -62,6 +62,11 @@
 #include <control_msgs/FollowJointTrajectoryAction.h>
 #include <actionlib/server/simple_action_server.h>
 
+#include <diagnostic_msgs/DiagnosticStatus.h>
+#include <diagnostic_msgs/DiagnosticArray.h>
+
+#include <pr2_msgs/PowerBoardState.h>
+
 typedef actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction> Server;
 
 namespace youBot
@@ -155,6 +160,12 @@ public:
      */
     void publishOODLSensorReadings();
 
+    /**
+	 * @brief Publishes status of base and arm as diagnostic and dashboard messages continuously
+	 *
+	 */
+	void publishArmAndBaseDiagnostics(double publish_rate_in_secs);
+
     /* Computation: */
 
     /**
@@ -199,6 +210,20 @@ private:
     std::string youBotOdometryChildFrameID;
     std::string youBotArmFrameID;
 
+    /// diagnostic msgs
+    ros::Time lastDiagnosticPublishTime;
+
+    ros::Publisher dashboardMessagePublisher;
+    pr2_msgs::PowerBoardState platformStateMessage;
+
+	ros::Publisher diagnosticArrayPublisher;
+	diagnostic_msgs::DiagnosticArray diagnosticArrayMessage;
+	diagnostic_msgs::DiagnosticStatus diagnosticStatusMessage;
+	std::string diagnosticNameArms;
+	std::string diagnosticNameBase;
+
+	bool areBaseMotorsSwitchedOn;
+	bool areArmMotorsSwitchedOn;
 
     /// The ROS node handle
     ros::NodeHandle node;
