@@ -35,3 +35,4 @@ include_directories(${Eigen_INCLUDE_DIRS})
 
 rosbuild_add_executable(registration src/registration.cpp)
 rosbuild_add_executable(youbot_kinect_registration src/youbot_kinect_registration.cpp)
+rosbuild_add_executable(pattern_detection_test src/pattern_detection_test.cpp)

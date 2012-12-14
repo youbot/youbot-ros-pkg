@@ -70,13 +70,7 @@ YouBotBaseConfiguration::YouBotBaseConfiguration()
 
 YouBotBaseConfiguration::~YouBotBaseConfiguration()
 {
-    if (youBotBase)
-    {
-        delete youBotBase;
-        youBotBase = 0;
-    }
-
-
+    // No delete of youBot base pointer - this class has no ownership 
 }
 
 YouBotArmConfiguration::YouBotArmConfiguration()
@@ -98,11 +92,7 @@ YouBotArmConfiguration::YouBotArmConfiguration()
 
 YouBotArmConfiguration::~YouBotArmConfiguration()
 {
-    if (youBotArm)
-    {
-        delete youBotArm;
-        youBotArm = 0;
-    }
+    // No delete of youBot arm pointer - this class has no ownership 
     jointNames.clear();
 }
 
@@ -112,7 +102,6 @@ YouBotConfiguration::YouBotConfiguration()
     armNameToArmIndexMapping.clear();
     hasBase = false;
     hasArms = false;
-
 }
 
 YouBotConfiguration::~YouBotConfiguration()

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<root xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+  <property name="cam3d_tower_height" value="0.49" />
+  <property name="cam3d_tower_width" value="0.03" />
+  <property name="cam3d_tower_depth" value="0.03" />
+  
+  <xacro:macro name="cam3d_tower" params="name parent *origin">
+  	<link name="${name}_link">
+      <inertial>
+        <mass value="0.01" />
+        <origin xyz="0 0 ${(cam3d_tower_height/2) - cam3d_tower_height}" rpy="0 0 0"/>
+        <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 ${cam3d_tower_height - (cam3d_tower_height/2)}" rpy="0 0 0" />
+        <geometry>
+          <box size="${cam3d_tower_depth} ${cam3d_tower_width} ${cam3d_tower_height}"/>
+        </geometry>
+        <material name="LightGrey" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 ${cam3d_tower_height - (cam3d_tower_height/2)}" rpy="0 0 0" />
+        <geometry>
+           <box size="${cam3d_tower_depth} ${cam3d_tower_width} ${cam3d_tower_height}"/>
+        </geometry>
+      </collision >
+    </link>
+    
+    <joint name="${name}_joint" type="fixed">
+      <insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${name}_link"/>
+    </joint>
+  </xacro:macro>
+
+</root>
