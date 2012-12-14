@@ -145,6 +145,19 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
         youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->calibrateManipulator();
         if (enableStandardGripper)
         {
+        	youbot::GripperBarName barName;
+        	std::string gripperBarName;
+
+            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar1().getConfigurationParameter(barName);
+            barName.getParameter(gripperBarName);
+            youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[YouBotArmConfiguration::LEFT_FINGER_INDEX] = gripperBarName;
+            ROS_INFO("Joint %i for gripper of arm %s has name: %s", 1, youBotConfiguration.youBotArmConfigurations[armIndex].armID.c_str(), gripperBarName.c_str());
+
+            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar2().getConfigurationParameter(barName);
+            barName.getParameter(gripperBarName);
+            youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[YouBotArmConfiguration::RIGHT_FINGER_INDEX] = gripperBarName;
+            ROS_INFO("Joint %i for gripper of arm %s has name: %s", 2, youBotConfiguration.youBotArmConfigurations[armIndex].armID.c_str(), gripperBarName.c_str());
+
             youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->calibrateGripper();
         }
     }
