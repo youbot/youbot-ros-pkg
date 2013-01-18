@@ -89,7 +89,7 @@
         			<origin xyz="0 0 0" rpy="0 0 0" />
         			<geometry>
           				<!--<box size="${base_size_x} ${base_size_y} ${base_size_z}" />-->
-					<mesh filename="package://youbot_description/meshes/youbot_base/base_convex.stl"/>
+					<mesh filename="package://youbot_description/meshes/youbot_base/base_convex.dae"/>
 	       			</geometry>
       			</collision>
     		</link>		
@@ -148,7 +148,7 @@
       			<collision>
         			<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
         			<geometry>
-        		       		<cylinder radius="${wheel_radius}" length="${wheel_length}" />
+        		       		<cylinder radius="${wheel_radius}" length="${wheel_radius}" />
         	       		</geometry>
       			</collision>
     		</link>
@@ -202,7 +202,7 @@
       			<collision>
         			<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
         			<geometry>
-        		       		<cylinder radius="${wheel_radius}" length="${wheel_length}" />
+        		       		<cylinder radius="${wheel_radius}" length="${wheel_radius}" />
         	       		</geometry>
       			</collision>
     		</link>
@@ -258,7 +258,7 @@
       			<collision>
         			<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
         			<geometry>
-        		       		<cylinder radius="${wheel_radius}" length="${wheel_length}" />
+        		       		<cylinder radius="${wheel_radius}" length="${wheel_radius}" />
         	       		</geometry>
       			</collision>
     		</link>
@@ -311,7 +311,7 @@
       			<collision>
         			<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
         			<geometry>
-        		       		<cylinder radius="${wheel_radius}" length="${wheel_length}" />
+        		       		<cylinder radius="${wheel_radius}" length="${wheel_radius}" />
         	       		</geometry>
       			</collision>
     		</link>

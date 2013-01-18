@@ -1,0 +1,3 @@
+<launch>
+	<node pkg="tf" type="static_transform_publisher" name="youbot_kinect_static_registration" args="-0.137 0.124 0.573 0.069 0.185 -0.290 0.936 /base_footprint /openni_camera 500" />
+</launch>

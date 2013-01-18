@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<root>
+  <material name="Blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="LightGrey">
+    <color rgba="0.82 0.82 0.82 1.0"/>
+  </material>
+</root>

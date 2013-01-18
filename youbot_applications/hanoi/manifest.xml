@@ -1,0 +1,22 @@
+<package>
+  <description brief="hanoi">
+
+     hanoi
+
+  </description>
+  <author>Malte Vesper, Steffen Waeldele</author>
+  <license>LGPL, BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/hanoi</url>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+  <depend package="brics_actuator"/>
+  <depend package="trajectory_msgs"/>
+  <depend package="tf"/>
+  <depend package="sensor_msgs"/>
+  <depend package="arm_navigation_msgs"/>
+  <depend package="eigen" />
+
+</package>
+
+

@@ -27,13 +27,13 @@
 				<geometry>
 					<mesh filename="package://youbot_description/meshes/youbot_plate/plate.dae" />
 				</geometry>
-				<material name="DarkGrey" />
+				<material name="DarkGrey"/>
 			</visual>
 			
 			<collision>
 				<origin xyz="0 0 0" rpy="0 0 0" />
 				<geometry>
-					<mesh filename="package://youbot_description/meshes/youbot_plate/plate_convex.stl" />
+					<mesh filename="package://youbot_description/meshes/youbot_plate/plate_convex.dae" />
 				</geometry>
 			</collision>
 		</link>

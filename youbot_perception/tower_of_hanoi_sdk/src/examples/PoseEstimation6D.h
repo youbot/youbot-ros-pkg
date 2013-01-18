@@ -28,7 +28,6 @@
 //BRICS_3D headers
 #include "algorithm/filtering/ColorBasedROIExtractorHSV.h"
 #include "util/PCLTypecaster.h"
-#include "core/ColoredPointCloud3D.h"
 #include "EuclideanClustering.h"
 #include "algorithm/featureExtraction/Centroid3D.h"
 #include "core/HomogeneousMatrix44.h"
@@ -90,6 +89,16 @@ class PoseEstimation6D {
 	BRICS_3D::PointCloud3D *cube3D;
 
 	/**
+	 * data base that holds all pont clouds representing the models
+	 */
+	std::vector<BRICS_3D::PointCloud3D*> modelDatabase;
+
+	/**
+	 * Vector that hold the associated names to the models.
+	 */
+	std::vector<std::string> modelNames;
+
+	/**
 	 * Object to create the cube models
 	 */
 	BRICS_3D::SimplePointCloudGeneratorCube cubeModelGenerator;
@@ -99,6 +108,16 @@ class PoseEstimation6D {
 	 * Fitting score threshold indicating a good match
 	 */
 	float reliableScoreThreshold;
+
+	/**
+	 * Max interations for ICP
+	 */
+	int maxIterations;
+
+	/**
+	 * Maximum distonce correspondence threshold for ICP
+	 */
+	float maxCorrespondenceThreshold;
 
 	/**
 	 * Best score found till now
@@ -117,6 +136,11 @@ class PoseEstimation6D {
 	std::vector<float> xtranslation;
 	std::vector<float> ytranslation;
 	std::vector<float> ztranslation;
+
+	/**
+	 * Indicates if all the pose estimates should be published or only the reliable estimates
+	 */
+	bool publishApproximatePoses;
 
 	/**
 	 * Best transformation found by the model fitting process
@@ -205,10 +229,23 @@ public:
 
 	void initializeClusterExtractor(int minClusterSize, int maxClusterSize, float clusterTolerance);
 
+	void initializeModelFitting(int maxIterations, float maxCorrespondenceThreshold, float reliableScoreThreshold);
+
 	void estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCount);
 
 	std::string getRegionLabel() const;
     void setRegionLabel(std::string regionLabel);
+    void setPublishingStatus(bool publishApproximatePoses){
+    	this->publishApproximatePoses=publishApproximatePoses;
+    }
+
+    /**
+     * Add a new model - represented as point cloud - to the database.
+     * All models will in the database will be fit into a region of intrest and the one with a
+     * @param model The new model the will be added to the database
+     * @param name A name that helps to identify that model
+     */
+    void addModelToDataBase(BRICS_3D::PointCloud3D* model, std::string name);
 };
 
 }

@@ -1,0 +1,6 @@
+/bin
+/bin/*      
+/build
+/msg_gen
+/srv_gen
+/docs

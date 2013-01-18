@@ -1,0 +1,7 @@
+minClusterSize: 200
+maxClusterSize: 2500
+clusterTolerance: 0.01
+maxIterations: 1000
+maxCorrespondenceThreshold: 0.1
+reliableScoreThreshold: 0.00008
+publishApproximatePoses: false

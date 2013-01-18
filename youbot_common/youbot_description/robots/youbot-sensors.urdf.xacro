@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       name="youbot" >
+  
+  <!-- The following included files set up definitions of parts of the robot body -->
+  <!-- misc common stuff? -->
+  <include filename="$(find youbot_description)/urdf/common.xacro" />
+
+  <!-- youbot base -->
+  <include filename="$(find youbot_description)/urdf/youbot_base/base.urdf.xacro" />
+
+  <!-- youbot plate -->
+  <include filename="$(find youbot_description)/urdf/youbot_plate/plate.urdf.xacro" /> 
+
+  <!-- youbot arm -->
+  <include filename="$(find youbot_description)/urdf/youbot_arm/arm.urdf.xacro"/>
+
+  <!-- youbot gripper -->
+  <include filename="$(find youbot_description)/urdf/youbot_gripper/gripper.urdf.xacro" />
+ 
+  <!-- generic simulator_gazebo plugins for starting mechanism control, ros time, ros battery -->
+  <include filename="$(find youbot_description)/gazebo/gazebo.urdf.xacro" />
+  
+  <!-- materials for visualization -->
+  <include filename="$(find youbot_description)/urdf/materials.urdf.xacro" />				     
+
+  <!-- Now we can start using the macros included above to define the actual youbot -->
+
+  <!-- The first use of a macro.  This one was defined in base.urdf.xacro above.
+       A macro like this will expand to a set of link and joint definitions, and to additional
+       Gazebo-related extensions (sensor plugins, etc).  The macro takes an argument, name, 
+       that equals "base", and uses it to generate names for its component links and joints 
+       (e.g., base_link).  The included origin block is also an argument to the macro.  By convention, 
+       the origin block defines where the component is w.r.t its parent (in this case the parent 
+       is the world frame). For more, see http://www.ros.org/wiki/xacro -->
+
+  <!-- foot for arm-->
+  <xacro:youbot_base name="base"/>
+  <xacro:youbot_plate name="plate" parent="base_link">
+    <origin xyz="-0.159 0 0.046" rpy="0 0 0" />
+  </xacro:youbot_plate>
+  <xacro:youbot_arm name="arm" parent="base_link">
+    <origin xyz="0.143 0 0.046" rpy="0 0 0" />
+  </xacro:youbot_arm>
+  <xacro:youbot_gripper name="gripper" parent="arm_link_5">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:youbot_gripper>
+
+
+  <!-- BRSU SPECIFIC STUFF -->
+  <include filename="$(find youbot_description)/urdf/updated_materials.urdf.xacro" />
+  <include filename="$(find youbot_description)/urdf/misc/sensor_angle.urdf.xacro" />
+  <include filename="$(find youbot_description)/urdf/misc/cam3d_tower.urdf.xacro" />
+  <include filename="$(find youbot_description)/urdf/sensors/kinect_camera.urdf.xacro" />
+  <include filename="$(find youbot_description)/urdf/sensors/microsoft_lifecam.urdf.xacro" />
+  <include filename="$(find youbot_description)/urdf/sensors/asus_xtion_camera.urdf.xacro" />
+  
+
+  <!-- base laser rear -->
+  <xacro:hokuyo_urg04_laser name="base_laser_rear" parent="base" ros_topic="scan_rear" update_rate="10" min_angle="-1.57" max_angle="1.57">
+     <origin xyz="-0.3 0.0 -0.03" rpy="0 0 ${M_PI}" />
+  </xacro:hokuyo_urg04_laser>
+
+  <!-- Sensor angle on arm -->
+  <xacro:sensor_angle name="arm_sensor_angle" parent="arm_link_5">
+    <origin xyz="-0.002 0.0 -0.023" rpy="0.0 0.0 0.0" />
+  </xacro:sensor_angle>
+  
+  <!-- ASUS Xtion on arm sensor angle -->
+<!--
+  <xacro:asus_xtion_camera name="openni" parent="arm_sensor_angle_part2_link"  tilt="0.0">
+    <origin xyz="0.01 0.0 0.0" rpy="${M_PI} 0.0 ${M_PI}" />
+  </xacro:asus_xtion_camera> 
+-->
+
+
+  <!-- tower -->
+<!--
+  <xacro:cam3d_tower name="tower" parent="plate_link">
+    <origin xyz="-0.0659 0.0 0.025" rpy="0 0 0" />
+  </xacro:cam3d_tower>
+-->
+  <!-- 3D camera on tower -->
+<!--
+  <xacro:kinect_camera name="openni" parent="tower_link">
+    <origin xyz="0.0509 -0.03 0.49" rpy="0 0.545 0" />
+  </xacro:kinect_camera> 
+-->  
+
+  <!-- Microsoft LifeCam on gripper -->
+  <xacro:microsoft_lifecam name="microsoft_lifecam" parent="arm_sensor_angle_part2_link">
+    <origin xyz="-0.04 0 -0.03" rpy="0 ${M_PI} 0" />
+  </xacro:microsoft_lifecam> 
+ 
+
+</robot>

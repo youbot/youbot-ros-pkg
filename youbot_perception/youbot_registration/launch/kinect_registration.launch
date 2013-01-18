@@ -1,0 +1,12 @@
+<launch>
+	<!-- Start the Kinect -->
+	<include file="$(find openni_camera)/launch/openni_node.launch" />
+	
+	<!-- Setup frame form a well known hook of robot modle to the marker center -->
+	<node pkg="tf" type="static_transform_publisher" name="youbot_pattern_static_trasform"
+args="-0.005 0 0.03 0 0 0 /gripper_finger_link_l /pattern_center_circle 500" />
+            
+	<!-- Start actual registration procedure -->
+  	<node pkg="youbot_registration" type="registration" name="youbot_sensor_registration" output="screen"/> 
+  	<node pkg="youbot_registration" type="youbot_kinect_registration" name="youbot_kinect_registration" output="screen"/>
+  </launch>

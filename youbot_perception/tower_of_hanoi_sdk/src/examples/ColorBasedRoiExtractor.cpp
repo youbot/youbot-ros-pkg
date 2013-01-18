@@ -53,8 +53,8 @@ void ColorBasedRoiExtractor::kinectCloudCallback(const sensor_msgs::PointCloud2 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr hsv_extracted_roi_ptr(new pcl::PointCloud<pcl::PointXYZRGB>());
 
 
-    BRICS_3D::ColoredPointCloud3D *in_cloud = new BRICS_3D::ColoredPointCloud3D();
-    BRICS_3D::ColoredPointCloud3D *extracted_cloud = new BRICS_3D::ColoredPointCloud3D();
+    BRICS_3D::PointCloud3D *in_cloud = new BRICS_3D::PointCloud3D();
+    BRICS_3D::PointCloud3D *extracted_cloud = new BRICS_3D::PointCloud3D();
 
 
     //Transform sensor_msgs::PointCloud2 msg to pcl::PointCloud
@@ -65,7 +65,7 @@ void ColorBasedRoiExtractor::kinectCloudCallback(const sensor_msgs::PointCloud2 
     ROS_INFO("Size of input cloud: %d ", in_cloud->getSize());
 
 	//perform HSV color based extraction
-	hsvBasedRoiExtractor.extractColorBasedROI(in_cloud, extracted_cloud);
+	hsvBasedRoiExtractor.filter(in_cloud, extracted_cloud);
 	ROS_INFO("Size of extracted cloud : %d ", extracted_cloud->getSize());
 
 	//convert back to PCl format for publishing
