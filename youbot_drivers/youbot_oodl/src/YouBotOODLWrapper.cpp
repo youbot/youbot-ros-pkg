@@ -542,6 +542,7 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 void YouBotOODLWrapper::computeOODLSensorReadings()
 {
 
+	try{
     currentTime = ros::Time::now();
     youbot::JointSensedAngle currentAngle;
     youbot::JointSensedVelocity currentVelocity;
@@ -721,6 +722,10 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
     }
 
     youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
+	}catch (std::exception& e)
+	{
+		ROS_WARN_ONCE("%s", e.what());
+	}
 
 }
 
@@ -898,7 +903,6 @@ bool YouBotOODLWrapper::reconnectCallback(std_srvs::Empty::Request& request, std
 	node.param("youBotHasBase", youBotHasBase, false);
 	node.param("youBotHasArms", youBotHasArms, false);
 	std::vector<std::string> armNames;
-	std::string youBotBaseName;
 
 	// Retrieve all defined arm names from the launch file params
 	int i = 1;
@@ -915,7 +919,7 @@ bool YouBotOODLWrapper::reconnectCallback(std_srvs::Empty::Request& request, std
 	ROS_ASSERT((youBotHasBase == true) || (youBotHasArms == true)); // At least one should be true, otherwise nothing to be started.
 	if (youBotHasBase == true)
 	{
-		this->initializeBase(youBotBaseName);
+		this->initializeBase(this->youBotConfiguration.baseConfiguration.baseID);
 	}
 
 	if (youBotHasArms == true)

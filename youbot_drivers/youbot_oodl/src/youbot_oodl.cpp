@@ -46,7 +46,6 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;
 	youBot::YouBotOODLWrapper youBot(n);
 	std::vector<std::string> armNames;
-	std::string youBotBaseName;
 
 
 	/* configuration */
@@ -57,7 +56,7 @@ int main(int argc, char **argv)
 	n.param("youBotHasArms", youBotHasArms, true);
 	n.param("youBotDriverCycleFrequencyInHz", youBotDriverCycleFrequencyInHz, 50.0);
 	n.param<std::string>("youBotConfigurationFilePath", youBot.youBotConfiguration.configurationFilePath, mkstr(YOUBOT_CONFIGURATIONS_DIR));
-	n.param<std::string>("youBotBaseName", youBotBaseName, "youbot-base");
+	n.param<std::string>("youBotBaseName", youBot.youBotConfiguration.baseConfiguration.baseID, "youbot-base");
 
 
 	// Retrieve all defined arm names from the launch file params
@@ -77,7 +76,7 @@ int main(int argc, char **argv)
     ROS_ASSERT((youBotHasBase == true) || (youBotHasArms == true)); // At least one should be true, otherwise nothing to be started.
     if (youBotHasBase == true)
     {
-        youBot.initializeBase(youBotBaseName);
+        youBot.initializeBase(youBot.youBotConfiguration.baseConfiguration.baseID);
     }
 
 	if (youBotHasArms == true) {
