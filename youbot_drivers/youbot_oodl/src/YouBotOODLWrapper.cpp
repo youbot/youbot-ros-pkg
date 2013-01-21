@@ -84,7 +84,7 @@ void YouBotOODLWrapper::initializeBase(std::string baseName)
     catch (std::exception& e)
     {
         std::string errorMessage = e.what();
-        ROS_FATAL("Cannot open youBot driver: \n %s ", errorMessage.c_str());
+        ROS_FATAL("%s ", errorMessage.c_str());
         ROS_ERROR("Base \"%s\" could not be initialized.", baseName.c_str());
         youBotConfiguration.hasBase = false;
         return;
@@ -165,7 +165,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     {
         youBotConfiguration.youBotArmConfigurations.pop_back();
         std::string errorMessage = e.what();
-        ROS_FATAL("Cannot open youBot driver: \n %s ", errorMessage.c_str());
+        ROS_FATAL("%s ", errorMessage.c_str());
         ROS_ERROR("Arm \"%s\" could not be initialized.", armName.c_str());
         ROS_INFO("System has %i initialized arm(s).", static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
         return;
