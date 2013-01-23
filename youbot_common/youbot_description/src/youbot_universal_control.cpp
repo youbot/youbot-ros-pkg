@@ -147,7 +147,7 @@ namespace controller {
         trajectoryServer = new Server("arm_1/arm_controller/joint_trajectory_action",
                 boost::bind(&YouBotUniversalController::executeActionServer, this, _1, trajectoryServer),
                 false);
-        trajectoryServer->start();
+        //trajectoryServer->start();
 
         return true;
     }
