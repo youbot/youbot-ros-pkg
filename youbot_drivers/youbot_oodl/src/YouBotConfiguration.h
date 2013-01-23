@@ -138,6 +138,9 @@ public:
     /// Receives "brics_actuator/JointVelocities" for the arm joints
     ros::Subscriber armVelocityCommandSubscriber;
 
+	/// Implements a "control_msgs/FollowJointTrajectory" action
+	actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> *armJointTrajectoryAction;
+
     /// Receives "brics_actuator/JointPositions" for the gripper
     ros::Subscriber gripperPositionCommandSubscriber;
 
@@ -154,8 +157,8 @@ public:
     /// Service to calibrate the arm
     ros::ServiceServer calibrateService;
 
-    Server* trajectoryActionServer;
-    JointTrajectoryAction* jointTrajectoryAction;
+    //Server* trajectoryActionServer;
+    //JointTrajectoryAction* jointTrajectoryAction;
 
     /**
      * This variable memorizes the last successfully set value for the gripper,

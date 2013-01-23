@@ -20,6 +20,7 @@
   <depend package="youbot_driver"/> 
   <rosdep name="setcap" />
   <depend package="control_msgs"/>
+  <depend package="actionlib"/>
   <depend package="orocos_kdl"/>  
   <depend package="youbot_trajectory_action_server"/>
 

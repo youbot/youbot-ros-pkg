@@ -61,9 +61,9 @@ node(n)
     armJointStateMessages.clear();
 
     n.param("youBotDriverCycleFrequencyInHz", youBotDriverCycleFrequencyInHz, 50.0);
-    n.param("trajectoryActionServerEnable", trajectoryActionServerEnable, false);
-    n.param("trajectoryVelocityGain", trajectoryVelocityGain, 0.0);
-    n.param("trajectoryPositionGain", trajectoryPositionGain, 5.0);
+    //n.param("trajectoryActionServerEnable", trajectoryActionServerEnable, false);
+    //n.param("trajectoryVelocityGain", trajectoryVelocityGain, 0.0);
+    //n.param("trajectoryPositionGain", trajectoryPositionGain, 5.0);
 	gripperCycleCounter = 0;
 }
 
@@ -181,6 +181,15 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "arm_controller/velocity_command";
     youBotConfiguration.youBotArmConfigurations[armIndex].armVelocityCommandSubscriber = node.subscribe<brics_actuator::JointVelocities > (topicName.str(), 1000, boost::bind(&YouBotOODLWrapper::armVelocitiesCommandCallback, this, _1, armIndex));
 
+	topicName.str("");
+	topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "arm_controller/joint_trajectory_action";
+	// topicName.str("/arm_1/arm_controller/follow_joint_trajectory");
+	youBotConfiguration.youBotArmConfigurations[armIndex].armJointTrajectoryAction = new actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction > (
+					node, topicName.str(),
+					boost::bind(&YouBotOODLWrapper::armJointTrajectoryGoalCallback, this, _1, armIndex),
+					boost::bind(&YouBotOODLWrapper::armJointTrajectoryCancelCallback, this, _1, armIndex), false);
+
+
     topicName.str("");
     topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "joint_states";
     youBotConfiguration.youBotArmConfigurations[armIndex].armJointStatePublisher = node.advertise<sensor_msgs::JointState > (topicName.str(), 1); //TODO different names or one topic?
@@ -207,7 +216,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     serviceName.str("");
     serviceName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "calibrate"; // e.g. "arm_1/calibrate"
     youBotConfiguration.youBotArmConfigurations[armIndex].calibrateService = node.advertiseService<std_srvs::Empty::Request, std_srvs::Empty::Response > (serviceName.str(), boost::bind(&YouBotOODLWrapper::calibrateArmCallback, this, _1, _2, armIndex));
-
+/*
     if (trajectoryActionServerEnable)
     {
         JointStateObserver* jointStateObserver = new JointStateObserverOODL(this, armIndex);
@@ -226,7 +235,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
                                                                                                   false);
         youBotConfiguration.youBotArmConfigurations[armIndex].trajectoryActionServer->start();
     }
-
+*/
     /* initialize message vector for arm joint states */
     sensor_msgs::JointState dummyMessage;
     armJointStateMessages.push_back(dummyMessage);
@@ -236,8 +245,18 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     ROS_INFO("Arm \"%s\" is initialized.", armName.c_str());
     ROS_INFO("System has %i initialized arm(s).", static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
     youBotConfiguration.hasArms = true;
+
+    // currently no action is running
+	armHasActiveJointTrajectoryGoal = false;
+
+    //tracejoint = 4;
+    //myTrace = new youbot::DataTrace(youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(tracejoint), "Joint4TrajectoryTrace");
+
+    // we can handle actionlib requests only after the complete initialization has been performed
+	youBotConfiguration.youBotArmConfigurations[armIndex].armJointTrajectoryAction->start();
 }
 
+/*
 void YouBotOODLWrapper::executeActionServer(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal, int armIndex)
 {
 
@@ -248,7 +267,7 @@ void YouBotOODLWrapper::executeActionServer(const control_msgs::FollowJointTraje
         jointTrajectoryAction->execute(goal, youBotConfiguration.youBotArmConfigurations[armIndex].trajectoryActionServer);
     }
 }
-
+*/
 void YouBotOODLWrapper::stop()
 {
 
@@ -476,6 +495,134 @@ void YouBotOODLWrapper::armVelocitiesCommandCallback(const brics_actuator::Joint
     }
 }
 
+
+void YouBotOODLWrapper::armJointTrajectoryGoalCallback(actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle youbotArmGoal, unsigned int armIndex) {
+	ROS_INFO("Goal for arm%i received", armIndex + 1);
+	ROS_ASSERT(armIndex < youBotConfiguration.youBotArmConfigurations.size());
+
+	if (youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm == 0) {
+		ROS_ERROR("Arm%i is not correctly initialized!", armIndex + 1);
+		youbotArmGoal.setRejected();
+		return;
+	}
+
+
+	trajectory_msgs::JointTrajectory trajectory = youbotArmGoal.getGoal()->trajectory;
+
+	// validate that the correct number of joints is provided in the goal
+	if (trajectory.joint_names.size() != static_cast<unsigned int> (youBotArmDoF)) {
+		ROS_ERROR("Trajectory is malformed! Goal has %i joint names, but only %i joints are supported", static_cast<int> (trajectory.joint_names.size()), youBotArmDoF);
+		youbotArmGoal.setRejected();
+		return;
+	}
+
+	// compare the joint names of the youBot configuration and joint names provided with the trajectory
+	for (unsigned int i = 0; i < youBotConfiguration.youBotArmConfigurations[armIndex].jointNames.size(); i++) {
+		bool jointNameFound = false;
+		for (unsigned int j = 0; j < trajectory.joint_names.size(); j++) {
+			if (youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i] == trajectory.joint_names[j]) {
+				jointNameFound = true;
+				break;
+			}
+		}
+
+		if (!jointNameFound) {
+			ROS_ERROR("Trajectory is malformed! Joint %s is missing in the goal", youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i].c_str());
+			youbotArmGoal.setRejected();
+			return;
+		}
+	}
+
+  std::vector<youbot::JointTrajectory> jointTrajectories(youBotArmDoF);
+  
+	// convert from the ROS trajectory representation to the controller's representation
+	std::vector<std::vector< quantity<plane_angle> > > positions(youBotArmDoF);
+	std::vector<std::vector< quantity<angular_velocity> > > velocities(youBotArmDoF);
+	std::vector<std::vector< quantity<angular_acceleration> > > accelerations(youBotArmDoF);
+  youbot::TrajectorySegment segment;
+	for (unsigned int i = 0; i < trajectory.points.size(); i++) {
+		trajectory_msgs::JointTrajectoryPoint point = trajectory.points[i];
+		// validate the trajectory point
+		if ((point.positions.size() != static_cast<unsigned int> (youBotArmDoF)
+						|| point.velocities.size() != static_cast<unsigned int> (youBotArmDoF)
+						|| point.accelerations.size() != static_cast<unsigned int> (youBotArmDoF))) {
+			ROS_ERROR("A trajectory point is malformed! %i positions, velocities and accelerations must be provided", youBotArmDoF);
+			youbotArmGoal.setRejected();
+			return;
+		}
+    
+		for (int j = 0; j < youBotArmDoF; j++) {
+      segment.positions = point.positions[j]*radian;
+      segment.velocities = point.velocities[j]*radian_per_second;
+      segment.accelerations = point.accelerations[j] * radian_per_second/second;
+      segment.time_from_start = boost::posix_time::microsec(point.time_from_start.toNSec()/1000);
+      jointTrajectories[j].segments.push_back(segment);
+		}
+	}
+  for (int j = 0; j < youBotArmDoF; j++) {
+      jointTrajectories[j].start_time = boost::posix_time::microsec_clock::local_time(); //TODO is this correct to set the trajectory start time to now
+  }
+
+  
+  
+
+	// cancel the old goal
+  /*
+	if (armHasActiveJointTrajectoryGoal) {
+		armActiveJointTrajectoryGoal.setCanceled();
+		armHasActiveJointTrajectoryGoal = false;
+		for (int i = 0; i < youBotArmDoF; ++i) {
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).cancelTrajectory();
+		}
+	}
+  */
+
+	// replace the old goal with the new one
+	youbotArmGoal.setAccepted();
+	armActiveJointTrajectoryGoal = youbotArmGoal;
+	armHasActiveJointTrajectoryGoal = true;
+
+  
+ // myTrace->startTrace();
+
+	// send the trajectory to the controller
+	for (int i = 0; i < youBotArmDoF; ++i) {
+		try {
+			// youBot joints start with 1 not with 0 -> i + 1
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).trajectoryController.setTrajectory(jointTrajectories[i]);
+      ROS_INFO("set trajectories %d", i);
+		} catch (std::exception& e) {
+			std::string errorMessage = e.what();
+			ROS_WARN("Cannot set trajectory for joint %i: \n %s", i + 1, errorMessage.c_str());
+		}
+	}
+	ROS_INFO("set all trajectories");
+}
+
+void YouBotOODLWrapper::armJointTrajectoryCancelCallback(actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle youbotArmGoal, unsigned int armIndex) {
+	ROS_DEBUG("Goal for arm%i received", armIndex + 1);
+	ROS_ASSERT(armIndex < youBotConfiguration.youBotArmConfigurations.size());
+
+	// stop the controller
+	for (int i = 0; i < youBotArmDoF; ++i) {
+		try {
+			// youBot joints start with 1 not with 0 -> i + 1
+      //TODO cancel trajectory
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).trajectoryController.cancelCurrentTrajectory();
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).stopJoint();
+		} catch (std::exception& e) {
+			std::string errorMessage = e.what();
+			ROS_WARN("Cannot stop joint %i: \n %s", i + 1, errorMessage.c_str());
+		}
+	}
+
+	if (armActiveJointTrajectoryGoal == youbotArmGoal) {
+		// Marks the current goal as canceled.
+		youbotArmGoal.setCanceled();
+		armHasActiveJointTrajectoryGoal = false;
+	}
+}
+
 void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::JointPositionsConstPtr& youbotGripperCommand, int armIndex)
 {
 	ROS_DEBUG("Command for gripper%i received", armIndex + 1);
@@ -679,6 +826,23 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
                 armJointStateMessages[armIndex].velocity[i] = currentVelocity.angularVelocity.value();
             }
 
+            // check if trajectory controller is finished
+			bool areTrajectoryControllersDone = true;
+			for (int i = 0; i < youBotArmDoF; ++i) {
+				if (youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).trajectoryController.isTrajectoryControllerActive()) {
+					areTrajectoryControllersDone = false;
+					break;
+				}
+			}
+			if (areTrajectoryControllersDone && armHasActiveJointTrajectoryGoal) {
+                armHasActiveJointTrajectoryGoal = false;
+				control_msgs::FollowJointTrajectoryResult trajectoryResult;
+				trajectoryResult.error_code = trajectoryResult.SUCCESSFUL;
+				armActiveJointTrajectoryGoal.setSucceeded(trajectoryResult, "trajectory successful");
+                // ROS_INFO("trajectory successful");
+                // myTrace->stopTrace();
+                // myTrace->plotTrace();
+			}
 
             /*
              * NOTE: gripper slide rails are always symmetric, but the fingers can be screwed in different
@@ -711,13 +875,13 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
                 std::string errorMessage = e.what();
                 ROS_WARN("Cannot read gripper values: \n %s", errorMessage.c_str());
             }
-
+/*
             if (trajectoryActionServerEnable)
             {
                 // updating joint states in trajectory action 
                 youBotConfiguration.youBotArmConfigurations[armIndex].jointTrajectoryAction->jointStateCallback(armJointStateMessages[armIndex]);
             }
-
+*/
         }
     }
 

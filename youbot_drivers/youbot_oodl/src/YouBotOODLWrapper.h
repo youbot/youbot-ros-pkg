@@ -58,11 +58,13 @@
 
 /* OODL includes */
 #include "YouBotConfiguration.h"
+#include "youbot/JointTrajectoryController.hpp"
+#include "youbot/DataTrace.hpp"
 
-#include <control_msgs/FollowJointTrajectoryAction.h>
-#include <actionlib/server/simple_action_server.h>
+//#include <control_msgs/FollowJointTrajectoryAction.h>
+//#include <actionlib/server/simple_action_server.h>
 
-typedef actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction> Server;
+//typedef actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction> Server;
 
 namespace youBot
 {
@@ -140,6 +142,20 @@ public:
      */
     void armVelocitiesCommandCallback(const brics_actuator::JointVelocitiesConstPtr& youbotArmCommand, int armIndex);
 
+    /**
+	 * @brief Callback that is executed when an action goal to perform a joint trajectory with the arm comes in.
+	 * @param youbotArmGoal Actionlib goal that contains the trajectory.
+	 * @param armIndex Index that identifies the arm
+	 */
+	void armJointTrajectoryGoalCallback(actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle youbotArmGoal, unsigned int armIndex);
+
+	/**
+	 * @brief Callback that is executed when an action goal of a joint trajectory is canceled.
+	 * @param youbotArmGoal Actionlib goal that contains the trajectory.
+	 * @param armIndex Index that identifies the arm
+	 */
+	void armJointTrajectoryCancelCallback(actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle youbotArmGoal, unsigned int armIndex);
+    
     /**
      * @brief Callback that is executed when a position command for the gripper comes in.
      * @param youbotGripperCommand Message that contains the desired joint configuration.
@@ -222,15 +238,21 @@ private:
     /// Vector of the published joint states of per arm with angles in [RAD]
     vector<sensor_msgs::JointState> armJointStateMessages;
 
+    /// The joint trajectory goal that is currently active.
+	actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle armActiveJointTrajectoryGoal;
+
+	/// Tell if a goal is currently active.
+	bool armHasActiveJointTrajectoryGoal;
+
 	youbot::GripperSensedBarPosition gripperBar1Position;
 	youbot::GripperSensedBarPosition gripperBar2Position;
 	int gripperCycleCounter;
 
-    void executeActionServer(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal,  int armIndex);
+    //void executeActionServer(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal,  int armIndex);
     
-    bool trajectoryActionServerEnable;
-    double trajectoryVelocityGain;
-    double trajectoryPositionGain;
+    //bool trajectoryActionServerEnable;
+    //double trajectoryVelocityGain;
+    //double trajectoryPositionGain;
     double youBotDriverCycleFrequencyInHz;
 
 };
