@@ -84,7 +84,7 @@ void YouBotOODLWrapper::initializeBase(std::string baseName)
     catch (std::exception& e)
     {
         std::string errorMessage = e.what();
-        ROS_FATAL("Cannot open youBot driver: \n %s ", errorMessage.c_str());
+        ROS_FATAL("%s", errorMessage.c_str());
         ROS_ERROR("Base \"%s\" could not be initialized.", baseName.c_str());
         youBotConfiguration.hasBase = false;
         return;
@@ -165,7 +165,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     {
         youBotConfiguration.youBotArmConfigurations.pop_back();
         std::string errorMessage = e.what();
-        ROS_FATAL("Cannot open youBot driver: \n %s ", errorMessage.c_str());
+        ROS_FATAL("%s", errorMessage.c_str());
         ROS_ERROR("Arm \"%s\" could not be initialized.", armName.c_str());
         ROS_INFO("System has %i initialized arm(s).", static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
         return;
@@ -352,7 +352,7 @@ void YouBotOODLWrapper::baseCommandCallback(const geometry_msgs::Twist& youbotBa
         catch (std::exception& e)
         {
             std::string errorMessage = e.what();
-            ROS_WARN("Cannot set base velocities: \n %s", errorMessage.c_str());
+            ROS_WARN("Cannot set base velocities: %s", errorMessage.c_str());
         }
 
     }
@@ -415,7 +415,7 @@ void YouBotOODLWrapper::armPositionsCommandCallback(const brics_actuator::JointP
                 catch (std::exception& e)
                 {
                     std::string errorMessage = e.what();
-                    ROS_WARN("Cannot set arm joint %i: \n %s", i + 1, errorMessage.c_str());
+                    ROS_WARN("Cannot set arm joint %i: %s", i + 1, errorMessage.c_str());
                 }
             }
         }
@@ -483,7 +483,7 @@ void YouBotOODLWrapper::armVelocitiesCommandCallback(const brics_actuator::Joint
                 catch (std::exception& e)
                 {
                     std::string errorMessage = e.what();
-                    ROS_WARN("Cannot set arm joint %i: \n %s", i + 1, errorMessage.c_str());
+                    ROS_WARN("Cannot set arm joint %i: %s", i + 1, errorMessage.c_str());
                 }
             }
         }
@@ -593,7 +593,7 @@ void YouBotOODLWrapper::armJointTrajectoryGoalCallback(actionlib::ActionServer<c
       ROS_INFO("set trajectories %d", i);
 		} catch (std::exception& e) {
 			std::string errorMessage = e.what();
-			ROS_WARN("Cannot set trajectory for joint %i: \n %s", i + 1, errorMessage.c_str());
+			ROS_WARN("Cannot set trajectory for joint %i: %s", i + 1, errorMessage.c_str());
 		}
 	}
 	ROS_INFO("set all trajectories");
@@ -612,7 +612,7 @@ void YouBotOODLWrapper::armJointTrajectoryCancelCallback(actionlib::ActionServer
 			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).stopJoint();
 		} catch (std::exception& e) {
 			std::string errorMessage = e.what();
-			ROS_WARN("Cannot stop joint %i: \n %s", i + 1, errorMessage.c_str());
+			ROS_WARN("Cannot stop joint %i: %s", i + 1, errorMessage.c_str());
 		}
 	}
 
@@ -662,7 +662,7 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 				youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar1().setData(leftGripperFingerPosition);
 			} catch (std::exception& e) {
 				std::string errorMessage = e.what();
-				ROS_WARN("Cannot set the left gripper finger: \n %s", errorMessage.c_str());
+				ROS_WARN("Cannot set the left gripper finger: %s", errorMessage.c_str());
 			}
 		}
 
@@ -676,7 +676,7 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 				youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar2().setData(rightGripperFingerPosition);
 			} catch (std::exception& e) {
 				std::string errorMessage = e.what();
-				ROS_WARN("Cannot set the right gripper finger: \n %s", errorMessage.c_str());
+				ROS_WARN("Cannot set the right gripper finger: %s", errorMessage.c_str());
 			}
 		}
 
@@ -694,7 +694,7 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
     youbot::JointSensedAngle currentAngle;
     youbot::JointSensedVelocity currentVelocity;
 
-    youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
+    youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be received at the same time
 
     if (youBotConfiguration.hasBase == true)
     {
@@ -873,7 +873,7 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
             catch (std::exception& e)
             {
                 std::string errorMessage = e.what();
-                ROS_WARN("Cannot read gripper values: \n %s", errorMessage.c_str());
+                ROS_WARN("Cannot read gripper values: %s", errorMessage.c_str());
             }
 /*
             if (trajectoryActionServerEnable)
@@ -885,7 +885,7 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
         }
     }
 
-    youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
+    youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be received at the same time
 	}catch (std::exception& e)
 	{
 		ROS_WARN_ONCE("%s", e.what());
@@ -921,15 +921,15 @@ bool YouBotOODLWrapper::switchOffBaseMotorsCallback(std_srvs::Empty::Request& re
         youbot::JointCurrentSetpoint currentStopMovement;
         currentStopMovement.current = 0.0 * ampere;
 		try {
-			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
+      youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
 			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(1).setData(currentStopMovement);
 			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(2).setData(currentStopMovement);
 			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(3).setData(currentStopMovement);
 			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(4).setData(currentStopMovement);
-			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
+      youbot::EthercatMaster::getInstance().AutomaticSendOn(true); // ensure that all joint values will be send at the same time
 		} catch (std::exception& e) {
 			std::string errorMessage = e.what();
-			ROS_WARN("Cannot switch off the base motors: \n %s", errorMessage.c_str());
+			ROS_WARN("Cannot switch off the base motors: %s", errorMessage.c_str());
 			return false;
 		}
 	} else {
@@ -959,7 +959,7 @@ bool YouBotOODLWrapper::switchOnBaseMotorsCallback(std_srvs::Empty::Request& req
         catch (std::exception& e)
         {
             std::string errorMessage = e.what();
-            ROS_WARN("Cannot set base velocities: \n %s", errorMessage.c_str());
+            ROS_WARN("Cannot set base velocities: %s", errorMessage.c_str());
             return false;
         }
     }
@@ -980,16 +980,16 @@ bool YouBotOODLWrapper::switchOffArmMotorsCallback(std_srvs::Empty::Request& req
         youbot::JointCurrentSetpoint currentStopMovement;
         currentStopMovement.current = 0.0 * ampere;
 		try{
-			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
+      youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
 			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(1).setData(currentStopMovement);
 			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(2).setData(currentStopMovement);
 			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(3).setData(currentStopMovement);
 			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(4).setData(currentStopMovement);
 			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(5).setData(currentStopMovement);
-			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
+      youbot::EthercatMaster::getInstance().AutomaticSendOn(true); // ensure that all joint values will be send at the same time
 		} catch (std::exception& e) {
 			std::string errorMessage = e.what();
-			ROS_WARN("Cannot switch off the arm motors: \n %s", errorMessage.c_str());
+			ROS_WARN("Cannot switch off the arm motors: %s", errorMessage.c_str());
 			return false;
 		}
 	} else {
@@ -1005,19 +1005,23 @@ bool YouBotOODLWrapper::switchOnArmMotorsCallback(std_srvs::Empty::Request& requ
     ROS_ASSERT(0 <= armIndex && armIndex < static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
 
     if (youBotConfiguration.hasArms && youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm != 0)
-    {
-        youbot::JointVelocitySetpoint desiredAngularVelocity;
-        desiredAngularVelocity = 0.0 * radian_per_second;
-        std::vector<youbot::JointVelocitySetpoint> desiredAngularVelocityVector;
-        desiredAngularVelocityVector.assign(5, desiredAngularVelocity);
-        try
+    {   
+      try
         {
-            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->setJointData(desiredAngularVelocityVector);
+            std::vector<youbot::JointSensedAngle> sensedJointAngleVector;
+            std::vector<youbot::JointAngleSetpoint> desiredJointAngleVector;
+            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getJointData(sensedJointAngleVector);
+            youbot::JointAngleSetpoint desiredJointAngle;
+            for(unsigned int i = 0; i < sensedJointAngleVector.size(); i++){
+              desiredJointAngle = sensedJointAngleVector[i].angle;
+              desiredJointAngleVector.push_back(desiredJointAngle);
+            }        
+            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->setJointData(desiredJointAngleVector);
         }
         catch (std::exception& e)
         {
             std::string errorMessage = e.what();
-            ROS_WARN("Cannot switch on the arm motors: \n %s", errorMessage.c_str());
+            ROS_WARN("Cannot switch on the arm motors: %s", errorMessage.c_str());
             return false;
         }
     }
@@ -1044,7 +1048,7 @@ bool YouBotOODLWrapper::calibrateArmCallback(std_srvs::Empty::Request& request, 
         catch (std::exception& e)
         {
             std::string errorMessage = e.what();
-            ROS_WARN("Cannot calibrate the arm: \n %s", errorMessage.c_str());
+            ROS_WARN("Cannot calibrate the arm: %s", errorMessage.c_str());
             return false;
         }
     }
