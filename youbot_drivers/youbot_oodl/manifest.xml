@@ -16,16 +16,13 @@
   <depend package="std_srvs"/>
   <depend package="trajectory_msgs"/>
   <depend package="brics_actuator"/> <!--BRICS interface messages, version 0.1 -->
-  <!--<depend package="soem"/>-->
   <depend package="youbot_driver"/> 
   <rosdep name="setcap" />
   <depend package="control_msgs"/>
   <depend package="actionlib"/>
-  <depend package="orocos_kdl"/>  
-  <depend package="youbot_trajectory_action_server"/>
 
 <export>
-    <cpp cflags="-I${prefix}/cfg/cpp -I${prefix}/include `rosboost-cfg --cflags`" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib `rosboost-cfg --lflags thread` -lyoubot_trajectory_action_server"/>
+    <cpp cflags="-I${prefix}/cfg/cpp -I${prefix}/include `rosboost-cfg --cflags`" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib `rosboost-cfg --lflags thread`"/>
  </export>
 
 </package>
