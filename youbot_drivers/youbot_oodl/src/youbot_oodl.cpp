@@ -42,7 +42,7 @@
 int main(int argc, char **argv)
 {
 
-  youbot::Logger::toConsole = true;
+  youbot::Logger::toConsole = false;
   youbot::Logger::toFile = false;
   youbot::Logger::toROS = true;
 	ros::init(argc, argv, "youbot_oodl_driver");
