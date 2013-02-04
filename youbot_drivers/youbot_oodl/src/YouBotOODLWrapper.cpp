@@ -92,7 +92,7 @@ void YouBotOODLWrapper::initializeBase(std::string baseName)
     catch (std::exception& e)
     {
         std::string errorMessage = e.what();
-        ROS_FATAL("Cannot open youBot driver: \n %s ", errorMessage.c_str());
+        ROS_FATAL("%s ", errorMessage.c_str());
         ROS_ERROR("Base \"%s\" could not be initialized.", baseName.c_str());
         youBotConfiguration.hasBase = false;
         return;
@@ -154,6 +154,19 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
         youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->calibrateManipulator();
         if (enableStandardGripper)
         {
+        	youbot::GripperBarName barName;
+        	std::string gripperBarName;
+
+            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar1().getConfigurationParameter(barName);
+            barName.getParameter(gripperBarName);
+            youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[YouBotArmConfiguration::LEFT_FINGER_INDEX] = gripperBarName;
+            ROS_INFO("Joint %i for gripper of arm %s has name: %s", 1, youBotConfiguration.youBotArmConfigurations[armIndex].armID.c_str(), gripperBarName.c_str());
+
+            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmGripper().getGripperBar2().getConfigurationParameter(barName);
+            barName.getParameter(gripperBarName);
+            youBotConfiguration.youBotArmConfigurations[armIndex].gripperFingerNames[YouBotArmConfiguration::RIGHT_FINGER_INDEX] = gripperBarName;
+            ROS_INFO("Joint %i for gripper of arm %s has name: %s", 2, youBotConfiguration.youBotArmConfigurations[armIndex].armID.c_str(), gripperBarName.c_str());
+
             youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->calibrateGripper();
         }
     }
@@ -161,7 +174,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     {
         youBotConfiguration.youBotArmConfigurations.pop_back();
         std::string errorMessage = e.what();
-        ROS_FATAL("Cannot open youBot driver: \n %s ", errorMessage.c_str());
+        ROS_FATAL("%s ", errorMessage.c_str());
         ROS_ERROR("Arm \"%s\" could not be initialized.", armName.c_str());
         ROS_INFO("System has %i initialized arm(s).", static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
         return;
@@ -751,16 +764,16 @@ void YouBotOODLWrapper::publishOODLSensorReadings()
 
 bool YouBotOODLWrapper::switchOffBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response) {
 	ROS_INFO("Switch off the base motors");
-	youbot::JointCurrentSetpoint currentSetpoint;
-	currentSetpoint.current = 0 * ampere;
 	if (youBotConfiguration.hasBase) { // in case stop has been invoked
 
+        youbot::JointCurrentSetpoint currentStopMovement;
+        currentStopMovement.current = 0.0 * ampere;
 		try {
 			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
-			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(1).setData(currentSetpoint);
-			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(2).setData(currentSetpoint);
-			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(3).setData(currentSetpoint);
-			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(4).setData(currentSetpoint);
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(1).setData(currentStopMovement);
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(2).setData(currentStopMovement);
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(3).setData(currentStopMovement);
+			youBotConfiguration.baseConfiguration.youBotBase->getBaseJoint(4).setData(currentStopMovement);
 			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
 		} catch (std::exception& e) {
 			std::string errorMessage = e.what();
@@ -813,17 +826,18 @@ bool YouBotOODLWrapper::switchOnBaseMotorsCallback(std_srvs::Empty::Request& req
 bool YouBotOODLWrapper::switchOffArmMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response, int armIndex) {
 	ROS_INFO("Switch off the arm%i motors", armIndex+1);
 	ROS_ASSERT(0 <= armIndex && armIndex < static_cast<int>(youBotConfiguration.youBotArmConfigurations.size()));
-	youbot::JointCurrentSetpoint currentSetpoint;
-	currentSetpoint.current = 0 * ampere;
+
 	if (youBotConfiguration.hasArms && youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm != 0) { // in case stop has been invoked
 
+        youbot::JointCurrentSetpoint currentStopMovement;
+        currentStopMovement.current = 0.0 * ampere;
 		try{
 			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be send at the same time
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(1).setData(currentSetpoint);
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(2).setData(currentSetpoint);
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(3).setData(currentSetpoint);
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(4).setData(currentSetpoint);
-			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(5).setData(currentSetpoint);
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(1).setData(currentStopMovement);
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(2).setData(currentStopMovement);
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(3).setData(currentStopMovement);
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(4).setData(currentStopMovement);
+			youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(5).setData(currentStopMovement);
 			youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be send at the same time
 		} catch (std::exception& e) {
 			std::string errorMessage = e.what();
