@@ -194,6 +194,11 @@ public:
     /// A youbot system has one or more arms
     std::vector<YouBotArmConfiguration> youBotArmConfigurations;
     std::map<std::string, int> armNameToArmIndexMapping;
+    
+    /// Publishes diagnostic messages
+    ros::Publisher diagnosticArrayPublisher;
+    
+    ros::Publisher dashboardMessagePublisher;
 };
 
 

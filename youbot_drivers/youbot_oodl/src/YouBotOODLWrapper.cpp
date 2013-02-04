@@ -56,6 +56,8 @@ node(n)
 
     youBotConfiguration.hasBase = false;
     youBotConfiguration.hasArms = false;
+    areBaseMotorsSwitchedOn = false;	
+    areArmMotorsSwitchedOn = false;
 
     youBotChildFrameID = "base_link"; //holds true for both: base and arm
     armJointStateMessages.clear();
@@ -64,12 +66,18 @@ node(n)
     //n.param("trajectoryActionServerEnable", trajectoryActionServerEnable, false);
     //n.param("trajectoryVelocityGain", trajectoryVelocityGain, 0.0);
     //n.param("trajectoryPositionGain", trajectoryPositionGain, 5.0);
-	gripperCycleCounter = 0;
+    gripperCycleCounter = 0;
+    diagnosticNameArms = "platform_Arms";
+    diagnosticNameBase = "platform_Base";
+    dashboardMessagePublisher = n.advertise<pr2_msgs::PowerBoardState>("/dashboard/platform_state", 1);
+    diagnosticArrayPublisher = n.advertise<diagnostic_msgs::DiagnosticArray>("/diagnostics", 1);
 }
 
 YouBotOODLWrapper::~YouBotOODLWrapper()
 {
     this->stop();
+    dashboardMessagePublisher.shutdown();
+    diagnosticArrayPublisher.shutdown();
 }
 
 void YouBotOODLWrapper::initializeBase(std::string baseName)
@@ -105,6 +113,7 @@ void YouBotOODLWrapper::initializeBase(std::string baseName)
 
     ROS_INFO("Base is initialized.");
     youBotConfiguration.hasBase = true;
+    areBaseMotorsSwitchedOn = true;
 }
 
 void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGripper)
@@ -245,6 +254,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     ROS_INFO("Arm \"%s\" is initialized.", armName.c_str());
     ROS_INFO("System has %i initialized arm(s).", static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
     youBotConfiguration.hasArms = true;
+    areArmMotorsSwitchedOn = true;
 
     // currently no action is running
 	armHasActiveJointTrajectoryGoal = false;
@@ -286,6 +296,7 @@ void YouBotOODLWrapper::stop()
         youBotConfiguration.baseConfiguration.switchOffMotorsService.shutdown();
         // youBotConfiguration.baseConfiguration.odometryBroadcaster.
         youBotConfiguration.hasBase = false;
+        areBaseMotorsSwitchedOn = false;
     }
 
     if (youBotConfiguration.hasArms)
@@ -308,6 +319,7 @@ void YouBotOODLWrapper::stop()
         }
 
         youBotConfiguration.hasArms = false;
+        areArmMotorsSwitchedOn = false;
         youBotConfiguration.youBotArmConfigurations.clear();
         armJointStateMessages.clear();
     }
@@ -886,7 +898,13 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
     }
 
     youbot::EthercatMaster::getInstance().AutomaticReceiveOn(true); // ensure that all joint values will be received at the same time
-	}catch (std::exception& e)
+  }catch (youbot::EtherCATConnectionException& e)
+  {
+      ROS_WARN("%s", e.what());
+      youBotConfiguration.hasBase = false;
+      youBotConfiguration.hasArms = false;
+  }
+	catch (std::exception& e)
 	{
 		ROS_WARN_ONCE("%s", e.what());
 	}
@@ -895,7 +913,7 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
 
 void YouBotOODLWrapper::publishOODLSensorReadings()
 {
-
+      
     if (youBotConfiguration.hasBase)
     {
         youBotConfiguration.baseConfiguration.odometryBroadcaster.sendTransform(odometryTransform);
@@ -936,6 +954,7 @@ bool YouBotOODLWrapper::switchOffBaseMotorsCallback(std_srvs::Empty::Request& re
 		ROS_ERROR("No base initialized!");
 		return false;
 	}
+  	areBaseMotorsSwitchedOn = false;
 	return true;
 }
 
@@ -968,6 +987,7 @@ bool YouBotOODLWrapper::switchOnBaseMotorsCallback(std_srvs::Empty::Request& req
         ROS_ERROR("No base initialized!");
         return false;
     }
+    areBaseMotorsSwitchedOn = true;
     return true;
 }
 
@@ -996,6 +1016,7 @@ bool YouBotOODLWrapper::switchOffArmMotorsCallback(std_srvs::Empty::Request& req
 		ROS_ERROR("Arm%i not initialized!", armIndex+1);
 		return false;
 	}
+  	areArmMotorsSwitchedOn = false;
 	return true;
 }
 
@@ -1030,6 +1051,7 @@ bool YouBotOODLWrapper::switchOnArmMotorsCallback(std_srvs::Empty::Request& requ
         ROS_ERROR("Arm%i not initialized!", armIndex + 1);
         return false;
     }
+    areArmMotorsSwitchedOn = true;
     return true;
 }
 
@@ -1098,7 +1120,64 @@ bool YouBotOODLWrapper::reconnectCallback(std_srvs::Empty::Request& request, std
 		}
 	}
 	return true;
-}
+  }
+
+  void YouBotOODLWrapper::publishArmAndBaseDiagnostics(double publish_rate_in_secs) {
+    // only publish every X seconds
+    if ((ros::Time::now() - lastDiagnosticPublishTime).toSec() < publish_rate_in_secs)
+      return;
+
+    lastDiagnosticPublishTime = ros::Time::now();
+
+    diagnosticArrayMessage.header.stamp = ros::Time::now();
+    diagnosticArrayMessage.status.clear();
+
+    // diagnostics message
+    diagnosticStatusMessage.name = "platform_Base";
+    if (youBotConfiguration.hasBase) {
+      diagnosticStatusMessage.message = "base is present";
+      diagnosticStatusMessage.level = diagnostic_msgs::DiagnosticStatus::OK;
+    } else {
+      diagnosticStatusMessage.message = "base is not connected or switched off";
+      diagnosticStatusMessage.level = diagnostic_msgs::DiagnosticStatus::ERROR;
+    }
+
+    diagnosticArrayMessage.status.push_back(diagnosticStatusMessage);
+
+    diagnosticStatusMessage.name = "platform_Arm";
+    if (youBotConfiguration.hasArms) {
+      diagnosticStatusMessage.message = "arm is present";
+      diagnosticStatusMessage.level = diagnostic_msgs::DiagnosticStatus::OK;
+    } else {
+      diagnosticStatusMessage.message = "arm is not connected or switched off";
+      diagnosticStatusMessage.level = diagnostic_msgs::DiagnosticStatus::ERROR;
+    }
+
+    diagnosticArrayMessage.status.push_back(diagnosticStatusMessage);
+
+
+    // dashboard message
+    platformStateMessage.header.stamp = ros::Time::now();
+
+    if (youBotConfiguration.hasBase && areBaseMotorsSwitchedOn)
+      platformStateMessage.circuit_state[0] = pr2_msgs::PowerBoardState::STATE_ENABLED;
+    else if (youBotConfiguration.hasBase && !areBaseMotorsSwitchedOn)
+      platformStateMessage.circuit_state[0] = pr2_msgs::PowerBoardState::STATE_STANDBY;
+    else
+      platformStateMessage.circuit_state[0] = pr2_msgs::PowerBoardState::STATE_DISABLED;
+
+    if (youBotConfiguration.hasArms && areArmMotorsSwitchedOn)
+      platformStateMessage.circuit_state[1] = pr2_msgs::PowerBoardState::STATE_ENABLED;
+    else if (youBotConfiguration.hasArms && !areArmMotorsSwitchedOn)
+      platformStateMessage.circuit_state[1] = pr2_msgs::PowerBoardState::STATE_STANDBY;
+    else
+      platformStateMessage.circuit_state[1] = pr2_msgs::PowerBoardState::STATE_DISABLED;
+
+
+    // publish established messages
+    dashboardMessagePublisher.publish(platformStateMessage);
+    diagnosticArrayPublisher.publish(diagnosticArrayMessage);
+  }
 
 } // namespace youBot
 

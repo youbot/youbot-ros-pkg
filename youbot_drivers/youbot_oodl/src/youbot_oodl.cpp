@@ -42,9 +42,9 @@
 int main(int argc, char **argv)
 {
 
-  youbot::Logger::toConsole = false;
-  youbot::Logger::toFile = false;
-  youbot::Logger::toROS = true;
+  	youbot::Logger::toConsole = false;
+  	youbot::Logger::toFile = false;
+  	youbot::Logger::toROS = true;
 	ros::init(argc, argv, "youbot_oodl_driver");
 	ros::NodeHandle n;
 	youBot::YouBotOODLWrapper youBot(n);
@@ -97,6 +97,7 @@ int main(int argc, char **argv)
         ros::spinOnce();
         youBot.computeOODLSensorReadings();
         youBot.publishOODLSensorReadings();
+        youBot.publishArmAndBaseDiagnostics(2.0);    //publish only every 2 seconds
         rate.sleep();
     }
 
