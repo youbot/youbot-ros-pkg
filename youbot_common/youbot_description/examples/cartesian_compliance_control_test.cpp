@@ -62,7 +62,7 @@ void publishTf() {
     while(ros::ok()) {
         if (mutex) {
             tf::Vector3 position(tipPose.position.x, tipPose.position.y, tipPose.position.z);
-            btQuaternion orientation;
+            tf::Quaternion orientation;
             tf::quaternionMsgToTF(tipPose.orientation, orientation);
             tf::Transform transform(orientation, position);
             string parentFrameId = tipPose.base_frame_uri;
