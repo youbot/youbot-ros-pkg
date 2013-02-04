@@ -70,6 +70,8 @@ class youbotStatusControl(wx.Window):
     self.set_stale()
     
     self.Bind(wx.EVT_PAINT, self.on_paint)
+    self.Bind(wx.EVT_LEFT_UP, self.on_left_up)
+    self.Bind(wx.EVT_LEFT_DOWN, self.on_left_down)
     self.Bind(wx.EVT_LEAVE_WINDOW, self.on_leave_window)
     self.Bind(wx.EVT_ENTER_WINDOW, self.on_enter_window)
     

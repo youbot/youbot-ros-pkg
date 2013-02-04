@@ -116,8 +116,14 @@ class PR2Frame(wx.Frame):
         static_sizer.Add(self._arm_status, 0)
         self._arm_status.Bind(wx.EVT_LEFT_DOWN, self.on_arm_status_clicked)
 
+        static_sizer = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, "Drv"), wx.HORIZONTAL)
+        sizer.Add(static_sizer, 0)
 
-
+        # driver status
+        self._driver_status = youbotStatusControl(self, wx.ID_ANY, youbot_icons_path, "driver", True)
+        self._driver_status.SetToolTip(wx.ToolTip("Driver: Stale"))
+        static_sizer.Add(self._driver_status, 0)
+        self._driver_status.Bind(wx.EVT_BUTTON, self.on_driver_status_clicked)
 
         static_sizer = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, "Battery"), wx.HORIZONTAL)
         sizer.Add(static_sizer, 0)
@@ -180,8 +186,9 @@ class PR2Frame(wx.Frame):
           self._power_state_ctrl.set_stale()
           self._arm_status.set_stale()
           self._base_status.set_stale()
+          self._driver_status.set_stale()
                     
-          ctrls = [self._power_state_ctrl, self._arm_status, self._base_status]
+          ctrls = [self._power_state_ctrl, self._arm_status, self._base_status, self._driver_status]
           for ctrl in ctrls:
               ctrl.SetToolTip(wx.ToolTip("No message received on dashboard_agg in the last 5 seconds"))
         
@@ -208,7 +215,7 @@ class PR2Frame(wx.Frame):
       # if any of the breakers is not enabled ask if they'd like to enable them
       if (self._dashboard_message is not None and self._dashboard_message.power_board_state_valid):
           if (self._dashboard_message.power_board_state.circuit_state[0] == PowerBoardState.STATE_STANDBY):
-              switch_on_base = rospy.ServiceProxy("base/switchOnMotors", std_srvs.srv.Empty)
+              switch_on_base = rospy.ServiceProxy("/base/switchOnMotors", std_srvs.srv.Empty)
        
               try:
                   switch_on_base()
@@ -224,7 +231,7 @@ class PR2Frame(wx.Frame):
       # if any of the breakers is not enabled ask if they'd like to enable them
       if (self._dashboard_message is not None and self._dashboard_message.power_board_state_valid):
           if (self._dashboard_message.power_board_state.circuit_state[0] == PowerBoardState.STATE_ENABLED):
-              switch_off_base = rospy.ServiceProxy("base/switchOffMotors", std_srvs.srv.Empty)
+              switch_off_base = rospy.ServiceProxy("/base/switchOffMotors", std_srvs.srv.Empty)
        
               try:
                   switch_off_base()
@@ -248,7 +255,7 @@ class PR2Frame(wx.Frame):
       # if any of the breakers is not enabled ask if they'd like to enable them
       if (self._dashboard_message is not None and self._dashboard_message.power_board_state_valid):
           if (self._dashboard_message.power_board_state.circuit_state[1] == PowerBoardState.STATE_STANDBY):
-              switch_on_arm = rospy.ServiceProxy("arm_1/switchOnMotors", std_srvs.srv.Empty)
+              switch_on_arm = rospy.ServiceProxy("/arm_1/switchOnMotors", std_srvs.srv.Empty)
        
               try:
                   switch_on_arm()
@@ -264,7 +271,7 @@ class PR2Frame(wx.Frame):
       # if any of the breakers is not enabled ask if they'd like to enable them
       if (self._dashboard_message is not None and self._dashboard_message.power_board_state_valid):
           if (self._dashboard_message.power_board_state.circuit_state[1] == PowerBoardState.STATE_ENABLED):
-              switch_off_arm = rospy.ServiceProxy("arm_1/switchOffMotors", std_srvs.srv.Empty)
+              switch_off_arm = rospy.ServiceProxy("/arm_1/switchOffMotors", std_srvs.srv.Empty)
        
               try:
                   switch_off_arm()
@@ -275,6 +282,14 @@ class PR2Frame(wx.Frame):
               wx.MessageBox("Arm motors are already switched OFF", "Error", wx.OK|wx.ICON_ERROR)
           elif (self._dashboard_message.power_board_state.circuit_state[1] == PowerBoardState.STATE_DISABLED):
               wx.MessageBox("Arm is not connected", "Error", wx.OK|wx.ICON_ERROR)
+
+    def on_driver_status_clicked(self, evt):
+        reconnect = rospy.ServiceProxy("/reconnect", std_srvs.srv.Empty)
+
+        try:
+            reconnect()
+        except rospy.ServiceException, e:
+            wx.MessageBox("Failed to reconnect the driver: service call failed with error: %s"%(e), "Error", wx.OK|wx.ICON_ERROR)
 
             
     def dashboard_callback(self, msg):
