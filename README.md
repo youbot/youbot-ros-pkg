@@ -31,9 +31,9 @@ NOTE: Do not forget to update your .bashrc!
 ## Clone and compile the youbot-ros-pkg Software
 First of all you have to clone the RoboCupAtHome repository.
 
-    cd ~
+    cd ~/ros_stacks
     git clone git@github.com:youbot/youbot-ros-pkg.git
-    cd ~/youbot-ros-pkg
+    cd ~/ros_stacks/youbot-ros-pkg
 
 Switch to the correct branch:
 
@@ -45,10 +45,9 @@ Then go on with installing further external dependencies:
     sudo easy_install -U rosinstall vcstools
 
     ./repository.debs
-    rosinstall ../external_software /opt/ros/fuerte repository.rosinstall
+    rosinstall .. /opt/ros/fuerte repository.rosinstall
     
-    echo "export ROS_PACKAGE_PATH=~/youbot-ros-pkg:\$ROS_PACKAGE_PATH" >> ~/.bashrc
-    echo "export ROS_PACKAGE_PATH=~/external_software:\$ROS_PACKAGE_PATH" >> ~/.bashrc
+    echo "export ROS_PACKAGE_PATH=~/ros_stacks:\$ROS_PACKAGE_PATH" >> ~/.bashrc
     source ~/.bashrc
     
 
