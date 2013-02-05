@@ -1,0 +1,8 @@
+- git:
+    local-name: youbot_driver
+    uri: https://github.com/youbot/youbot_driver.git
+    version: master
+
+- svn:
+    local-name: brics_3d
+    uri: https://svn.best-of-robotics.org/brics/BROCRE/BRICS_3D/trunk
