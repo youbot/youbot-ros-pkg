@@ -19,12 +19,12 @@
 
 #include "ModelFitting.h"
 
-namespace BRICS_3D {
+namespace brics_3d {
 
 ModelFitting::ModelFitting() {
 
-	cube2D = new BRICS_3D::PointCloud3D();
-	cube3D = new BRICS_3D::PointCloud3D();
+	cube2D = new brics_3d::PointCloud3D();
+	cube3D = new brics_3d::PointCloud3D();
 
 	cubeModelGenerator.setPointsOnEachSide(5);
 	cubeModelGenerator.setCubeSideLength(0.057);
@@ -37,7 +37,7 @@ ModelFitting::ModelFitting() {
 
 	Eigen::Matrix4f  tempHomogenousMatrix;
 	calculateHomogeneousMatrix(90,0,0,0,0,0,tempHomogenousMatrix,true);
-	BRICS_3D::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
+	brics_3d::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
 			tempHomogenousMatrix(0), tempHomogenousMatrix(4), tempHomogenousMatrix(8),
 			tempHomogenousMatrix(1), tempHomogenousMatrix(5), tempHomogenousMatrix(9),
 			tempHomogenousMatrix(2), tempHomogenousMatrix(6), tempHomogenousMatrix(10),
@@ -50,7 +50,7 @@ ModelFitting::ModelFitting() {
 	reliableScoreThreshold = 0.00008;
 	bestScore = 1000;
 
-	poseEstimatorICP = new BRICS_3D::SDK::IterativeClosestPoint();
+	poseEstimatorICP = new brics_3d::SDK::IterativeClosestPoint();
 }
 
 ModelFitting::~ModelFitting() {
@@ -62,21 +62,21 @@ ModelFitting::~ModelFitting() {
 void ModelFitting::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
 
 	bestTransformation = new Eigen::Matrix4f();
-	//Transforming Input message to BRICS_3D format
+	//Transforming Input message to brics_3d format
 	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_xyz_ptr(new pcl::PointCloud<pcl::PointXYZ>());
 	pcl::PointCloud<pcl::PointXYZ>::Ptr estimated_model_ptr(new pcl::PointCloud<pcl::PointXYZ>());
 
-	BRICS_3D::PointCloud3D *in_cloud = new BRICS_3D::PointCloud3D();
-	BRICS_3D::PointCloud3D *finalModel2D = new BRICS_3D::PointCloud3D();
-	BRICS_3D::PointCloud3D *finalModel3D = new BRICS_3D::PointCloud3D();
-	BRICS_3D::PointCloud3D *transformedCubeModel2D = new BRICS_3D::PointCloud3D();
-	BRICS_3D::PointCloud3D *transformedCubeModel3D = new BRICS_3D::PointCloud3D();
-	BRICS_3D::Centroid3D centroidEstimator;
+	brics_3d::PointCloud3D *in_cloud = new brics_3d::PointCloud3D();
+	brics_3d::PointCloud3D *finalModel2D = new brics_3d::PointCloud3D();
+	brics_3d::PointCloud3D *finalModel3D = new brics_3d::PointCloud3D();
+	brics_3d::PointCloud3D *transformedCubeModel2D = new brics_3d::PointCloud3D();
+	brics_3d::PointCloud3D *transformedCubeModel3D = new brics_3d::PointCloud3D();
+	brics_3d::Centroid3D centroidEstimator;
 
 	//Transform sensor_msgs::PointCloud2 msg to pcl::PointCloud
 	pcl::fromROSMsg (cloud, *cloud_xyz_ptr);
 
-	// cast PCL to BRICS_3D type
+	// cast PCL to brics_3d type
 	pclTypecaster.convertToBRICS3DDataType(cloud_xyz_ptr, in_cloud);
 //	ROS_INFO("Size of input cloud: %d ", in_cloud->getSize());
 
@@ -90,14 +90,14 @@ void ModelFitting::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
 	//Translate the cube models which will be our initial estimate for ICP
 	Eigen::Matrix4f  tempHomogenousMatrix;
 	calculateHomogeneousMatrix(0,0,0,xTrans,yTrans,zTrans,tempHomogenousMatrix,true);
-	BRICS_3D::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
+	brics_3d::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
 			1, 0, 0,
 			0, 1, 0,
 			0, 0, 1,
 			xTrans,yTrans,zTrans);
 
 	for(unsigned int i=0; i<cube2D->getSize();i++){
-		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*cube2D->getPointCloud())[i].getX(),
+		brics_3d::Point3D *tempPoint = new brics_3d::Point3D((*cube2D->getPointCloud())[i].getX(),
 				(*cube2D->getPointCloud())[i].getY(),
 				(*cube2D->getPointCloud())[i].getZ());
 		transformedCubeModel2D->addPoint(tempPoint);
@@ -107,7 +107,7 @@ void ModelFitting::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
 
 
 	for(unsigned int i=0; i<cube3D->getSize();i++){
-		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*cube3D->getPointCloud())[i].getX(),
+		brics_3d::Point3D *tempPoint = new brics_3d::Point3D((*cube3D->getPointCloud())[i].getX(),
 				(*cube3D->getPointCloud())[i].getY(),
 				(*cube3D->getPointCloud())[i].getZ());
 		transformedCubeModel3D->addPoint(tempPoint);
@@ -185,9 +185,9 @@ void ModelFitting::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud){
     		 modelPublisher->getTopic()));
 
      calculateHomogeneousMatrix(xRot,yRot,zRot,xtranslation,ytranslation,ztranslation,tempHomogenousMatrix,0);
-     BRICS_3D::PointCloud3D *finalModel = new BRICS_3D::PointCloud3D();
+     brics_3d::PointCloud3D *finalModel = new brics_3d::PointCloud3D();
  	for(unsigned int i=0; i<cube3D->getSize();i++){
- 		BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*cube3D->getPointCloud())[i].getX(),
+ 		brics_3d::Point3D *tempPoint = new brics_3d::Point3D((*cube3D->getPointCloud())[i].getX(),
  				(*cube3D->getPointCloud())[i].getY(),
  				(*cube3D->getPointCloud())[i].getZ());
  		finalModel->addPoint(tempPoint);

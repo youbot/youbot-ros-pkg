@@ -32,11 +32,11 @@
 
 //#include "algorithm/segmentation/EuclideanClustering.h"
 #include "EuclideanClustering.h"
-#include "algorithm/featureExtraction/Centroid3D.h"
-#include "util/PCLTypecaster.h"
+#include "brics_3d/algorithm/featureExtraction/Centroid3D.h"
+#include "brics_3d/util/PCLTypecaster.h"
 
 //Todo add the comments
-namespace BRICS_3D {
+namespace brics_3d {
 
 class EuclideanClusterExtractor {
 private:
@@ -47,19 +47,19 @@ private:
 	ros::Publisher *extractedClusterPublisher;
 
 	/**
-	 * Utility  object to type-cast data-types between BRICS_3D and PCL
+	 * Utility  object to type-cast data-types between brics_3d and PCL
 	 */
-	BRICS_3D::PCLTypecaster pclTypecaster;
+	brics_3d::PCLTypecaster pclTypecaster;
 
 	/**
 	 * Object for extracting euclidean clusters
 	 */
-	BRICS_3D::SDK::EuclideanClustering euclideanClusterExtractor;
+	brics_3d::SDK::EuclideanClustering euclideanClusterExtractor;
 
 	/**
 	 * Object for estimating 3D centroids of the estimated object clusters
 	 */
-	BRICS_3D::Centroid3D* centroid3DEstimator;
+	brics_3d::Centroid3D* centroid3DEstimator;
 
 	/**
 	 * Maximum number of object clusters which will be published.

@@ -65,7 +65,7 @@ int main(int argc, char* argv[]){
 	ros::Publisher estimatedModelPublisher[noOfRegions][maxNoOfObjects];
 
 	//Define the model estimators
-	BRICS_3D::ModelFitting poseEstimator[noOfRegions][maxNoOfObjects];
+	brics_3d::ModelFitting poseEstimator[noOfRegions][maxNoOfObjects];
 
 
 	for (int i = 0; i<noOfRegions; i++){
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]){
         	subTopic.clear();
         	subTopic << "region_"<< i+1 << "_obj_cluster_" << j+1;
         	objectClusterSubscriber[count]= nh.subscribe(subTopic.str(), 1,
-        			&BRICS_3D::ModelFitting::kinectCloudCallback, &poseEstimator[i][j]);
+        			&brics_3d::ModelFitting::kinectCloudCallback, &poseEstimator[i][j]);
         	poseEstimator[i][j].setModelPublisher(&estimatedModelPublisher[i][j]);
         	count++;
 		}

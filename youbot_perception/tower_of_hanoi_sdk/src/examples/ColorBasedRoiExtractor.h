@@ -31,11 +31,11 @@
 #include "pcl/PointIndices.h"
 #include "pcl/filters/extract_indices.h"
 
-#include "algorithm/filtering/ColorBasedROIExtractorHSV.h"
-#include "core/ColorSpaceConvertor.h"
-#include "util/PCLTypecaster.h"
+#include "brics_3d/algorithm/filtering/ColorBasedROIExtractorHSV.h"
+#include "brics_3d/core/ColorSpaceConvertor.h"
+#include "brics_3d/util/PCLTypecaster.h"
 
-namespace BRICS_3D {
+namespace brics_3d {
 
 //ToDo update the extractor to also use some default V values to be more flexible.
 
@@ -50,17 +50,17 @@ private:
 	/**
 	 * object for extracting ROIs based on HSV-color space limits
 	 */
-	BRICS_3D::ColorBasedROIExtractorHSV hsvBasedRoiExtractor;
+	brics_3d::ColorBasedROIExtractorHSV hsvBasedRoiExtractor;
 
 	/**
 	 * Utility object for color-space transforms
 	 */
-	BRICS_3D::ColorSpaceConvertor colorSpaceConvertor;
+	brics_3d::ColorSpaceConvertor colorSpaceConvertor;
 
 	/**
 	 * Utility object for type-casting data between BRICS_3D and PCL
 	 */
-	BRICS_3D::PCLTypecaster pclTypeCaster;
+	brics_3d::PCLTypecaster pclTypeCaster;
 
 public:
 	ColorBasedRoiExtractor();

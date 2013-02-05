@@ -19,13 +19,13 @@
 
 #include "EuclideanClustering.h"
 
-#include "util/PCLTypecaster.h"
-#include "core/ColorSpaceConvertor.h"
+#include "brics_3d/util/PCLTypecaster.h"
+#include "brics_3d/core/ColorSpaceConvertor.h"
 #include "pcl/segmentation/extract_clusters.h"
 #include "pcl/point_types.h"
 #include "pcl/features/normal_3d.h"
 
-namespace BRICS_3D {
+namespace brics_3d {
 namespace SDK{
 EuclideanClustering::EuclideanClustering() {
 	// TODO Auto-generated constructor stub
@@ -39,12 +39,12 @@ EuclideanClustering::~EuclideanClustering() {
 	// TODO Auto-generated destructor stub
 }
 
-void EuclideanClustering::extractClusters(BRICS_3D::PointCloud3D *inCloud,
-		std::vector<BRICS_3D::PointCloud3D*> *extractedClusters){
+void EuclideanClustering::extractClusters(brics_3d::PointCloud3D *inCloud,
+		std::vector<brics_3d::PointCloud3D*> *extractedClusters){
 
 //	printf("[EuclideanClusterExtraction.cpp][checkpoint] size of input cloud is %d\n", inCloud->getSize());
 
-	BRICS_3D::PCLTypecaster pclTypecaster;
+	brics_3d::PCLTypecaster pclTypecaster;
 
 	//converting input cloud into PCL format
 	pcl::PointCloud<pcl::PointXYZ>::Ptr inCloudPclPtr(new pcl::PointCloud<pcl::PointXYZ> ());
@@ -72,7 +72,7 @@ void EuclideanClustering::extractClusters(BRICS_3D::PointCloud3D *inCloud,
 	int index =0;
 	for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin (); it != cluster_indices.end (); ++it){
 
-		extractedClusters->push_back(new BRICS_3D::PointCloud3D());
+		extractedClusters->push_back(new brics_3d::PointCloud3D());
 
 		extractedClusters->data()[index]->getPointCloud()->clear();
 		for (std::vector<int>::const_iterator pit = it->indices.begin (); pit != it->indices.end (); pit++){
@@ -86,11 +86,11 @@ void EuclideanClustering::extractClusters(BRICS_3D::PointCloud3D *inCloud,
 }
 
 
-//void EuclideanClustering::extractClusters(BRICS_3D::ColoredPointCloud3D *inCloud,
-//		std::vector<BRICS_3D::ColoredPointCloud3D*> *extractedClusters){
+//void EuclideanClustering::extractClusters(brics_3d::ColoredPointCloud3D *inCloud,
+//		std::vector<brics_3d::ColoredPointCloud3D*> *extractedClusters){
 //
-//	BRICS_3D::PCLTypecaster pclTypecaster;
-//	BRICS_3D::ColorSpaceConvertor colorSpaceConvertor;
+//	brics_3d::PCLTypecaster pclTypecaster;
+//	brics_3d::ColorSpaceConvertor colorSpaceConvertor;
 //	//converting input cloud into PCL format
 //	pcl::PointCloud<pcl::PointXYZRGB>::Ptr inCloudPclPtr(new pcl::PointCloud<pcl::PointXYZRGB> ());
 //	pclTypecaster.convertToPCLDataType(inCloudPclPtr, inCloud);
@@ -111,7 +111,7 @@ void EuclideanClustering::extractClusters(BRICS_3D::PointCloud3D *inCloud,
 //
 //	//Building up the pointclouds for corresponding clusters
 //	for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin (); it != cluster_indices.end (); ++it){
-//		BRICS_3D::ColoredPointCloud3D tempPointCloud3D;
+//		brics_3d::ColoredPointCloud3D tempPointCloud3D;
 //		tempPointCloud3D.getPointCloud()->clear();
 //		for (std::vector<int>::const_iterator pit = it->indices.begin (); pit != it->indices.end (); pit++){
 //

@@ -18,10 +18,10 @@
 ******************************************************************************/
 #include "EuclideanClusterExtractor.h"
 
-namespace BRICS_3D{
+namespace brics_3d{
 
 EuclideanClusterExtractor::EuclideanClusterExtractor() {
-	centroid3DEstimator = new BRICS_3D::Centroid3D();
+	centroid3DEstimator = new brics_3d::Centroid3D();
 	maxNoOfObjects = 3;
 }
 
@@ -63,9 +63,9 @@ void EuclideanClusterExtractor::kinectCloudCallback(const sensor_msgs::PointClou
     pcl::fromROSMsg (cloud, *cloud_xyz_rgb_ptr);
 
     if(cloud_xyz_rgb_ptr->size() > this->euclideanClusterExtractor.getMinClusterSize()){
-        BRICS_3D::PointCloud3D *in_cloud = new BRICS_3D::PointCloud3D();
-        std::vector<BRICS_3D::PointCloud3D*> extracted_clusters;
-    // cast PCL to BRICS_3D type
+        brics_3d::PointCloud3D *in_cloud = new brics_3d::PointCloud3D();
+        std::vector<brics_3d::PointCloud3D*> extracted_clusters;
+    // cast PCL to brics_3d type
     pclTypecaster.convertToBRICS3DDataType(cloud_xyz_rgb_ptr, in_cloud);
 
     //extract the clusters

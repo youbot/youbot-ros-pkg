@@ -26,12 +26,12 @@
 #include <tf/transform_broadcaster.h>
 
 //BRICS_3D headers
-#include "algorithm/filtering/ColorBasedROIExtractorHSV.h"
-#include "util/PCLTypecaster.h"
+#include "brics_3d/algorithm/filtering/ColorBasedROIExtractorHSV.h"
+#include "brics_3d/util/PCLTypecaster.h"
 #include "EuclideanClustering.h"
-#include "algorithm/featureExtraction/Centroid3D.h"
-#include "core/HomogeneousMatrix44.h"
-#include "util/SimplePointCloudGeneratorCube.h"
+#include "brics_3d/algorithm/featureExtraction/Centroid3D.h"
+#include "brics_3d/core/HomogeneousMatrix44.h"
+#include "brics_3d/util/SimplePointCloudGeneratorCube.h"
 #include "IterativeClosestPoint.h"
 
 
@@ -39,7 +39,7 @@
 #include <iostream>
 #include <vector>
 #include <Eigen/StdVector>
-namespace BRICS_3D {
+namespace brics_3d {
 
 class PoseEstimation6D {
 
@@ -56,12 +56,12 @@ class PoseEstimation6D {
 	/**
 	 * object for extracting ROIs based on HSV-color space limits
 	 */
-	BRICS_3D::ColorBasedROIExtractorHSV hsvBasedRoiExtractor;
+	brics_3d::ColorBasedROIExtractorHSV hsvBasedRoiExtractor;
 
 	/**
-	 * Utility object for type-casting data between BRICS_3D and PCL
+	 * Utility object for type-casting data between brics_3d and PCL
 	 */
-	BRICS_3D::PCLTypecaster pclTypecaster;
+	brics_3d::PCLTypecaster pclTypecaster;
 
 	/**
 	 * Indicates if the color based ROI extractor is intialized with proper limits
@@ -71,27 +71,27 @@ class PoseEstimation6D {
 	/**
 	 * Object for extracting euclidean clusters
 	 */
-	BRICS_3D::SDK::EuclideanClustering euclideanClusterExtractor;
+	brics_3d::SDK::EuclideanClustering euclideanClusterExtractor;
 
 	/**
 	 * Object for estimating 3D centroids of the estimated object clusters
 	 */
-	BRICS_3D::Centroid3D *centroid3DEstimator;
+	brics_3d::Centroid3D *centroid3DEstimator;
 
 	/**
 	 * two-sided cube model
 	 */
-	BRICS_3D::PointCloud3D *cube2D;
+	brics_3d::PointCloud3D *cube2D;
 
 	/**
 	 * Three sided cube model
 	 */
-	BRICS_3D::PointCloud3D *cube3D;
+	brics_3d::PointCloud3D *cube3D;
 
 	/**
 	 * data base that holds all pont clouds representing the models
 	 */
-	std::vector<BRICS_3D::PointCloud3D*> modelDatabase;
+	std::vector<brics_3d::PointCloud3D*> modelDatabase;
 
 	/**
 	 * Vector that hold the associated names to the models.
@@ -101,7 +101,7 @@ class PoseEstimation6D {
 	/**
 	 * Object to create the cube models
 	 */
-	BRICS_3D::SimplePointCloudGeneratorCube cubeModelGenerator;
+	brics_3d::SimplePointCloudGeneratorCube cubeModelGenerator;
 
 
 	/**
@@ -127,7 +127,7 @@ class PoseEstimation6D {
 	/**
 	 * Object for performing ICP
 	 */
-	BRICS_3D::SDK::IterativeClosestPoint *poseEstimatorICP;
+	brics_3d::SDK::IterativeClosestPoint *poseEstimatorICP;
 
 
 	/**
@@ -231,7 +231,7 @@ public:
 
 	void initializeModelFitting(int maxIterations, float maxCorrespondenceThreshold, float reliableScoreThreshold);
 
-	void estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCount);
+	void estimatePose(brics_3d::PointCloud3D *in_cloud, int objCount);
 
 	std::string getRegionLabel() const;
     void setRegionLabel(std::string regionLabel);
@@ -245,7 +245,7 @@ public:
      * @param model The new model the will be added to the database
      * @param name A name that helps to identify that model
      */
-    void addModelToDataBase(BRICS_3D::PointCloud3D* model, std::string name);
+    void addModelToDataBase(brics_3d::PointCloud3D* model, std::string name);
 };
 
 }

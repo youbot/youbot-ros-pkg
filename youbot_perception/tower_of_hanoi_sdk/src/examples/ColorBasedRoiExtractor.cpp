@@ -19,7 +19,7 @@
 
 #include "ColorBasedRoiExtractor.h"
 
-namespace BRICS_3D {
+namespace brics_3d {
 
 ColorBasedRoiExtractor::ColorBasedRoiExtractor() {}
 
@@ -53,14 +53,14 @@ void ColorBasedRoiExtractor::kinectCloudCallback(const sensor_msgs::PointCloud2 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr hsv_extracted_roi_ptr(new pcl::PointCloud<pcl::PointXYZRGB>());
 
 
-    BRICS_3D::PointCloud3D *in_cloud = new BRICS_3D::PointCloud3D();
-    BRICS_3D::PointCloud3D *extracted_cloud = new BRICS_3D::PointCloud3D();
+    brics_3d::PointCloud3D *in_cloud = new brics_3d::PointCloud3D();
+    brics_3d::PointCloud3D *extracted_cloud = new brics_3d::PointCloud3D();
 
 
     //Transform sensor_msgs::PointCloud2 msg to pcl::PointCloud
     pcl::fromROSMsg (cloud, *cloud_xyz_rgb_ptr);
 
-    // cast PCL to BRICS_3D type
+    // cast PCL to brics_3d type
     pclTypeCaster.convertToBRICS3DDataType(cloud_xyz_rgb_ptr, in_cloud);
     ROS_INFO("Size of input cloud: %d ", in_cloud->getSize());
 
