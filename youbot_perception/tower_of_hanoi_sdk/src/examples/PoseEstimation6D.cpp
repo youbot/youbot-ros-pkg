@@ -20,7 +20,7 @@
 #include "PoseEstimation6D.h"
 #include <limits>
 
-namespace BRICS_3D {
+namespace brics_3d {
 
 PoseEstimation6D::PoseEstimation6D() {
 	//default initialization of roi extractor
@@ -34,13 +34,13 @@ PoseEstimation6D::PoseEstimation6D() {
 	this->euclideanClusterExtractor.setMaxClusterSize(0);
 	this->euclideanClusterExtractor.setClusterTolerance(0);
 
-	poseEstimatorICP = new BRICS_3D::SDK::IterativeClosestPoint();
+	poseEstimatorICP = new brics_3d::SDK::IterativeClosestPoint();
 
-	centroid3DEstimator =  new BRICS_3D::Centroid3D();
+	centroid3DEstimator =  new brics_3d::Centroid3D();
 
 	//default initialization of cube models
-	cube2D = new BRICS_3D::PointCloud3D();
-	cube3D = new BRICS_3D::PointCloud3D();
+	cube2D = new brics_3d::PointCloud3D();
+	cube3D = new brics_3d::PointCloud3D();
 
 	cubeModelGenerator.setPointsOnEachSide(5);
 	cubeModelGenerator.setCubeSideLength(0.06);
@@ -58,7 +58,7 @@ PoseEstimation6D::PoseEstimation6D() {
 
 	Eigen::Matrix4f  tempHomogenousMatrix;
 	calculateHomogeneousMatrix(90,0,0,0,0,0,tempHomogenousMatrix,true);
-	BRICS_3D::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
+	brics_3d::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
 			tempHomogenousMatrix(0), tempHomogenousMatrix(4), tempHomogenousMatrix(8),
 			tempHomogenousMatrix(1), tempHomogenousMatrix(5), tempHomogenousMatrix(9),
 			tempHomogenousMatrix(2), tempHomogenousMatrix(6), tempHomogenousMatrix(10),
@@ -136,7 +136,7 @@ void PoseEstimation6D::initializeModelFitting(int maxIterations, float maxCorres
 	this->reliableScoreThreshold = reliableScoreThreshold;
 }
 
-void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCount){
+void PoseEstimation6D::estimatePose(brics_3d::PointCloud3D *in_cloud, int objCount){
 
 	Eigen::Vector3d centroid3d = centroid3DEstimator->computeCentroid(in_cloud);
 	bool reliableModelFound=true;
@@ -151,18 +151,18 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 	//Translate the cube models which will be our initial estimate for ICP
 	Eigen::Matrix4f  tempHomogenousMatrix;
 	calculateHomogeneousMatrix(0,0,0,xTrans,yTrans,zTrans,tempHomogenousMatrix,true);
-	BRICS_3D::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
+	brics_3d::HomogeneousMatrix44* homogeneousTrans = new HomogeneousMatrix44(
 			1, 0, 0,
 			0, 1, 0,
 			0, 0, 1,
 			xTrans,yTrans,zTrans);
 
-	std::vector<BRICS_3D::PointCloud3D*> transformedModelDatabase;
+	std::vector<brics_3d::PointCloud3D*> transformedModelDatabase;
 
 	for (unsigned int index = 0; index < modelDatabase.size(); ++index) {
-		transformedModelDatabase.push_back(new BRICS_3D::PointCloud3D());
+		transformedModelDatabase.push_back(new brics_3d::PointCloud3D());
 		for(unsigned int i=0; i< (*modelDatabase[index]).getSize(); i++){
-			BRICS_3D::Point3D *tempPoint = new BRICS_3D::Point3D((*(*modelDatabase[index]).getPointCloud())[i].getX(),
+			brics_3d::Point3D *tempPoint = new brics_3d::Point3D((*(*modelDatabase[index]).getPointCloud())[i].getX(),
 					(*(*modelDatabase[index]).getPointCloud())[i].getY(),
 					(*(*modelDatabase[index]).getPointCloud())[i].getZ());
 			(*transformedModelDatabase[index]).addPoint(tempPoint);
@@ -173,7 +173,7 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 	assert(modelDatabase.size() == transformedModelDatabase.size());
 	std::cout << "Model database size = " << modelDatabase.size() << std::endl;
 
-	std::vector<BRICS_3D::PointCloud3D*> finalModels;
+	std::vector<brics_3d::PointCloud3D*> finalModels;
 	std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Vector4f> > finalTransformations;
 	std::map<float, int> scoreToIndexMapping;
 	std::map<float, int>::const_iterator scoreToIndexMappingIterator;
@@ -182,7 +182,7 @@ void PoseEstimation6D::estimatePose(BRICS_3D::PointCloud3D *in_cloud, int objCou
 	poseEstimatorICP->setMaxIterations(maxIterations);
 	ROS_INFO("[%s_%d] Results for fitted models: index | score    | scoreThresh | name", regionLabel.c_str(), objCount);
 	for (unsigned int index = 0; index < modelDatabase.size(); ++index) {
-		finalModels.push_back(new BRICS_3D::PointCloud3D());
+		finalModels.push_back(new brics_3d::PointCloud3D());
 
 		//Performing model alignment
 		poseEstimatorICP->setObjectModel(transformedModelDatabase[index]);
@@ -266,14 +266,14 @@ void PoseEstimation6D::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud
 
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyz_rgb_ptr(new pcl::PointCloud<pcl::PointXYZRGB>());
 
-	BRICS_3D::PointCloud3D *in_cloud = new BRICS_3D::PointCloud3D();
-	BRICS_3D::PointCloud3D *color_based_roi = new BRICS_3D::PointCloud3D();
-	std::vector<BRICS_3D::PointCloud3D*> extracted_clusters;
+	brics_3d::PointCloud3D *in_cloud = new brics_3d::PointCloud3D();
+	brics_3d::PointCloud3D *color_based_roi = new brics_3d::PointCloud3D();
+	std::vector<brics_3d::PointCloud3D*> extracted_clusters;
 
 	//Transform sensor_msgs::PointCloud2 msg to pcl::PointCloud
 	pcl::fromROSMsg (cloud, *cloud_xyz_rgb_ptr);
 
-	// cast PCL to BRICS_3D type
+	// cast PCL to brics_3d type
 	pclTypecaster.convertToBRICS3DDataType(cloud_xyz_rgb_ptr, in_cloud);
 	ROS_INFO("Size of input cloud: %d ", in_cloud->getSize());
 
@@ -312,7 +312,7 @@ void PoseEstimation6D::kinectCloudCallback(const sensor_msgs::PointCloud2 &cloud
 
 }
 
-void PoseEstimation6D::addModelToDataBase(BRICS_3D::PointCloud3D* model, std::string name) {
+void PoseEstimation6D::addModelToDataBase(brics_3d::PointCloud3D* model, std::string name) {
 	if (model->getSize() == 0) {
 		ROS_WARN("Model point cloud to be added to database is empty. Possibly the model was not loaded correctly.");
 		return;
@@ -325,7 +325,7 @@ void PoseEstimation6D::addModelToDataBase(BRICS_3D::PointCloud3D* model, std::st
 	float zTrans = centroid3d[2];
 
 	ROS_DEBUG("Model centroid is transalated to origin by (%f, %f, %f)", -xTrans, -yTrans, -zTrans);
-	BRICS_3D::HomogeneousMatrix44* demeanTranslation = new HomogeneousMatrix44(
+	brics_3d::HomogeneousMatrix44* demeanTranslation = new HomogeneousMatrix44(
 			1, 0, 0,
 			0, 1, 0,
 			0, 0, 1,

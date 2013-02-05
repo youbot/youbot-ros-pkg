@@ -21,8 +21,8 @@
 #define POSEESTIMATIONICP_H_
 
 
-#include "core/PointCloud3D.h"
-#include "util/PCLTypecaster.h"
+#include "brics_3d/core/PointCloud3D.h"
+#include "brics_3d/util/PCLTypecaster.h"
 #include <iostream>
 
 #include <pcl/registration/icp.h>
@@ -31,7 +31,7 @@
 #include <pcl/common/transform.h>
 
 
-namespace BRICS_3D {
+namespace brics_3d {
 
 namespace SDK {
 
@@ -41,7 +41,7 @@ private:
 	/**
 	 * Object model to be fitted with the target cloud
 	 */
-	BRICS_3D::PointCloud3D *objectModel;
+	brics_3d::PointCloud3D *objectModel;
 
 	/**
 	 * Maximum distance threshold for ICP
@@ -78,7 +78,7 @@ public:
 	 * @param inCloud	input point-cloud
 	 * @param outCloud	best transformed result found of the object model
 	 */
-	void estimateBestFit(BRICS_3D::PointCloud3D *inCloud, BRICS_3D::PointCloud3D *outCloud);
+	void estimateBestFit(brics_3d::PointCloud3D *inCloud, brics_3d::PointCloud3D *outCloud);
 
 
 	/**
@@ -145,7 +145,7 @@ public:
      * Returns the used object model for fitting
      * @return	The used object model for fitting
      */
-    BRICS_3D::PointCloud3D* getObjectModel() const
+    brics_3d::PointCloud3D* getObjectModel() const
     {
         return objectModel;
     }
@@ -155,7 +155,7 @@ public:
      * Sets the object model to be used for fitting
      * @param objectModel	object model to be used for fitting
      */
-    void setObjectModel(BRICS_3D::PointCloud3D *objectModel)
+    void setObjectModel(brics_3d::PointCloud3D *objectModel)
     {
         this->objectModel = objectModel;
     }

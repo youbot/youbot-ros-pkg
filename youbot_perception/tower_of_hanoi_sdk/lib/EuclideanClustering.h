@@ -20,11 +20,11 @@
 #ifndef EUCLEDEANCLUSTEREXTRACTION_H_
 #define EUCLEDEANCLUSTEREXTRACTION_H_
 
-#include "core/PointCloud3D.h"
+#include "brics_3d/core/PointCloud3D.h"
 
 #include <vector>
 #include<stdio.h>
-namespace BRICS_3D {
+namespace brics_3d {
 namespace SDK{
 /**
  * The class provides a wrapper for ONLY simple KDTree based Euclidean Cluster Extraction in PCL
@@ -61,7 +61,7 @@ public:
 	 * @param inCloud	Input point cloud
 	 * @param extractedClusters Vector of pointcluds containing the extracted clusters
 	 */
-	void extractClusters(BRICS_3D::PointCloud3D *inCloud, std::vector<BRICS_3D::PointCloud3D*> *extractedClusters);
+	void extractClusters(brics_3d::PointCloud3D *inCloud, std::vector<brics_3d::PointCloud3D*> *extractedClusters);
 
 
 //	/**
@@ -70,7 +70,7 @@ public:
 //	 * @param inCloud	Input point cloud
 //	 * @param extractedClusters Vector of pointcluds containing the extracted clusters
 //	 */
-//	void extractClusters(BRICS_3D::ColoredPointCloud3D *inCloud, std::vector<BRICS_3D::ColoredPointCloud3D*> *extractedClusters);
+//	void extractClusters(brics_3d::ColoredPointCloud3D *inCloud, std::vector<brics_3d::ColoredPointCloud3D*> *extractedClusters);
 
 
 	/**

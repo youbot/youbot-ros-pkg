@@ -25,7 +25,7 @@
 #include <pcl_ros/point_cloud.h>
 #include "pcl/point_types.h"
 
-//BRICS_3D specific Headers
+//brics_3d specific Headers
 #include "examples/ColorBasedRoiExtractor.h"
 
 //Sytem-wide Standard Headers
@@ -36,7 +36,7 @@
 
 
 using namespace std;
-BRICS_3D::ColorBasedRoiExtractor *roiExtractor;
+brics_3d::ColorBasedRoiExtractor *roiExtractor;
 int noOfRegions = 0;
 
 
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]){
 
 	//Define the color based region extractors
 
-	if( (roiExtractor = (BRICS_3D::ColorBasedRoiExtractor *)malloc(noOfRegions*sizeof(BRICS_3D::ColorBasedRoiExtractor))) == NULL ){
+	if( (roiExtractor = (brics_3d::ColorBasedRoiExtractor *)malloc(noOfRegions*sizeof(brics_3d::ColorBasedRoiExtractor))) == NULL ){
 		ROS_ERROR("Memory Allocation Error!!");
 		exit(0);
 	}

@@ -29,11 +29,11 @@
 
 //BRICS_3D headers
 #include "IterativeClosestPoint.h"
-#include "util/SimplePointCloudGeneratorCube.h"
-#include "util/PCLTypecaster.h"
-#include "core/PointCloud3D.h"
-#include "algorithm/featureExtraction/Centroid3D.h"
-#include "core/HomogeneousMatrix44.h"
+#include "brics_3d/util/SimplePointCloudGeneratorCube.h"
+#include "brics_3d/util/PCLTypecaster.h"
+#include "brics_3d/core/PointCloud3D.h"
+#include "brics_3d/algorithm/featureExtraction/Centroid3D.h"
+#include "brics_3d/core/HomogeneousMatrix44.h"
 
 //PCL Headers
 #include <pcl/registration/icp.h>
@@ -45,34 +45,34 @@
 #include <Eigen/Geometry>
 
 
-namespace BRICS_3D {
+namespace brics_3d {
 
 class ModelFitting {
 
 	/**
 	 * Object for performing ICP
 	 */
-	BRICS_3D::SDK::IterativeClosestPoint* poseEstimatorICP;
+	brics_3d::SDK::IterativeClosestPoint* poseEstimatorICP;
 
 	/**
 	 * two-sided cube model
 	 */
-	BRICS_3D::PointCloud3D *cube2D;
+	brics_3d::PointCloud3D *cube2D;
 
 	/**
 	 * Three sided cube model
 	 */
-	BRICS_3D::PointCloud3D *cube3D;
+	brics_3d::PointCloud3D *cube3D;
 
 	/**
 	 * Object to create the cube models
 	 */
-	BRICS_3D::SimplePointCloudGeneratorCube cubeModelGenerator;
+	brics_3d::SimplePointCloudGeneratorCube cubeModelGenerator;
 
 	/**
 	 * Object to typecast data-types between PCL and BRICS_3D
 	 */
-	BRICS_3D::PCLTypecaster pclTypecaster;
+	brics_3d::PCLTypecaster pclTypecaster;
 
 	/**
 	 * Fitting score threshold indicating a good match

@@ -19,7 +19,7 @@
 
 #include "IterativeClosestPoint.h"
 
-namespace BRICS_3D {
+namespace brics_3d {
 
 namespace SDK {
 
@@ -33,10 +33,10 @@ IterativeClosestPoint::IterativeClosestPoint() {
 IterativeClosestPoint::~IterativeClosestPoint() {}
 
 
-void IterativeClosestPoint::estimateBestFit(BRICS_3D::PointCloud3D *inCloud, BRICS_3D::PointCloud3D *outCloud){
+void IterativeClosestPoint::estimateBestFit(brics_3d::PointCloud3D *inCloud, brics_3d::PointCloud3D *outCloud){
 
 	pcl::PointCloud<pcl::PointXYZ>::Ptr targetCloudPtr(new pcl::PointCloud<pcl::PointXYZ>);
-	BRICS_3D::PCLTypecaster pclTypecaster;
+	brics_3d::PCLTypecaster pclTypecaster;
 
 	pcl::IterativeClosestPointNonLinear<pcl::PointXYZ, pcl::PointXYZ> icp;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr objectModelPtr(new pcl::PointCloud<pcl::PointXYZ>);

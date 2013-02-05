@@ -41,8 +41,8 @@
 
 
 //global variables
-std::vector<BRICS_3D::PoseEstimation6D*> poseEstimators;
-std::vector<BRICS_3D::PointCloud3D*> modelDataBase;
+std::vector<brics_3d::PoseEstimation6D*> poseEstimators;
+std::vector<brics_3d::PointCloud3D*> modelDataBase;
 std::vector<std::string> modelNames;
 bool perceptionPaused;
 unsigned int maxNoOfObjects;
@@ -116,7 +116,7 @@ void perceptionConfigurationCallback(const tower_of_hanoi_sdk::Configuration mes
 
 	if(poseEstimators.size() < noOfRegions){
 		for(unsigned int i=0; i< noOfRegions-poseEstimators.size(); i++){
-			poseEstimators.push_back(new BRICS_3D::PoseEstimation6D());
+			poseEstimators.push_back(new brics_3d::PoseEstimation6D());
 		}
 	}
 
@@ -214,7 +214,7 @@ int main(int argc, char* argv[]){
 			maxNoOfObjects, noOfRegions);
 
 	/* load models from disk */
-//	BRICS_3D::PointCloud3D* tmpModel = new BRICS_3D::PointCloud3D;
+//	brics_3d::PointCloud3D* tmpModel = new brics_3d::PointCloud3D;
 //	tmpModel->readFromTxtFile("test_model_green_1.txt");
 //	modelDataBase.push_back(tmpModel);
 //	modelNames.push_back("test_model_green_1");
@@ -227,7 +227,7 @@ int main(int argc, char* argv[]){
 	std::ifstream configFileStream;
 	for (unsigned int i = 0; i< noOfRegions; i++){
 
-		poseEstimators.push_back(new BRICS_3D::PoseEstimation6D());
+		poseEstimators.push_back(new brics_3d::PoseEstimation6D());
 
 		configFileStream.open(argv[i+3]);
 		if ( configFileStream.is_open() ) {     //if file exists

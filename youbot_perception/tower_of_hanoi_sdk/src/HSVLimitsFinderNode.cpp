@@ -26,7 +26,7 @@
 #include "pcl_ros/point_cloud.h"
 #include "pcl/point_types.h"
 
-//BRICS_3D specific Headers
+//brics_3d specific Headers
 #include "examples/ColorBasedRoiExtractor.h"
 
 //Sytem-wide Standard Headers
@@ -53,7 +53,7 @@
 using namespace std;
 
 //Global Variables
-BRICS_3D::ColorBasedRoiExtractor roiExtractor;
+brics_3d::ColorBasedRoiExtractor roiExtractor;
 int minH, maxH, minS, maxS;
 ofstream configFileStream;
 

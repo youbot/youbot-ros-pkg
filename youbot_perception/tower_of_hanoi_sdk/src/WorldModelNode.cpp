@@ -23,10 +23,10 @@
 #include <tower_of_hanoi_sdk/GetSceneObjects.h>
 
 //BRICS_3D specific headers
-#include "worldModel/WorldModel.h"
-#include "worldModel/sceneGraph/Box.h"
-#include "core/HomogeneousMatrix44.h"
-#include "core/Logger.h"
+#include "brics_3d/worldModel/WorldModel.h"
+#include "brics_3d/worldModel/sceneGraph/Box.h"
+#include "brics_3d/core/HomogeneousMatrix44.h"
+#include "brics_3d/core/Logger.h"
 
 //System headers
 #include <sstream>
@@ -50,7 +50,7 @@ public:
 		associationDistanceTreshold = 0.02; // [m]
 
 		getObjectsService = node.advertiseService("youbot_3d_world_model/getSceneObjects", &YouBotWorldModel::onGetSceneObjects, this);
-//		BRICS_3D::Logger::setMinLoglevel(BRICS_3D::Logger::LOGDEBUG);
+//		brics_3d::Logger::setMinLoglevel(brics_3d::Logger::LOGDEBUG);
 
 		startFrameId = "start";
 //		auxiliaryFrameId = "auxiliary";
@@ -62,44 +62,44 @@ public:
 
 
 		objectClasses.clear();
-		vector<BRICS_3D::RSG::Attribute> objectAttributes;
+		vector<brics_3d::rsg::Attribute> objectAttributes;
 
 		objectAttributes.clear();
-		objectAttributes.push_back(Attribute("shapeType","Box"));
-		objectAttributes.push_back(Attribute("taskType","targetArea"));
-		objectAttributes.push_back(Attribute("name","start"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("shapeType","Box"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("taskType","targetArea"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("name","start"));
 		objectClasses.insert(std::make_pair(startFrameId, objectAttributes));
 
 		objectAttributes.clear();
-		objectAttributes.push_back(Attribute("shapeType","Box"));
-		objectAttributes.push_back(Attribute("taskType","targetArea"));
-		objectAttributes.push_back(Attribute("name","auxiliary"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("shapeType","Box"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("taskType","targetArea"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("name","auxiliary"));
 		objectClasses.insert(std::make_pair(auxiliaryFrameId, objectAttributes));
 
 		objectAttributes.clear();
-		objectAttributes.push_back(Attribute("shapeType","Box"));
-		objectAttributes.push_back(Attribute("taskType","targetArea"));
-		objectAttributes.push_back(Attribute("name","goal"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("shapeType","Box"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("taskType","targetArea"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("name","goal"));
 		objectClasses.insert(std::make_pair(goalFrameId, objectAttributes));
 
 
 		objectAttributes.clear();
-		objectAttributes.push_back(Attribute("shapeType","Box"));
-		objectAttributes.push_back(Attribute("color","red"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("shapeType","Box"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("color","red"));
 		objectClasses.insert(std::make_pair(redBoxFrameId + "1", objectAttributes));
 		objectClasses.insert(std::make_pair(redBoxFrameId + "2", objectAttributes));
 		objectClasses.insert(std::make_pair(redBoxFrameId + "3", objectAttributes));
 
 		objectAttributes.clear();
-		objectAttributes.push_back(Attribute("shapeType","Box"));
-		objectAttributes.push_back(Attribute("color","green"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("shapeType","Box"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("color","green"));
 		objectClasses.insert(std::make_pair(greenBoxFrameId + "1", objectAttributes));
 		objectClasses.insert(std::make_pair(greenBoxFrameId + "2", objectAttributes));
 		objectClasses.insert(std::make_pair(greenBoxFrameId + "3", objectAttributes));
 
 		objectAttributes.clear();
-		objectAttributes.push_back(Attribute("shapeType","Box"));
-		objectAttributes.push_back(Attribute("color","yellow"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("shapeType","Box"));
+		objectAttributes.push_back(brics_3d::rsg::Attribute("color","yellow"));
 		objectClasses.insert(std::make_pair(yellowBoxFrameId + "1", objectAttributes));
 		objectClasses.insert(std::make_pair(yellowBoxFrameId + "2", objectAttributes));
 		objectClasses.insert(std::make_pair(yellowBoxFrameId + "3", objectAttributes));
@@ -111,13 +111,13 @@ public:
 
 		/* parse request */
 		ROS_DEBUG("Receiving new query.");
-		vector<BRICS_3D::RSG::Attribute> queryAttributes;
+		vector<brics_3d::rsg::Attribute> queryAttributes;
 		for (unsigned int i = 0; i < static_cast<unsigned int>(req.attributes.size()); ++i) {
-			queryAttributes.push_back(Attribute(req.attributes[i].key ,req.attributes[i].value));
+			queryAttributes.push_back(brics_3d::rsg::Attribute(req.attributes[i].key ,req.attributes[i].value));
 		}
 
 		/* query */
-		vector<BRICS_3D::SceneObject> resultObjects;
+		vector<brics_3d::SceneObject> resultObjects;
 		myWM.getSceneObjects(queryAttributes, resultObjects);
 
 		/* setup response */
@@ -147,7 +147,7 @@ public:
 
 			tmpSceneObject.transform = tmpTransformMsg;
 
-			BRICS_3D::RSG::Box::BoxPtr tmpBox = boost::dynamic_pointer_cast<Box>(resultObjects[i].shape);
+			brics_3d::rsg::Box::BoxPtr tmpBox = boost::dynamic_pointer_cast<brics_3d::rsg::Box>(resultObjects[i].shape);
 
 			if ( tmpBox != 0) {
 				tmpSceneObject.shape.type = arm_navigation_msgs::Shape::BOX; //TODO support multible shapes
@@ -172,7 +172,7 @@ public:
 	}
 
 	void processTfTopic () {
-		map <string, vector<BRICS_3D::RSG::Attribute> >::iterator iter = objectClasses.begin();
+		map <string, vector<brics_3d::rsg::Attribute> >::iterator iter = objectClasses.begin();
 		for (iter = objectClasses.begin(); iter != objectClasses.end(); iter++) {
 
 			string objectFrameId = iter->first;
@@ -192,9 +192,9 @@ public:
 			ROS_INFO("TF found for %s.", iter->first.c_str());
 
 			/* query */
-			vector<BRICS_3D::RSG::Attribute> queryAttributes;;
+			vector<brics_3d::rsg::Attribute> queryAttributes;;
 			queryAttributes = iter->second;
-			vector<BRICS_3D::SceneObject> resultObjects;
+			vector<brics_3d::SceneObject> resultObjects;
 
 			myWM.getSceneObjects(queryAttributes, resultObjects);
 //			ROS_INFO("Number of boxes: %i " , static_cast<unsigned int>(resultObjects.size()));
@@ -230,7 +230,7 @@ public:
 
 				/* update existing */
 				ROS_INFO("Updating existing scene object with object ID: %i", resultObjects[index].id);
-				BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr newTransform(new BRICS_3D::HomogeneousMatrix44());
+				brics_3d::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr newTransform(new brics_3d::HomogeneousMatrix44());
 				tfTransformToHomogeniousMatrix(transform, newTransform);
 				myWM.insertTransform(resultObjects[index].id, newTransform);
 
@@ -238,11 +238,11 @@ public:
 
 				/* insert */
 				ROS_INFO("Inserting new scene object");
-				BRICS_3D::RSG::Shape::ShapePtr boxShape(new BRICS_3D::RSG::Box(cubeSize, cubeSize, cubeSize)); // in [m]
-				BRICS_3D::RSG::Shape::ShapePtr targetAreaBoxShape(new BRICS_3D::RSG::Box(targetAreaSizeX, targetAreaSizeY, targetAreaSizeZ)); // in [m]
-				BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr initialTransform(new BRICS_3D::HomogeneousMatrix44());
+				brics_3d::rsg::Shape::ShapePtr boxShape(new brics_3d::rsg::Box(cubeSize, cubeSize, cubeSize)); // in [m]
+				brics_3d::rsg::Shape::ShapePtr targetAreaBoxShape(new brics_3d::rsg::Box(targetAreaSizeX, targetAreaSizeY, targetAreaSizeZ)); // in [m]
+				brics_3d::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr initialTransform(new brics_3d::HomogeneousMatrix44());
 				tfTransformToHomogeniousMatrix(transform, initialTransform);
-				BRICS_3D::SceneObject tmpSceneObject;
+				brics_3d::SceneObject tmpSceneObject;
 				if ( (iter->first.compare(startFrameId) == 0) || (iter->first.compare(auxiliaryFrameId) == 0) || (iter->first.compare(goalFrameId) == 0)) {
 					tmpSceneObject.shape = targetAreaBoxShape;
 				} else {
@@ -262,10 +262,10 @@ public:
 		}
 
 		/* query */
-		vector<BRICS_3D::RSG::Attribute> queryAttributes;
-		vector<BRICS_3D::SceneObject> resultObjects;
-		queryAttributes.push_back(Attribute("shapeType","Box"));
-//		queryAttributes.push_back(Attribute("color","red"));
+		vector<brics_3d::rsg::Attribute> queryAttributes;
+		vector<brics_3d::SceneObject> resultObjects;
+		queryAttributes.push_back(brics_3d::rsg::Attribute("shapeType","Box"));
+//		queryAttributes.push_back(brics_3d::rsg::Attribute("color","red"));
 
 		myWM.getSceneObjects(queryAttributes, resultObjects);
 		ROS_INFO("Total number of boxes: %i " , static_cast<unsigned int>(resultObjects.size()));
@@ -277,7 +277,7 @@ public:
 	}
 
 	/* Some helper functions */
-	void tfTransformToHomogeniousMatrix (const tf::Transform& tfTransform, BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr& transformMatrix)
+	void tfTransformToHomogeniousMatrix (const tf::Transform& tfTransform, brics_3d::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr& transformMatrix)
 	{
 		double mv[12];
 
@@ -294,7 +294,7 @@ public:
 
 	}
 
-	void homogeniousMatrixToTfTransform (const BRICS_3D::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr& transformMatrix, tf::Transform& tfTransform) {
+	void homogeniousMatrixToTfTransform (const brics_3d::IHomogeneousMatrix44::IHomogeneousMatrix44Ptr& transformMatrix, tf::Transform& tfTransform) {
 		const double* matrixPtr = transformMatrix->getRawData();
 
 		btVector3 translation;
@@ -335,7 +335,7 @@ private:
 	ros::NodeHandle node;
 
 	/// Handle for the 3D world model
-	BRICS_3D::WorldModel myWM;
+	brics_3d::WorldModel myWM;
 
 	/// Receives TF
 	tf::TransformListener tfListener;
@@ -353,7 +353,7 @@ private:
 	string yellowBoxFrameId;
 
 	/// Mapping that assignes attributes to relevant TF frame_ids
-	map <string, vector<BRICS_3D::RSG::Attribute> > objectClasses;
+	map <string, vector<brics_3d::rsg::Attribute> > objectClasses;
 
 };
 
@@ -364,7 +364,7 @@ private:
 int main(int argc, char **argv)
 {
 
-	BRICS_3D::Logger::setMinLoglevel(BRICS_3D::Logger::LOGDEBUG);
+	brics_3d::Logger::setMinLoglevel(brics_3d::Logger::LOGDEBUG);
 	ros::init(argc, argv, "youbot_3d_world_model");
 	ros::NodeHandle n;
 	youBot::YouBotWorldModel youbotWM(n);

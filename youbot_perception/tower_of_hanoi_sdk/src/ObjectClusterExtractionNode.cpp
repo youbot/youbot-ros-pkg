@@ -53,7 +53,7 @@
 
 
 //global variables
-BRICS_3D::EuclideanClusterExtractor *objectClusterExtractor;
+brics_3d::EuclideanClusterExtractor *objectClusterExtractor;
 int maxNoOfObjects;
 int noOfRegions;
 
@@ -89,8 +89,8 @@ int main(int argc, char* argv[]){
 
 	//Define the cluster extractors
 	//Todo replace malloc
-	if( (objectClusterExtractor = (BRICS_3D::EuclideanClusterExtractor *)malloc
-			(noOfRegions*sizeof(BRICS_3D::EuclideanClusterExtractor ))) == NULL ){
+	if( (objectClusterExtractor = (brics_3d::EuclideanClusterExtractor *)malloc
+			(noOfRegions*sizeof(brics_3d::EuclideanClusterExtractor ))) == NULL ){
 		ROS_ERROR("Memory Allocation Error!!");
 		exit(0);
 	}
@@ -123,7 +123,7 @@ int main(int argc, char* argv[]){
     	subTopic.clear();
     	subTopic << "extracted_region_"<< i+1;
     	extractedRoiSubscriber[i]= nh.subscribe(subTopic.str(), 1,
-    			&BRICS_3D::EuclideanClusterExtractor::kinectCloudCallback, &objectClusterExtractor[i]);
+    			&brics_3d::EuclideanClusterExtractor::kinectCloudCallback, &objectClusterExtractor[i]);
     }
 
     ROS_INFO("Now extracting Object Clusters ;)");
