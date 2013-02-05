@@ -1,0 +1,1 @@
+sudo apt-get install -y build-essential cmake subversion libboost-dev libopencv2.3-dev libeigen3-dev ros-electric-laser-drivers ros-electric-navigation ros-electric-pr2-common ros-electric-common-tutorials ros-electric-control ros-electric-arm-navigation ros-electric-vision-opencv ros-electric-pr2-mechanism ros-electric-pr2-controllers ros-electric-cob-common
