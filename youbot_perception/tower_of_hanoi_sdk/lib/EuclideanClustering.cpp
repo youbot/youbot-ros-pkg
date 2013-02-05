@@ -51,7 +51,7 @@ void EuclideanClustering::extractClusters(brics_3d::PointCloud3D *inCloud,
 	pclTypecaster.convertToPCLDataType(inCloudPclPtr, inCloud);
 
 	// Creating the KdTree object for the search method of the extraction
-	pcl::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::KdTreeFLANN<pcl::PointXYZ>);
+	pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ>);
 	tree->setInputCloud (inCloudPclPtr);
 	std::vector<pcl::PointIndices> cluster_indices;
 	pcl::EuclideanClusterExtraction<pcl::PointXYZ> euclideanClusterExtractor;
@@ -96,7 +96,7 @@ void EuclideanClustering::extractClusters(brics_3d::PointCloud3D *inCloud,
 //	pclTypecaster.convertToPCLDataType(inCloudPclPtr, inCloud);
 //
 //	// Creating the KdTree object for the search method of the extraction
-//	pcl::KdTree<pcl::PointXYZRGB>::Ptr tree (new pcl::KdTreeFLANN<pcl::PointXYZRGB>);
+//	pcl::search::KdTree<pcl::PointXYZRGB>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZRGB>);
 //	tree->setInputCloud (inCloudPclPtr);
 //	std::vector<pcl::PointIndices> cluster_indices;
 //	pcl::EuclideanClusterExtraction<pcl::PointXYZRGB> euclideanClusterExtractor;
