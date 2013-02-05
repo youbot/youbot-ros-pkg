@@ -35,7 +35,7 @@ First of all you have to clone the RoboCupAtHome repository.
     git clone git@github.com:youbot/youbot-ros-pkg.git
     cd ~/youbot-ros-pkg
 
-Switch to the correct branch
+Switch to the correct branch:
 
     git checkout electric --  if you want to work with ros electric
     git checkout fuerte -- if you want to work with ros fuerte
