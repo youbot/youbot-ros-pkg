@@ -15,7 +15,6 @@
   <depend package="tf"/>
   <depend package="sensor_msgs"/>
   <depend package="arm_navigation_msgs"/>
-  <depend package="eigen" />
 
 </package>
 
