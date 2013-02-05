@@ -22,6 +22,7 @@
   <depend package="opencv2"/>
   <depend package="cv_bridge"/>
   <depend package="dynamic_reconfigure"/>
+  <depend package="brics_3d"/>
 
 </package>
 

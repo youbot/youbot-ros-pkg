@@ -11,7 +11,6 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #Set the path for external CMAKE modules
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/external/cmake_modules")
 
-FIND_PACKAGE(BRICS_3D REQUIRED)
 
 # add dynamic reconfigure api
 rosbuild_find_ros_package(dynamic_reconfigure)
@@ -24,18 +23,8 @@ rosbuild_gensrv()
 
 ADD_DEFINITIONS(-DEIGEN3)
 
-# add library directories (-L)
-LINK_DIRECTORIES(
-#    ${BRICS_3D_ALGOTITHM_LIBRARY}
-#    ${BRICS_3D_CORE_LIBRARY}
-#    ${BRICS_3D_UTIL_LIBRARY}
-    ${BRICS_3D_LINK_DIRECTORIES}
-    
-)
-
 # add include directories (-I)
 INCLUDE_DIRECTORIES(
-	 ${BRICS_3D_INCLUDE_DIRS}
      ${PROJECT_SOURCE_DIR}/lib
 )
 
