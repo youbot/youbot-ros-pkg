@@ -34,10 +34,11 @@ First of all you have to clone the RoboCupAtHome repository.
     cd ~
     git clone git@github.com:youbot/youbot-ros-pkg.git
     cd ~/youbot-ros-pkg
-    (git checkout electric) -- only if you want to work with ros electric
-or
 
-    (git checkout fuerte) -- only if you want to work with ros fuerte
+Switch to the correct branch
+
+    git checkout electric --  if you want to work with ros electric
+    git checkout fuerte -- if you want to work with ros fuerte
 
 Then go on with installing further external dependencies:
     
