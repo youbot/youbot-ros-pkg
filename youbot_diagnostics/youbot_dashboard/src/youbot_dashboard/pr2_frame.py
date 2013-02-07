@@ -284,12 +284,13 @@ class PR2Frame(wx.Frame):
               wx.MessageBox("Arm is not connected", "Error", wx.OK|wx.ICON_ERROR)
 
     def on_driver_status_clicked(self, evt):
-        reconnect = rospy.ServiceProxy("/reconnect", std_srvs.srv.Empty)
+        if (self._dashboard_message is not None):        
+            reconnect = rospy.ServiceProxy("/reconnect", std_srvs.srv.Empty)
 
-        try:
-            reconnect()
-        except rospy.ServiceException, e:
-            wx.MessageBox("Failed to reconnect the driver: service call failed with error: %s"%(e), "Error", wx.OK|wx.ICON_ERROR)
+            try:
+                reconnect()
+            except rospy.ServiceException, e:
+                wx.MessageBox("Failed to reconnect the driver: service call failed with error: %s"%(e), "Error", wx.OK|wx.ICON_ERROR)
 
             
     def dashboard_callback(self, msg):
