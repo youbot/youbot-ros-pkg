@@ -58,7 +58,7 @@ from os import path
 import threading
 
 from status_control import StatusControl
-from youbot_status_control import youbotStatusControl
+#from youbot_status_control import youbotStatusControl
 from power_state_control import PowerStateControl
 from diagnostics_frame import DiagnosticsFrame
 from rosout_frame import RosoutFrame
@@ -105,13 +105,13 @@ class PR2Frame(wx.Frame):
         sizer.Add(static_sizer, 0)
         
         # base status
-        self._base_status = youbotStatusControl(self, wx.ID_ANY, youbot_icons_path, "base", True)
+        self._base_status = StatusControl(self, wx.ID_ANY, youbot_icons_path, "base", True)
         self._base_status.SetToolTip(wx.ToolTip("Base Motors: Stale"))
         static_sizer.Add(self._base_status, 0)
         self._base_status.Bind(wx.EVT_LEFT_DOWN, self.on_base_status_clicked)
         
         # arm status
-        self._arm_status = youbotStatusControl(self, wx.ID_ANY, youbot_icons_path, "arm", True)
+        self._arm_status = StatusControl(self, wx.ID_ANY, youbot_icons_path, "arm", True)
         self._arm_status.SetToolTip(wx.ToolTip("Arm Motors: Stale"))
         static_sizer.Add(self._arm_status, 0)
         self._arm_status.Bind(wx.EVT_LEFT_DOWN, self.on_arm_status_clicked)
@@ -120,7 +120,7 @@ class PR2Frame(wx.Frame):
         sizer.Add(static_sizer, 0)
 
         # driver status
-        self._driver_status = youbotStatusControl(self, wx.ID_ANY, youbot_icons_path, "driver", True)
+        self._driver_status = StatusControl(self, wx.ID_ANY, youbot_icons_path, "driver", True)
         self._driver_status.SetToolTip(wx.ToolTip("Driver: Stale"))
         static_sizer.Add(self._driver_status, 0)
         self._driver_status.Bind(wx.EVT_BUTTON, self.on_driver_status_clicked)
