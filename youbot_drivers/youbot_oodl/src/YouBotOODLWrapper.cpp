@@ -281,48 +281,44 @@ void YouBotOODLWrapper::executeActionServer(const control_msgs::FollowJointTraje
 void YouBotOODLWrapper::stop()
 {
 
-    if (youBotConfiguration.hasBase)
+    if (youBotConfiguration.baseConfiguration.youBotBase)
     {
-        if (youBotConfiguration.baseConfiguration.youBotBase)
-        {
-            delete youBotConfiguration.baseConfiguration.youBotBase;
-            youBotConfiguration.baseConfiguration.youBotBase = 0;
-        }
-
-        youBotConfiguration.baseConfiguration.baseCommandSubscriber.shutdown();
-        youBotConfiguration.baseConfiguration.baseJointStatePublisher.shutdown();
-        youBotConfiguration.baseConfiguration.baseOdometryPublisher.shutdown();
-        youBotConfiguration.baseConfiguration.switchONMotorsService.shutdown();
-        youBotConfiguration.baseConfiguration.switchOffMotorsService.shutdown();
-        // youBotConfiguration.baseConfiguration.odometryBroadcaster.
-        youBotConfiguration.hasBase = false;
-        areBaseMotorsSwitchedOn = false;
+        delete youBotConfiguration.baseConfiguration.youBotBase;
+        youBotConfiguration.baseConfiguration.youBotBase = 0;
     }
 
-    if (youBotConfiguration.hasArms)
-    {
-        for (int armIndex = 0; armIndex < static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()); armIndex++) //delete each arm
-        {
-            if (youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm)
-            {
-                delete youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm;
-                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm = 0;
-            }
+    youBotConfiguration.baseConfiguration.baseCommandSubscriber.shutdown();
+    youBotConfiguration.baseConfiguration.baseJointStatePublisher.shutdown();
+    youBotConfiguration.baseConfiguration.baseOdometryPublisher.shutdown();
+    youBotConfiguration.baseConfiguration.switchONMotorsService.shutdown();
+    youBotConfiguration.baseConfiguration.switchOffMotorsService.shutdown();
+    // youBotConfiguration.baseConfiguration.odometryBroadcaster.
+    youBotConfiguration.hasBase = false;
+    areBaseMotorsSwitchedOn = false;
 
-            youBotConfiguration.youBotArmConfigurations[armIndex].armJointStatePublisher.shutdown();
-            youBotConfiguration.youBotArmConfigurations[armIndex].armPositionCommandSubscriber.shutdown();
-            youBotConfiguration.youBotArmConfigurations[armIndex].armVelocityCommandSubscriber.shutdown();
-            youBotConfiguration.youBotArmConfigurations[armIndex].calibrateService.shutdown();
-            youBotConfiguration.youBotArmConfigurations[armIndex].gripperPositionCommandSubscriber.shutdown();
-            youBotConfiguration.youBotArmConfigurations[armIndex].switchONMotorsService.shutdown();
-            youBotConfiguration.youBotArmConfigurations[armIndex].switchOffMotorsService.shutdown();
+
+    for (int armIndex = 0; armIndex < static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()); armIndex++) //delete each arm
+    {
+        if (youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm)
+        {
+            delete youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm;
+            youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm = 0;
         }
 
-        youBotConfiguration.hasArms = false;
-        areArmMotorsSwitchedOn = false;
-        youBotConfiguration.youBotArmConfigurations.clear();
-        armJointStateMessages.clear();
+        youBotConfiguration.youBotArmConfigurations[armIndex].armJointStatePublisher.shutdown();
+        youBotConfiguration.youBotArmConfigurations[armIndex].armPositionCommandSubscriber.shutdown();
+        youBotConfiguration.youBotArmConfigurations[armIndex].armVelocityCommandSubscriber.shutdown();
+        youBotConfiguration.youBotArmConfigurations[armIndex].calibrateService.shutdown();
+        youBotConfiguration.youBotArmConfigurations[armIndex].gripperPositionCommandSubscriber.shutdown();
+        youBotConfiguration.youBotArmConfigurations[armIndex].switchONMotorsService.shutdown();
+        youBotConfiguration.youBotArmConfigurations[armIndex].switchOffMotorsService.shutdown();
     }
+
+    youBotConfiguration.hasArms = false;
+    areArmMotorsSwitchedOn = false;
+    youBotConfiguration.youBotArmConfigurations.clear();
+    armJointStateMessages.clear();
+
     youbot::EthercatMaster::destroy();
 }
 
@@ -1120,9 +1116,9 @@ bool YouBotOODLWrapper::reconnectCallback(std_srvs::Empty::Request& request, std
 		}
 	}
 	return true;
-  }
+}
 
-  void YouBotOODLWrapper::publishArmAndBaseDiagnostics(double publish_rate_in_secs) {
+void YouBotOODLWrapper::publishArmAndBaseDiagnostics(double publish_rate_in_secs) {
     // only publish every X seconds
     if ((ros::Time::now() - lastDiagnosticPublishTime).toSec() < publish_rate_in_secs)
       return;
