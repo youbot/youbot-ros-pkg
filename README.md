@@ -4,8 +4,9 @@
 ## Install Ubuntu
 The repository and its related components have been tested under the following Ubuntu distributions:
 
-- Ubuntu 10.04
-- Ubuntu 11.10
+- Ubuntu 10.04 (ROS Electric, ROS Fuerte)
+- Ubuntu 11.10 (ROS Electric, ROS Fuerte)
+- Ubuntu 12.04 (ROS Fuerte)
 
 If you do not have a Ubuntu distribution on your computer you can download it here
 
@@ -13,9 +14,9 @@ If you do not have a Ubuntu distribution on your computer you can download it he
 
 ## Git - Version Control
 ### Install Git Software
-Install the Git core components and some additional GUI's for the version control:
+Install the Git core components:
 
-     sudo apt-get install git-core gitg gitk
+     sudo apt-get install git-core
 
 
 ## ROS - Robot Operating System
