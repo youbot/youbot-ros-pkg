@@ -284,7 +284,7 @@ class PR2Frame(wx.Frame):
               wx.MessageBox("Arm is not connected", "Error", wx.OK|wx.ICON_ERROR)
 
     def on_driver_status_clicked(self, evt):
-        if (self._dashboard_message is not None):
+        if (self._dashboard_message is not None):        
             reconnect = rospy.ServiceProxy("/reconnect", std_srvs.srv.Empty)
 
             try:
