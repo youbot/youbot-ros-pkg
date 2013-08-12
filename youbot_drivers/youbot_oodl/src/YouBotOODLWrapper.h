@@ -44,6 +44,9 @@
 #define mkstr2(X) #X
 #define mkstr(X) mkstr2(X)
 
+/* BOOST includes */
+#include <boost/units/io.hpp>
+
 /* ROS includes */
 #include "geometry_msgs/Twist.h"
 #include "tf/transform_broadcaster.h"
