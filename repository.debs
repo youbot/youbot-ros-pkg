@@ -1,1 +1,7 @@
+# /bin/bash
+
+### install debian packages
 sudo apt-get install -y build-essential cmake subversion libboost-dev libopencv2.3-dev libeigen3-dev ros-fuerte-laser-drivers ros-fuerte-navigation ros-fuerte-pr2-common ros-fuerte-common-tutorials ros-fuerte-control ros-fuerte-arm-navigation ros-fuerte-vision-opencv ros-fuerte-pr2-mechanism ros-fuerte-pr2-controllers ros-fuerte-cob-common
+
+### install further repositories
+rosinstall .. /opt/ros/fuerte repository.rosinstall
