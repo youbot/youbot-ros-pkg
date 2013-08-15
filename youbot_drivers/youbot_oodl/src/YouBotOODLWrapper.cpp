@@ -799,8 +799,8 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
          * We actually flipp the directions of the wheel on the right side such that the standard ROS controllers
          * (e.g. for PR2) can be used for the youBot
          */
+        baseJointStateMessage.position[0] = -baseJointStateMessage.position[0];
         baseJointStateMessage.position[2] = -baseJointStateMessage.position[2];
-        baseJointStateMessage.position[4] = -baseJointStateMessage.position[4];
 
     }
 

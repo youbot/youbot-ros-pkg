@@ -126,15 +126,15 @@ namespace controller {
 
         pids.resize(joints.size());
 
-        for (unsigned int i = 0; i < joints.size(); ++i) {
-            if (!pids[i].init(ros::NodeHandle(gainsNS + "/" + joints[i]->joint_->name))) {
-                ROS_ERROR("Can't setup PID for the joint %s. (namespace: %s)", joints[i]->joint_->name.c_str(), nodeHandle.getNamespace().c_str());
+        for (unsigned int j = 0; j < joints.size(); ++j) {
+            if (!pids[j].init(ros::NodeHandle(gainsNS + "/" + joints[j]->joint_->name))) {
+                ROS_ERROR("Can't setup PID for the joint %s. (namespace: %s)", joints[j]->joint_->name.c_str(), nodeHandle.getNamespace().c_str());
                 return false;
             }
 
-            double p, i, d, i_max, i_min;
-            pids[i].getGains(p, i, d, i_max, i_min);
-            ROS_DEBUG("PID for joint %s: p=%f, i=%f, d=%f, i_max=%f, i_min=%f\n", joints[i]->joint_->name.c_str(), p, i, d, i_max, i_min);
+            double p_value = 0.0, i_value = 0.0, d_value = 0.0, i_max = 0.0, i_min = 0.0;
+            pids[j].getGains(p_value, i_value, d_value, i_max, i_min);
+            ROS_DEBUG("PID for joint %s: p=%f, i=%f, d=%f, i_max=%f, i_min=%f\n", joints[j]->joint_->name.c_str(), p_value, i_value, d_value, i_max, i_min);
         }
 
         positionCommandSubscriber = nodeHandle.subscribe("position_command", 1, &YouBotUniversalController::positionCommand, this);
