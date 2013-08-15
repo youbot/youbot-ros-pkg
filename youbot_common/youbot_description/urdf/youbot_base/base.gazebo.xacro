@@ -55,7 +55,7 @@
 
 	<!-- position controller -->
 		<gazebo>
-      			<controller:gazebo_ros_p3d name="p3d_base_controller" plugin="libgazebo_ros_p3d.so">
+      			<plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
         			<alwaysOn>true</alwaysOn>
         			<updateRate>100.0</updateRate>
         			<bodyName>base_link</bodyName>
@@ -64,8 +64,7 @@
         			<frameName>map</frameName>
         			<xyzOffsets>25.7 25.7 0</xyzOffsets> <!-- initialize odometry for fake localization-->
         			<rpyOffsets>0 0 0</rpyOffsets>
-        			<interface:position name="p3d_base_position"/>
-      			</controller:gazebo_ros_p3d>
+      			</plugin>
       			<canonicalBody>base_footprint</canonicalBody>
     		</gazebo>
   </xacro:macro>
