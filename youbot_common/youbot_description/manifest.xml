@@ -22,6 +22,7 @@
   <depend package="control_msgs"/>
   <depend package="actionlib"/>
   <depend package="youbot_trajectory_action_server"/>
+  <depend package="pr2_gazebo_plugins"/>
 
   <export>
     <pr2_controller_interface plugin="${prefix}/controller_plugins.xml" />
