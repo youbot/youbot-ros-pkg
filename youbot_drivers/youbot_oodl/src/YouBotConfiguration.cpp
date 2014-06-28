@@ -103,16 +103,22 @@ YouBotArmConfiguration::~YouBotArmConfiguration()
 
 YouBotConfiguration::YouBotConfiguration()
 {
+    for (std::vector<YouBotArmConfiguration*>::iterator iter = youBotArmConfigurations.begin();
+         iter != youBotArmConfigurations.end();
+         ++iter)
+        delete *iter;    
     youBotArmConfigurations.clear();
-    armNameToArmIndexMapping.clear();
     hasBase = false;
     hasArms = false;
 }
 
 YouBotConfiguration::~YouBotConfiguration()
 {
+    for (std::vector<YouBotArmConfiguration*>::iterator iter = youBotArmConfigurations.begin();
+         iter != youBotArmConfigurations.end();
+         ++iter)
+        delete *iter;    
     youBotArmConfigurations.clear();
-    armNameToArmIndexMapping.clear();
 }
 
 } // namespace youBot
