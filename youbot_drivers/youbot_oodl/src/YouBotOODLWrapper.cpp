@@ -130,7 +130,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     {
         ROS_INFO("Configuration file path: %s", youBotConfiguration.configurationFilePath.c_str());   
         armConfig = new YouBotArmConfiguration();
-        armIndex = static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()) - 1;
+        armIndex = static_cast<int> (youBotConfiguration.youBotArmConfigurations.size());
         armConfig->youBotArm = new youbot::YouBotManipulator(armName, youBotConfiguration.configurationFilePath);
         armConfig->armID = armName;
         topicName.str("");
@@ -230,7 +230,9 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     }
     catch (std::exception& e)
     {
-        youBotConfiguration.youBotArmConfigurations.pop_back();
+        if (armConfig != NULL) 
+            delete armConfig;
+        armConfig = NULL;
         std::string errorMessage = e.what();
         ROS_FATAL("%s", errorMessage.c_str());
         ROS_ERROR("Arm \"%s\" could not be initialized.", armName.c_str());
