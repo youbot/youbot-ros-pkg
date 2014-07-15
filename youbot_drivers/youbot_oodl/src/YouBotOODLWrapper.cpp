@@ -890,11 +890,11 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
 
         bool queryGripperPositions = false;
 
-        if (gripperCycleCounter == 0) {
+        --gripperCycleCounter;
+        if (gripperCycleCounter <= 0) {
             queryGripperPositions = true;
             gripperCycleCounter = youBotDriverCycleFrequencyInHz/5;
         }
-        --gripperCycleCounter;
 
         for (int armIndex = 0; armIndex < static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()); armIndex++)
         {
@@ -960,7 +960,6 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
             	    gripperBar1.getData(gripperBar1Position[armIndex]);
             	    gripperBar2.getData(gripperBar2Position[armIndex]);
                 }
-                gripperCycleCounter--;
 
                 double leftGripperFingerPosition = gripperBar1Position[armIndex].barPosition.value();
                 armJointStateMessages[armIndex].name[youBotArmDoF + 0] = armConfig->gripperFingerNames[YouBotArmConfiguration::LEFT_FINGER_INDEX];
