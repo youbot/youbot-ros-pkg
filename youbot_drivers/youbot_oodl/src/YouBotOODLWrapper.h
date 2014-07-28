@@ -255,8 +255,10 @@ private:
 	/// Tell if a goal is currently active.
 	bool armHasActiveJointTrajectoryGoal;
 
-	youbot::GripperSensedBarPosition gripperBar1Position;
-	youbot::GripperSensedBarPosition gripperBar2Position;
+    // Track gripper bar positions for each configured arm
+	std::vector<youbot::GripperSensedBarPosition> gripperBar1Position;
+	std::vector<youbot::GripperSensedBarPosition> gripperBar2Position;
+
 	int gripperCycleCounter;
 
     //void executeActionServer(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal,  int armIndex);
