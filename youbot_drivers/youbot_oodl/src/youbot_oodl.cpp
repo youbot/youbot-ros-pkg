@@ -83,12 +83,22 @@ int main(int argc, char **argv)
     }
 
     if (youBotHasArms == true) {
-        std::vector<std::string>::iterator armNameIter;
-        for (armNameIter = armNames.begin(); armNameIter != armNames.end(); ++armNameIter) {
-            youBot.initializeArm(*armNameIter);
+        for (unsigned int i=0; i<armNames.size(); i++) {
+            // determine topic name for arm #i
+            std::string topic;
+            std::stringstream armTopicParam;
+            armTopicParam << "youBotArmTopic" << i+1; // youBotArmTopic1, youBotArmName2, etc.
+            if (n.hasParam(armTopicParam.str())) {
+                n.getParam(armTopicParam.str(), topic);
+            } else {
+                // if no parameter is provided, use "arm_1", "arm_2" etc. as default topic names
+                std::stringstream armTopicDefault;
+                armTopicDefault << "arm_" << i+1;
+                topic = armTopicDefault.str();
+            }
+            youBot.initializeArm(armNames[i], topic);
         }
     }
-
 
     /* coordination */
     ros::Rate rate(youBotDriverCycleFrequencyInHz); //Input and output at the same time... (in Hz)

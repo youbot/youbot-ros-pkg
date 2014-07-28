@@ -107,7 +107,7 @@ public:
      * @param armName Name of the base. Used to open the configuration file e.g. youbot-manipulator.cfg
      * @param enableStandardGripper If set to true, then the default gripper of the youBot will be initialized.
      */
-    void initializeArm(std::string armName, bool enableStandardGripper = true);
+    void initializeArm(std::string armName, std::string topic, bool enableStandardGripper = true);
 
     /**
      * @brief Stops all initialized elements.

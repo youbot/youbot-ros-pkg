@@ -116,7 +116,7 @@ void YouBotOODLWrapper::initializeBase(std::string baseName)
     areBaseMotorsSwitchedOn = true;
 }
 
-void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGripper)
+void YouBotOODLWrapper::initializeArm(std::string armName, std::string topic, bool enableStandardGripper)
 {
     int armIndex;
     youbot::JointName jointNameParameter;
@@ -133,9 +133,7 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
         armIndex = static_cast<int> (youBotConfiguration.youBotArmConfigurations.size());
         armConfig->youBotArm = new youbot::YouBotManipulator(armName, youBotConfiguration.configurationFilePath);
         armConfig->armID = armName;
-        topicName.str("");
-        topicName << armName << "/";
-        armConfig->commandTopicName = topicName.str(); // e.g. arm_1/, named according to youBotArmName# launch configuration param
+        armConfig->commandTopicName = topic + "/";
         armConfig->parentFrameIDName = "base_link";
 
         /* take joint names form configuration files */
@@ -201,11 +199,11 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
             }
 
             ss.str("");
-            ss << armName << "/joint_limits/" << armConfig->jointNames[i].c_str() << "_lower";
+            ss << armConfig->commandTopicName << "joint_limits/" << armConfig->jointNames[i].c_str() << "_lower";
             this->node.setParam(ss.str(), lowerLimitVal);
 
             ss.str("");
-            ss << armName << "/joint_limits/" << armConfig->jointNames[i].c_str() << "_upper";
+            ss << armConfig->commandTopicName << "joint_limits/" << armConfig->jointNames[i].c_str() << "_upper";
             this->node.setParam(ss.str(), upperLimitVal);
         }
         if (enableStandardGripper)
@@ -219,11 +217,11 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
             const int GRIPPER_DOF = 2;
             for (int i=0; i<GRIPPER_DOF; ++i) {
                 std::stringstream param_name;
-                param_name << armName << "/joint_limits/" << armConfig->gripperFingerNames[i].c_str() << "_lower";
+                param_name << armConfig->commandTopicName << "joint_limits/" << armConfig->gripperFingerNames[i].c_str() << "_lower";
                 this->node.setParam(param_name.str(), 0.);
 
                 param_name.str("");      
-                param_name << armName << "/joint_limits/" << armConfig->gripperFingerNames[i].c_str() << "_upper";
+                param_name << armConfig->commandTopicName << "joint_limits/" << armConfig->gripperFingerNames[i].c_str() << "_upper";
                 this->node.setParam(param_name.str(), max_gripper_dist);
             }
         }
@@ -1178,42 +1176,52 @@ bool YouBotOODLWrapper::calibrateArmCallback(std_srvs::Empty::Request& request, 
 
 bool YouBotOODLWrapper::reconnectCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
 {
+    this->stop();
 
-	this->stop();
+    /* configuration */
+    bool youBotHasBase;
+    bool youBotHasArms;
+    node.param("youBotHasBase", youBotHasBase, false);
+    node.param("youBotHasArms", youBotHasArms, false);
+    std::vector<std::string> armNames;
 
-	/* configuration */
-	bool youBotHasBase;
-	bool youBotHasArms;
-	node.param("youBotHasBase", youBotHasBase, false);
-	node.param("youBotHasArms", youBotHasArms, false);
-	std::vector<std::string> armNames;
+    // Retrieve all defined arm names from the launch file params
+    int i = 1;
+    std::stringstream armNameParam;
+    armNameParam << "youBotArmName" << i; // youBotArmName1 is first checked param... then youBotArmName2, etc.
+    while (node.hasParam(armNameParam.str())) {
+        std::string armName;
+        node.getParam(armNameParam.str(), armName);
+        armNames.push_back(armName);
+        armNameParam.str("");
+        armNameParam << "youBotArmName" <<  (++i);
+    }
 
-	// Retrieve all defined arm names from the launch file params
-	int i = 1;
-	std::stringstream armNameParam;
-	armNameParam << "youBotArmName" << i; // youBotArmName1 is first checked param... then youBotArmName2, etc.
-	while (node.hasParam(armNameParam.str())) {
-		std::string armName;
-		node.getParam(armNameParam.str(), armName);
-		armNames.push_back(armName);
-		armNameParam.str("");
-		armNameParam << "youBotArmName" <<  (++i);
-	}
+    ROS_ASSERT((youBotHasBase == true) || (youBotHasArms == true)); // At least one should be true, otherwise nothing to be started.
+    if (youBotHasBase == true)
+    {
+        this->initializeBase(this->youBotConfiguration.baseConfiguration.baseID);
+    }
 
-	ROS_ASSERT((youBotHasBase == true) || (youBotHasArms == true)); // At least one should be true, otherwise nothing to be started.
-	if (youBotHasBase == true)
-	{
-		this->initializeBase(this->youBotConfiguration.baseConfiguration.baseID);
-	}
+    if (youBotHasArms == true) {
+        for (unsigned int i=0; i<armNames.size(); i++) {
+            // determine topic name for arm #i
+            std::string topic;
+            std::stringstream armTopicParam;
+            armTopicParam << "youBotArmTopic" << i+1; // youBotArmTopic1, youBotArmName2, etc.
+            if (node.hasParam(armTopicParam.str())) {
+                node.getParam(armTopicParam.str(), topic);
+            } else {
+                // if no parameter is provided, use "arm_1", "arm_2" etc. as default topic names
+                std::stringstream armTopicDefault;
+                armTopicDefault << "arm_" << i+1;
+                topic = armTopicDefault.str();
+            }
+            initializeArm(armNames[i], topic);
+        }
+    }
 
-	if (youBotHasArms == true)
-	{
-		std::vector<std::string>::iterator armNameIter;
-		for (armNameIter = armNames.begin(); armNameIter != armNames.end(); ++armNameIter) {
-			this->initializeArm(*armNameIter);
-		}
-	}
-	return true;
+    return true;
 }
 
 void YouBotOODLWrapper::publishArmAndBaseDiagnostics(double publish_rate_in_secs) {
