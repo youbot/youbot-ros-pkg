@@ -116,13 +116,11 @@ int main(int argc, char **argv) {
   command.positions = armJointPositions;
 
   armPositionsPublisher = n.advertise<brics_actuator::JointPositions > ("arm_1/arm_controller/position_command", 1);
-  ros::spinOnce();
 
   ros::Subscriber armTrajectory;
   armTrajectory = n.subscribe("/arm_controller/follow_joint_trajectory/goal", 1, trajectoryCallback);
 
   ros::Duration(1).sleep();
-  ros::spinOnce();
 
   moveToInitPos(command);
   //ros::Duration(10).sleep();
