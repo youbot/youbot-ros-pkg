@@ -6,7 +6,7 @@
 		<!-- remap from="joint_states" to="youbot_state"/> -->
 	
 	<!-- start robot_state_publisher assuming /joint_states is the default topic -->
-	<node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher" output="screen"/>
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen"/>
 	
 	<!-- start robot_state_publisher assuming /joint_states is not the default topic and the drivers default topics are used -->
 	<!--
